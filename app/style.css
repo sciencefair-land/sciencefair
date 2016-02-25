@@ -1,0 +1,100 @@
+@font-face {
+  font-family: "Aleo-Light";
+  src: url("./fonts/Aleo/Light/aleo-light-webfont.woff") format("woff"), url("./fonts/Aleo/Light/aleo-light-webfont.eot") format("eot"); }
+
+@font-face {
+  font-family: "Aleo-Regular";
+  src: url("./fonts/Aleo/Regular/aleo-regular-webfont.woff") format("woff"), url("./fonts/Aleo/Regular/aleo-regular-webfont.eot") format("eot"); }
+
+@font-face {
+  font-family: "CooperHewitt-Bold";
+  src: url("./fonts/CooperHewitt/CooperHewitt-Bold.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-Bold.eot") format("eot"); }
+
+@font-face {
+  font-family: "CooperHewitt-BoldItalic";
+  src: url("./fonts/CooperHewitt/CooperHewitt-BoldItalic.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-BoldItalic.eot") format("eot"); }
+
+@font-face {
+  font-family: "CooperHewitt-Medium";
+  src: url("./fonts/CooperHewitt/CooperHewitt-Medium.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-Medium.eot") format("eot"); }
+
+@font-face {
+  font-family: "CooperHewitt-MediumItalic";
+  src: url("./fonts/CooperHewitt/CooperHewitt-MediumItalic.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-MediumItalic.eot") format("eot"); }
+
+@font-face {
+  font-family: "CooperHewitt-Light";
+  src: url("./fonts/CooperHewitt/CooperHewitt-Light.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-Light.eot") format("eot"); }
+
+@font-face {
+  font-family: "CooperHewitt-LightItalic";
+  src: url("./fonts/CooperHewitt/CooperHewitt-LightItalic.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-LightItalic.eot") format("eot"); }
+
+@font-face {
+  font-family: "CooperHewitt-Book";
+  src: url("./fonts/CooperHewitt/CooperHewitt-Book.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-Book.eot") format("eot"); }
+
+html {
+ 	height: 100%;
+ 	width: 100%;
+ 	overflow: hidden;
+ 	-webkit-user-select: none;
+}
+
+body {
+	width: 100%;
+	height: 100%;
+	padding: 0px;
+	margin: 0px;
+	font-size: 16px;
+	font-family: 'Aleo';
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+	background: rgb(43,43,51);
+	cursor: default;
+}
+
+#main {
+	position: absolute;
+	top: 4%;
+	width: 100%;
+	height: 87%;
+	background-color: rgb(111,174,193);
+}
+
+#footer {
+	position: absolute;
+	bottom: 0%;
+	height: 9%;
+	width: 100%;
+}
+
+.paper {
+	opacity: 0.85;
+	-webkit-transition: border 0.5s;
+	-webkit-box-sizing: border-box;
+}
+
+.paper:hover {
+	opacity: 1.0;
+}
+
+::-webkit-input-placeholder { 
+	color: rgb(43,43,51); 
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: none;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgb(43,43,51);
+}
+
+::selection { 
+	background: white; 
+}

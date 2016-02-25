@@ -1,0 +1,21 @@
+{
+  "name": "sciencefair",
+  "version": "1.0.0",
+  "description": "search, browse, and download open access papers",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codeforscience/sciencefair.git"
+  },
+  "author": "code-for-science",
+  "license": "MIT",
+  "dependencies": {
+    "d3-selection": "^0.6.11",
+    "dom-css": "^2.0.0",
+    "electron-prebuilt": "^0.36.8",
+    "lodash": "^4.5.1"
+  }
+}
