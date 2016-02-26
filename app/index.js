@@ -1,3 +1,5 @@
+var path = require('path')
+var searcher  = require('sqlite-search')
 var _ = require('lodash')
 
 var header = document.getElementById('header')
@@ -10,14 +12,24 @@ var message = require('./components/message.js')(main)
 var transfers = require('./components/transfers.js')(footer)
 var title = require('./components/title.js')(header)
 
-// generate fake data
-function items (count) {
-  return _.range(count).map(function () {
-    return {
-      title: 'Cytodiagnostic accuracy and pitfalls', 
-      author: 'Gia-Khanh Nguyen; Jody Ginsberg; Peter M. Crockford;'
-    }
-  })
+var opts = {
+  path: path.join(__dirname, 'db', 'sample.sqlite'),
+  name: 'Papers',
+  primaryKey: 'id',
+  columns: ['title', 'author']
+}
+
+function fetch (input) {
+  var results = []
+  searcher(opts, function (err, instance) {
+    var stream = instance.createSearchStream({field: 'Papers', query: input})
+    stream.on('data', function(row) {
+      results.push(row)
+    })
+    stream.on('end', function () {
+      if (results.length > 0) list.update(results)
+    })
+  })  
 }
 
 // welcome message
@@ -30,7 +42,7 @@ search.on('input', function (input) {
     list.update([])
   } else {
     message.hide()
-    list.update(items(parseInt(Math.random() * 30)))
+    fetch(input)
   }
 })
 
