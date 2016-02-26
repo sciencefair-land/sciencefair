@@ -7,5 +7,5 @@ Work in progress! Doesn't really do anything yet.
 To start, clone this repo, then run
 
 - `npm install` to install dependencies
-- `npm sample` to generate a fake database
-- `npm start` to start the electron app
+- `npm run sample` to generate a fake database
+- `npm run start` to start the electron app
