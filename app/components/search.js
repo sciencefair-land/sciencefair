@@ -25,7 +25,7 @@ function Search (container) {
     position: 'absolute',
     marginTop: '4%',
     marginLeft: '5%',
-    width: '30%',
+    width: '36%',
     height: '4%',
     border: 'none',
     borderBottom: 'dotted 2px rgb(33,33,39)',
