@@ -16,7 +16,7 @@ db.serialize(function() {
   db.run("CREATE VIRTUAL TABLE Papers USING fts4(id INT, author TEXT, title TEXT)")
   var stmt = db.prepare("INSERT INTO Papers (id, author, title) VALUES (:id, :author, :title)");
   
-  for (var i = 0; i < 100; i++) {
+  for (var i = 0; i < 500; i++) {
     stmt.run(
       i,
       subsets(authors, parseInt(Math.random() * 5) + 1)[0].join(' '), 
@@ -25,13 +25,4 @@ db.serialize(function() {
   }
   
   stmt.finalize()
-
-  db.each("SELECT rowid AS id, author, title FROM Papers", function(err, row) {
-    console.log(row)
-  })
-
-  var statement= "SELECT * FROM Papers WHERE title MATCH 'biology' ORDER BY id"
-  db.each(statement, function (err, result) {
-    console.log(result)
-  })
 })
