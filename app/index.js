@@ -27,7 +27,7 @@ function fetch (input) {
       results.push(row)
     })
     stream.on('end', function () {
-      list.update(results)
+      if (results.length > 0) list.update(results)
     })
   })  
 }
