@@ -71,7 +71,7 @@ body {
 
 .paper {
 	opacity: 0.85;
-	-webkit-transition: border 0.5s;
+	-webkit-transition: border 0.3s;
 	-webkit-box-sizing: border-box;
 }
 

@@ -15,12 +15,15 @@ function Paper (container) {
   var author = box.appendChild(document.createElement('div'))
 
   var base = {
+    width: '80%',
+    position: 'absolute',
     fontFamily: 'Aleo-Regular',
     textAlign: 'left',
     color: 'rgb(178,180,184)'
   }
 
   css(box, {
+    position: 'relative',
     background: 'rgb(43,43,51)',
     display: 'inline-block',
     marginRight: '2%',
@@ -46,7 +49,7 @@ function Paper (container) {
     }))
 
     css(author, _.extend(base, {
-      marginTop: '5%',
+      marginTop: '45%',
       fontSize: width * 0.08  + 'px'
     }))
 
