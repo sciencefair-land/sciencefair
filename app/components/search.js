@@ -10,6 +10,7 @@ function Search (container) {
 
   var input = container.appendChild(document.createElement('input'))
   var img = container.appendChild(document.createElement('img'))
+  input.autofocus = true
   img.width = '25'
   img.height = '25'
   img.src = './images/search.svg'
