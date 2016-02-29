@@ -6,6 +6,7 @@
   "scripts": {
     "start": "electron index.js",
     "sample": "node sample.js",
+    "getdb": "cd app/db && test -e sqlite/eupmc.sqlite || dat dat://b57f332de2444ac963bb764f3b4e0b8cf01a42044501e688d0a5f1a2f701ca71 | grep -m1 '[Done] Downloaded' | head -1",
     "postinstall": "npm run rebuild-sqlite3",
     "rebuild-sqlite3": "cd node_modules/sqlite3 && npm run prepublish && node-gyp configure --module_name=node_sqlite3 --module_path=../lib/binding/node-v47-darwin-x64 && node-gyp rebuild --target=0.36.8 --arch=x64 --target_platform=darwin --dist-url=https://atom.io/download/atom-shell --module_name=node_sqlite3 --module_path=../lib/binding/node-v47-darwin-x64"
   },
@@ -22,7 +23,8 @@
     "lodash": "^4.5.1",
     "nan": "^2.2.0",
     "sqlite-search": "^4.1.0",
-    "sqlite3": "^3.1.1"
+    "sqlite3": "^3.1.1",
+    "dat": "^9.6.0"
   },
   "devDependencies": {
     "random-subsets": "0.0.1"
