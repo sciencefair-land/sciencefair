@@ -6,7 +6,7 @@ var main = null
 app.on('ready', function () {
   main = new browser({
     height: 720,
-    resizable: false,
+    resizable: true,
     title: 'sciencefair',
     width: 1050,
     'title-bar-style': 'hidden',
