@@ -31,7 +31,7 @@ function Paper (container) {
     cursor: 'pointer'
   })
 
-  self.scale = function (value) {
+  self.layout = function () {
 
     var width = '160'
 
@@ -69,7 +69,7 @@ function Paper (container) {
   }
 
   self.update = function (value) {
-    title.innerHTML = self.truncate(value.title, 200)
+    title.innerHTML = value.title
     author.innerHTML = self.etalia(value.authorString)
     year.innerHTML = value.year
   }
@@ -102,7 +102,7 @@ function Paper (container) {
     })
   }
 
-  self.scale(13)
+  self.layout()
 
   box.onclick  = function () {
     self.emit('click')
