@@ -1,6 +1,6 @@
 # sciencefair
 
-Search, browse, and download open access papers. Made with Electron.
+Search, browse, and download open access papers. Made with Electron, powered by Dat.
 
 Work in progress! Doesn't really do anything yet.
 
