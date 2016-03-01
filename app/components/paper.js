@@ -13,9 +13,9 @@ function Paper (container) {
   box.className = 'paper'
   var title = box.appendChild(document.createElement('div'))
   var author = box.appendChild(document.createElement('div'))
+  var year = box.appendChild(document.createElement('year'))
 
   var base = {
-    width: '80%',
     position: 'absolute',
     fontFamily: 'Aleo-Regular',
     textAlign: 'left',
@@ -26,38 +26,49 @@ function Paper (container) {
     position: 'relative',
     background: 'rgb(43,43,51)',
     display: 'inline-block',
-    marginRight: '2%',
-    marginBottom: '2%',
+    marginRight: '20px',
+    marginBottom: '20px',
     cursor: 'pointer'
   })
 
   self.scale = function (value) {
 
-    css(box, {
-      width: value + '%'
-    })
-
-    var width = box.clientWidth
+    var width = '160'
 
     css(box, {
+      width: width + 'px',
       height: width * 1.31,
       padding: width * 0.09
     })
 
-    css(title, _.extend(base, {
-      fontSize: width * 0.12  + 'px'
+    css(title, _.extend(_.clone(base), {
+      fontSize: '14px',
+      left: '10px',
+      right: '10px',
+      top: '10px'
     }))
 
-    css(author, _.extend(base, {
-      marginTop: '45%',
-      fontSize: width * 0.08  + 'px'
+    css(author, _.extend(_.clone(base), {
+      fontSize: '10px',
+      left: '10px',
+      right: '40px',
+      bottom: '10px'
+    }))
+
+    css(year, _.extend(_.clone(base), {
+      position: 'absolute',
+      fontSize: '14px',
+      left: '120px',
+      right: '10px',
+      bottom: '10px'
     }))
 
   }
 
   self.update = function (value) {
-    title.innerHTML = self.truncate(value.title, 100)
+    title.innerHTML = self.truncate(value.title, 200)
     author.innerHTML = self.etalia(value.authorString)
+    year.innerHTML = value.year
   }
 
   self.etalia = function (authorString) {
@@ -88,7 +99,7 @@ function Paper (container) {
     })
   }
 
-  self.scale(11.6)
+  self.scale(13)
 
   box.onclick  = function () {
     self.emit('click')
