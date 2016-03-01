@@ -56,9 +56,31 @@ function Paper (container) {
   }
 
   self.update = function (value) {
-    title.innerHTML = value.title
-    author.innerHTML = value.author
+    title.innerHTML = self.truncate(value.title, 100)
+    author.innerHTML = self.etalia(value.authorString)
   }
+
+  self.etalia = function (authorString) {
+    var authors = authorString.split(', ')
+    return authors.length > 3 ? authors[0] + ' et al.' : authorString
+  }
+
+  self.truncate = function (str, limit) {
+    var  bits = str.split('')
+    if (bits.length > limit) {
+      for (var i = bits.length - 1; i > -1; --i) {
+        if (i > limit) {
+          bits.length = i
+        }
+        else if (' ' === bits[i]) {
+          bits.length = i
+          break
+        }
+      }
+      bits.push('...')
+    }
+    return bits.join('')
+  };
 
   self.downloaded = function () {
     css(box, {
