@@ -55,7 +55,6 @@ function fetch (input) {
       limit: opts.limit
     })
     stream.on('data', function(row) {
-      console.log(row)
       if (first) {
         message.hide()
         first = false
