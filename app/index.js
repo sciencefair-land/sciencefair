@@ -10,7 +10,7 @@ var footer = document.getElementById('footer')
 var search = require('./components/search.js')(main)
 var list = require('./components/list.js')(main)
 var message = require('./components/message.js')(main)
-var transfers = require('./components/transfers.js')(footer)
+var statbar = require('./components/statbar.js')(footer)
 var title = require('./components/title.js')(header)
 
 var dbfiles = ['sqlite/eupmc.sqlite', 'sample.sqlite']
@@ -86,9 +86,9 @@ search.on('input', function (input) {
 
 // fake a download on paper click
 list.on('click', function (paper) {
-  transfers.update(50)
+  statbar.update(50)
   setTimeout(function () {
-    transfers.update(0)
+    statbar.update(0)
     paper.downloaded()
   }, 500)
 })
