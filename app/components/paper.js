@@ -45,7 +45,10 @@ function Paper (container) {
       fontSize: '14px',
       left: '10px',
       right: '10px',
-      top: '10px'
+      top: '10px',
+      bottom: '40px',
+      overflowY: 'scroll',
+      overflowX: 'hidden'
     }))
 
     css(author, _.extend(_.clone(base), {

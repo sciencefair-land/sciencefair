@@ -16,17 +16,17 @@ function Search (container) {
 
   css(img, {
     position: 'absolute',
-    marginTop: '4%',
-    marginLeft: '5%',
+    marginTop: 'calc(4% + 2px)',
+    marginLeft: 'calc(5% + 2px)',
     zIndex: 2000
   })
-  
+
   css(input,{
     position: 'absolute',
     marginTop: '4%',
     marginLeft: '5%',
     width: '36%',
-    height: '4%',
+    height: '30px',
     border: 'none',
     borderBottom: 'dotted 2px rgb(33,33,39)',
     fontSize: '130%',
@@ -47,7 +47,7 @@ function Search (container) {
       outline: 'none'
     })
   }
-  
+
   input.oninput = function () {
     self.emit('input', input.value)
   }

@@ -10,7 +10,8 @@ app.on('ready', function () {
     title: 'sciencefair',
     width: 1050,
     'title-bar-style': 'hidden',
-    fullscreen: false
+    fullscreen: false,
+    icon: './app/images/logo.png'
   })
 
   main.loadURL('file://' + __dirname + '/app/index.html')

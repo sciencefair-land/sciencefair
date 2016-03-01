@@ -14,10 +14,10 @@ function List (container) {
 
   css(list,{
     position: 'absolute',
-    top: '18%',
+    top: 'calc(4% + 100px)',
     left: '5%',
     width: '90%',
-    height: '77.2%',
+    height: 'calc(96% - 140px)',
     overflowY: 'scroll'
   })
 
