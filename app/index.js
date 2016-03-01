@@ -9,6 +9,7 @@ var footer = document.getElementById('footer')
 var search = require('./components/search.js')(main)
 var list = require('./components/list.js')(main)
 var message = require('./components/message.js')(main)
+var progress = require('./components/progress.js')(main)
 var transfers = require('./components/transfers.js')(footer)
 var title = require('./components/title.js')(header)
 
@@ -32,10 +33,28 @@ function fetch (input) {
   })  
 }
 
-// welcome message
-message.update('Search for a paper.')
+function ready () {
+  search.show()
+  message.update('Search for a paper.')
+  progress.hide()
+}
 
-// update list on search with fake data (for now!)
+// welcome message
+message.update('Initializing...')
+search.hide()
+
+// fake initializing
+var downloaded = 0
+var timer = setInterval(function () {
+  if (downloaded >= 100) {
+    clearInterval(timer)
+    ready()
+  }
+  progress.update(downloaded)
+  downloaded += 10
+}, 50)
+
+// update list on search
 search.on('input', function (input) {
   if (input === '') {
     message.show() 
@@ -46,7 +65,7 @@ search.on('input', function (input) {
   }
 })
 
-// fake a download on paper click
+// download on paper click
 list.on('click', function (paper) {
   transfers.update(50)
   setTimeout(function () {

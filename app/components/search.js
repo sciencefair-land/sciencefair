@@ -52,6 +52,16 @@ function Search (container) {
   input.oninput = function () {
     self.emit('input', input.value)
   }
+
+  self.hide = function () {
+    css(input, {opacity: 0})
+    css(img, {opacity: 0})
+  }
+
+  self.show = function () {
+    css(input, {opacity: 1})
+    css(img, {opacity: 1})
+  }
 }
 
 module.exports = Search
