@@ -1,4 +1,5 @@
 var path = require('path')
+var fs = require('fs')
 var searcher  = require('sqlite-search')
 var _ = require('lodash')
 
@@ -12,36 +13,74 @@ var message = require('./components/message.js')(main)
 var transfers = require('./components/transfers.js')(footer)
 var title = require('./components/title.js')(header)
 
+var dbfiles = ['sqlite/eupmc.sqlite', 'sample.sqlite']
+
+function dbFileExists (dbfile) {
+  return fs.existsSync(path.join(__dirname, 'db', dbfile))
+}
+
+function getdb () {
+  var i = 0
+  var dbfile = dbfiles[i]
+  while(!dbFileExists(dbfile) && i < dbfiles.length) {
+    i += 1
+    dbfile = dbfiles[i]
+  }
+  console.log('using database at', dbfile)
+  return dbfile
+}
+
 var opts = {
-  path: path.join(__dirname, 'db', 'sample.sqlite'),
+  path: path.join(__dirname, 'db', getdb()),
   name: 'Papers',
   primaryKey: 'id',
-  columns: ['title', 'author']
+  columns: ['title', 'authorString', 'doi', 'year'],
+  limit: 30
 }
 
 function fetch (input) {
+  console.log(input)
   var results = []
+  var first = true
   searcher(opts, function (err, instance) {
-    var stream = instance.createSearchStream({field: 'Papers', query: input})
+    if (err) {
+      message.update('Oops, there was an error')
+      message.show()
+      console.log(err)
+    }
+    list.clear()
+    var stream = instance.createSearchStream({
+      field: 'Papers',
+      query: input,
+      limit: opts.limit
+    })
     stream.on('data', function(row) {
+      console.log(row)
+      if (first) {
+        message.hide()
+        first = false
+      }
       results.push(row)
+      if (results.length == 10) {
+        list.update(results)
+        results = []
+      }
     })
     stream.on('end', function () {
-      if (results.length > 0) list.update(results)
+      list.update(results)
     })
-  })  
+  })
 }
-
-// welcome message
-message.update('Search for a paper.')
 
 // update list on search with fake data (for now!)
 search.on('input', function (input) {
   if (input === '') {
-    message.show() 
+    message.update('Search for a paper.')
+    message.show()
     list.update([])
   } else {
-    message.hide()
+    message.update('Searching...')
+    message.show()
     fetch(input)
   }
 })
