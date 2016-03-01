@@ -34,3 +34,4 @@ node_modules
 
 # Database
 app/db
+data
