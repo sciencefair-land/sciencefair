@@ -81,7 +81,7 @@ function fetch (input) {
   var first = true
   searcher(opts, function (err, instance) {
     if (err) {
-      message.update('Oops, there was an error')
+      message.update('Oops, there was an error!')
       message.show()
       console.log(err)
     }
@@ -107,7 +107,11 @@ function fetch (input) {
     })
     stream.on('end', function () {
       if (input === currentSearch) {
-        list.update(results)
+        if (first && results.length == 0) {
+          message.update('No results found.')
+        } else {
+          list.update(results)
+        }
       }
     })
   })
@@ -117,9 +121,9 @@ function fetch (input) {
 search.on('input', function (input) {
   currentSearch = input
   if (input === '') {
+    list.update([])
     message.update('Search for a paper.')
     message.show()
-    list.update([])
   } else {
     message.update('Searching...')
     message.show()
