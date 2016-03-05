@@ -11,23 +11,37 @@ function Statbar (container) {
   var box = container.appendChild(document.createElement('div'))
   css(box,{
     margin: 0,
+    width: '100%',
     paddingLeft: '30px',
+    paddingRight: '30px',
     color: 'rgb(202,172,77)',
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'space-between'
   })
 
   var speed = box.appendChild(document.createElement('div'))
-  speed.innerHTML = 0 + ' mb/s'
+  var dbname = box.appendChild(document.createElement('div'))
 
   css(speed, {
     marginRight: '40px',
     fontFamily: 'CooperHewitt-Light',
   })
 
-  self.update = function (value) {
+  css(dbname, {
+    marginLeft: '40px',
+    fontFamily: 'CooperHewitt-Light',
+  })
+
+  self.updateSpeed = function (value) {
     speed.innerHTML = value + ' mb/s'
   }
+
+  self.setdb = function (db) {
+    dbname.innerHTML = 'database: ' + db.name
+  }
+
+  self.updateSpeed(0)
 
 }
 

@@ -13,7 +13,22 @@ var message = require('./components/message.js')(main)
 var statbar = require('./components/statbar.js')(footer)
 var title = require('./components/title.js')(header)
 
-var dbfiles = ['sqlite/eupmc.sqlite', 'sample.sqlite']
+var databases = {
+  eupmc: {
+    path: 'sqlite/eupmc.sqlite',
+    name: 'EuropePMC free full-text (3.5m)',
+    description: 'Simple metadata for ~3.5 million free full-text articles in Europe PubMed Central',
+    shortname: 'eupmc',
+    datHash: 'b57f332de2444ac963bb764f3b4e0b8cf01a42044501e688d0a5f1a2f701ca71'
+  },
+  sample: {
+    path: 'sample.sqlite',
+    name: 'Sample database',
+    description: 'A fake database used for UI demoing',
+    shortname: 'sample'
+  }
+}
+var dbs = ['eupmc', 'sample']
 
 function dbFileExists (dbfile) {
   return fs.existsSync(path.join(__dirname, 'db', dbfile))
@@ -21,13 +36,15 @@ function dbFileExists (dbfile) {
 
 function getdb () {
   var i = 0
-  var dbfile = dbfiles[i]
-  while(!dbFileExists(dbfile) && i < dbfiles.length) {
+  var dbkey = dbs[i]
+  var db = databases[dbkey]
+  while(!dbFileExists(db.path) && i < dbs.length) {
     i += 1
-    dbfile = dbfiles[i]
+    dbkey = dbs[i]
+    db = databases[dbkey]
   }
-  console.log('using database at', dbfile)
-  return dbfile
+  statbar.setdb(db)
+  return db.path
 }
 
 var opts = {
@@ -38,8 +55,28 @@ var opts = {
   limit: 30
 }
 
+var countParts = ["(select count() from ", ") as count"]
+
+function makeQuery (input) {
+  var countSelector = countparts[0] + opts.name + countparts[1]
+  select = [countSelector, ['*']]
+  var statement =
+    "SELECT " + select.join(', ') +
+    " FROM " + opts.name +
+    " WHERE " +
+    (since ? opts.primaryKey + " > '" + since + "' AND " + field : field) +
+    " MATCH '" + query + "'" +
+    " ORDER BY " + order +
+    (opts.limit ? " LIMIT " + opts.limit : '') +
+    (offset ? " OFFSET " + offset : '') +
+    ";"
+}
+
+// track the most recent search input so we don't
+// mix results from previous partial search entries
+var currentSearch = '';
+
 function fetch (input) {
-  console.log(input)
   var results = []
   var first = true
   searcher(opts, function (err, instance) {
@@ -55,24 +92,30 @@ function fetch (input) {
       limit: opts.limit
     })
     stream.on('data', function(row) {
-      if (first) {
-        message.hide()
-        first = false
-      }
-      results.push(row)
-      if (results.length == 10) {
-        list.update(results)
-        results = []
+      console.log(input, currentSearch)
+      if (input === currentSearch) {
+        if (first) {
+          message.hide()
+          first = false
+        }
+        results.push(row)
+        if (results.length == 10) {
+          list.update(results)
+          results = []
+        }
       }
     })
     stream.on('end', function () {
-      list.update(results)
+      if (input === currentSearch) {
+        list.update(results)
+      }
     })
   })
 }
 
-// update list on search with fake data (for now!)
+// update list on search
 search.on('input', function (input) {
+  currentSearch = input
   if (input === '') {
     message.update('Search for a paper.')
     message.show()
@@ -86,9 +129,9 @@ search.on('input', function (input) {
 
 // fake a download on paper click
 list.on('click', function (paper) {
-  statbar.update(50)
+  statbar.updateSpeed(50)
   setTimeout(function () {
-    statbar.update(0)
+    statbar.updateSpeed(0)
     paper.downloaded()
   }, 500)
 })
