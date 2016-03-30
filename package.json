@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "electron index.js",
-    "sample": "node sample.js",
+    "getsample": "cd app/db && test -e sqlite/eupmc10ktest.sqlite || dat dat://b57f332de2444ac963bb764f3b4e0b8cf01a42044501e688d0a5f1a2f701ca71 | grep -m1 '[Done] Downloaded' | head -1",
     "getdb": "cd app/db && test -e sqlite/eupmc.sqlite || dat dat://b57f332de2444ac963bb764f3b4e0b8cf01a42044501e688d0a5f1a2f701ca71 | grep -m1 '[Done] Downloaded' | head -1",
     "postinstall": "npm run rebuild-sqlite3",
     "rebuild-sqlite3": "cd node_modules/sqlite3 && npm run prepublish && node-gyp configure --module_name=node_sqlite3 --module_path=../lib/binding/node-v47-darwin-x64 && node-gyp rebuild --target=0.36.8 --arch=x64 --target_platform=darwin --dist-url=https://atom.io/download/atom-shell --module_name=node_sqlite3 --module_path=../lib/binding/node-v47-darwin-x64"
@@ -18,13 +18,15 @@
   "license": "MIT",
   "dependencies": {
     "d3-selection": "^0.6.11",
+    "dat-manager": "^2.0.1",
     "dom-css": "^2.0.0",
     "electron-prebuilt": "^0.36.8",
+    "infiniscroll": "^1.1.0",
     "lodash": "^4.5.1",
     "nan": "^2.2.0",
+    "scrollwatch": "^1.1.0",
     "sqlite-search": "^4.1.0",
-    "sqlite3": "^3.1.1",
-    "dat": "^9.6.0"
+    "sqlite3": "^3.1.1"
   },
   "devDependencies": {
     "random-subsets": "0.0.1"
