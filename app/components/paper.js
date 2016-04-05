@@ -13,7 +13,10 @@ function Paper (container) {
   box.className = 'paper'
   var title = box.appendChild(document.createElement('div'))
   var author = box.appendChild(document.createElement('div'))
-  var year = box.appendChild(document.createElement('year'))
+  var year = box.appendChild(document.createElement('div'))
+  var overlay = box.appendChild(document.createElement('div'))
+  var lens = overlay.appendChild(document.createElement('img'))
+  lens.src = './images/lens.png'
 
   var base = {
     position: 'absolute',
@@ -29,6 +32,22 @@ function Paper (container) {
     marginRight: '20px',
     marginBottom: '20px',
     cursor: 'pointer'
+  })
+
+  css(overlay, {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: '100%',
+    height: '100%',
+    display: 'none',
+    background: 'rgba(255, 255, 255, 0.4)',
+    alignItems: 'center',
+    justifyContent: 'center'
+  })
+
+  css(lens, {
+    width: '20%'
   })
 
   self.layout = function () {
@@ -134,6 +153,18 @@ function Paper (container) {
 
   box.onclick  = function () {
     self.emit('click')
+  }
+
+  box.addEventListener("mouseenter", function(event) {
+    if (self.file) css(overlay, { display: 'flex' })
+  })
+
+  box.addEventListener("mouseleave", function(event) {
+    css(overlay, { display: 'none' })
+  })
+
+  lens.onclick = function () {
+    self.emit('lens-click')
   }
 }
 

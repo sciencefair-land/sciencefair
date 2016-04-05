@@ -25,7 +25,6 @@ message.show()
 var metadata = pubdata.getMetadataSource(testing)
 var fulltext = pubdata.getFulltextSource(testing)
 
-console.log(metadata)
 metadata[0].download(dbLoading)
 
 function dbLoading(err, db) {
@@ -35,7 +34,6 @@ function dbLoading(err, db) {
 
 
 function initFulltextSource(datasource) {
-  console.log('initialising fulltext source', datasource.name)
   var dler = downloader(datasource, fulltextSourceReady)
 
   var ready = false
@@ -187,13 +185,11 @@ search.on('input', function (input) {
 })
 
 search.on('prev', function () {
-  console.log('prev clicked')
   offset = Math.max(offset -30, 0)
   fetch(currentSearch)
 })
 
 search.on('next', function () {
-  console.log('next clicked')
   offset += 30
   fetch(currentSearch)
 })
@@ -211,7 +207,6 @@ list.on('click', function (paper) {
     }
     files.forEach((file) => {
       paper.downloaded(file)
-      console.log('downloaded file:', file)
     })
     statbar.updateSpeed(0)
   })

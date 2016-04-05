@@ -22,8 +22,6 @@ PubData.prototype.getFulltextSource = function() {
 }
 
 PubData.prototype.getSource = function(filter) {
-  console.log(this.sources)
-  console.log(_.extend(filter, { testData: this.testing }))
   return _.filter(this.sources, _.extend(filter, { testData: this.testing }))
 }
 
