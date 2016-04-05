@@ -69,9 +69,13 @@ function Paper (container) {
   }
 
   self.update = function (value) {
+    Object.assign(this, value)
+    console.log(value)
     title.innerHTML = value.title
     author.innerHTML = self.etalia(value.authorString)
     year.innerHTML = value.year
+
+    self.loadFile()
   }
 
   self.etalia = function (authorString) {
@@ -96,11 +100,35 @@ function Paper (container) {
     return bits.join('')
   };
 
-  self.downloaded = function () {
+  self.downloadFailed = function (err) {
+    css(box, {
+      borderBottom: 'solid 7px rgb(202,77,107)'
+    })
+  }
+
+  self.downloaded = function (file) {
+    self.file = file.path
     css(box, {
       borderBottom: 'solid 7px rgb(202, 172, 77)'
     })
   }
+
+  self.loadFile = function () {
+    var self = this
+    var filedir = path.join(path.resolve('data'), 'eupmc_fulltexts')
+    var filepath = path.join(filedir, this.pmcid, "fulltext.xml")
+    fs.stat(filepath, function(err, stat) {
+      if (err == null) {
+        // file exists - show lens viewer button
+        self.downloaded({ path: filepath })
+      } else if(err.code == 'ENOENT') {
+        // file doesn't exist - do nothing
+      } else {
+        console.log('Error looking for file: ', filepath, err);
+      }
+    });
+  }
+
 
   self.layout()
 

@@ -14,6 +14,8 @@ app.on('ready', function () {
     icon: './app/images/logo.png'
   })
 
+  main.maximize()
+
   main.loadURL('file://' + __dirname + '/app/index.html')
 
   main.on('closed', function () {

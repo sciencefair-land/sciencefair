@@ -13,28 +13,59 @@ var message = require('./components/message.js')(main)
 var statbar = require('./components/statbar.js')(footer)
 var title = require('./components/title.js')(header)
 
-var getdata = require('./lib/data.js')
+var testing = process.env['SCIENCEFAIR_DEVMODE'] === "TRUE"
+console.log("Testing mode active?", testing)
 
-var dbs = []
-var corpora = []
-
-var testing = true
+var pubdata = require('./lib/pubdata.js')(testing)
 
 message.update('Loading data sources...')
 message.show()
 
-getdata(testing, function(err, datasource) {
-  if (err) {
-    console.log(err)
+
+var metadata = pubdata.getMetadataSource(testing)
+var fulltext = pubdata.getFulltextSource(testing)
+
+console.log(metadata)
+metadata[0].download(dbLoading)
+
+function dbLoading(err, db) {
+  statbar.setdb(db)
+  activateSearch()
+}
+
+
+function initFulltextSource(datasource) {
+  console.log('initialising fulltext source', datasource.name)
+  var dler = downloader(datasource, fulltextSourceReady)
+
+  var ready = false
+
+  var keepLoggingMeta = function(progress) {
+    logProgress(progress)
+    if (!ready) {
+      setTimeout(function() { keepLoggingMeta(progress) }, 10000)
+    }
   }
-  if (datasource.type === 'fulltext') {
-    corpora.push(datasource)
-  } else if (datasource.type === 'metadata') {
-    dbs.push(datasource)
-    statbar.setdb(datasource)
-    activateSearch()
+
+  var fulltextSourceReady = function(err, swarm) {
+    ready = true
+    if (err) {
+      console.trace(err)
+    }
+    statbar.setFulltext(datasource)
   }
-})
+
+  keepLoggingMeta(dler.metaProgress)
+}
+
+function logProgress(p) {
+  console.log(`total bytes local: ${p.total.bytesTotal}`)
+  console.log(`# local directories: ${p.total.directories}`)
+  console.log(`local parentFolder: ${p.parentFolder}`)
+  console.log(`remote directories: ${p.progress.directories}`)
+  console.log(`remote files: ${p.progress.filesRead}`)
+  console.log(`remote bytes read: ${p.progress.bytesRead}`)
+}
 
 function activateSearch() {
   search.showSearch()
@@ -43,7 +74,7 @@ function activateSearch() {
 }
 
 function getSearchOpts() {
-  var db = dbs[0]
+  var db = metadata[0]
 
   return {
     path: path.join(path.resolve('data'), db.dir, db.filename),
@@ -169,9 +200,19 @@ search.on('next', function () {
 
 // fake a download on paper click
 list.on('click', function (paper) {
+  if (paper.file) {
+    return
+  }
   statbar.updateSpeed(50)
-  setTimeout(function () {
+  fulltext[0].downloadPaperHTTP(paper, (err, files) => {
+    if (err) {
+      paper.downloadFailed(err)
+      return console.log(err)
+    }
+    files.forEach((file) => {
+      paper.downloaded(file)
+      console.log('downloaded file:', file)
+    })
     statbar.updateSpeed(0)
-    paper.downloaded()
-  }, 100)
+  })
 })
