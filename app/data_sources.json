@@ -1,0 +1,24 @@
+[
+  {
+    "name": "EuropePMC free articles",
+    "type": "metadata",
+    "format": "sqlite",
+    "version": "0.1",
+    "releaseDate": "2016-03-28",
+    "datHash": "37df27e928ea69f6c83526ad4b99dba2a4beace12063f0ea90952937ea6b900d",
+    "dir": "eupmc_free_metadata",
+    "filename": "eupmc.sqlite",
+    "testData": false
+  },
+  {
+    "name": "EuropePMC 10k article test",
+    "type": "metadata",
+    "format": "sqlite",
+    "version": "0.1",
+    "releaseDate": "2016-03-28",
+    "datHash": "5d35fcedea8fcc07c6ee97e5429dc6aec4fe49165b70ab9997d9972bc9fc4ff9",
+    "dir": "eupmc_free_test_metadata",
+    "filename": "eupmc_10ktest.sqlite",
+    "testData": true
+  }
+]

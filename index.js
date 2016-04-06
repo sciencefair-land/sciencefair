@@ -6,11 +6,12 @@ var main = null
 app.on('ready', function () {
   main = new browser({
     height: 720,
-    resizable: false,
+    resizable: true,
     title: 'sciencefair',
     width: 1050,
     'title-bar-style': 'hidden',
-    fullscreen: false
+    fullscreen: false,
+    icon: './app/images/logo.png'
   })
 
   main.loadURL('file://' + __dirname + '/app/index.html')
