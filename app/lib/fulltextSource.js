@@ -3,11 +3,11 @@ var gravityWell = function(){}
 var Download = require('download')
 var datapath = require('path').resolve('data')
 
-function FulltextSource(source) {
+function FulltextSource(source, datadir) {
   if (!(this instanceof FulltextSource)) return new FulltextSource(source)
 
   Object.assign(this, source)
-
+  this.datadir = datadir
   this.parts = _.toPairsIn(this.datHash).map(extractPart)
   this.downloaders = _.fromPairs(this.parts.map(getWell))
 }
@@ -49,12 +49,23 @@ FulltextSource.prototype.syncMetadata = function(cb) {
 }
 
 FulltextSource.prototype.downloadPaperHTTP = function(paper, cb) {
-  var httpurl = `http://www.ebi.ac.uk/europepmc/webservices/rest/${paper.pmcid}/fullTextXML`
-  var output = path.join(path.resolve('data'), 'eupmc_fulltexts')
-  var dl = new Download()
-  dl.get(httpurl)
-    .rename(`${paper.pmcid}/fulltext.xml`)
+  var baseurl = 'http://www.ebi.ac.uk/europepmc/webservices/rest'
+  var output = path.join(datadir, 'eupmc_fulltexts')
+  var dl = new Download({ extract: true, mode: '755' })
+
+  dl.get(`${baseurl}/${paper.pmcid}/fullTextXML`)
+    .get(`${baseurl}/${paper.pmcid}/supplementaryFiles`)
     .dest(output)
+    .rename(function(file) {
+      file.dirname += `/${paper.pmcid}`
+      if (/fullTextXML/.test(file.basename)) {
+        file.basename = 'fulltext'
+        file.extname = '.xml'
+      } else {
+        file.dirname += '/figures'
+      }
+      return file
+    })
     .run(cb)
 }
 

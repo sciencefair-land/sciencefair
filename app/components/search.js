@@ -25,7 +25,7 @@ function Search (container) {
     position: 'absolute',
     marginTop: 'calc(4% + 2px)',
     marginLeft: 'calc(5% + 2px)',
-    zIndex: 2000,
+    zIndex: 900,
     display: 'none'
   })
 

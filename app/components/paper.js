@@ -2,12 +2,14 @@ var css = require('dom-css')
 var inherits = require('inherits')
 var _ = require('lodash')
 var EventEmitter = require('events').EventEmitter
+var reader = require('./reader.js')
 
 inherits(Paper, EventEmitter)
 
-function Paper (container) {
-  if (!(this instanceof Paper)) return new Paper(container)
+function Paper (container, opts) {
+  if (!(this instanceof Paper)) return new Paper(container, opts)
   var self = this
+  this.opts = opts
 
   var box = container.appendChild(document.createElement('div'))
   box.className = 'paper'
@@ -17,6 +19,8 @@ function Paper (container) {
   var overlay = box.appendChild(document.createElement('div'))
   var lens = overlay.appendChild(document.createElement('img'))
   lens.src = './images/lens.png'
+
+  var lensReader = null
 
   var base = {
     position: 'absolute',
@@ -89,7 +93,7 @@ function Paper (container) {
 
   self.update = function (value) {
     Object.assign(this, value)
-    console.log(value)
+
     title.innerHTML = value.title
     author.innerHTML = self.etalia(value.authorString)
     year.innerHTML = value.year
@@ -134,12 +138,12 @@ function Paper (container) {
 
   self.loadFile = function () {
     var self = this
-    var filedir = path.join(path.resolve('data'), 'eupmc_fulltexts')
-    var filepath = path.join(filedir, this.pmcid, "fulltext.xml")
+    var filepath = this.filepath()
     fs.stat(filepath, function(err, stat) {
       if (err == null) {
         // file exists - show lens viewer button
         self.downloaded({ path: filepath })
+        console.log('paper should be located at', filepath)
       } else if(err.code == 'ENOENT') {
         // file doesn't exist - do nothing
       } else {
@@ -148,6 +152,21 @@ function Paper (container) {
     });
   }
 
+  self.filepath = function() {
+    var dir = opts.fulltextSource.dir
+    var pmcid = self.pmcid
+    var filepath = path.join(opts.datadir, dir, pmcid, 'fulltext.xml')
+    return filepath
+  }
+
+  self.url = function() {
+    var port = opts.contentServer.port
+    var dir = opts.fulltextSource.dir
+    var pmcid = self.pmcid
+    var url = `http://localhost:${port}/${dir}/${pmcid}/fulltext.xml`
+    console.log('paper should be served at', url)
+    return url
+  }
 
   self.layout()
 
@@ -156,7 +175,7 @@ function Paper (container) {
   }
 
   box.addEventListener("mouseenter", function(event) {
-    if (self.file) css(overlay, { display: 'flex' })
+    if (self.file && contentServer.port) css(overlay, { display: 'flex' })
   })
 
   box.addEventListener("mouseleave", function(event) {
@@ -165,6 +184,9 @@ function Paper (container) {
 
   lens.onclick = function () {
     self.emit('lens-click')
+    lensReader = reader(self, self.opts)
+    lensReader.show()
+    // TODO: destroy on close
   }
 }
 

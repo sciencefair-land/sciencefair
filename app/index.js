@@ -2,77 +2,53 @@ var path = require('path')
 var fs = require('fs')
 var searcher  = require('sqlite-search')
 var _ = require('lodash')
+var mkdirp = require('mkdirp')
+var untildify = require('untildify')
 
+var testing = process.env['SCIENCEFAIR_DEVMODE'] === "TRUE"
+console.log("Testing mode", testing ? "ON" : "OFF")
+
+// layout
 var header = document.getElementById('header')
 var main = document.getElementById('main')
 var footer = document.getElementById('footer')
 
-var search = require('./components/search.js')(main)
-var list = require('./components/list.js')(main)
+// setup data sources and server
 var message = require('./components/message.js')(main)
-var statbar = require('./components/statbar.js')(footer)
-var title = require('./components/title.js')(header)
-
-var testing = process.env['SCIENCEFAIR_DEVMODE'] === "TRUE"
-console.log("Testing mode active?", testing)
-
-var pubdata = require('./lib/pubdata.js')(testing)
-
 message.update('Loading data sources...')
 message.show()
 
+var datadir = untildify('~/.sciencefair/data')
+mkdirp.sync(datadir)
+console.log(datadir)
 
-var metadata = pubdata.getMetadataSource(testing)
-var fulltext = pubdata.getFulltextSource(testing)
+var contentServer = require('./lib/contentServer.js')(datadir)
+var pubdata = require('./lib/pubdata.js')(datadir, testing)
 
-metadata[0].download(dbLoading)
+var metadata = pubdata.getMetadataSource(testing)[0]
+var fulltext = pubdata.getFulltextSource(testing)[0]
 
-function dbLoading(err, db) {
+// components
+var search = require('./components/search.js')(main)
+var list = require('./components/list.js')(main, {
+  fulltextSource: fulltext,
+  datadir: datadir,
+  contentServer: contentServer
+})
+var statbar = require('./components/statbar.js')(footer)
+var title = require('./components/title.js')(header)
+
+// start
+metadata.download(function(err, db) {
   statbar.setdb(db)
-  activateSearch()
-}
-
-
-function initFulltextSource(datasource) {
-  var dler = downloader(datasource, fulltextSourceReady)
-
-  var ready = false
-
-  var keepLoggingMeta = function(progress) {
-    logProgress(progress)
-    if (!ready) {
-      setTimeout(function() { keepLoggingMeta(progress) }, 10000)
-    }
-  }
-
-  var fulltextSourceReady = function(err, swarm) {
-    ready = true
-    if (err) {
-      console.trace(err)
-    }
-    statbar.setFulltext(datasource)
-  }
-
-  keepLoggingMeta(dler.metaProgress)
-}
-
-function logProgress(p) {
-  console.log(`total bytes local: ${p.total.bytesTotal}`)
-  console.log(`# local directories: ${p.total.directories}`)
-  console.log(`local parentFolder: ${p.parentFolder}`)
-  console.log(`remote directories: ${p.progress.directories}`)
-  console.log(`remote files: ${p.progress.filesRead}`)
-  console.log(`remote bytes read: ${p.progress.bytesRead}`)
-}
-
-function activateSearch() {
   search.showSearch()
   message.update('Search for a paper.')
   message.show()
-}
+})
 
+// search
 function getSearchOpts() {
-  var db = metadata[0]
+  var db = metadata
 
   return {
     path: path.join(path.resolve('data'), db.dir, db.filename),
@@ -200,7 +176,7 @@ list.on('click', function (paper) {
     return
   }
   statbar.updateSpeed(50)
-  fulltext[0].downloadPaperHTTP(paper, (err, files) => {
+  fulltext.downloadPaperHTTP(paper, (err, files) => {
     if (err) {
       paper.downloadFailed(err)
       return console.log(err)
