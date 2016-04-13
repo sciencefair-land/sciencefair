@@ -1,7 +1,6 @@
 // var gravityWell = require('gravity-well')()
 var gravityWell = function(){}
 var Download = require('download')
-var datapath = require('path').resolve('data')
 
 function FulltextSource(source, datadir) {
   if (!(this instanceof FulltextSource)) return new FulltextSource(source)

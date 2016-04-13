@@ -51,7 +51,7 @@ function getSearchOpts() {
   var db = metadata
 
   return {
-    path: path.join(path.resolve('data'), db.dir, db.filename),
+    path: path.join(datadir, db.dir, db.filename),
     name: 'Papers',
     primaryKey: 'id',
     columns: ['title', 'authorString', 'doi', 'year'],
