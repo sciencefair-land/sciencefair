@@ -1,7 +1,7 @@
 [
   {
-    "name": "EuropePMC fulltext (NLM XML)",
-    "description": "1,219,716 Open Access articles from EuropePMC.",
+    "name": "EuropePMC Lite fulltext (NLM XML)",
+    "description": "1,264,182 Open Access articles from EuropePMC.",
     "type": "fulltext",
     "format": "nlm_dtd_xml",
     "version": "0.3",
@@ -11,14 +11,20 @@
     "testData": true
   },
   {
-    "name": "EuropePMC free articles",
+    "name": "EuropePMC Lite",
     "type": "metadata",
-    "format": "sqlite",
+    "format": "search-index",
     "version": "0.1",
-    "releaseDate": "2016-03-28",
-    "datHash": "37df27e928ea69f6c83526ad4b99dba2a4beace12063f0ea90952937ea6b900d",
-    "dir": "eupmc_free_metadata",
-    "filename": "eupmc.sqlite",
+    "releaseDate": "2016-04-15",
+    "links": [
+      {
+        "type": "http",
+        "link": "https://zenodo.org/record/49813/files/eupmc_lite_metadata_searchindex_2016_04_15.gz"
+      }
+    ],
+    "dir": "eupmc_lite_metadata",
+    "snapshot": "eupmc_lite_metadata_searchindex_2016_04_15.gz",
+    "filename": "eupmc.search-index",
     "testData": false
   },
   {

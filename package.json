@@ -28,6 +28,7 @@
     "path-exists": "^2.1.0",
     "portfinder": "^1.0.3",
     "pump": "^1.0.1",
+    "search-index": "^0.8.1",
     "speedometer": "^1.0.0",
     "sqlite-search": "^4.1.0",
     "sqlite3": "^3.1.1",

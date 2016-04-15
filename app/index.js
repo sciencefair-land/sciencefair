@@ -26,6 +26,7 @@ var contentServer = require('./lib/contentServer.js')(datadir)
 var pubdata = require('./lib/pubdata.js')(datadir, testing)
 
 var metadata = pubdata.getMetadataSource(testing)[0]
+var metadataDB = null
 var fulltext = pubdata.getFulltextSource(testing)[0]
 
 // components
@@ -39,25 +40,15 @@ var statbar = require('./components/statbar.js')(footer)
 var title = require('./components/title.js')(header)
 
 // start
-metadata.download(function(err, db) {
-  statbar.setdb(db)
-  search.showSearch()
-  message.update('Search for a paper.')
-  message.show()
+metadata.ensure(function() {
+  metadataDB = require('./lib/database.js')(metadata)
+  metadataDB.on('ready', function() {
+    statbar.setdb(db)
+    search.showSearch()
+    message.update('Search for a paper.')
+    message.show()
+  })
 })
-
-// search
-function getSearchOpts() {
-  var db = metadata
-
-  return {
-    path: path.join(datadir, db.dir, db.filename),
-    name: 'Papers',
-    primaryKey: 'id',
-    columns: ['title', 'authorString', 'doi', 'year'],
-    limit: 30
-  }
-}
 
 function countResults(instance, input, field) {
   var opts = getSearchOpts()
@@ -73,64 +64,26 @@ function countResults(instance, input, field) {
   })
 }
 
-function runQuery(instance, input, field) {
-  var results = []
-  var total = 0
-  var first = true
-  var opts = getSearchOpts()
-  var conf = {
-    field: field,
-    query: input,
-    limit: opts.limit,
-    offset: offset
-  }
-  var stream = instance.createSearchStream(conf)
-  stream.on('data', function(row) {
-    total += 1
-    if (input === currentSearch) {
-      if (first) {
-        message.hide()
-        first = false
-      }
-      results.push(row)
-      if (results.length == 10) {
-        list.update(results)
-        results = []
-      }
-    }
-  })
-  stream.on('end', function () {
-    if (input === currentSearch) {
-      if (first && results.length == 0) {
-        message.update('No results found.')
-      } else {
-        statbar.updateResultStats({
-          from: offset,
-          to: offset + total
-        })
-        search.updateButtons({
-          from: offset,
-          to: offset + total,
-          total: statbar.totalResults
-        })
-        list.update(results)
-      }
-    }
-  })
-}
-
-// track the most recent search input so we don't
-// mix results from previous partial search entries
-var currentSearch = ''
-var offset = 0
-
 function fetch (input) {
-  var opts = getSearchOpts()
+  var newquery = metadataDB.search(input, null, metadataDB)
+
+  lastquery = newquery
+
+  var resultEmitter = newquery.nextPage()
+
+  resultEmitter.on('err', function(err) {
+    message.update('Oops, there was an error!')
+    message.show()
+    console.log(err)
+  })
+
+  resultEmitter.on('results', function(res) {
+    console.log(res)
+  })
+
   searcher(opts, function (err, instance) {
     if (err) {
-      message.update('Oops, there was an error!')
-      message.show()
-      console.log(err)
+
     }
     list.clear()
 
@@ -145,8 +98,6 @@ function fetch (input) {
 
 // update list on search
 search.on('input', function (input) {
-  offset = 0
-  currentSearch = input
   if (input === '') {
     list.clear()
     statbar.updateResultStats()
