@@ -104,10 +104,14 @@ function Paper (container, opts) {
     self.loadFile()
   }
 
+  self.stringForAuthor = function(a) {
+    return `${a.given_names} ${a.surname}`
+  }
+
   self.etalia = function (authors) {
-    var authorStrs = authors.map((a) => `${a.given_names} ${a.surname}`)
+    var authorStrs = authors.map(self.stringForAuthor)
     if (authors.length > 3) {
-      return authors[0] + ' et al.'
+      return self.stringForAuthor(authors[0]) + ' et al.'
     } else {
       return authorStrs.join(', ')
     }
