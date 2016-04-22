@@ -3,21 +3,23 @@ var path = require('path')
 var fs = require('fs')
 var exists = require('path-exists')
 var mkdirp = require('mkdirp')
+var exec = require('sync-exec')
 
 var metadataSource = require('./metadataSource.js')
 var fulltextSource = require('./fulltextSource.js')
 
 function installTestData(datadir) {
-  var file = path.join('eupmc_free_test_metadata', 'eupmc_10ktest.sqlite')
+  // TODO make this less hacky
+  var file = path.join('eupmc_lite_10k', 'eupmc_lite_10k.tar.bz2')
   var src = path.join(path.resolve('data'), file)
   var dest = path.join(datadir, file)
 
   if (exists.sync(dest)) return
 
   console.log('installing included test data to', dest)
-  mkdirp(path.join(datadir, 'eupmc_free_test_metadata'))
-
+  mkdirp(path.join(datadir, 'eupmc_lite_10k'))
   fs.writeFileSync(dest, fs.readFileSync(src))
+  exec(`cd ${datadir}/eupmc_lite_10k && tar xf eupmc_lite_10k.tar.bz2`)
 }
 
 function PubData(datadir, testing) {

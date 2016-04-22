@@ -1,6 +1,5 @@
 var path = require('path')
 var fs = require('fs')
-var searcher  = require('sqlite-search')
 var _ = require('lodash')
 var mkdirp = require('mkdirp')
 var untildify = require('untildify')
@@ -20,7 +19,7 @@ message.show()
 
 var datadir = untildify('~/.sciencefair/data')
 mkdirp.sync(datadir)
-console.log(datadir)
+console.log('data directory:', datadir)
 
 var contentServer = require('./lib/contentServer.js')(datadir)
 var pubdata = require('./lib/pubdata.js')(datadir, testing)
@@ -43,58 +42,22 @@ var title = require('./components/title.js')(header)
 metadata.ensure(function() {
   metadataDB = require('./lib/database.js')(metadata)
   metadataDB.on('ready', function() {
-    statbar.setdb(db)
+    statbar.setdb(metadataDB)
     search.showSearch()
     message.update('Search for a paper.')
     message.show()
   })
 })
 
-function countResults(instance, input, field) {
-  var opts = getSearchOpts()
-  var cnt = `SELECT count() FROM ${opts.name} WHERE ${field} MATCH '${input}';`
-  var stream = instance.createSearchStream({
-    field: 'Papers',
-    statement: cnt,
-    limit: opts.limit,
-    offset: offset
+var searchCursor = {}
+
+var doSearch = _.debounce(function(query) {
+  searchCursor = metadataDB.search(query, function(err, results) {
+    if (err) throw err
+    console.log(results)
+    list.update(results.hits)
   })
-  stream.on('data', function(row) {
-    statbar.setTotalResults(row['count()'])
-  })
-}
-
-function fetch (input) {
-  var newquery = metadataDB.search(input, null, metadataDB)
-
-  lastquery = newquery
-
-  var resultEmitter = newquery.nextPage()
-
-  resultEmitter.on('err', function(err) {
-    message.update('Oops, there was an error!')
-    message.show()
-    console.log(err)
-  })
-
-  resultEmitter.on('results', function(res) {
-    console.log(res)
-  })
-
-  searcher(opts, function (err, instance) {
-    if (err) {
-
-    }
-    list.clear()
-
-    // count the total hits in a separate query
-    // running a joint query is *much* slower
-    if (offset == 0) {
-      countResults(instance, input, 'Papers')
-    }
-    runQuery(instance, input, 'Papers')
-  })
-}
+}, 200)
 
 // update list on search
 search.on('input', function (input) {
@@ -107,18 +70,16 @@ search.on('input', function (input) {
   } else {
     message.update('Searching...')
     message.show()
-    fetch(input)
+    doSearch(input)
   }
 })
 
 search.on('prev', function () {
-  offset = Math.max(offset -30, 0)
-  fetch(currentSearch)
+  console.log('prev not currently working')
 })
 
 search.on('next', function () {
-  offset += 30
-  fetch(currentSearch)
+  cursor.next()
 })
 
 // fake a download on paper click

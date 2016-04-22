@@ -94,16 +94,23 @@ function Paper (container, opts) {
   self.update = function (value) {
     Object.assign(this, value)
 
-    title.innerHTML = value.title
-    author.innerHTML = self.etalia(value.authorString)
-    year.innerHTML = value.year
+    var pmcid = _.find(self.document.identifier, { type: 'pmcid' }).id
+    this.pmcid = `PMC${pmcid}`
+
+    title.innerHTML = value.document.title
+    author.innerHTML = self.etalia(value.document.author)
+    year.innerHTML = value.document.year
 
     self.loadFile()
   }
 
-  self.etalia = function (authorString) {
-    var authors = authorString.split(', ')
-    return authors.length > 3 ? authors[0] + ' et al.' : authorString
+  self.etalia = function (authors) {
+    var authorStrs = authors.map((a) => `${a.given_names} ${a.surname}`)
+    if (authors.length > 3) {
+      return authors[0] + ' et al.'
+    } else {
+      return authorStrs.join(', ')
+    }
   }
 
   self.truncate = function (str, limit) {
