@@ -54,6 +54,8 @@ var searchCursor = {}
 var doSearch = _.debounce(function(query) {
   searchCursor = metadataDB.search(query, function(err, results) {
     if (err) throw err
+    message.update('')
+    message.hide()
     console.log(results)
     list.update(results.hits)
   })
@@ -61,8 +63,8 @@ var doSearch = _.debounce(function(query) {
 
 // update list on search
 search.on('input', function (input) {
+  list.clear()
   if (input === '') {
-    list.clear()
     statbar.updateResultStats()
     search.hideButtons()
     message.update('Search for a paper.')
