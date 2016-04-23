@@ -126,12 +126,11 @@ function Paper (container, opts) {
   }
 
   self.downloadingXML = function (res, url) {
-    console.log('', res, url)
     if (!res.headers['content-length']) {
       // return
     }
 
-    var total = parseInt(res.headers['content-length'], 10) || 10000
+    var total = parseInt(res.headers['content-length'], 10) || 100000
     var done = 0
 
     res.on('data', function (data) {
@@ -150,7 +149,6 @@ function Paper (container, opts) {
   }
 
   self.updateBar = function (done, total) {
-    console.log(done, total)
     css(bar, { width: `${Math.min((done / total) * 100, 100)}%`})
   }
 

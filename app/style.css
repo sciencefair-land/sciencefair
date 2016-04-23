@@ -99,3 +99,8 @@ body {
 ::selection {
 	background: white;
 }
+
+#browser-plugin-1 {
+  width: 100% !important;
+  height: 100% !important;
+}

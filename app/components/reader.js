@@ -9,11 +9,14 @@ function Reader (paper) {
   if (!(this instanceof Reader)) return new Reader(paper)
   var self = this
 
-  var frame = document.createElement('webview')
+  var encloser = document.createElement('div')
+  var frame = encloser.appendChild(document.createElement('webview'))
   frame.disablewebsecurity = true
-  // frame.addEventListener("dom-ready", function(){
-  //   frame.openDevTools();
-  // });
+  frame.addEventListener("dom-ready", function(){
+    frame.openDevTools()
+  })
+  frame.shadowRoot.applyAuthorStyles = true
+  frame.shadowRoot.children[1].style.cssText = "width: 100%; height: 100%"
 
   var closebtn = document.createElement('img')
   closebtn.src = './images/close.png'
@@ -34,25 +37,32 @@ function Reader (paper) {
   var encodedURL = encodeURIComponent(paper.url())
   frame.src = `./lib/lens/index.html?url=${encodedURL}`
 
-  css(frame, {
+  css(encloser, {
     position: 'fixed',
     left: margin,
     top: margin + marginTopShim,
     bottom: margin,
     right: margin,
     zIndex: 1000,
-    display: 'none'
+    display: 'none',
+    border: 'none'
+  })
+
+  css(frame, {
+    width: '100%',
+    height: '100%',
+    display: 'block'
   })
 
   self.show = function() {
-    document.body.appendChild(frame)
-    css(frame, 'display', 'block')
+    document.body.appendChild(encloser)
+    css(encloser, 'display', 'block')
     document.body.appendChild(closebtn)
     css(closebtn, 'display', 'block')
   }
 
   self.destroy = function() {
-    document.body.removeChild(frame)
+    document.body.removeChild(encloser)
     document.body.removeChild(closebtn)
     delete frame
     delete closebtn
