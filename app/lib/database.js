@@ -18,7 +18,6 @@ function DB (datasource) {
   yuno(opts, function (err, db) {
     if (err) throw err
 
-    console.log('hello')
     self.db = db
 
     // if (datasource.snapshotPath()) {

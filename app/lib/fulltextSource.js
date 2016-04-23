@@ -47,7 +47,7 @@ FulltextSource.prototype.syncMetadata = function(cb) {
   })
 }
 
-FulltextSource.prototype.downloadPaperHTTP = function(paper, cb) {
+FulltextSource.prototype.downloadPaperHTTP = function(paper) {
   var baseurl = 'http://www.ebi.ac.uk/europepmc/webservices/rest'
   var output = path.join(datadir, 'eupmc_fulltexts')
   var dl = new Download({ extract: true, mode: '755' })
@@ -65,7 +65,8 @@ FulltextSource.prototype.downloadPaperHTTP = function(paper, cb) {
       }
       return file
     })
-    .run(cb)
+    .use(paper.downloading)
+    .run()
 }
 
 // Given a Paper find the corresponding dataset part

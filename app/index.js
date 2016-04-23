@@ -57,6 +57,9 @@ var doSearch = _.debounce(function(query) {
     message.update('')
     message.hide()
     console.log(results)
+    if (results.totalHits > results.offset + results.hits.length) {
+      search.showButtons()
+    }
     list.update(results.hits)
   })
 }, 200)
@@ -90,14 +93,5 @@ list.on('click', function (paper) {
     return
   }
   statbar.updateSpeed(50)
-  fulltext.downloadPaperHTTP(paper, (err, files) => {
-    if (err) {
-      paper.downloadFailed(err)
-      return console.log(err)
-    }
-    files.forEach((file) => {
-      paper.downloaded(file)
-    })
-    statbar.updateSpeed(0)
-  })
+  fulltext.downloadPaperHTTP(paper)
 })

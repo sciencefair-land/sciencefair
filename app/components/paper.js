@@ -18,6 +18,7 @@ function Paper (container, opts) {
   var year = box.appendChild(document.createElement('div'))
   var overlay = box.appendChild(document.createElement('div'))
   var lens = overlay.appendChild(document.createElement('img'))
+  var bar = box.appendChild(document.createElement('div'))
   lens.src = './images/lens.png'
 
   var lensReader = null
@@ -36,6 +37,17 @@ function Paper (container, opts) {
     marginRight: '20px',
     marginBottom: '20px',
     cursor: 'pointer'
+  })
+
+  css(bar, {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    zIndex: 999,
+    width: '0%',
+    height: 7,
+    display: 'block',
+    backgroundColor: 'rgb(202, 172, 77)'
   })
 
   css(overlay, {
@@ -101,7 +113,45 @@ function Paper (container, opts) {
     author.innerHTML = self.etalia(value.document.author)
     year.innerHTML = value.document.year
 
+    self.updateBar(0, 9999)
     self.loadFile()
+  }
+
+  self.downloading = function (res, url) {
+    if (/fullTextXML/.test(url)) {
+      self.downloadingXML(res, url)
+    } else if (/supplementaryFiles/.test(url)) {
+      // self.downloadingSupplementaryFiles(res, url)
+    }
+  }
+
+  self.downloadingXML = function (res, url) {
+    console.log('', res, url)
+    if (!res.headers['content-length']) {
+      // return
+    }
+
+    var total = parseInt(res.headers['content-length'], 10) || 10000
+    var done = 0
+
+    res.on('data', function (data) {
+      done += data.length
+      self.updateBar(done, total)
+    })
+
+    res.on('error', function (err) {
+      self.downloadFailed(err)
+      console.log(err)
+    })
+
+    res.on('end', function () {
+      self.downloaded({ path: self.filepath() })
+    })
+  }
+
+  self.updateBar = function (done, total) {
+    console.log(done, total)
+    css(bar, { width: `${Math.min((done / total) * 100, 100)}%`})
   }
 
   self.stringForAuthor = function(a) {
@@ -135,24 +185,25 @@ function Paper (container, opts) {
   };
 
   self.downloadFailed = function (err) {
-    css(box, {
-      borderBottom: 'solid 7px rgb(202,77,107)'
+    css(bar, {
+      width: '100%',
+      backgroundColor: 'rgb(202,77,107)'
     })
   }
 
   self.downloaded = function (file) {
     self.file = file.path
-    css(box, {
-      borderBottom: 'solid 7px rgb(202, 172, 77)'
+    css(bar, {
+      width: '100%'
     })
   }
 
   self.loadFile = function () {
-    var self = this
-    var filepath = this.filepath()
+    var filepath = self.filepath()
     fs.stat(filepath, function(err, stat) {
       if (err == null) {
         // file exists - show lens viewer button
+        // and completion bar
         self.downloaded({ path: filepath })
         console.log('paper should be located at', filepath)
       } else if(err.code == 'ENOENT') {
