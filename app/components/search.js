@@ -93,6 +93,7 @@ function Search (container) {
   self.showSearch = function () {
     css(img, { display: 'block' })
     css(input, { display: 'block' })
+    input.focus()
   }
 
   self.showButtons = function () {
