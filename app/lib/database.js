@@ -10,6 +10,7 @@ function DB (datasource) {
   console.log('loading database at', datasource.dbPath())
 
   var self = this
+  this.datasource = datasource
 
   var opts = _.merge(datasource.dbOpts(), {
     location: datasource.dbPath()

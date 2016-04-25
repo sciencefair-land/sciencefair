@@ -63,7 +63,7 @@ function Statbar (container) {
   }
 
   self.setdb = function (db) {
-    dbname.innerHTML = `database: ${db.name}`
+    dbname.innerHTML = `database: ${db.datasource.name}`
   }
 
   self.setTotalResults(0)
