@@ -64,8 +64,8 @@ function Search (container) {
     background: 'none',
     padding: '3px',
     marginLeft: '10px',
-    height: 60,
-    width: 60
+    height: 40,
+    width: 40
   }
 
   css(first, buttonStyle)
