@@ -52,17 +52,32 @@ metadata.ensure(function() {
 var searchCursor = {}
 
 var doSearch = _.debounce(function(query) {
-  searchCursor = metadataDB.search(query, function(err, results) {
-    if (err) throw err
-    message.update('')
-    message.hide()
-    console.log(results)
-    if (results.totalHits > results.offset + results.hits.length) {
-      search.showButtons()
-    }
-    list.update(results.hits)
-  })
+  searchCursor = metadataDB.search(query, { pageSize: 30 }, updateList)
 }, 200)
+
+function updateList (err, results) {
+  if (err) throw err
+  message.update('')
+  message.hide()
+
+  if (results.offset >= searchCursor.pageSize) {
+    search.showPrev()
+  } else {
+    search.hidePrev()
+  }
+
+  var penultimatePage = Math.floor(results.totalHits/ searchCursor.pageSize)
+  var lastPageStart = penultimatePage * searchCursor.pageSize
+  var lastPage = results.offset >= lastPageStart
+  if (results.totalHits > results.offset && !lastPage) {
+    search.showNext()
+  } else {
+    search.hideNext()
+  }
+
+  list.clear()
+  list.update(results.hits)
+}
 
 // update list on search
 search.on('input', function (input) {
@@ -80,11 +95,11 @@ search.on('input', function (input) {
 })
 
 search.on('prev', function () {
-  console.log('prev not currently working')
+  searchCursor.prev(updateList)
 })
 
 search.on('next', function () {
-  cursor.next()
+  searchCursor.next(updateList)
 })
 
 // fake a download on paper click

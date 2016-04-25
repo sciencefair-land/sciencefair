@@ -203,7 +203,7 @@ function Paper (container, opts) {
         // file exists - show lens viewer button
         // and completion bar
         self.downloaded({ path: filepath })
-        console.log('paper should be located at', filepath)
+        // console.log('paper should be located at', filepath)
       } else if(err.code == 'ENOENT') {
         // file doesn't exist - do nothing
       } else {

@@ -95,15 +95,32 @@ function Search (container) {
     css(input, { display: 'block' })
   }
 
+  self.showButtons = function () {
+    self.showPrev()
+    self.showNext()
+  }
+
+  self.showPrev = function () {
+    css(prev, { display: 'inline-block' })
+  }
+
+  self.showNext = function () {
+    css(next, { display: 'inline-block' })
+  }
+
   self.hideButtons = function () {
+    self.hidePrev()
+    self.hideNext()
+  }
+
+  self.hidePrev = function () {
     css(prev, { display: 'none' })
+  }
+
+  self.hideNext = function () {
     css(next, { display: 'none' })
   }
 
-  self.showButtons = function () {
-    css(prev, { display: 'inline-block' })
-    css(next, { display: 'inline-block' })
-  }
 
   self.updateButtons = function(stats) {
     var first = stats.from == 0
