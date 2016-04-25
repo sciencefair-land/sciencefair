@@ -75,6 +75,11 @@ function updateList (err, results) {
     search.hideNext()
   }
 
+  statbar.setTotalResults(results.totalHits)
+  var from = results.offset + 1
+  var to = results.offset + results.hits.length
+  statbar.updateResultStats({ from: from, to: to })
+
   list.clear()
   list.update(results.hits)
 }
