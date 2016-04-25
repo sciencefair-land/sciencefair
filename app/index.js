@@ -4,6 +4,8 @@ var _ = require('lodash')
 var mkdirp = require('mkdirp')
 var untildify = require('untildify')
 
+var key = require('keymaster')
+
 var testing = process.env['SCIENCEFAIR_DEVMODE'] === "TRUE"
 console.log("Testing mode", testing ? "ON" : "OFF")
 
@@ -61,8 +63,10 @@ function updateList (err, results) {
   message.hide()
 
   if (results.offset >= searchCursor.pageSize) {
+    search.showFirst()
     search.showPrev()
   } else {
+    search.hideFirst()
     search.hidePrev()
   }
 
@@ -71,8 +75,10 @@ function updateList (err, results) {
   var lastPage = results.offset >= lastPageStart
   if (results.totalHits > results.offset && !lastPage) {
     search.showNext()
+    search.showLast()
   } else {
     search.hideNext()
+    search.hideLast()
   }
 
   statbar.setTotalResults(results.totalHits)
@@ -84,7 +90,6 @@ function updateList (err, results) {
   list.update(results.hits)
 }
 
-// update list on search
 search.on('input', function (input) {
   list.clear()
   if (input === '') {
@@ -99,7 +104,28 @@ search.on('input', function (input) {
   }
 })
 
+search.on('first', function () {
+  searchCursor.first(updateList)
+})
+
+key('shift+left', function() {
+  searchCursor.first(updateList)
+})
+
+search.on('last', function () {
+  searchCursor.last(updateList)
+})
+
+key('shift+right', function() {
+  searchCursor.last(updateList)
+})
+
+
 search.on('prev', function () {
+  searchCursor.prev(updateList)
+})
+
+key('left', function() {
   searchCursor.prev(updateList)
 })
 
@@ -107,7 +133,11 @@ search.on('next', function () {
   searchCursor.next(updateList)
 })
 
-// fake a download on paper click
+key('right', function() {
+  searchCursor.next(updateList)
+})
+
+// download on paper click
 list.on('click', function (paper) {
   if (paper.file) {
     return

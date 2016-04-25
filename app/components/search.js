@@ -16,10 +16,14 @@ function Search (container) {
 
   var buttons = container.appendChild(document.createElement('div'))
 
-  var prev = buttons.appendChild(document.createElement('div'))
-  prev.textContent = "⬆"
-  var next = buttons.appendChild(document.createElement('div'))
-  next.textContent = "⬇"
+  var first = buttons.appendChild(document.createElement('img'))
+  first.src = "./images/first.svg"
+  var prev = buttons.appendChild(document.createElement('img'))
+  prev.src = "./images/prev.svg"
+  var next = buttons.appendChild(document.createElement('img'))
+  next.src = "./images/next.svg"
+  var last = buttons.appendChild(document.createElement('img'))
+  last.src = "./images/last.svg"
 
   css(img, {
     position: 'absolute',
@@ -56,15 +60,18 @@ function Search (container) {
   })
 
   var buttonStyle = {
-    transform: 'rotate(-90deg)',
     color: 'rgb(202,172,77)',
-    background: 'rgb(33,33,39)',
+    background: 'none',
     padding: '3px',
-    marginLeft: '20px'
+    marginLeft: '10px',
+    height: 60,
+    width: 60
   }
 
+  css(first, buttonStyle)
   css(prev, buttonStyle)
   css(next, buttonStyle)
+  css(last, buttonStyle)
 
   input.onfocus = function () {
     css(input, {
@@ -82,12 +89,20 @@ function Search (container) {
     self.emit('input', input.value)
   }
 
+  first.onclick = function () {
+    self.emit('first')
+  }
+
   prev.onclick = function () {
     self.emit('prev')
   }
 
   next.onclick = function () {
     self.emit('next')
+  }
+
+  last.onclick = function () {
+    self.emit('last')
   }
 
   self.showSearch = function () {
@@ -97,8 +112,10 @@ function Search (container) {
   }
 
   self.showButtons = function () {
+    self.showFirst()
     self.showPrev()
     self.showNext()
+    self.showLast()
   }
 
   self.showPrev = function () {
@@ -109,9 +126,19 @@ function Search (container) {
     css(next, { display: 'inline-block' })
   }
 
+  self.showFirst = function () {
+    css(first, { display: 'inline-block' })
+  }
+
+  self.showLast = function () {
+    css(last, { display: 'inline-block' })
+  }
+
   self.hideButtons = function () {
+    self.hideFirst()
     self.hidePrev()
     self.hideNext()
+    self.hideLast()
   }
 
   self.hidePrev = function () {
@@ -120,6 +147,14 @@ function Search (container) {
 
   self.hideNext = function () {
     css(next, { display: 'none' })
+  }
+
+  self.hideFirst = function () {
+    css(first, { display: 'none' })
+  }
+
+  self.hideLast = function () {
+    css(last, { display: 'none' })
   }
 
 
