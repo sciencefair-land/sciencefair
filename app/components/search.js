@@ -17,13 +17,13 @@ function Search (container) {
   var buttons = container.appendChild(document.createElement('div'))
 
   var first = buttons.appendChild(document.createElement('img'))
-  first.src = "./images/first.svg"
+  first.className = 'search-btn'
   var prev = buttons.appendChild(document.createElement('img'))
-  prev.src = "./images/prev.svg"
+  prev.className = 'search-btn'
   var next = buttons.appendChild(document.createElement('img'))
-  next.src = "./images/next.svg"
+  next.className = 'search-btn'
   var last = buttons.appendChild(document.createElement('img'))
-  last.src = "./images/last.svg"
+  last.className = 'search-btn'
 
   css(img, {
     position: 'absolute',
@@ -59,19 +59,20 @@ function Search (container) {
     fontFamily: 'CooperHewitt-Book'
   })
 
-  var buttonStyle = {
-    color: 'rgb(202,172,77)',
-    background: 'none',
-    padding: '3px',
-    marginLeft: '10px',
-    height: 40,
-    width: 40
+  function buttonStyle(btn, img) {
+    return {
+      background: 'rgb(43,43,51)',
+      '-webkit-mask': `url(${img}) center / contain no-repeat`,
+      marginLeft: '10px',
+      height: 40,
+      width: 40
+    }
   }
 
-  css(first, buttonStyle)
-  css(prev, buttonStyle)
-  css(next, buttonStyle)
-  css(last, buttonStyle)
+  css(first, buttonStyle(first, './images/first.svg'))
+  css(prev, buttonStyle(prev, './images/prev.svg'))
+  css(next, buttonStyle(next, './images/next.svg'))
+  css(last, buttonStyle(last, './images/last.svg'))
 
   input.onfocus = function () {
     css(input, {

@@ -104,3 +104,11 @@ body {
   width: 100% !important;
   height: 100% !important;
 }
+
+.search-btn {
+  opacity: 1.0;
+}
+
+.search-btn:hover {
+  opacity: 1.0;
+}

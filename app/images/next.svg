@@ -11,5 +11,5 @@
 	<path d="M210.8,213.4c-5.2,0-8.4-5.2-8.4-7.1V84.1c0-1.9,4-6.9,8.4-7.1c5-0.2,8.3,5.3,8.3,7.3v122.1
 		C219.4,208.3,216,213.4,210.8,213.4z"/>
 </g>
-<circle fill="none" stroke="#000000" stroke-width="19" stroke-miterlimit="10" cx="144.5" cy="144.5" r="124.5"/>
+<circle fill="none" stroke="rgb(43,43,51)" stroke-width="19" stroke-miterlimit="10" cx="144.5" cy="144.5" r="124.5"/>
 </svg>
