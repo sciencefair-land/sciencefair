@@ -32,7 +32,7 @@ var fulltext = pubdata.getFulltextSource(testing)[0]
 
 // components
 var search = require('./components/search.js')(main)
-var list = require('./components/list.js')(main, {
+var list = require('./components/table.js')(main, {
   fulltextSource: fulltext,
   datadir: datadir,
   contentServer: contentServer

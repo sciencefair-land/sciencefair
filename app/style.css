@@ -100,15 +100,78 @@ body {
 	background: white;
 }
 
+/* fix for atom webview automatic sizing bug */
 #browser-plugin-1 {
   width: 100% !important;
   height: 100% !important;
 }
 
+/* buttons for navigating search results */
 .search-btn {
-  opacity: 1.0;
+  opacity: 0.9;
 }
 
 .search-btn:hover {
   opacity: 1.0;
+}
+
+/* table view */
+.results-table {
+  table-layout: auto;
+  font-family: 'Aleo-Regular';
+  color: rgb(178, 180, 184);
+  position: absolute;
+  top: calc(4% + 100px);
+  left: 5%;
+  width: 90%;
+  height: calc(96% - 170px);
+}
+.results-table .tr:nth-child(even) {
+  background-color: rgba(43, 43, 51, 0.9);
+}
+.tbody {
+  height: 100%;
+  overflow: auto;
+}
+.row {
+  background-color: rgba(43, 43, 51, 1);
+  display: flex;
+  flex-wrap: wrap;
+  cursor: pointer;
+}
+.row:nth-child(even) {
+  background-color: rgba(43, 43, 51, 0.9);
+}
+.th {
+  font-family: 'CooperHewitt-Book';
+  flex: auto;
+  background-color: rgb(43, 43, 51);
+  padding: .5em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: rgb(202, 172, 77);
+  font-size: 1.4em;
+}
+.td {
+  flex: auto;
+  padding: .5em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.col-title {
+  width: 30%;
+  min-width: 150px;
+}
+.col-author {
+  width: 10%;
+  min-width: 80px;
+}
+.col-doi, .col-pmcid, .col-year {
+  width: 5%;
+  min-width: 60px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }

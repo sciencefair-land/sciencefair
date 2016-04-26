@@ -14,6 +14,7 @@
   "author": "code-for-science",
   "license": "MIT",
   "dependencies": {
+    "csjs": "^1.0.1",
     "d3-selection": "^0.6.11",
     "dat-manager": "^2.0.1",
     "dom-css": "^2.0.0",
@@ -33,6 +34,7 @@
     "sync-exec": "^0.6.2",
     "through2": "^2.0.1",
     "untildify": "^2.1.0",
+    "yo-yo": "^1.2.0",
     "yunodb": "github:blahah/yunodb"
   },
   "devDependencies": {
