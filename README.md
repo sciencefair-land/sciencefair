@@ -1,11 +1,15 @@
-# sciencefair
+# Science Fair
 
-Search, browse, and download open access papers. Made with Electron.
+![](https://github.com/codeforscience/openscienceprize/raw/master/logo.png)
 
-Work in progress! Doesn't really do anything yet.
+Search, browse, and read the scientific literature on your computer.
+
+Science Fair aims to make the outputs of science accessible to everyone. Made with Electron, powered by Dat.
+
+Work in progress! Doesn't really do much yet.
 
 To start, clone this repo, then run
 
 - `npm install` to install dependencies
-- `npm run dev` to start in dev mode with a small database
-- `npm run start` to start the app normally
+- `npm run dev` to start the app with a test database of 10k articles
+- `npm run start` to start the electron app
