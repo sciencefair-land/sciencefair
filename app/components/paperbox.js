@@ -4,10 +4,10 @@ var _ = require('lodash')
 var EventEmitter = require('events').EventEmitter
 var reader = require('./reader.js')
 
-inherits(Paper, EventEmitter)
+inherits(PaperBox, EventEmitter)
 
-function Paper (container, opts) {
-  if (!(this instanceof Paper)) return new Paper(container, opts)
+function PaperBox (container, opts) {
+  if (!(this instanceof Paper)) return new PaperBox(container, opts)
   var self = this
   this.opts = opts
 
@@ -117,70 +117,9 @@ function Paper (container, opts) {
     self.loadFile()
   }
 
-  self.downloading = function (res, url) {
-    if (/fullTextXML/.test(url)) {
-      self.downloadingXML(res, url)
-    } else if (/supplementaryFiles/.test(url)) {
-      // self.downloadingSupplementaryFiles(res, url)
-    }
-  }
-
-  self.downloadingXML = function (res, url) {
-    if (!res.headers['content-length']) {
-      // return
-    }
-
-    var total = parseInt(res.headers['content-length'], 10) || 100000
-    var done = 0
-
-    res.on('data', function (data) {
-      done += data.length
-      self.updateBar(done, total)
-    })
-
-    res.on('error', function (err) {
-      self.downloadFailed(err)
-      console.log(err)
-    })
-
-    res.on('end', function () {
-      self.downloaded({ path: self.filepath() })
-    })
-  }
-
   self.updateBar = function (done, total) {
     css(bar, { width: `${Math.min((done / total) * 100, 100)}%`})
   }
-
-  self.stringForAuthor = function(a) {
-    return `${a.given_names} ${a.surname}`
-  }
-
-  self.etalia = function (authors) {
-    var authorStrs = authors.map(self.stringForAuthor)
-    if (authors.length > 3) {
-      return self.stringForAuthor(authors[0]) + ' et al.'
-    } else {
-      return authorStrs.join(', ')
-    }
-  }
-
-  self.truncate = function (str, limit) {
-    var  bits = str.split('')
-    if (bits.length > limit) {
-      for (var i = bits.length - 1; i > -1; --i) {
-        if (i > limit) {
-          bits.length = i
-        }
-        else if (' ' === bits[i]) {
-          bits.length = i
-          break
-        }
-      }
-      bits.push('...')
-    }
-    return bits.join('')
-  };
 
   self.downloadFailed = function (err) {
     css(bar, {
@@ -196,37 +135,6 @@ function Paper (container, opts) {
     })
   }
 
-  self.loadFile = function () {
-    var filepath = self.filepath()
-    fs.stat(filepath, function(err, stat) {
-      if (err == null) {
-        // file exists - show lens viewer button
-        // and completion bar
-        self.downloaded({ path: filepath })
-        // console.log('paper should be located at', filepath)
-      } else if(err.code == 'ENOENT') {
-        // file doesn't exist - do nothing
-      } else {
-        console.log('Error looking for file: ', filepath, err);
-      }
-    });
-  }
-
-  self.filepath = function() {
-    var dir = opts.fulltextSource.dir
-    var pmcid = self.pmcid
-    var filepath = path.join(opts.datadir, dir, pmcid, 'fulltext.xml')
-    return filepath
-  }
-
-  self.url = function() {
-    var port = opts.contentServer.port
-    var dir = opts.fulltextSource.dir
-    var pmcid = self.pmcid
-    var url = `http://localhost:${port}/${dir}/${pmcid}/fulltext.xml`
-    console.log('paper should be served at', url)
-    return url
-  }
 
   self.layout()
 

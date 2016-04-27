@@ -27,28 +27,12 @@ function Table (container, opts) {
   function render (data) {
     return yo`
     <div class="results-table">
-      ${thead()}
       ${tbody(data)}
     </div>
     `
   }
 
-  function thead (row) {
-    return yo`
-    <div class="thead">
-      <div class="row">
-        <div class="th col-title">Title</div>
-        <div class="th col-author">Author</div>
-        <div class="th col-year">Year</div>
-        <div class="th col-pmcid">PMCid</div>
-        <div class="th col-doi">DOI</div>
-      </div>
-    </div>
-    `
-  }
-
   function tbody (rows) {
-
     var element = yo`
     <div class="tbody">
       ${rows.map(renderRow)}
@@ -59,12 +43,14 @@ function Table (container, opts) {
 
     function renderRow (paper) {
       var pr = PaperRow(paper, opts)
-      pr.on('click', function(a, b, c) {
-        self.emit('click', a, b, c)
+      ;['click', 'lens-click',
+       'xml-click', 'pdf-click'].forEach(function(clicktype) {
+        pr.on(clicktype, function() {
+          self.emit(clicktype, pr)
+        })
       })
       return pr.row
     }
-
   }
 }
 

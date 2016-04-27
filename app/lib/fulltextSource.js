@@ -50,23 +50,40 @@ FulltextSource.prototype.syncMetadata = function(cb) {
 FulltextSource.prototype.downloadPaperHTTP = function(paper) {
   var baseurl = 'http://www.ebi.ac.uk/europepmc/webservices/rest'
   var output = path.join(datadir, 'eupmc_fulltexts')
-  var dl = new Download({ extract: true, mode: '755' })
 
-  dl.get(`${baseurl}/${paper.pmcid}/fullTextXML`)
-    .get(`${baseurl}/${paper.pmcid}/supplementaryFiles`)
+  new Download({ extract: true, mode: '755' })
+    .get(`${baseurl}/${paper.getId('pmcid')}/fullTextXML`)
     .dest(output)
     .rename(function(file) {
-      file.dirname += `/${paper.pmcid}`
-      if (/fullTextXML/.test(file.basename)) {
-        file.basename = 'fulltext'
-        file.extname = '.xml'
-      } else {
-        file.dirname += '/figures'
-      }
+      file.dirname += `/${paper.getId('pmcid')}`
+      file.basename = 'fulltext'
+      file.extname = '.xml'
       return file
     })
-    .use(paper.downloading)
+    .use((res, url) => { paper.downloading(res, url, 'xml') })
     .run()
+  //
+  // dl.get(`${baseurl}/${paper.getId('pmcid')}/fullTextXML`)
+  //   .dest(output)
+  //   .rename(function(file) {
+  //     file.dirname += `/${paper.getId('pmcid')}`
+  //     file.basename = 'fulltext'
+  //     file.extname = '.pdf'
+  //     return file
+  //   })
+  //   .use((res, url) => { paper.downloading(res, url, 'pdf') })
+  //   .run()
+  //
+  new Download({ extract: true, mode: '755' })
+    .get(`${baseurl}/${paper.getId('pmcid')}/supplementaryFiles`)
+    .dest(output)
+    .rename(function(file) {
+      file.dirname += `/${paper.getId('pmcid')}/figures`
+      return file
+    })
+    .use((res, url) => { paper.downloading(res, url, 'supp') })
+    .run()
+
 }
 
 // Given a Paper find the corresponding dataset part

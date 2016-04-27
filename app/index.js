@@ -3,6 +3,7 @@ var fs = require('fs')
 var _ = require('lodash')
 var mkdirp = require('mkdirp')
 var untildify = require('untildify')
+var paper = require('./lib/paper.js')
 
 var key = require('keymaster')
 
@@ -54,7 +55,7 @@ metadata.ensure(function() {
 var searchCursor = {}
 
 var doSearch = _.debounce(function(query) {
-  searchCursor = metadataDB.search(query, { pageSize: 30 }, updateList)
+  searchCursor = metadataDB.search(query, { pageSize: 200 }, updateList)
 }, 200)
 
 function updateList (err, results) {
@@ -87,7 +88,11 @@ function updateList (err, results) {
   statbar.updateResultStats({ from: from, to: to })
 
   list.clear()
-  list.update(results.hits)
+  list.update(results.hits.map((hit) => paper(hit, {
+    fulltextSource: fulltext,
+    datadir: datadir,
+    contentServer: contentServer
+  })))
 }
 
 search.on('input', function (input) {
@@ -120,7 +125,6 @@ key('shift+right', function() {
   searchCursor.last(updateList)
 })
 
-
 search.on('prev', function () {
   searchCursor.prev(updateList)
 })
@@ -138,10 +142,11 @@ key('right', function() {
 })
 
 // download on paper click
-list.on('click', function (paper) {
-  if (paper.file) {
+list.on('click', function (item) {
+  if (item.paper.downloaded) {
+    console.log('paper already downloaded')
     return
   }
   statbar.updateSpeed(50)
-  fulltext.downloadPaperHTTP(paper)
+  fulltext.downloadPaperHTTP(item.paper)
 })

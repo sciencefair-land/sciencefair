@@ -2,178 +2,137 @@ var css = require('dom-css')
 var inherits = require('inherits')
 var EventEmitter = require('events').EventEmitter
 var selection = require('d3-selection')
+var path = require('path')
 
 var yo = require('yo-yo')
 var csjs = require('csjs')
 
+var reader = require('../lib/reader.js')
 var iconbutton = require('./iconbutton.js')
+var asseticon = require('./asseticon.js')
+var buttonbar = require('./buttonbar.js')
+var loading = require('./loading.js')
 
 inherits(PaperRow, EventEmitter)
 
-function PaperRow (paper, opts) {
-  if (!(this instanceof PaperRow)) return new PaperRow(paper, opts)
+function PaperRow (paper) {
+  if (!(this instanceof PaperRow)) return new PaperRow(paper)
   var self = this
-  this.paper = paper.document
-
-  var lens = iconbutton('./images/lens.png')
+  this.paper = paper
 
   var lensReader = null
 
-  var bar = yo`<div></div>`
-
-  var pmcid = _.find(self.paper.identifier, { type: 'pmcid' })
-  this.pmcid = pmcid ? `PMC${pmcid.id}` :  null
-
-  var doi = _.find(self.paper.identifier, { type: 'doi' })
-  this.doi = doi ? doi.id : null
-
-  self.downloading = function (res, url) {
-    if (/fullTextXML/.test(url)) {
-      self.downloadingXML(res, url)
-    } else if (/supplementaryFiles/.test(url)) {
-      // self.downloadingSupplementaryFiles(res, url)
-    }
-  }
-
-  self.downloadingXML = function (res, url) {
-    if (!res.headers['content-length']) {
-      // return
-    }
-
-    var total = parseInt(res.headers['content-length'], 10) || 100000
-    var done = 0
-
-    res.on('data', function (data) {
-      done += data.length
-      self.updateBar(done, total)
-    })
-
-    res.on('error', function (err) {
-      self.downloadFailed(err)
-      console.log(err)
-    })
-
-    res.on('end', function () {
-      self.downloaded({ path: self.filepath() })
-    })
-  }
-
-  self.updateBar = function (done, total) {
-    css(bar, { width: `${Math.min((done / total) * 100, 100)}%`})
-  }
-
-  self.stringForAuthor = function(a) {
-    return `${a.given_names} ${a.surname}`
-  }
-
-  self.etalia = function (authors) {
-    var authorStrs = authors.map(self.stringForAuthor)
-    if (authors.length > 3) {
-      return self.stringForAuthor(authors[0]) + ' et al.'
-    } else {
-      return authorStrs.join(', ')
-    }
-  }
-
-  self.truncate = function (str, limit) {
-    var  bits = str.split('')
-    if (bits.length > limit) {
-      for (var i = bits.length - 1; i > -1; --i) {
-        if (i > limit) {
-          bits.length = i
-        }
-        else if (' ' === bits[i]) {
-          bits.length = i
-          break
-        }
-      }
-      bits.push('...')
-    }
-    return bits.join('')
-  };
-
-  self.downloadFailed = function (err) {
-    css(bar, {
-      width: '100%',
-      backgroundColor: 'rgb(202,77,107)'
-    })
-  }
-
-  self.downloaded = function (file) {
-    self.file = file.path
-    css(bar, {
-      width: '100%'
-    })
-  }
-
-  self.loadFile = function () {
-    var filepath = self.filepath()
-    fs.stat(filepath, function(err, stat) {
-      if (err == null) {
-        // file exists - show lens viewer button
-        // and completion bar
-        self.downloaded({ path: filepath })
-        // console.log('paper should be located at', filepath)
-      } else if(err.code == 'ENOENT') {
-        // file doesn't exist - do nothing
-      } else {
-        console.log('Error looking for file: ', filepath, err);
-      }
-    });
-  }
-
-  self.filepath = function() {
-    var dir = opts.fulltextSource.dir
-    var pmcid = self.pmcid
-    var filepath = path.join(opts.datadir, dir, pmcid, 'fulltext.xml')
-    return filepath
-  }
-
-  self.url = function() {
-    var port = opts.contentServer.port
-    var dir = opts.fulltextSource.dir
-    var pmcid = self.pmcid
-    var url = `http://localhost:${port}/${dir}/${pmcid}/fulltext.xml`
-    console.log('paper should be served at', url)
-    return url
-  }
-
-  lens.onclick = function () {
-    self.emit('lens-click')
-    lensReader = reader(self, self.opts)
+  var xml = asseticon({ ext: 'xml', hidden: true })
+  xml.on('click', function () {
+    self.emit('xml-click')
+    lensReader = reader(self.paper, self.opts)
     lensReader.show()
-    // TODO: destroy on close
+  })
+
+  self.assets = {
+    xml: xml
   }
+
+  self.getAssets = function() {
+    return _.map(self.assets, (value, key) => value.element)
+  }
+
+  self.loading = loading({
+    position: 'absolute',
+    bottom: '-15px',
+    right: 4
+  })
+  self.loading.hide()
 
   self.render = function () {
-    self.row = yo`
+    var row = yo`
     <div class="row paper-table-row">
       <div class="td col-title">${self.paper.title}</div>
-      <div class="td col-author">${self.etalia(self.paper.author)}</div>
+      <div class="td col-author">${self.paper.etalia()}</div>
       <div class="td col-year">${self.paper.year}</div>
-      <div class="td col-pmcid">${self.pmcid}</div>
-      <div class="td col-doi">${self.doi}</div>
+      <div class="td col-ids">
+        ${self.paper.identifier
+          .filter((id) => id.type !== 'publisher-id')
+          .map((id) => {
+            return yo`
+            <div class="paper-table-row-id">
+              <span class="paper-id-type">${id.type}</span>
+              ${id.id}</div>`
+          })
+        }
+      </div>
+      <div class="td col-spacer">
+        ${self.loading.element}
+      </div>
+      <div class="td col-actions">
+        ${self.getAssets()}
+      </div>
     </div>
     `
+
+    row.onclick = function () {
+      self.emit('click')
+    }
+    if (self.row) {
+      yo.update(self.row, row)
+    } else {
+      self.row = row
+    }
   }
 
   self.render()
 
-  self.row.onclick  = function () {
-    self.emit('click')
-  }
-
-  self.row.addEventListener("mouseenter", function(event) {
+  self.row.addEventListener("mouseenter", function (event) {
+    css(self.row, 'opacity', 0.9)
     // if (self.file && contentServer.port) css(overlay, { display: 'flex' })
   })
 
-  self.row.addEventListener("mouseleave", function(event) {
-    // css(overlay, { display: 'none' })
+  self.row.addEventListener("mouseleave", function (event) {
+    css(self.row, 'opacity', 1)
   })
 
+  function getAsset (apath) {
+    var ext = path.extname(apath).substring(1)
+    if (ext === 'supp') {
+      return null
+    }
+    var asset = self.assets[ext]
+    if (!asset) {
+      asset = self.assets[ext] = asseticon({ ext: ext })
+    }
+    return asset
+  }
 
-  self.updateBar(0, 9999)
-  self.loadFile()
+  function updateAssets () {
+    self.paper.assetPaths().forEach(function(apath) {
+      var asset = getAsset(apath)
+      asset.found()
+    })
+    self.render()
+  }
+
+  var stopLoading = _.after(2, function() {
+    setTimeout(self.loading.hide, 500)
+  })
+
+  self.paper.on('download.start', function () {
+    console.log('download started')
+    self.loading.show()
+  })
+
+  self.paper.on('download.end', function() {
+    updateAssets()
+    stopLoading()
+  })
+
+  self.paper.on('download.error', function () {
+    stopLoading()
+  })
+
+  // self.updateBar(0, 9999)
+  // self.loadFile()
+
+  updateAssets()
 
 }
 
