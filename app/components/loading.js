@@ -19,25 +19,37 @@ function Loading (style) {
     css(rect, {
       backgroundColor: color,
       marginRight: 3,
-      animation: `line-scale 1s -0.${i - 1}s infinite cubic-bezier(0.2, 0.68, 0.18, 1.08)`
+      animation: `line-scale 1s -0.${i - 1}s infinite ease`
     })
     return rect
   }
 
+  self.bars = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(bar)
+
   self.element = yo`
   <div class="line-scale">
-    ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(bar)}
+    ${self.bars}
   </div>
   `
 
   if (style) css(self.element, style)
 
   self.show = function() {
+    self.bars.forEach(function(bar) {
+      css(bar, 'max-height', 40)
+    })
     css(self.element, 'display', 'flex')
   }
 
   self.hide = function() {
-    css(self.element, 'display', 'none')
+    self.bars.forEach(function(bar, i) {
+      setTimeout(function() {
+        css(bar, 'max-height', 0)
+      }, i * 100)
+    })
+    setTimeout(function() {
+      css(self.element, 'display', 'none')
+    }, 1500)
   }
 
 }

@@ -12,6 +12,8 @@ var iconbutton = require('./iconbutton.js')
 var asseticon = require('./asseticon.js')
 var buttonbar = require('./buttonbar.js')
 var loading = require('./loading.js')
+var articletype = require('./articletype.js')
+
 
 inherits(PaperRow, EventEmitter)
 
@@ -39,14 +41,17 @@ function PaperRow (paper) {
 
   self.loading = loading({
     position: 'absolute',
-    bottom: '-15px',
-    right: 4
+    bottom: 0,
+    right: 4,
+    display: 'none'
   })
-  self.loading.hide()
+
+  self.type = articletype(self.paper.type)
 
   self.render = function () {
     var row = yo`
     <div class="row paper-table-row">
+      <div class="td col-type">${self.type.element}</div>
       <div class="td col-title">${self.paper.title}</div>
       <div class="td col-author">${self.paper.etalia()}</div>
       <div class="td col-year">${self.paper.year}</div>

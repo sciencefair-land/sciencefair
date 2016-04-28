@@ -132,7 +132,7 @@ body {
 .row {
   background-color: rgba(43, 43, 51, 1);
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   /*cursor: pointer;*/
   margin-bottom: 20px;
   margin-right: 10px;
@@ -146,12 +146,17 @@ body {
   text-overflow: ellipsis;
   overflow: hidden;
 }
+.col-type {
+  width: 48px;
+  max-width: 48px;
+}
 .col-title {
   width: 30%;
-  max-width: 450px;
+  max-width: 30%;
   font-family: 'CooperHewitt-Book';
 }
 .col-author {
+  width: 100px;
   max-width: 100px;
   font-family: 'CooperHewitt-LightItalic';
 }
@@ -160,6 +165,11 @@ body {
   max-width: 50px;
 }
 .col-ids {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  flex-direction: row;
+  max-width: 30%;
 }
 .col-spacer {
 
@@ -169,9 +179,11 @@ body {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-end;
+  max-width: 20%;
 }
 .paper-table-row-id {
-  margin-bottom: 6px;
+  margin-bottom: 10px;
+  margin-right: 10px;
 }
 
 .paper-id-type {
@@ -194,12 +206,16 @@ a {
 @keyframes line-scale {
   0% { transform: scaley(1); }
   50% { transform: scaley(0.4); }
-  100% { transform: scaley(1); } }
+  100% { transform: scaley(1); }
+}
 
 .line-scale > div {
+  /*transition: display 0.5s;*/
+  transition: all 1.5s;
   width: 4px;
-  height: 30px;
+  height: 20px;
   margin: 4px;
   animation-fill-mode: both;
   display: inline-block;
+  transform-origin: center bottom;
 }

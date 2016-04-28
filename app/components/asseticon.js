@@ -31,7 +31,8 @@ function AssetIcon (opts) {
       justifyContent: 'center',
       position: 'relative',
       color: 'rgba(43, 43, 51, 1)',
-      marginLeft: 10
+      marginLeft: 10,
+      marginBottom: 10
     })
 
     if (!self.element) {
@@ -62,6 +63,7 @@ function AssetIcon (opts) {
     </svg></svg>
     `
     css(element, {
+      transition: 'all 1.5s',
       stroke: 'transparent',
       fill: self.opts.bgcolor || 'rgb(178, 180, 184)',
       position: 'absolute',
@@ -82,13 +84,12 @@ function AssetIcon (opts) {
 
   self.hide = function () {
     self.opts.hidden = true
-    console.log(self.element)
-    css(self.element, 'display', 'none')
+    self.render()
   }
 
   self.show = function () {
     self.opts.hidden = false
-    css(self.element, 'display', 'flex')
+    self.render()
   }
 
   self.error = self.hide

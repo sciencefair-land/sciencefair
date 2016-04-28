@@ -19,6 +19,7 @@ function Paper (doc, opts) {
     }
     return id
   })
+  self.identifier = _.sortBy(self.identifier, 'type')
 
   self.assetDir = _.memoize(function () {
     var dir = opts.fulltextSource.dir
@@ -56,6 +57,7 @@ function Paper (doc, opts) {
     })
 
     res.on('error', function (err) {
+      console.log(err)
       self.emit('download.error', {
         type: type,
         url: url,
