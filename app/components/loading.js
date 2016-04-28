@@ -35,17 +35,15 @@ function Loading (style) {
   if (style) css(self.element, style)
 
   self.show = function() {
-    self.bars.forEach(function(bar) {
-      css(bar, 'max-height', 40)
-    })
     css(self.element, 'display', 'flex')
+    self.bars.forEach(function(bar) {
+      css(bar, 'max-height', 15)
+    })
   }
 
   self.hide = function() {
     self.bars.forEach(function(bar, i) {
-      setTimeout(function() {
-        css(bar, 'max-height', 0)
-      }, i * 100)
+      css(bar, 'max-height', 0)
     })
     setTimeout(function() {
       css(self.element, 'display', 'none')

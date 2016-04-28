@@ -33,7 +33,7 @@ var fulltext = pubdata.getFulltextSource(testing)[0]
 
 // components
 var search = require('./components/search.js')(main)
-var list = require('./components/table.js')(main, {
+var displayController = require('./components/displaycontroller.js')(main, {
   fulltextSource: fulltext,
   datadir: datadir,
   contentServer: contentServer
@@ -63,23 +63,29 @@ function updateList (err, results) {
   message.update('')
   message.hide()
 
-  if (results.offset >= searchCursor.pageSize) {
-    search.showFirst()
-    search.showPrev()
+  if (results.totalHits > searchCursor.pageSize) {
+    search.showButtons()
   } else {
-    search.hideFirst()
-    search.hidePrev()
+    search.hideButtons()
+  }
+
+  if (results.offset >= searchCursor.pageSize) {
+    search.onFirst()
+    search.onPrev()
+  } else {
+    search.offFirst()
+    search.offPrev()
   }
 
   var penultimatePage = Math.floor(results.totalHits/ searchCursor.pageSize)
   var lastPageStart = penultimatePage * searchCursor.pageSize
   var lastPage = results.offset >= lastPageStart
   if (results.totalHits > results.offset && !lastPage) {
-    search.showNext()
-    search.showLast()
+    search.onNext()
+    search.onLast()
   } else {
-    search.hideNext()
-    search.hideLast()
+    search.offNext()
+    search.offLast()
   }
 
   statbar.setTotalResults(results.totalHits)
@@ -87,8 +93,8 @@ function updateList (err, results) {
   var to = results.offset + results.hits.length
   statbar.updateResultStats({ from: from, to: to })
 
-  list.clear()
-  list.update(results.hits.map((hit) => paper(hit, {
+  displayController.clear()
+  displayController.update(results.hits.map((hit) => paper(hit, {
     fulltextSource: fulltext,
     datadir: datadir,
     contentServer: contentServer
@@ -96,7 +102,7 @@ function updateList (err, results) {
 }
 
 search.on('input', function (input) {
-  list.clear()
+  displayController.clear()
   if (input === '') {
     statbar.updateResultStats()
     search.hideButtons()
@@ -142,9 +148,9 @@ key('right', function() {
 })
 
 // download on paper click
-list.on('click', function (item) {
-  if (item.paper.downloaded) {
-    console.log('paper already downloaded')
+displayController.on('paper.click', function (item) {
+  console.log('paper.click', item)
+  if (item.paper.downloaded || item.paper.downloadStarted) {
     return
   }
   statbar.updateSpeed(50)

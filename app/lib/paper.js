@@ -20,6 +20,7 @@ function Paper (doc, opts) {
     return id
   })
   self.identifier = _.sortBy(self.identifier, 'type')
+  self.identifier = _.uniqBy(self.identifier, 'type')
 
   self.assetDir = _.memoize(function () {
     var dir = opts.fulltextSource.dir
@@ -34,11 +35,15 @@ function Paper (doc, opts) {
     return paths
   }
 
+  self.downloadsRunning = 0
+
   self.downloading = function (res, url, type) {
     // if we don't know the actual size of the file,
     // assume it's 1MB so the user sees some progress
     var total = parseInt(res.headers['content-length'], 10) || 100000
-    var done = 0
+
+    self.downloadsRunning += 1
+    var bytesReceived = 0
 
     self.emit('download.start', {
       type: type,
@@ -47,12 +52,13 @@ function Paper (doc, opts) {
     })
 
     res.on('data', function (data) {
-      done += data.length
+      bytesReceived += data.length
       self.emit('download.data', {
         type: type,
         url: url,
         response: res,
-        data: data
+        data: data,
+        bytesReceived: bytesReceived
       })
     })
 
@@ -70,9 +76,15 @@ function Paper (doc, opts) {
       self.emit('download.end', {
         type: type,
         url: url,
-        response: res
+        response: res,
+        bytesReceived: bytesReceived
       })
     })
+  }
+
+  self.downloadFinished = function(a, b, c) {
+    self.downloadsRunning -= 1
+    self.emit('download.finished', a, b, c)
   }
 
   self.getId = _.memoize(function (type) {
@@ -98,7 +110,7 @@ function Paper (doc, opts) {
   self.assetUrl = function(assetPath) {
     var port = opts.contentServer.port
     var dir = opts.fulltextSource.dir
-    var pmcid = self.pmcid
+    var pmcid = self.getId('pmcid')
     var url = `http://localhost:${port}/${dir}/${pmcid}/${assetPath}`
     console.log('paper should be served at', url)
     return url

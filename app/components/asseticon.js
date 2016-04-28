@@ -16,7 +16,7 @@ function AssetIcon (opts) {
 
   self.render = function() {
     var element = yo`
-    <div>
+    <div class="asset-icon clickable">
       ${self.svg()}
       ${self.text()}
     </div>

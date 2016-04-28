@@ -27,6 +27,7 @@ function PaperRow (paper) {
   var xml = asseticon({ ext: 'xml', hidden: true })
   xml.on('click', function () {
     self.emit('xml-click')
+    console.log('xml-click')
     lensReader = reader(self.paper, self.opts)
     lensReader.show()
   })
@@ -50,7 +51,7 @@ function PaperRow (paper) {
 
   self.render = function () {
     var row = yo`
-    <div class="row paper-table-row">
+    <div class="row paper-table-row clickable paper">
       <div class="td col-type">${self.type.element}</div>
       <div class="td col-title">${self.paper.title}</div>
       <div class="td col-author">${self.paper.etalia()}</div>
@@ -67,11 +68,11 @@ function PaperRow (paper) {
         }
       </div>
       <div class="td col-spacer">
-        ${self.loading.element}
       </div>
       <div class="td col-actions">
         ${self.getAssets()}
       </div>
+      ${self.loading.element}
     </div>
     `
 
@@ -88,12 +89,9 @@ function PaperRow (paper) {
   self.render()
 
   self.row.addEventListener("mouseenter", function (event) {
-    css(self.row, 'opacity', 0.9)
-    // if (self.file && contentServer.port) css(overlay, { display: 'flex' })
   })
 
   self.row.addEventListener("mouseleave", function (event) {
-    css(self.row, 'opacity', 1)
   })
 
   function getAsset (apath) {
@@ -116,21 +114,22 @@ function PaperRow (paper) {
     self.render()
   }
 
-  var stopLoading = _.after(2, function() {
-    setTimeout(self.loading.hide, 500)
-  })
+  var stopLoading = function() {
+    if (paper.downloadsRunning == 0) setTimeout(self.loading.hide, 500)
+  }
 
   self.paper.on('download.start', function () {
     console.log('download started')
     self.loading.show()
   })
 
-  self.paper.on('download.end', function() {
+  self.paper.on('download.finished', function() {
     updateAssets()
     stopLoading()
   })
 
   self.paper.on('download.error', function () {
+    updateAssets()
     stopLoading()
   })
 

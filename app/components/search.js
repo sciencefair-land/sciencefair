@@ -18,13 +18,13 @@ function Search (container) {
   var buttons = container.appendChild(document.createElement('div'))
 
   var first = buttons.appendChild(document.createElement('img'))
-  first.className = 'search-btn'
+  first.className = 'search-btn clickable'
   var prev = buttons.appendChild(document.createElement('img'))
-  prev.className = 'search-btn'
+  prev.className = 'search-btn clickable'
   var next = buttons.appendChild(document.createElement('img'))
-  next.className = 'search-btn'
+  next.className = 'search-btn clickable'
   var last = buttons.appendChild(document.createElement('img'))
-  last.className = 'search-btn'
+  last.className = 'search-btn clickable'
 
   css(img, {
     position: 'absolute',
@@ -114,49 +114,50 @@ function Search (container) {
   }
 
   self.showButtons = function () {
-    self.showFirst()
-    self.showPrev()
-    self.showNext()
-    self.showLast()
+    ;[first, prev, next, last].forEach(function(b) {
+      css(b, 'display', 'inline-block')
+    })
   }
 
-  self.showPrev = function () {
-    css(prev, { display: 'inline-block' })
+  self.offPrev = function () {
+    css(prev, { opacity: 0.6 })
   }
 
-  self.showNext = function () {
-    css(next, { display: 'inline-block' })
+  self.offNext = function () {
+    css(next, { opacity: 0.6 })
+
   }
 
-  self.showFirst = function () {
-    css(first, { display: 'inline-block' })
+  self.offFirst = function () {
+    css(first, { opacity: 0.6 })
+
   }
 
-  self.showLast = function () {
-    css(last, { display: 'inline-block' })
+  self.offLast = function () {
+    css(last, { opacity: 0.6 })
+
   }
 
   self.hideButtons = function () {
-    self.hideFirst()
-    self.hidePrev()
-    self.hideNext()
-    self.hideLast()
+    ;[first, prev, next, last].forEach(function(b) {
+      css(b, 'display', 'none')
+    })
   }
 
-  self.hidePrev = function () {
-    css(prev, { display: 'none' })
+  self.onPrev = function () {
+    css(prev, { opacity: 0.85 })
   }
 
-  self.hideNext = function () {
-    css(next, { display: 'none' })
+  self.onNext = function () {
+    css(next, { opacity: 0.85 })
   }
 
-  self.hideFirst = function () {
-    css(first, { display: 'none' })
+  self.onFirst = function () {
+    css(first, { opacity: 0.85 })
   }
 
-  self.hideLast = function () {
-    css(last, { display: 'none' })
+  self.onLast = function () {
+    css(last, { opacity: 0.85 })
   }
 
 

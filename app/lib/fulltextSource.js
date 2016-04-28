@@ -61,7 +61,7 @@ FulltextSource.prototype.downloadPaperHTTP = function(paper) {
       return file
     })
     .use((res, url) => { paper.downloading(res, url, 'xml') })
-    .run()
+    .run(paper.downloadFinished)
   //
   // dl.get(`${baseurl}/${paper.getId('pmcid')}/fullTextXML`)
   //   .dest(output)
@@ -82,7 +82,7 @@ FulltextSource.prototype.downloadPaperHTTP = function(paper) {
       return file
     })
     .use((res, url) => { paper.downloading(res, url, 'supp') })
-    .run()
+    .run(paper.downloadFinished)
 
 }
 

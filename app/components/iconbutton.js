@@ -3,7 +3,7 @@ var yo = require('yo-yo')
 
 module.exports = function (src, click) {
   var element = yo`
-  <img onclick=${click} />
+  <img class="clickable" onclick=${click} />
   `
   css(element, {
     width: 40,

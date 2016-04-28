@@ -2,17 +2,18 @@ var css = require('dom-css')
 var inherits = require('inherits')
 var _ = require('lodash')
 var EventEmitter = require('events').EventEmitter
-var reader = require('./reader.js')
+var reader = require('../lib/reader.js')
 
 inherits(PaperBox, EventEmitter)
 
-function PaperBox (container, opts) {
-  if (!(this instanceof Paper)) return new PaperBox(container, opts)
+function PaperBox (paper, opts) {
+  if (!(this instanceof PaperBox)) return new PaperBox(paper, opts)
   var self = this
-  this.opts = opts
+  self.paper = paper
+  self.opts = opts
 
-  var box = container.appendChild(document.createElement('div'))
-  box.className = 'paper'
+  var box = document.createElement('div')
+  box.className = 'paper paper-box clickable'
   var title = box.appendChild(document.createElement('div'))
   var author = box.appendChild(document.createElement('div'))
   var year = box.appendChild(document.createElement('div'))
@@ -20,6 +21,12 @@ function PaperBox (container, opts) {
   var lens = overlay.appendChild(document.createElement('img'))
   var bar = box.appendChild(document.createElement('div'))
   lens.src = './images/lens.png'
+
+  self.pmcid = self.paper.getId('pmcid')
+
+  title.innerHTML = self.paper.title
+  author.innerHTML = self.paper.etalia()
+  year.innerHTML = self.paper.year
 
   var lensReader = null
 
@@ -103,20 +110,6 @@ function PaperBox (container, opts) {
 
   }
 
-  self.update = function (value) {
-    Object.assign(this, value)
-
-    var pmcid = _.find(self.document.identifier, { type: 'pmcid' }).id
-    this.pmcid = `PMC${pmcid}`
-
-    title.innerHTML = value.document.title
-    author.innerHTML = self.etalia(value.document.author)
-    year.innerHTML = value.document.year
-
-    self.updateBar(0, 9999)
-    self.loadFile()
-  }
-
   self.updateBar = function (done, total) {
     css(bar, { width: `${Math.min((done / total) * 100, 100)}%`})
   }
@@ -135,15 +128,17 @@ function PaperBox (container, opts) {
     })
   }
 
-
   self.layout()
+  //
+  // self.updateBar(0, 9999)
+  // self.loadFile()
 
   box.onclick  = function () {
     self.emit('click')
   }
 
   box.addEventListener("mouseenter", function(event) {
-    if (self.file && contentServer.port) css(overlay, { display: 'flex' })
+    if (self.paper && contentServer.port) css(overlay, { display: 'flex' })
   })
 
   box.addEventListener("mouseleave", function(event) {
@@ -152,10 +147,12 @@ function PaperBox (container, opts) {
 
   lens.onclick = function () {
     self.emit('lens-click')
-    lensReader = reader(self, self.opts)
+    lensReader = reader(self.paper, self.opts)
     lensReader.show()
     // TODO: destroy on close
   }
+
+  self.box = box
 }
 
-module.exports = Paper
+module.exports = PaperBox

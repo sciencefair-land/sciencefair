@@ -13,7 +13,7 @@ function Reader (paper) {
   var frame = encloser.appendChild(document.createElement('webview'))
   frame.disablewebsecurity = true
   frame.addEventListener("dom-ready", function(){
-    frame.openDevTools()
+    // frame.openDevTools()
   })
   frame.shadowRoot.applyAuthorStyles = true
   frame.shadowRoot.children[1].style.cssText = "width: 100%; height: 100%"
@@ -34,7 +34,7 @@ function Reader (paper) {
     top: margin + marginTopShim + 5
   })
 
-  var encodedURL = encodeURIComponent(paper.url())
+  var encodedURL = encodeURIComponent(paper.assetUrl('fulltext.xml'))
   frame.src = `./lib/lens/index.html?url=${encodedURL}`
 
   css(encloser, {
