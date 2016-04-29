@@ -2,18 +2,25 @@ var css = require('dom-css')
 var inherits = require('inherits')
 var _ = require('lodash')
 var EventEmitter = require('events').EventEmitter
+var reader = require('./reader.js')
 
 inherits(Paper, EventEmitter)
 
-function Paper (container) {
-  if (!(this instanceof Paper)) return new Paper(container)
+function Paper (container, opts) {
+  if (!(this instanceof Paper)) return new Paper(container, opts)
   var self = this
+  this.opts = opts
 
   var box = container.appendChild(document.createElement('div'))
   box.className = 'paper'
   var title = box.appendChild(document.createElement('div'))
   var author = box.appendChild(document.createElement('div'))
-  var year = box.appendChild(document.createElement('year'))
+  var year = box.appendChild(document.createElement('div'))
+  var overlay = box.appendChild(document.createElement('div'))
+  var lens = overlay.appendChild(document.createElement('img'))
+  lens.src = './images/lens.png'
+
+  var lensReader = null
 
   var base = {
     position: 'absolute',
@@ -29,6 +36,22 @@ function Paper (container) {
     marginRight: '20px',
     marginBottom: '20px',
     cursor: 'pointer'
+  })
+
+  css(overlay, {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: '100%',
+    height: '100%',
+    display: 'none',
+    background: 'rgba(255, 255, 255, 0.4)',
+    alignItems: 'center',
+    justifyContent: 'center'
+  })
+
+  css(lens, {
+    width: '20%'
   })
 
   self.layout = function () {
@@ -69,9 +92,13 @@ function Paper (container) {
   }
 
   self.update = function (value) {
+    Object.assign(this, value)
+
     title.innerHTML = value.title
     author.innerHTML = self.etalia(value.authorString)
     year.innerHTML = value.year
+
+    self.loadFile()
   }
 
   self.etalia = function (authorString) {
@@ -96,16 +123,70 @@ function Paper (container) {
     return bits.join('')
   };
 
-  self.downloaded = function () {
+  self.downloadFailed = function (err) {
+    css(box, {
+      borderBottom: 'solid 7px rgb(202,77,107)'
+    })
+  }
+
+  self.downloaded = function (file) {
+    self.file = file.path
     css(box, {
       borderBottom: 'solid 7px rgb(202, 172, 77)'
     })
+  }
+
+  self.loadFile = function () {
+    var self = this
+    var filepath = this.filepath()
+    fs.stat(filepath, function(err, stat) {
+      if (err == null) {
+        // file exists - show lens viewer button
+        self.downloaded({ path: filepath })
+        console.log('paper should be located at', filepath)
+      } else if(err.code == 'ENOENT') {
+        // file doesn't exist - do nothing
+      } else {
+        console.log('Error looking for file: ', filepath, err);
+      }
+    });
+  }
+
+  self.filepath = function() {
+    var dir = opts.fulltextSource.dir
+    var pmcid = self.pmcid
+    var filepath = path.join(opts.datadir, dir, pmcid, 'fulltext.xml')
+    return filepath
+  }
+
+  self.url = function() {
+    var port = opts.contentServer.port
+    var dir = opts.fulltextSource.dir
+    var pmcid = self.pmcid
+    var url = `http://localhost:${port}/${dir}/${pmcid}/fulltext.xml`
+    console.log('paper should be served at', url)
+    return url
   }
 
   self.layout()
 
   box.onclick  = function () {
     self.emit('click')
+  }
+
+  box.addEventListener("mouseenter", function(event) {
+    if (self.file && contentServer.port) css(overlay, { display: 'flex' })
+  })
+
+  box.addEventListener("mouseleave", function(event) {
+    css(overlay, { display: 'none' })
+  })
+
+  lens.onclick = function () {
+    self.emit('lens-click')
+    lensReader = reader(self, self.opts)
+    lensReader.show()
+    // TODO: destroy on close
   }
 }
 

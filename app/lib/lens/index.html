@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:mml="http://www.w3.org/1998/Math/MathML">
+  <head>
+    <title>eLife Lens</title>
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,400italic,600italic' rel='stylesheet' type='text/css'>
+    
+    <link rel="stylesheet" type="text/css" media="all" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+
+    <!-- A combined lens.css will be generated in the bundling process --> 
+    <!-- While in development, separate links for each CSS file are added, so we don't need a source map -->
+    <link href='lens.css' rel='stylesheet' type='text/css'/>
+
+    <script src="lib/jquery.min.js"></script>
+
+    <!-- MathJax Configuration -->
+    <script type="text/x-mathjax-config">
+       MathJax.Hub.Config({
+         jax: ["input/TeX", "input/MathML","output/HTML-CSS"],
+         extensions: ["MathMenu.js","MathZoom.js", "CHTML-preview.js"],
+         "HTML-CSS": { linebreaks: { automatic: true }, EqnChunk: 9999 },
+         SVG: { linebreaks: { automatic: true }, EqnChunk: 9999  },
+         TeX: {
+           extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
+         },
+         "displayAlign": "left",
+         styles: {".MathJax_Display": {padding: "0em 0em 0em 3em" },".MathJax_SVG_Display": {padding: "0em 0em 0em 3em" },}
+      });
+    </script>
+    <script type="text/javascript" src="http://beta.mathjax.org/mathjax/latest/MathJax.js?config=MML_HTMLorMML-full"></script>
+
+    <script src='lens.js'></script>
+  </head>
+  <body class="loading">
+
+  </body>
+</html>
