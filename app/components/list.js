@@ -6,8 +6,8 @@ var Paper = require('./paper.js')
 
 inherits(List, EventEmitter)
 
-function List (container) {
-  if (!(this instanceof List)) return new List(container)
+function List (container, opts) {
+  if (!(this instanceof List)) return new List(container, opts)
   var self = this
 
   var list = container.appendChild(document.createElement('div'))
@@ -27,7 +27,7 @@ function List (container) {
 
   self.update = function (items) {
     items.forEach(function (item) {
-      var paper = Paper(list)
+      var paper = Paper(list, opts)
       paper.update(item)
       paper.on('click', function () {
         self.emit('click', paper)

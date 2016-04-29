@@ -1,5 +1,16 @@
 [
   {
+    "name": "EuropePMC fulltext (NLM XML)",
+    "description": "1,219,716 Open Access articles from EuropePMC.",
+    "type": "fulltext",
+    "format": "nlm_dtd_xml",
+    "version": "0.3",
+    "releaseDate": "2016-03-31",
+    "datHash": {},
+    "dir": "eupmc_fulltexts",
+    "testData": true
+  },
+  {
     "name": "EuropePMC free articles",
     "type": "metadata",
     "format": "sqlite",

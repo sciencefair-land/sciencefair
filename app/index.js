@@ -2,51 +2,56 @@ var path = require('path')
 var fs = require('fs')
 var searcher  = require('sqlite-search')
 var _ = require('lodash')
+var mkdirp = require('mkdirp')
+var untildify = require('untildify')
 
+var testing = process.env['SCIENCEFAIR_DEVMODE'] === "TRUE"
+console.log("Testing mode", testing ? "ON" : "OFF")
+
+// layout
 var header = document.getElementById('header')
 var main = document.getElementById('main')
 var footer = document.getElementById('footer')
 
-var search = require('./components/search.js')(main)
-var list = require('./components/list.js')(main)
+// setup data sources and server
 var message = require('./components/message.js')(main)
-var statbar = require('./components/statbar.js')(footer)
-var title = require('./components/title.js')(header)
-
-var getdata = require('./lib/data.js')
-
-var dbs = []
-var corpora = []
-
-var testing = true
-
 message.update('Loading data sources...')
 message.show()
 
-getdata(testing, function(err, datasource) {
-  if (err) {
-    console.log(err)
-  }
-  if (datasource.type === 'fulltext') {
-    corpora.push(datasource)
-  } else if (datasource.type === 'metadata') {
-    dbs.push(datasource)
-    statbar.setdb(datasource)
-    activateSearch()
-  }
-})
+var datadir = untildify('~/.sciencefair/data')
+mkdirp.sync(datadir)
+console.log(datadir)
 
-function activateSearch() {
+var contentServer = require('./lib/contentServer.js')(datadir)
+var pubdata = require('./lib/pubdata.js')(datadir, testing)
+
+var metadata = pubdata.getMetadataSource(testing)[0]
+var fulltext = pubdata.getFulltextSource(testing)[0]
+
+// components
+var search = require('./components/search.js')(main)
+var list = require('./components/list.js')(main, {
+  fulltextSource: fulltext,
+  datadir: datadir,
+  contentServer: contentServer
+})
+var statbar = require('./components/statbar.js')(footer)
+var title = require('./components/title.js')(header)
+
+// start
+metadata.download(function(err, db) {
+  statbar.setdb(db)
   search.showSearch()
   message.update('Search for a paper.')
   message.show()
-}
+})
 
+// search
 function getSearchOpts() {
-  var db = dbs[0]
+  var db = metadata
 
   return {
-    path: path.join(path.resolve('data'), db.dir, db.filename),
+    path: path.join(datadir, db.dir, db.filename),
     name: 'Papers',
     primaryKey: 'id',
     columns: ['title', 'authorString', 'doi', 'year'],
@@ -156,22 +161,29 @@ search.on('input', function (input) {
 })
 
 search.on('prev', function () {
-  console.log('prev clicked')
   offset = Math.max(offset -30, 0)
   fetch(currentSearch)
 })
 
 search.on('next', function () {
-  console.log('next clicked')
   offset += 30
   fetch(currentSearch)
 })
 
 // fake a download on paper click
 list.on('click', function (paper) {
+  if (paper.file) {
+    return
+  }
   statbar.updateSpeed(50)
-  setTimeout(function () {
+  fulltext.downloadPaperHTTP(paper, (err, files) => {
+    if (err) {
+      paper.downloadFailed(err)
+      return console.log(err)
+    }
+    files.forEach((file) => {
+      paper.downloaded(file)
+    })
     statbar.updateSpeed(0)
-    paper.downloaded()
-  }, 100)
+  })
 })
