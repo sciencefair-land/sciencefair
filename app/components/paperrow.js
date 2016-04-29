@@ -13,7 +13,7 @@ var asseticon = require('./asseticon.js')
 var buttonbar = require('./buttonbar.js')
 var loading = require('./loading.js')
 var articletype = require('./articletype.js')
-
+var textMinedTerms = require('./textminedterms.js')
 
 inherits(PaperRow, EventEmitter)
 
@@ -49,6 +49,8 @@ function PaperRow (paper) {
 
   self.type = articletype(self.paper.type)
 
+  self.terms = textMinedTerms(self.paper)
+
   self.render = function () {
     var row = yo`
     <div class="row paper-table-row clickable paper">
@@ -67,7 +69,8 @@ function PaperRow (paper) {
           })
         }
       </div>
-      <div class="td col-spacer">
+      <div class="td col-terms">
+        ${self.terms.render()}
       </div>
       <div class="td col-actions">
         ${self.getAssets()}
@@ -106,11 +109,16 @@ function PaperRow (paper) {
     return asset
   }
 
+  function updateTextMinedTerms () {
+    self.terms.load()
+  }
+
   function updateAssets () {
     self.paper.assetPaths().forEach(function(apath) {
       var asset = getAsset(apath)
       asset.found()
     })
+    updateTextMinedTerms()
     self.render()
   }
 
@@ -125,11 +133,13 @@ function PaperRow (paper) {
 
   self.paper.on('download.finished', function() {
     updateAssets()
+    updateTextMinedTerms()
     stopLoading()
   })
 
   self.paper.on('download.error', function () {
     updateAssets()
+    updateTextMinedTerms()
     stopLoading()
   })
 
@@ -137,6 +147,7 @@ function PaperRow (paper) {
   // self.loadFile()
 
   updateAssets()
+  updateTextMinedTerms()
 
 }
 

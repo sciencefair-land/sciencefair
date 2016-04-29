@@ -51,9 +51,9 @@ FulltextSource.prototype.downloadPaperHTTP = function(paper, cb) {
   var baseurl = 'http://www.ebi.ac.uk/europepmc/webservices/rest'
   var output = path.join(datadir, 'eupmc_fulltexts')
 
-  function done(a, b, c) {
-    paper.downloadFinished(a, b, c)
-    if (cb) cb(a, b, c)
+  function done(err, files, other) {
+    paper.downloadFinished(err, files, other)
+    if (cb) cb(err, files, other)
   }
 
   new Download({ extract: true, mode: '755' })
@@ -66,6 +66,18 @@ FulltextSource.prototype.downloadPaperHTTP = function(paper, cb) {
       return file
     })
     .use((res, url) => { paper.downloading(res, url, 'xml') })
+    .run(done)
+
+  new Download({ extract: true, mode: '755' })
+    .get(`${baseurl}/PMC/${paper.getId('pmcid')}/textMinedTerms//1/1000/json`)
+    .dest(output)
+    .rename(function(file) {
+      file.dirname += `/${paper.getId('pmcid')}`
+      file.basename = 'textMinedTerms'
+      file.extname = '.json'
+      return file
+    })
+    .use((res, url) => { paper.downloading(res, url, 'terms') })
     .run(done)
   //
   // dl.get(`${baseurl}/${paper.getId('pmcid')}/fullTextXML`)

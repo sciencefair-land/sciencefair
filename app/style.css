@@ -169,15 +169,15 @@ body {
   flex-direction: row;
   max-width: 30%;
 }
-.col-spacer {
-
+.col-terms {
+  max-width: 250px;
 }
 .col-actions {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-end;
-  max-width: 20%;
+  max-width: 200px;
 }
 .paper-table-row-id {
   display: flex;
