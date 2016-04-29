@@ -53,7 +53,8 @@ function DownloadButton (controller, opts) {
   var inactiveStyle = {
     display: 'flex',
     opacity: 1.0,
-    backgroundColor: 'rgb(111, 174, 193)'
+    backgroundColor: 'rgb(111, 174, 193)',
+    animation: 'none'
   }
 
   var activeStyle = {
@@ -100,8 +101,10 @@ function DownloadButton (controller, opts) {
   }
 
   function allDownloaded () {
-    css(arrow, hiddenStyle)
-    css(tick, activeStyle)
+    setTimeout(function() {
+      css(arrow, hiddenStyle)
+      css(tick, activeStyle)
+    }, 200)
   }
 
   dlbtn.onclick = function () {
