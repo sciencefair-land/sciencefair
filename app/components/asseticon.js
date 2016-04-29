@@ -31,8 +31,7 @@ function AssetIcon (opts) {
       justifyContent: 'center',
       position: 'relative',
       color: 'rgba(43, 43, 51, 1)',
-      marginLeft: 10,
-      marginBottom: 10
+      margin: 5,
     })
 
     if (!self.element) {
@@ -58,7 +57,8 @@ function AssetIcon (opts) {
 
   self.svg = function () {
     var element = yo`
-    <svg viewBox="40 10 207 268"><path d="M241.1,75.7c0-2.3-0.9-4.6-2.6-6.3l-48.4-51.8c-1.7-2-4.3-2.9-6.9-2.9h-121c-8.4,0-15.3,6.9-15.3,15.3v228.4
+    <svg viewBox="40 10 207 268">
+      <path d="M241.1,75.7c0-2.3-0.9-4.6-2.6-6.3l-48.4-51.8c-1.7-2-4.3-2.9-6.9-2.9h-121c-8.4,0-15.3,6.9-15.3,15.3v228.4
     	c0,8.4,6.9,15.3,15.3,15.3h163.9c8.4,0,15.3-6.9,15.3-15.3L241.1,75.7z"/>
     </svg></svg>
     `

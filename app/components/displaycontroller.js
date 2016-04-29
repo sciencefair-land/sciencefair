@@ -4,6 +4,7 @@ var inherits = require('inherits')
 var EventEmitter = require('events').EventEmitter
 var list = require('./list.js')
 var table = require('./table.js')
+var downloadbtn = require('./downloadbtn.js')
 
 inherits(DisplayController, EventEmitter)
 
@@ -83,8 +84,11 @@ function DisplayController (container, opts) {
     self.display.on('click', bubbleClick)
   }
 
+  var dlbtn = downloadbtn(self, opts)
+
   self.update = function(items) {
     self.display.update(items)
+    dlbtn.load()
   }
 
   self.clear = function() {
@@ -95,6 +99,7 @@ function DisplayController (container, opts) {
   <div class="display-controller">
     ${listbtn}
     ${tablebtn}
+    ${dlbtn.element}
   </div>
   `
 

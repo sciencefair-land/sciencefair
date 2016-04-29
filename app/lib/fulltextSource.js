@@ -47,9 +47,14 @@ FulltextSource.prototype.syncMetadata = function(cb) {
   })
 }
 
-FulltextSource.prototype.downloadPaperHTTP = function(paper) {
+FulltextSource.prototype.downloadPaperHTTP = function(paper, cb) {
   var baseurl = 'http://www.ebi.ac.uk/europepmc/webservices/rest'
   var output = path.join(datadir, 'eupmc_fulltexts')
+
+  function done(a, b, c) {
+    paper.downloadFinished(a, b, c)
+    if (cb) cb(a, b, c)
+  }
 
   new Download({ extract: true, mode: '755' })
     .get(`${baseurl}/${paper.getId('pmcid')}/fullTextXML`)
@@ -61,7 +66,7 @@ FulltextSource.prototype.downloadPaperHTTP = function(paper) {
       return file
     })
     .use((res, url) => { paper.downloading(res, url, 'xml') })
-    .run(paper.downloadFinished)
+    .run(done)
   //
   // dl.get(`${baseurl}/${paper.getId('pmcid')}/fullTextXML`)
   //   .dest(output)
@@ -82,7 +87,7 @@ FulltextSource.prototype.downloadPaperHTTP = function(paper) {
       return file
     })
     .use((res, url) => { paper.downloading(res, url, 'supp') })
-    .run(paper.downloadFinished)
+    .run(done)
 
 }
 

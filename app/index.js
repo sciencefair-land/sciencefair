@@ -55,7 +55,7 @@ metadata.ensure(function() {
 var searchCursor = {}
 
 var doSearch = _.debounce(function(query) {
-  searchCursor = metadataDB.search(query, { pageSize: 200 }, updateList)
+  searchCursor = metadataDB.search(query, { pageSize: 50 }, updateList)
 }, 200)
 
 function updateList (err, results) {

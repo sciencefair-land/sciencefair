@@ -35,6 +35,13 @@ function Paper (doc, opts) {
     return paths
   }
 
+  self.download = function (downloadfn, cb) {
+    function done(a, b, c) {
+      if (self.downloadsRunning == 0) cb(a, b, c)
+    }
+    downloadfn(self, done)
+  }
+
   self.downloadsRunning = 0
 
   self.downloading = function (res, url, type) {
