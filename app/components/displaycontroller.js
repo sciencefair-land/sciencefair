@@ -14,18 +14,21 @@ function DisplayController (container, opts) {
 
   self.display = list(container, opts)
 
-  function button(type) {
+  function button (type) {
     var btn = yo`
-    <div class="clickable"></div>
+    <div></div>
     `
     css(btn, {
       backgroundColor: 'rgb(43, 43, 51)',
       '-webkit-mask': `url(./images/${type}.svg) center / contain no-repeat`,
       display: 'flex',
-      height: 40,
-      width: 40,
+      height: 50,
+      width: 50,
       padding: 0,
-      marginRight: 10
+      marginRight: 10,
+      marginLeft: 5,
+      cursor: 'pointer',
+      opacity: 1.0
     })
 
     return btn
@@ -97,8 +100,8 @@ function DisplayController (container, opts) {
 
   self.element = yo`
   <div class="display-controller">
-    ${listbtn}
-    ${tablebtn}
+    <div class='button-wrapper'><div class='clickable'>${listbtn}</div></div>
+    <div class='button-wrapper'><div class='clickable'>${tablebtn}</div></div>
     ${dlbtn.element}
   </div>
   `
@@ -107,7 +110,7 @@ function DisplayController (container, opts) {
     display: 'flex',
     flexDirection: 'row',
     position: 'absolute',
-    marginTop: '3.6%',
+    marginTop: '3.2%',
     left: 'calc(41% + 60px)'
   })
 

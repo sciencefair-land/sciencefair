@@ -21,12 +21,12 @@ function DownloadButton (controller, opts) {
       backgroundColor: 'rgb(43, 43, 51)',
       '-webkit-mask': `url(./images/${type}.svg) center / contain no-repeat`,
       display: 'flex',
-      position: 'absolute',
-      height: 40,
-      width: 40,
+      height: 50,
+      width: 50,
       padding: 0,
-      margin: 0,
-
+      marginRight: 10,
+      marginLeft: 5,
+      cursor: 'pointer'
     })
 
     return btn
@@ -73,10 +73,6 @@ function DownloadButton (controller, opts) {
   }
 
   var dlbtn = button('download_all')
-  css(dlbtn, {
-    marginLeft: 10,
-    width: 59
-  })
 
   var arrow = icon('down_arrow')
   css(arrow, inactiveStyle)
@@ -136,11 +132,7 @@ function DownloadButton (controller, opts) {
   self.load()
 
   self.element = yo`
-  <div class="download-btn">
     ${dlbtn}
-    ${arrow}
-    ${tick}
-  </div>
   `
 
   setInterval(self.load, 2000)
