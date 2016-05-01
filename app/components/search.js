@@ -16,15 +16,22 @@ function Search (container) {
   img.src = './images/search.svg'
 
   var buttons = container.appendChild(document.createElement('div'))
+  var boxStyle = {
+    borderRight: 'dotted rgb(43, 43, 51) 2px',
+    display: 'inline-block'
+  }
 
-  var first = buttons.appendChild(document.createElement('img'))
-  first.className = 'search-btn clickable'
-  var prev = buttons.appendChild(document.createElement('img'))
-  prev.className = 'search-btn clickable'
-  var next = buttons.appendChild(document.createElement('img'))
-  next.className = 'search-btn clickable'
-  var last = buttons.appendChild(document.createElement('img'))
-  last.className = 'search-btn clickable'
+  var group = {}
+
+  ;['first', 'prev', 'next', 'last'].forEach(function (name) {
+    var box = buttons.appendChild(document.createElement('div'))
+    css(box, boxStyle)
+    var wrapper = box.appendChild(document.createElement('div'))
+    wrapper.className = 'clickable'
+    var icon = wrapper.appendChild(document.createElement('img'))
+    icon.className = 'search-btn'
+    group[name] = icon
+  })
 
   css(img, {
     position: 'absolute',
@@ -52,7 +59,7 @@ function Search (container) {
 
   css(buttons, {
     position: 'absolute',
-    marginTop: '4%',
+    marginTop: '3.5%',
     right: '5%',
     border: 'none',
     fontSize: '130%',
@@ -60,20 +67,22 @@ function Search (container) {
     fontFamily: 'CooperHewitt-Book'
   })
 
-  function buttonStyle(btn, img) {
+  function buttonStyle (img) {
     return {
       background: 'rgb(43,43,51)',
       '-webkit-mask': `url(${img}) center / contain no-repeat`,
-      marginLeft: '10px',
+      marginLeft: '5px',
+      marginRight: '10px',
       height: 40,
-      width: 40
+      width: 40,
+      cursor: 'pointer'
     }
   }
 
-  css(first, buttonStyle(first, './images/first.svg'))
-  css(prev, buttonStyle(prev, './images/prev.svg'))
-  css(next, buttonStyle(next, './images/next.svg'))
-  css(last, buttonStyle(last, './images/last.svg'))
+  css(group.first, buttonStyle('./images/first.svg'))
+  css(group.prev, buttonStyle('./images/prev.svg'))
+  css(group.next, buttonStyle('./images/next.svg'))
+  css(group.last, buttonStyle('./images/last.svg'))
 
   input.onfocus = function () {
     css(input, {
@@ -91,19 +100,19 @@ function Search (container) {
     self.emit('input', input.value)
   }
 
-  first.onclick = function () {
+  group.first.onclick = function () {
     self.emit('first')
   }
 
-  prev.onclick = function () {
+  group.prev.onclick = function () {
     self.emit('prev')
   }
 
-  next.onclick = function () {
+  group.next.onclick = function () {
     self.emit('next')
   }
 
-  last.onclick = function () {
+  group.last.onclick = function () {
     self.emit('last')
   }
 
@@ -114,50 +123,50 @@ function Search (container) {
   }
 
   self.showButtons = function () {
-    ;[first, prev, next, last].forEach(function(b) {
+    ;[group.first, group.prev, group.next, group.last].forEach(function(b) {
       css(b, 'display', 'inline-block')
     })
   }
 
   self.offPrev = function () {
-    css(prev, { opacity: 0.6 })
+    css(group.prev, { opacity: 0.4 })
   }
 
   self.offNext = function () {
-    css(next, { opacity: 0.6 })
+    css(group.next, { opacity: 0.4 })
 
   }
 
   self.offFirst = function () {
-    css(first, { opacity: 0.6 })
+    css(group.first, { opacity: 0.4 })
 
   }
 
   self.offLast = function () {
-    css(last, { opacity: 0.6 })
+    css(group.last, { opacity: 0.4 })
 
   }
 
   self.hideButtons = function () {
-    ;[first, prev, next, last].forEach(function(b) {
+    ;[group.first, group.prev, group.next, group.last].forEach(function(b) {
       css(b, 'display', 'none')
     })
   }
 
   self.onPrev = function () {
-    css(prev, { opacity: 0.85 })
+    css(group.prev, { opacity: 0.85 })
   }
 
   self.onNext = function () {
-    css(next, { opacity: 0.85 })
+    css(group.next, { opacity: 0.85 })
   }
 
   self.onFirst = function () {
-    css(first, { opacity: 0.85 })
+    css(group.first, { opacity: 0.85 })
   }
 
   self.onLast = function () {
-    css(last, { opacity: 0.85 })
+    css(group.last, { opacity: 0.85 })
   }
 
 
