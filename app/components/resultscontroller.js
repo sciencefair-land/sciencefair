@@ -5,11 +5,12 @@ var EventEmitter = require('events').EventEmitter
 var list = require('./list.js')
 var table = require('./table.js')
 var downloadbtn = require('./downloadbtn.js')
+var projectMenu = require('./projectmenu.js')
 
-inherits(DisplayController, EventEmitter)
+inherits(ResultsController, EventEmitter)
 
-function DisplayController (container, opts) {
-  if (!(this instanceof DisplayController)) return new DisplayController(container, opts)
+function ResultsController (container, opts) {
+  if (!(this instanceof ResultsController)) return new ResultsController(container, opts)
   var self = this
 
   self.display = list(container, opts)
@@ -89,6 +90,12 @@ function DisplayController (container, opts) {
 
   var dlbtn = downloadbtn(self, opts)
 
+  var projectbtn = button('project')
+  var projectmenu = projectMenu(projectbtn, self)
+  projectbtn.onclick = function() {
+    projectmenu.toggle()
+  }
+
   self.update = function(items) {
     self.display.update(items)
     dlbtn.load()
@@ -102,7 +109,9 @@ function DisplayController (container, opts) {
   <div class="display-controller">
     <div class='button-wrapper'><div class='clickable'>${listbtn}</div></div>
     <div class='button-wrapper'><div class='clickable'>${tablebtn}</div></div>
-    ${dlbtn.element}
+    <div class='button-wrapper'>${dlbtn.element}</div>
+    <div class='button-wrapper'><div class='clickable'>${projectbtn}</div></div>
+    <div class='project-menu'>${projectmenu.element}</div>
   </div>
   `
 
@@ -117,4 +126,4 @@ function DisplayController (container, opts) {
   container.appendChild(self.element)
 }
 
-module.exports = DisplayController
+module.exports = ResultsController

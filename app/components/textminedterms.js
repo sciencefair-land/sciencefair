@@ -23,7 +23,6 @@ function TextMinedTerms (paper) {
     if (rawterms) {
       var json = fs.readFileSync(rawterms, 'utf8')
       self.terms = JSON.parse(json)
-      console.log(self.terms)
     }
     // self.render()
   }
@@ -34,20 +33,19 @@ function TextMinedTerms (paper) {
     css(name, {
       marginRight: 5
     })
-    var element = yo`<div>${name}${count}</div>`
+    var element = yo`<div class="clickable paper-term-badge">${name}${count}</div>`
     css(element, {
       display: 'flex',
       flexDirection: 'row',
-      alignItems: 'center',
-      alignContent: 'center',
-      justifyContent: 'center',
       position: 'relative',
       fontFamily: 'CooperHewitt-Book',
       backgroundColor: 'rgb(178, 180, 184)',
       color: 'rgba(43, 43, 51, 1)',
-      padding: 2,
+      padding: 6,
+      paddingBottom: 0,
       margin: 5,
-      borderRadius: 2
+      borderRadius: 2,
+      height: 22
     })
     return element
   }
@@ -56,7 +54,7 @@ function TextMinedTerms (paper) {
     self.load()
     if (self.terms === null) return null
     var element = yo`
-    <div class="asset-icon clickable">
+    <div>
       ${self.terms.semanticTypeCountList.semanticType.map(renderTypeCount)}
     </div>
     `
@@ -77,71 +75,6 @@ function TextMinedTerms (paper) {
     }
     return self.element
   }
-
-  // self.text = function () {
-  //   var element = yo`
-  //   <div>${self.opts.ext}</div>
-  //   `
-  //   css(element, {
-  //     fontFamily: 'CooperHewitt-Medium',
-  //     fontSize : '0.9em',
-  //     marginTop: '40%',
-  //     textTransform: 'uppercase',
-  //     zIndex: 601
-  //   })
-  //   return element
-  // }
-  //
-  // self.svg = function () {
-  //   var element = yo`
-  //   <svg viewBox="40 10 207 268">
-  //     <path d="M241.1,75.7c0-2.3-0.9-4.6-2.6-6.3l-48.4-51.8c-1.7-2-4.3-2.9-6.9-2.9h-121c-8.4,0-15.3,6.9-15.3,15.3v228.4
-  //   	c0,8.4,6.9,15.3,15.3,15.3h163.9c8.4,0,15.3-6.9,15.3-15.3L241.1,75.7z"/>
-  //   </svg></svg>
-  //   `
-  //   css(element, {
-  //     transition: 'all 1.5s',
-  //     stroke: 'transparent',
-  //     fill: self.opts.bgcolor || 'rgb(178, 180, 184)',
-  //     position: 'absolute',
-  //     left: 0,
-  //     top: 0,
-  //     width: '100%',
-  //     height: '100%',
-  //     zindex: 600
-  //   })
-  //
-  //   return element
-  // }
-  //
-  // self.setBackground = function (color) {
-  //   self.opts.bgcolor = color
-  //   self.render()
-  // }
-  //
-  // self.hide = function () {
-  //   self.opts.hidden = true
-  //   self.render()
-  // }
-  //
-  // self.show = function () {
-  //   self.opts.hidden = false
-  //   self.render()
-  // }
-  //
-  // self.error = self.hide
-  //
-  // self.downloading = function() {
-  //   self.setBackground('rgb(178, 180, 184)')
-  // }
-  //
-  // self.found = function () {
-  //   self.setBackground('rgb(202, 172, 77)')
-  //   self.show()
-  // }
-  //
-  // self.render()
-
 }
 
 module.exports = TextMinedTerms

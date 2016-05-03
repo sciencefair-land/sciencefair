@@ -9,11 +9,13 @@ var key = require('keymaster')
 
 var testing = process.env['SCIENCEFAIR_DEVMODE'] === "TRUE"
 console.log("Testing mode", testing ? "ON" : "OFF")
+if (testing) require('debug-menu').install()
 
 // layout
 var header = document.getElementById('header')
 var main = document.getElementById('main')
 var footer = document.getElementById('footer')
+var title = require('./components/title.js')(header)
 
 // setup data sources and server
 var message = require('./components/message.js')(main)
@@ -28,131 +30,27 @@ var contentServer = require('./lib/contentServer.js')(datadir)
 var pubdata = require('./lib/pubdata.js')(datadir, testing)
 
 var metadata = pubdata.getMetadataSource(testing)[0]
-var metadataDB = null
 var fulltext = pubdata.getFulltextSource(testing)[0]
 
-// components
-var search = require('./components/search.js')(main)
-var displayController = require('./components/displaycontroller.js')(main, {
+var view = require('./components/mainview.js')({
+  containers: {
+    header: header,
+    main: main,
+    footer: footer
+  },
+  pubdata: pubdata,
   fulltextSource: fulltext,
+  metadataSource: metadata,
   datadir: datadir,
-  contentServer: contentServer
+  contentServer: contentServer,
+  testing: testing,
+  message: message
 })
-var statbar = require('./components/statbar.js')(footer)
-var title = require('./components/title.js')(header)
 
 // start
 metadata.ensure(function() {
-  metadataDB = require('./lib/database.js')(metadata)
+  var metadataDB = require('./lib/database.js')(metadata)
   metadataDB.on('ready', function() {
-    statbar.setdb(metadataDB)
-    search.showSearch()
-    message.update('Search for a paper.')
-    message.show()
+    view.metadataReady(metadataDB)
   })
-})
-
-var searchCursor = {}
-
-var doSearch = _.debounce(function(query) {
-  searchCursor = metadataDB.search(query, { pageSize: 50 }, updateList)
-}, 200)
-
-function updateList (err, results) {
-  if (err) throw err
-  message.update('')
-  message.hide()
-
-  if (results.totalHits > searchCursor.pageSize) {
-    search.showButtons()
-  } else {
-    search.hideButtons()
-  }
-
-  if (results.offset >= searchCursor.pageSize) {
-    search.onFirst()
-    search.onPrev()
-  } else {
-    search.offFirst()
-    search.offPrev()
-  }
-
-  var penultimatePage = Math.floor(results.totalHits/ searchCursor.pageSize)
-  var lastPageStart = penultimatePage * searchCursor.pageSize
-  var lastPage = results.offset >= lastPageStart
-  if (results.totalHits > results.offset && !lastPage) {
-    search.onNext()
-    search.onLast()
-  } else {
-    search.offNext()
-    search.offLast()
-  }
-
-  statbar.setTotalResults(results.totalHits)
-  var from = results.offset + 1
-  var to = results.offset + results.hits.length
-  statbar.updateResultStats({ from: from, to: to })
-
-  displayController.clear()
-  displayController.update(results.hits.map((hit) => paper(hit, {
-    fulltextSource: fulltext,
-    datadir: datadir,
-    contentServer: contentServer
-  })))
-}
-
-search.on('input', function (input) {
-  displayController.clear()
-  if (input === '') {
-    statbar.updateResultStats()
-    search.hideButtons()
-    message.update('Search for a paper.')
-    message.show()
-  } else {
-    message.update('Searching...')
-    message.show()
-    doSearch(input)
-  }
-})
-
-search.on('first', function () {
-  searchCursor.first(updateList)
-})
-
-key('shift+left', function() {
-  searchCursor.first(updateList)
-})
-
-search.on('last', function () {
-  searchCursor.last(updateList)
-})
-
-key('shift+right', function() {
-  searchCursor.last(updateList)
-})
-
-search.on('prev', function () {
-  searchCursor.prev(updateList)
-})
-
-key('left', function() {
-  searchCursor.prev(updateList)
-})
-
-search.on('next', function () {
-  searchCursor.next(updateList)
-})
-
-key('right', function() {
-  searchCursor.next(updateList)
-})
-
-// download on paper click
-displayController.on('paper.click', function (item) {
-  console.log('paper.click', item)
-  if (item.paper.downloaded || item.paper.downloadStarted) {
-    return
-  }
-  statbar.updateSpeed(50)
-  fulltext.downloadPaperHTTP(item.paper)
 })

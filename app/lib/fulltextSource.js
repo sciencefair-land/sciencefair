@@ -37,7 +37,6 @@ function getWell(part) {
   return [part, gravityWell(part)]
 }
 
-
 // Sync the metadata for every hyperdrive loaded.
 // call `cb` when all have completed
 FulltextSource.prototype.syncMetadata = function(cb) {

@@ -54,26 +54,35 @@ function PaperRow (paper) {
   self.render = function () {
     var row = yo`
     <div class="row paper-table-row clickable paper">
-      <div class="td col-type">${self.type.element}</div>
-      <div class="td col-title">${self.paper.title}</div>
-      <div class="td col-author">${self.paper.etalia()}</div>
-      <div class="td col-year">${self.paper.year}</div>
-      <div class="td col-ids">
-        ${self.paper.identifier
-          .filter((id) => id.type !== 'publisher-id')
-          .map((id) => {
-            return yo`
-            <div class="paper-table-row-id">
-              <span class="paper-id-type">${id.type}</span>
-              ${id.id}</div>`
-          })
-        }
+      <div class="td paper-element paper-type">${self.type.element}</div>
+      <div class="td paper-element paper-biblio">
+        <div class="row">
+          <div class="paper-element paper-title">${self.paper.title}</div>
+        </div>
+        <div class="row">
+          <div class="paper-element paper-author">${self.paper.etalia()}</div>
+          <div class="paper-element paper-year">${self.paper.year}</div>
+          <div class="paper-element paper-ids">
+            ${self.paper.identifier
+              .filter((id) => id.type !== 'publisher-id')
+              .map((id) => {
+                return yo`
+                <div class="paper-table-row-id clickable">
+                  <span class="paper-id-type">${id.type}</span>
+                  <span class="paper-id-id">${id.id}</span>
+                </div>`
+              })
+            }
+          </div>
+        </div>
       </div>
-      <div class="td col-terms">
-        ${self.terms.render()}
-      </div>
-      <div class="td col-actions">
-        ${self.getAssets()}
+      <div class="td paper-element paper-data">
+        <div class="paper-element paper-terms">
+          ${self.terms.render()}
+        </div>
+        <div class="paper-element paper-actions">
+          ${self.getAssets()}
+        </div>
       </div>
       ${self.loading.element}
     </div>
