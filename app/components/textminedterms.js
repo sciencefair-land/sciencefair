@@ -3,7 +3,6 @@ var _ = require('lodash')
 var EventEmitter = require('events').EventEmitter
 var css = require('dom-css')
 var yo = require('yo-yo')
-var parsexml = require('xml-parser')
 var fs = require('fs')
 
 inherits(TextMinedTerms, EventEmitter)
@@ -16,18 +15,18 @@ function TextMinedTerms (paper) {
   self.paper = paper
   self.terms = null
 
-  self.load = function() {
-    var rawterms = _.find(self.paper.assetPaths(), function(p) {
+  self.load = function () {
+    var rawterms = _.find(self.paper.assetPaths(), function (p) {
       return /textMinedTerms\.json$/.test(p)
     })
     if (rawterms) {
       var json = fs.readFileSync(rawterms, 'utf8')
       self.terms = JSON.parse(json)
     }
-    // self.render()
+  // self.render()
   }
 
-  function renderTypeCount(obj) {
+  function renderTypeCount (obj) {
     var name = yo`<div>${obj.name}</div>`
     var count = yo`<div>${obj.count}</div>`
     css(name, {
@@ -50,7 +49,7 @@ function TextMinedTerms (paper) {
     return element
   }
 
-  self.render = function() {
+  self.render = function () {
     self.load()
     if (self.terms === null) return null
     var element = yo`

@@ -1,21 +1,14 @@
-var path = require('path')
-var fs = require('fs')
-var _ = require('lodash')
 var mkdirp = require('mkdirp')
 var untildify = require('untildify')
-var paper = require('./lib/paper.js')
 
-var key = require('keymaster')
-
-var testing = process.env['SCIENCEFAIR_DEVMODE'] === "TRUE"
-console.log("Testing mode", testing ? "ON" : "OFF")
+var testing = process.env['SCIENCEFAIR_DEVMODE'] === 'TRUE'
+console.log('Testing mode', testing ? 'ON' : 'OFF')
 if (testing) require('debug-menu').install()
 
 // layout
 var header = document.getElementById('header')
 var main = document.getElementById('main')
 var footer = document.getElementById('footer')
-var title = require('./components/title.js')(header)
 
 // setup data sources and server
 var message = require('./components/message.js')(main)
@@ -48,9 +41,9 @@ var view = require('./components/mainview.js')({
 })
 
 // start
-metadata.ensure(function() {
+metadata.ensure(function () {
   var metadataDB = require('./lib/database.js')(metadata)
-  metadataDB.on('ready', function() {
+  metadataDB.on('ready', function () {
     view.metadataReady(metadataDB)
   })
 })

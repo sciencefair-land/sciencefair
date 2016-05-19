@@ -1,5 +1,4 @@
 var inherits = require('inherits')
-var _ = require('lodash')
 var EventEmitter = require('events').EventEmitter
 var css = require('dom-css')
 var yo = require('yo-yo')
@@ -14,7 +13,7 @@ function AssetIcon (opts) {
   var width = opts.width || 34
   var height = width * 1.27
 
-  self.render = function() {
+  self.render = function () {
     var element = yo`
     <div class="asset-icon clickable">
       ${self.svg()}
@@ -31,13 +30,17 @@ function AssetIcon (opts) {
       justifyContent: 'center',
       position: 'relative',
       color: 'rgba(43, 43, 51, 1)',
-      margin: 5,
+      margin: 5
     })
 
     if (!self.element) {
       self.element = element
     } else {
       yo.update(self.element, element)
+    }
+
+    self.element.onclick = function () {
+      self.emit('click', self)
     }
   }
 
@@ -47,7 +50,7 @@ function AssetIcon (opts) {
     `
     css(element, {
       fontFamily: 'CooperHewitt-Medium',
-      fontSize : '0.9em',
+      fontSize: '0.9em',
       marginTop: '40%',
       textTransform: 'uppercase',
       zIndex: 601
@@ -94,7 +97,7 @@ function AssetIcon (opts) {
 
   self.error = self.hide
 
-  self.downloading = function() {
+  self.downloading = function () {
     self.setBackground('rgb(178, 180, 184)')
   }
 
@@ -103,8 +106,9 @@ function AssetIcon (opts) {
     self.show()
   }
 
-  self.render()
+  self.paths = new Set()
 
+  self.render()
 }
 
 module.exports = AssetIcon

@@ -1,19 +1,16 @@
-var css = require('dom-css')
 var inherits = require('inherits')
 var EventEmitter = require('events').EventEmitter
-var selection = require('d3-selection')
 var path = require('path')
 
 var yo = require('yo-yo')
-var csjs = require('csjs')
 
 var reader = require('../lib/reader.js')
-var iconbutton = require('./iconbutton.js')
 var asseticon = require('./asseticon.js')
-var buttonbar = require('./buttonbar.js')
 var loading = require('./loading.js')
 var articletype = require('./articletype.js')
 var textMinedTerms = require('./textminedterms.js')
+var overlay = require('./overlay.js')
+var _ = require('lodash')
 
 inherits(PaperRow, EventEmitter)
 
@@ -24,19 +21,38 @@ function PaperRow (paper) {
 
   var lensReader = null
 
-  var xml = asseticon({ ext: 'xml', hidden: true })
-  xml.on('click', function () {
-    self.emit('xml-click')
-    console.log('xml-click')
-    lensReader = reader(self.paper, self.opts)
-    lensReader.show()
-  })
+  self.assetActions = {
+    xml: function (asset) {
+      self.emit('xml-click')
+      console.log('xml-click')
+      lensReader = reader(self.paper, self.opts)
+      lensReader.show()
+    },
+    json: function (asset) {
+      console.log('json-click')
+    },
+    jpg: function (asset) {
+      console.log('jpg-click', asset)
+      var img = yo`
+      <div>
+      ${Array.from(asset.paths).map(function (p) {
+        return yo`<img src='${p}' />`
+      })}
+      </div>
+      `
+      overlay(img)
+    }
+  }
+  self.assetActions.jpeg = self.assetActions.jpg
 
-  self.assets = {
-    xml: xml
+  self.assetAction = function (asset) {
+    var action = self.assetActions[asset.opts.ext]
+    if (action) action(asset)
   }
 
-  self.getAssets = function() {
+  self.assets = {}
+
+  self.getAssets = function () {
     return _.map(self.assets, (value, key) => value.element)
   }
 
@@ -70,7 +86,8 @@ function PaperRow (paper) {
                 <div class="paper-table-row-id clickable">
                   <span class="paper-id-type">${id.type}</span>
                   <span class="paper-id-id">${id.id}</span>
-                </div>`
+                </div>
+                `
               })
             }
           </div>
@@ -100,12 +117,6 @@ function PaperRow (paper) {
 
   self.render()
 
-  self.row.addEventListener("mouseenter", function (event) {
-  })
-
-  self.row.addEventListener("mouseleave", function (event) {
-  })
-
   function getAsset (apath) {
     var ext = path.extname(apath).substring(1)
     if (ext === 'supp') {
@@ -114,7 +125,9 @@ function PaperRow (paper) {
     var asset = self.assets[ext]
     if (!asset) {
       asset = self.assets[ext] = asseticon({ ext: ext })
+      asset.on('click', function (asset) { self.assetAction(asset) })
     }
+    asset.paths.add(apath)
     return asset
   }
 
@@ -123,7 +136,7 @@ function PaperRow (paper) {
   }
 
   function updateAssets () {
-    self.paper.assetPaths().forEach(function(apath) {
+    self.paper.assetPaths().forEach(function (apath) {
       var asset = getAsset(apath)
       asset.found()
     })
@@ -131,8 +144,8 @@ function PaperRow (paper) {
     self.render()
   }
 
-  var stopLoading = function() {
-    if (paper.downloadsRunning == 0) setTimeout(self.loading.hide, 500)
+  var stopLoading = function () {
+    if (paper.downloadsRunning === 0) setTimeout(self.loading.hide, 500)
   }
 
   self.paper.on('download.start', function () {
@@ -140,7 +153,7 @@ function PaperRow (paper) {
     self.loading.show()
   })
 
-  self.paper.on('download.finished', function() {
+  self.paper.on('download.finished', function () {
     updateAssets()
     updateTextMinedTerms()
     stopLoading()
@@ -152,12 +165,8 @@ function PaperRow (paper) {
     stopLoading()
   })
 
-  // self.updateBar(0, 9999)
-  // self.loadFile()
-
   updateAssets()
   updateTextMinedTerms()
-
 }
 
 module.exports = PaperRow

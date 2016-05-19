@@ -1,9 +1,12 @@
 var inherits = require('inherits')
 var EventEmitter = require('events').EventEmitter
+var key = require('keymaster')
+var _ = require('lodash')
+var paper = require('../lib/paper.js')
 
 inherits(MainView, EventEmitter)
 
-function MainView(opts) {
+function MainView (opts) {
   if (!(this instanceof MainView)) return new MainView(opts)
 
   var self = this
@@ -23,7 +26,7 @@ function MainView(opts) {
 
   var searchCursor = {}
 
-  var doSearch = _.debounce(function(query) {
+  var doSearch = _.debounce(function (query) {
     searchCursor = self.metadataDB.search(query, { pageSize: 50 }, updateList)
   }, 200)
 
@@ -46,7 +49,7 @@ function MainView(opts) {
       search.offPrev()
     }
 
-    var penultimatePage = Math.floor(results.totalHits/ searchCursor.pageSize)
+    var penultimatePage = Math.floor(results.totalHits / searchCursor.pageSize)
     var lastPageStart = penultimatePage * searchCursor.pageSize
     var lastPage = results.offset >= lastPageStart
     if (results.totalHits > results.offset && !lastPage) {
@@ -84,7 +87,7 @@ function MainView(opts) {
     searchCursor.first(updateList)
   })
 
-  key('shift+left', function() {
+  key('shift+left', function () {
     searchCursor.first(updateList)
   })
 
@@ -92,7 +95,7 @@ function MainView(opts) {
     searchCursor.last(updateList)
   })
 
-  key('shift+right', function() {
+  key('shift+right', function () {
     searchCursor.last(updateList)
   })
 
@@ -100,7 +103,7 @@ function MainView(opts) {
     searchCursor.prev(updateList)
   })
 
-  key('left', function() {
+  key('left', function () {
     searchCursor.prev(updateList)
   })
 
@@ -108,7 +111,7 @@ function MainView(opts) {
     searchCursor.next(updateList)
   })
 
-  key('right', function() {
+  key('right', function () {
     searchCursor.next(updateList)
   })
 
@@ -119,17 +122,16 @@ function MainView(opts) {
       return
     }
     statbar.updateSpeed(50)
-    fulltext.downloadPaperHTTP(item.paper)
+    opts.fulltextSource.downloadPaperHTTP(item.paper)
   })
 
-  self.metadataReady = function(metadataDB) {
+  self.metadataReady = function (metadataDB) {
     self.metadataDB = metadataDB
     statbar.setdb(metadataDB)
     search.showSearch()
     opts.message.update('Search for a paper.')
     opts.message.show()
   }
-
 }
 
 module.exports = MainView

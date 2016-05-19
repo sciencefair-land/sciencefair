@@ -1,7 +1,6 @@
 var css = require('dom-css')
 var inherits = require('inherits')
 var EventEmitter = require('events').EventEmitter
-var selection = require('d3-selection')
 var yo = require('yo-yo')
 var projectManager = require('../lib/projectmanager.js')
 var displayController = require('./resultscontroller.js')
@@ -46,7 +45,7 @@ function ProjectMenu (btn, controller) {
     render()
   }
 
-  css(addinput,{
+  css(addinput, {
     width: '100%',
     height: '100%',
     border: 'none',
@@ -75,7 +74,7 @@ function ProjectMenu (btn, controller) {
       </div>
     </div>
     `
-    css(element,{
+    css(element, {
       position: 'absolute',
       top: y,
       left: x,
@@ -106,7 +105,6 @@ function ProjectMenu (btn, controller) {
       </div>
       `
     }
-
   }
 
   function renderProjectEntry (project) {
@@ -117,7 +115,7 @@ function ProjectMenu (btn, controller) {
     })
 
     addallbtn.onlick = function () {
-      project.putBatch(controller.display.papers, function(err) {
+      project.putBatch(controller.display.papers, function (err) {
         if (err) throw err
         console.log('added', controller.display.papers.length, 'to', project.name)
       })
