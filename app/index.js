@@ -3,6 +3,9 @@ var fs = require('fs')
 var _ = require('lodash')
 var mkdirp = require('mkdirp')
 var untildify = require('untildify')
+var paper = require('./lib/paper.js')
+
+var key = require('keymaster')
 
 var testing = process.env['SCIENCEFAIR_DEVMODE'] === "TRUE"
 console.log("Testing mode", testing ? "ON" : "OFF")
@@ -30,7 +33,7 @@ var fulltext = pubdata.getFulltextSource(testing)[0]
 
 // components
 var search = require('./components/search.js')(main)
-var list = require('./components/list.js')(main, {
+var displayController = require('./components/displaycontroller.js')(main, {
   fulltextSource: fulltext,
   datadir: datadir,
   contentServer: contentServer
@@ -52,7 +55,7 @@ metadata.ensure(function() {
 var searchCursor = {}
 
 var doSearch = _.debounce(function(query) {
-  searchCursor = metadataDB.search(query, { pageSize: 30 }, updateList)
+  searchCursor = metadataDB.search(query, { pageSize: 50 }, updateList)
 }, 200)
 
 function updateList (err, results) {
@@ -60,19 +63,29 @@ function updateList (err, results) {
   message.update('')
   message.hide()
 
-  if (results.offset >= searchCursor.pageSize) {
-    search.showPrev()
+  if (results.totalHits > searchCursor.pageSize) {
+    search.showButtons()
   } else {
-    search.hidePrev()
+    search.hideButtons()
+  }
+
+  if (results.offset >= searchCursor.pageSize) {
+    search.onFirst()
+    search.onPrev()
+  } else {
+    search.offFirst()
+    search.offPrev()
   }
 
   var penultimatePage = Math.floor(results.totalHits/ searchCursor.pageSize)
   var lastPageStart = penultimatePage * searchCursor.pageSize
   var lastPage = results.offset >= lastPageStart
   if (results.totalHits > results.offset && !lastPage) {
-    search.showNext()
+    search.onNext()
+    search.onLast()
   } else {
-    search.hideNext()
+    search.offNext()
+    search.offLast()
   }
 
   statbar.setTotalResults(results.totalHits)
@@ -80,13 +93,16 @@ function updateList (err, results) {
   var to = results.offset + results.hits.length
   statbar.updateResultStats({ from: from, to: to })
 
-  list.clear()
-  list.update(results.hits)
+  displayController.clear()
+  displayController.update(results.hits.map((hit) => paper(hit, {
+    fulltextSource: fulltext,
+    datadir: datadir,
+    contentServer: contentServer
+  })))
 }
 
-// update list on search
 search.on('input', function (input) {
-  list.clear()
+  displayController.clear()
   if (input === '') {
     statbar.updateResultStats()
     search.hideButtons()
@@ -99,7 +115,27 @@ search.on('input', function (input) {
   }
 })
 
+search.on('first', function () {
+  searchCursor.first(updateList)
+})
+
+key('shift+left', function() {
+  searchCursor.first(updateList)
+})
+
+search.on('last', function () {
+  searchCursor.last(updateList)
+})
+
+key('shift+right', function() {
+  searchCursor.last(updateList)
+})
+
 search.on('prev', function () {
+  searchCursor.prev(updateList)
+})
+
+key('left', function() {
   searchCursor.prev(updateList)
 })
 
@@ -107,11 +143,16 @@ search.on('next', function () {
   searchCursor.next(updateList)
 })
 
-// fake a download on paper click
-list.on('click', function (paper) {
-  if (paper.file) {
+key('right', function() {
+  searchCursor.next(updateList)
+})
+
+// download on paper click
+displayController.on('paper.click', function (item) {
+  console.log('paper.click', item)
+  if (item.paper.downloaded || item.paper.downloadStarted) {
     return
   }
   statbar.updateSpeed(50)
-  fulltext.downloadPaperHTTP(paper)
+  fulltext.downloadPaperHTTP(item.paper)
 })

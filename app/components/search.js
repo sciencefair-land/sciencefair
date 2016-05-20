@@ -16,11 +16,22 @@ function Search (container) {
   img.src = './images/search.svg'
 
   var buttons = container.appendChild(document.createElement('div'))
+  var boxStyle = {
+    borderRight: 'dotted rgb(43, 43, 51) 2px',
+    display: 'inline-block'
+  }
 
-  var prev = buttons.appendChild(document.createElement('div'))
-  prev.textContent = "⬆"
-  var next = buttons.appendChild(document.createElement('div'))
-  next.textContent = "⬇"
+  var group = {}
+
+  ;['first', 'prev', 'next', 'last'].forEach(function (name) {
+    var box = buttons.appendChild(document.createElement('div'))
+    css(box, boxStyle)
+    var wrapper = box.appendChild(document.createElement('div'))
+    wrapper.className = 'clickable'
+    var icon = wrapper.appendChild(document.createElement('img'))
+    icon.className = 'search-btn'
+    group[name] = icon
+  })
 
   css(img, {
     position: 'absolute',
@@ -48,7 +59,7 @@ function Search (container) {
 
   css(buttons, {
     position: 'absolute',
-    marginTop: '4%',
+    marginTop: '3.5%',
     right: '5%',
     border: 'none',
     fontSize: '130%',
@@ -56,16 +67,22 @@ function Search (container) {
     fontFamily: 'CooperHewitt-Book'
   })
 
-  var buttonStyle = {
-    transform: 'rotate(-90deg)',
-    color: 'rgb(202,172,77)',
-    background: 'rgb(33,33,39)',
-    padding: '3px',
-    marginLeft: '20px'
+  function buttonStyle (img) {
+    return {
+      background: 'rgb(43,43,51)',
+      '-webkit-mask': `url(${img}) center / contain no-repeat`,
+      marginLeft: '5px',
+      marginRight: '10px',
+      height: 40,
+      width: 40,
+      cursor: 'pointer'
+    }
   }
 
-  css(prev, buttonStyle)
-  css(next, buttonStyle)
+  css(group.first, buttonStyle('./images/first.svg'))
+  css(group.prev, buttonStyle('./images/prev.svg'))
+  css(group.next, buttonStyle('./images/next.svg'))
+  css(group.last, buttonStyle('./images/last.svg'))
 
   input.onfocus = function () {
     css(input, {
@@ -83,43 +100,73 @@ function Search (container) {
     self.emit('input', input.value)
   }
 
-  prev.onclick = function () {
+  group.first.onclick = function () {
+    self.emit('first')
+  }
+
+  group.prev.onclick = function () {
     self.emit('prev')
   }
 
-  next.onclick = function () {
+  group.next.onclick = function () {
     self.emit('next')
+  }
+
+  group.last.onclick = function () {
+    self.emit('last')
   }
 
   self.showSearch = function () {
     css(img, { display: 'block' })
     css(input, { display: 'block' })
+    input.focus()
   }
 
   self.showButtons = function () {
-    self.showPrev()
-    self.showNext()
+    ;[group.first, group.prev, group.next, group.last].forEach(function(b) {
+      css(b, 'display', 'inline-block')
+    })
   }
 
-  self.showPrev = function () {
-    css(prev, { display: 'inline-block' })
+  self.offPrev = function () {
+    css(group.prev, { opacity: 0.4 })
   }
 
-  self.showNext = function () {
-    css(next, { display: 'inline-block' })
+  self.offNext = function () {
+    css(group.next, { opacity: 0.4 })
+
+  }
+
+  self.offFirst = function () {
+    css(group.first, { opacity: 0.4 })
+
+  }
+
+  self.offLast = function () {
+    css(group.last, { opacity: 0.4 })
+
   }
 
   self.hideButtons = function () {
-    self.hidePrev()
-    self.hideNext()
+    ;[group.first, group.prev, group.next, group.last].forEach(function(b) {
+      css(b, 'display', 'none')
+    })
   }
 
-  self.hidePrev = function () {
-    css(prev, { display: 'none' })
+  self.onPrev = function () {
+    css(group.prev, { opacity: 0.85 })
   }
 
-  self.hideNext = function () {
-    css(next, { display: 'none' })
+  self.onNext = function () {
+    css(group.next, { opacity: 0.85 })
+  }
+
+  self.onFirst = function () {
+    css(group.first, { opacity: 0.85 })
+  }
+
+  self.onLast = function () {
+    css(group.last, { opacity: 0.85 })
   }
 
 

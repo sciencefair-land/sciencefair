@@ -47,26 +47,60 @@ FulltextSource.prototype.syncMetadata = function(cb) {
   })
 }
 
-FulltextSource.prototype.downloadPaperHTTP = function(paper) {
+FulltextSource.prototype.downloadPaperHTTP = function(paper, cb) {
   var baseurl = 'http://www.ebi.ac.uk/europepmc/webservices/rest'
   var output = path.join(datadir, 'eupmc_fulltexts')
-  var dl = new Download({ extract: true, mode: '755' })
 
-  dl.get(`${baseurl}/${paper.pmcid}/fullTextXML`)
-    .get(`${baseurl}/${paper.pmcid}/supplementaryFiles`)
+  function done(err, files, other) {
+    paper.downloadFinished(err, files, other)
+    if (cb) cb(err, files, other)
+  }
+
+  new Download({ extract: true, mode: '755' })
+    .get(`${baseurl}/${paper.getId('pmcid')}/fullTextXML`)
     .dest(output)
     .rename(function(file) {
-      file.dirname += `/${paper.pmcid}`
-      if (/fullTextXML/.test(file.basename)) {
-        file.basename = 'fulltext'
-        file.extname = '.xml'
-      } else {
-        file.dirname += '/figures'
-      }
+      file.dirname += `/${paper.getId('pmcid')}`
+      file.basename = 'fulltext'
+      file.extname = '.xml'
       return file
     })
-    .use(paper.downloading)
-    .run()
+    .use((res, url) => { paper.downloading(res, url, 'xml') })
+    .run(done)
+
+  new Download({ extract: true, mode: '755' })
+    .get(`${baseurl}/PMC/${paper.getId('pmcid')}/textMinedTerms//1/1000/json`)
+    .dest(output)
+    .rename(function(file) {
+      file.dirname += `/${paper.getId('pmcid')}`
+      file.basename = 'textMinedTerms'
+      file.extname = '.json'
+      return file
+    })
+    .use((res, url) => { paper.downloading(res, url, 'terms') })
+    .run(done)
+  //
+  // dl.get(`${baseurl}/${paper.getId('pmcid')}/fullTextXML`)
+  //   .dest(output)
+  //   .rename(function(file) {
+  //     file.dirname += `/${paper.getId('pmcid')}`
+  //     file.basename = 'fulltext'
+  //     file.extname = '.pdf'
+  //     return file
+  //   })
+  //   .use((res, url) => { paper.downloading(res, url, 'pdf') })
+  //   .run()
+  //
+  new Download({ extract: true, mode: '755' })
+    .get(`${baseurl}/${paper.getId('pmcid')}/supplementaryFiles`)
+    .dest(output)
+    .rename(function(file) {
+      file.dirname += `/${paper.getId('pmcid')}/figures`
+      return file
+    })
+    .use((res, url) => { paper.downloading(res, url, 'supp') })
+    .run(done)
+
 }
 
 // Given a Paper find the corresponding dataset part
