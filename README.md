@@ -1,8 +1,4 @@
-<p align="center">
-  <h3>science fair</h3>
-  <br><br>
-  <img width="300px" src="https://raw.githubusercontent.com/codeforscience/sciencefair/master/icon/logo.png">
-</p>
+<p align="center"><h3>science fair</h3><br><br><img width="300px" src="https://raw.githubusercontent.com/codeforscience/sciencefair/master/icon/logo.png"></p>
 
 Search, read and reuse the scientific literature.
 
