@@ -1,5 +1,7 @@
 # sciencefair
 
+<div style="text-align: center;"><img src="https://raw.githubusercontent.com/codeforscience/sciencefair/master/icon/logo.png" /></div>
+
 Search, browse, and download open access papers. Made with Electron.
 
 Work in progress! Most of the functionality is being developed in branches. The master branch gives a flavour of what we're working on.
