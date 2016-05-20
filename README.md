@@ -1,10 +1,7 @@
 <p align="center">
-  <h3>science fair</b><br>
-  <a href="#">Link 1</a> |
-  <a href="#">Link 2</a> |
-  <a href="#">Link 3</a>
+  <h3>science fair</h3>
   <br><br>
-  <img width="300px" src="https://raw.githubusercontent.com/codeforscience/sciencefair/master/icon/logo.png" />
+  <img width="300px" src="https://raw.githubusercontent.com/codeforscience/sciencefair/master/icon/logo.png">
 </p>
 
 Search, read and reuse the scientific literature.
