@@ -1,9 +1,9 @@
 var inherits = require('inherits')
 var _ = require('lodash')
 var EventEmitter = require('events').EventEmitter
-var reader = require('./reader.js')
 var readdir = require('recursive-readdir-sync')
 var mkdirp = require('mkdirp')
+var path = require('path')
 
 inherits(Paper, EventEmitter)
 
@@ -28,7 +28,7 @@ function Paper (doc, opts) {
     return path.join(opts.datadir, dir, pmcid)
   })
 
-  self.assetPaths = function() {
+  self.assetPaths = function () {
     mkdirp.sync(self.assetDir())
     var paths = readdir(self.assetDir())
     if (paths.length > 0) self.downloaded = true
@@ -36,7 +36,7 @@ function Paper (doc, opts) {
   }
 
   self.download = function (downloadfn, cb) {
-    function done(a, b, c) {
+    function done (a, b, c) {
       if (self.downloadsRunning == 0) cb(a, b, c)
     }
     downloadfn(self, done)
@@ -89,7 +89,7 @@ function Paper (doc, opts) {
     })
   }
 
-  self.downloadFinished = function(a, b, c) {
+  self.downloadFinished = function (a, b, c) {
     self.downloadsRunning -= 1
     self.emit('download.finished', a, b, c)
   }
@@ -99,7 +99,7 @@ function Paper (doc, opts) {
     return hit ? hit.id : null
   })
 
-  self.stringForAuthor = function(author) {
+  self.stringForAuthor = function (author) {
     return `${author.surname}`
   }
 
@@ -114,7 +114,7 @@ function Paper (doc, opts) {
     }
   })
 
-  self.assetUrl = function(assetPath) {
+  self.assetUrl = function (assetPath) {
     var port = opts.contentServer.port
     var dir = opts.fulltextSource.dir
     var pmcid = self.getId('pmcid')

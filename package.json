@@ -41,6 +41,7 @@
     "yunodb": "github:blahah/yunodb"
   },
   "devDependencies": {
+    "debug-menu": "^0.4.0",
     "random-subsets": "0.0.1"
   }
 }
