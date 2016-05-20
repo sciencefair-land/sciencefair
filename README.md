@@ -1,6 +1,6 @@
 # sciencefair
 
-<div style="text-align: center;"><img style="width: 300px;" src="https://raw.githubusercontent.com/codeforscience/sciencefair/master/icon/logo.png" /></div>
+<div style="text-align: center;"><img width="300px" src="https://raw.githubusercontent.com/codeforscience/sciencefair/master/icon/logo.png" /></div>
 
 Search, browse, and download open access papers. Made with Electron.
 
