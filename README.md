@@ -2,7 +2,7 @@
 
 <h1 align="center">science fair</h3>
 <p align="center">
-  <strong>Search, read and reuse the scientific literature.</strong><br/><br/>
+  <strong>Search, collect, read and reuse the scientific literature.</strong><br/><br/>
   <img width="300px" src="https://raw.githubusercontent.com/codeforscience/sciencefair/master/icon/logo.png"/>
 </p>
 
