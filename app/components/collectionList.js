@@ -3,23 +3,20 @@ var inherits = require('inherits')
 var EventEmitter = require('events').EventEmitter
 var yo = require('yo-yo')
 var projectManager = require('../lib/projectmanager.js')
-var displayController = require('./resultscontroller.js')
 
-inherits(ProjectMenu, EventEmitter)
+inherits(CollectionList, EventEmitter)
 
-function ProjectMenu (btn, controller) {
-  if (!(this instanceof ProjectMenu)) return new ProjectMenu(btn, controller)
+function CollectionList (controller, sidebar) {
+  if (!(this instanceof CollectionList)) {
+    return new CollectionList(controller, sidebar)
+  }
   var self = this
-
-  var btnrect = btn.getBoundingClientRect()
-  var y = btnrect.bottom + 60
-  var x = btnrect.left
 
   self.manager = projectManager()
 
   function button (type) {
     var element = yo`
-    <div></div>
+    <div class="clickable"></div>
     `
     css(element, {
       backgroundColor: 'rgb(178, 180, 184)',
@@ -41,7 +38,7 @@ function ProjectMenu (btn, controller) {
 
   addbtn.onclick = function () {
     var name = addinput.value
-    var project = self.manager.get(name)
+    self.manager.get(name)
     render()
   }
 
@@ -49,7 +46,7 @@ function ProjectMenu (btn, controller) {
     width: '100%',
     height: '100%',
     border: 'none',
-    borderBottom: 'dotted 2px rgb(178, 180, 184)',
+    borderBottom: 'dotted 2px rgba(178, 180, 184, 0.3)',
     fontSize: '130%',
     padding: '5px',
     fontFamily: 'CooperHewitt-Book',
@@ -65,24 +62,18 @@ function ProjectMenu (btn, controller) {
   function render () {
     var element = yo`
     <div class="col project-selector">
+      <div class="row sidebar-section-title">Collections</div>
       <div class="row topbar">
-        <div class="col add-project-input">${addinput}</div>
+        <div class="col add-project-input" placeholder="new collection">${addinput}</div>
         <div class="col">${addbtn}</div>
       </div>
-      <div class="row col">
-        ${projectList()}
-      </div>
+      ${projectList()}
     </div>
     `
     css(element, {
-      position: 'absolute',
-      top: y,
-      left: x,
-      width: 350,
-      height: 350 * 1.618,
-      overflowY: 'scroll',
-      display: self.hidden ? 'none' : 'flex',
-      opacity: 0.85
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'initial'
     })
 
     if (self.element) {
@@ -94,17 +85,26 @@ function ProjectMenu (btn, controller) {
 
   function projectList () {
     var projects = self.manager.projects()
+    var element
     if (projects && projects.length > 0) {
-      return yo`
-      ${projects.map(renderProjectEntry)}
-      `
+      element = yo`
+      <div class="row col">
+        ${projects.map(renderProjectEntry)}
+      </div>`
     } else {
-      return yo`
+      element = yo`
       <div class="project-entry row">
         <h3>No collections yet.</h3>
       </div>
       `
     }
+    if (self.projectListElement) {
+      yo.update(self.projectListElement, element)
+    } else {
+      self.projectListElement = element
+    }
+
+    return self.projectListElement
   }
 
   function renderProjectEntry (project) {
@@ -114,32 +114,39 @@ function ProjectMenu (btn, controller) {
       marginRight: 20
     })
 
-    addallbtn.onlick = function () {
-      project.putBatch(controller.display.papers, function (err) {
-        if (err) throw err
-        console.log('added', controller.display.papers.length, 'to', project.name)
-      })
-    }
-
     var element = yo`
     <div class="project-entry row">
-      <div>${project.name}</div><div>${addallbtn}</div>
+      <div class="row">${project.name}<div class="project-count"></div></div>
+      <div>${addallbtn}</div>
     </div>
     `
+
+    addallbtn.onclick = function () {
+      try {
+        project.putBatch(controller.display.papers, function (err) {
+          if (err) throw err
+          render()
+          project.getSize(function (size) {
+            element.getElementsByClassName('project-count')[0].innerHTML = `[${size}]`
+          })
+        })
+      } catch (err) {
+        console.trace(err)
+      }
+    }
+
+    project.getSize(function (size) {
+      element.getElementsByClassName('project-count')[0].innerHTML = `[${size}]`
+    })
     // element.onclick = function () {
     //   selectProject(project)
     // }
     return element
   }
 
-  self.toggle = function () {
-    css(self.element, {
-      display: self.hidden ? 'block' : 'none'
-    })
-    self.hidden = !(self.hidden)
-  }
-
   render()
+
+  sidebar.addSection(self.element)
 }
 
-module.exports = ProjectMenu
+module.exports = CollectionList

@@ -2,16 +2,20 @@ var mkdirp = require('mkdirp')
 var untildify = require('untildify')
 
 var testing = process.env['SCIENCEFAIR_DEVMODE'] === 'TRUE'
+testing = true // TODO: turn this off when we cut first release
 console.log('Testing mode', testing ? 'ON' : 'OFF')
 if (testing) require('debug-menu').install()
 
 // layout
 var header = document.getElementById('header')
-var main = document.getElementById('main')
+var title = require('./components/title.js')(header)
+var mid = document.getElementById('middle')
+var sidebar = require('./components/sidebar.js')(mid)
+var main = require('./components/main.js')(mid)
 var footer = document.getElementById('footer')
 
 // setup data sources and server
-var message = require('./components/message.js')(main)
+var message = require('./components/message.js')(main.element)
 message.update('Loading data sources...')
 message.show()
 
@@ -28,8 +32,11 @@ var fulltext = pubdata.getFulltextSource(testing)[0]
 var view = require('./components/mainview.js')({
   containers: {
     header: header,
-    main: main,
-    footer: footer
+    middle: mid,
+    footer: footer,
+    title: title,
+    sidebar: sidebar,
+    main: main.element
   },
   pubdata: pubdata,
   fulltextSource: fulltext,

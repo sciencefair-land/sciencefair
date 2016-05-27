@@ -95,6 +95,9 @@ function Paper (doc, opts) {
   }
 
   self.getId = _.memoize(function (type) {
+    if (!type) {
+      return self.getId('pmcid') || self.getId('pmid') || self.getId('doi')
+    }
     var hit = _.find(self.identifier, { type: type })
     return hit ? hit.id : null
   })
@@ -121,6 +124,10 @@ function Paper (doc, opts) {
     var url = `http://localhost:${port}/${dir}/${pmcid}/${assetPath}`
     console.log('paper should be served at', url)
     return url
+  }
+
+  self.serialize = function () {
+    return JSON.stringify(doc.document)
   }
 }
 

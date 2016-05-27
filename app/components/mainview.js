@@ -3,6 +3,7 @@ var EventEmitter = require('events').EventEmitter
 var key = require('keymaster')
 var _ = require('lodash')
 var paper = require('../lib/paper.js')
+require('hint')
 
 inherits(MainView, EventEmitter)
 
@@ -23,6 +24,8 @@ function MainView (opts) {
   var statbar = require('./statbar.js')(
     opts.containers.footer
   )
+
+  require('./collectionList.js')(displayController, opts.containers.sidebar)
 
   var searchCursor = {}
 

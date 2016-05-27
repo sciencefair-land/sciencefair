@@ -5,7 +5,6 @@ var EventEmitter = require('events').EventEmitter
 var list = require('./list.js')
 var table = require('./table.js')
 var downloadbtn = require('./downloadbtn.js')
-var projectMenu = require('./projectmenu.js')
 
 inherits(ResultsController, EventEmitter)
 
@@ -39,9 +38,11 @@ function ResultsController (container, opts) {
     self.emit('paper.click', a, b, c)
   }
 
-  function cleanup(old) {
+  function cleanup (old) {
     old.clear()
-    old.element.remove()
+    if (old.element) {
+      old.element.remove()
+    }
   }
 
   var activestyle = {
@@ -56,7 +57,7 @@ function ResultsController (container, opts) {
   var tablebtn = button('table')
   css(tablebtn, inactivestyle)
 
-  listbtn.onclick = function() {
+  listbtn.onclick = function () {
     if (self.display instanceof list) {
       return
     }
@@ -72,7 +73,7 @@ function ResultsController (container, opts) {
     self.display.on('click', bubbleClick)
   }
 
-  tablebtn.onclick = function() {
+  tablebtn.onclick = function () {
     if (self.display instanceof table) {
       return
     }
@@ -90,28 +91,24 @@ function ResultsController (container, opts) {
 
   var dlbtn = downloadbtn(self, opts)
 
-  var projectbtn = button('project')
-  var projectmenu = projectMenu(projectbtn, self)
-  projectbtn.onclick = function() {
-    projectmenu.toggle()
-  }
-
-  self.update = function(items) {
+  self.update = function (items) {
     self.display.update(items)
     dlbtn.load()
   }
 
-  self.clear = function() {
+  self.clear = function () {
     self.display.clear()
   }
 
   self.element = yo`
   <div class="display-controller">
-    <div class='button-wrapper'><div class='clickable'>${listbtn}</div></div>
-    <div class='button-wrapper'><div class='clickable'>${tablebtn}</div></div>
-    <div class='button-wrapper'>${dlbtn.element}</div>
-    <div class='button-wrapper'><div class='clickable'>${projectbtn}</div></div>
-    <div class='project-menu'>${projectmenu.element}</div>
+    <div class='button-wrapper' data-hint='grid view'>
+      <div class='clickable'>${listbtn}</div>
+    </div>
+    <div class='button-wrapper' data-hint='list view'>
+      <div class='clickable'>${tablebtn}</div>
+    </div>
+    <div class='button-wrapper' data-hint='download all'>${dlbtn.element}</div>
   </div>
   `
 

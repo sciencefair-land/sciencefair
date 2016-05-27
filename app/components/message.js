@@ -5,8 +5,8 @@ function Message (container) {
   var self = this
 
   var message = container.appendChild(document.createElement('div'))
-  
-  css(message,{
+
+  css(message, {
     position: 'absolute',
     marginLeft: '5%',
     marginTop: '40%',
@@ -28,7 +28,6 @@ function Message (container) {
   self.show = function () {
     css(message, {opacity: 1})
   }
-
 }
 
 module.exports = Message

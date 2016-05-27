@@ -31,7 +31,7 @@ function List (container, opts) {
       ${data.map(renderBox)}
     </div>
     `
-    css(self.element,{
+    css(self.element, {
       position: 'absolute',
       top: 'calc(4% + 100px)',
       left: '5%',
@@ -45,12 +45,11 @@ function List (container, opts) {
 
   function renderBox (paper) {
     var pb = PaperBox(paper, opts)
-    pb.on('click', function() {
+    pb.on('click', function () {
       self.emit('click', pb)
     })
     return pb.box
   }
-
 }
 
 module.exports = List

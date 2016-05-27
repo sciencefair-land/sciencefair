@@ -35,38 +35,43 @@
   src: url("./fonts/CooperHewitt/CooperHewitt-Book.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-Book.eot") format("eot"); }
 
 html {
- 	height: 100%;
- 	width: 100%;
- 	overflow: hidden;
- 	-webkit-user-select: none;
+   height: 100%;
+   width: 100%;
+   overflow: hidden;
+   -webkit-user-select: none;
 }
 
 body {
-	width: 100%;
-	height: 100%;
-	padding: 0px;
-	margin: 0px;
-	font-size: 16px;
-	font-family: 'Aleo';
-	overflow: auto;
-	-webkit-overflow-scrolling: touch;
-	background: rgb(43,43,51);
-	cursor: default;
+  width: 100%;
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+  font-size: 16px;
+  font-family: 'Aleo';
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  background: rgb(43,43,51);
+  cursor: default;
+  display: flex;
+  flex-direction: row;
 }
 
-#main {
-	position: absolute;
-	top: 30px;
-	width: 100%;
-	bottom: 50px;
-	background-color: rgb(111,174,193);
+#middle {
+  position: absolute;
+  top: 30px;
+  width: 100%;
+  bottom: 50px;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
 }
 
 #footer {
-	position: absolute;
-	bottom: 0;
-	height: 50px;
-	width: 100%;
+  position: absolute;
+  bottom: 0;
+  height: 50px;
+  width: 100%;
   display: flex;
 }
 
@@ -79,12 +84,12 @@ body {
 }
 
 .paper {
-	-webkit-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 
 
 ::-webkit-input-placeholder {
-	color: rgb(43,43,51);
+  color: rgb(43,43,51);
 }
 
 ::-webkit-scrollbar {
@@ -104,7 +109,7 @@ body {
 }
 
 ::selection {
-	background: white;
+  background: white;
 }
 
 /* fix for atom webview automatic sizing bug */
@@ -289,16 +294,30 @@ a {
   padding: 10px;
 }
 .project-entry {
+  font-family: "CooperHewitt-Light";
   color: rgb(178, 180, 184);
   margin: 5px;
   padding: 10px;
   opacity: 0.85;
-  width: 100%;
+  width: 90%;
   height: 30px;
-  background: inherit;
+  font-size: 1.3em;
+  background: none;
   display: flex;
   align-items: center;
+  align-content: center;
   justify-content: space-between;
+  border-bottom: dotted rgba(178, 180, 184, 0.3) 2px;
+  margin-bottom: 0;
+}
+.project-entry > .row {
+  margin: 0;
+}
+.project-entry:last-of-type {
+  border-bottom: none;
+}
+.project-count {
+  margin-left: 10px;
 }
 .project-entry:hover {
   opacity: 1.0;
@@ -322,4 +341,12 @@ a {
   justify-content: space-between;
   margin: 0;
   padding-left: 10px;
+}
+
+
+.sidebar-section-title {
+  justify-content: flex-start;;
+  font-size: 1.8em;
+  font-family: "Aleo-Regular";
+  padding-left: 20px;
 }
