@@ -15,6 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "csjs": "^1.0.1",
+    "d3": "^3.5.17",
     "d3-selection": "^0.6.11",
     "dat-manager": "^2.0.1",
     "debug-menu": "^0.4.0",
@@ -29,6 +30,7 @@
     "nan": "^2.2.0",
     "node-static": "^0.7.7",
     "npm": "^3.8.7",
+    "nvd3": "^1.8.3",
     "path-exists": "^2.1.0",
     "portfinder": "^1.0.3",
     "pump": "^1.0.1",

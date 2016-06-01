@@ -5,14 +5,15 @@ var path = require('path')
 var exists = require('path-exists')
 var mkdirp = require('mkdirp')
 var fs = require('fs')
+var Paper = require('./paper.js')
 
 inherits(Project, EventEmitter)
 
-function Project (opts) {
-  if (!(this instanceof Project)) return new Project(opts)
+function Project (config, opts) {
+  if (!(this instanceof Project)) return new Project(config, opts)
   var self = this
 
-  self.dir = opts.dir
+  self.dir = config.dir
   mkdirp(self.dir)
 
   self.dbdir = path.join(self.dir, 'leveldb')
@@ -38,27 +39,26 @@ function Project (opts) {
       })
   }
 
-  self.setup = function (opts) {
+  self.setup = function (config) {
     var configpath = path.join(self.dir, 'project.json')
-    console.log(configpath)
     if (!exists.sync(configpath)) {
       self.created = new Date()
       fs.writeFileSync(configpath, JSON.stringify({
-        name: opts.name,
+        name: config.name,
         created: self.created.toISOString()
       }))
-      self.name = opts.name
-    } else {
-      var config = require(configpath)
       self.name = config.name
-      self.created = new Date(config.created)
+    } else {
+      var cfg = require(configpath)
+      self.name = cfg.name
+      self.created = new Date(cfg.created)
     }
     self.getSize(function () {
       // noop
     })
   }
 
-  self.setup(opts)
+  self.setup(config)
 
   self.put = function (paper, cb) {
     self.db.put(paper.getId(), paper, function (err) {
@@ -69,11 +69,13 @@ function Project (opts) {
 
   self.putBatch = function (papers, cb) {
     var commands = papers.map(function (paper) {
-      return {
+      var doc = {
         type: 'put',
         key: paper.getId(),
-        paper: paper.serialize()
+        value: paper.serialize()
       }
+      console.log(doc)
+      return doc
     })
     self.db.batch(commands, function (err) {
       self.changed = true
@@ -89,7 +91,19 @@ function Project (opts) {
     })
   }
 
-  self.createReadStream = self.db.createReadStream
+  self.getAll = function (cb) {
+    var papers = []
+    self.db.createReadStream({})
+      .on('data', function (paper) {
+        papers.push(Paper({ document: paper.value }, opts))
+      })
+      .on('error', function (err) {
+        cb(err)
+      })
+      .on('end', function () {
+        cb(papers)
+      })
+  }
 
   self.del = function (key, cb) {
     self.db.del(key, function (err) {

@@ -36,7 +36,7 @@ var view = require('./components/mainview.js')({
     footer: footer,
     title: title,
     sidebar: sidebar,
-    main: main.element
+    main: main
   },
   pubdata: pubdata,
   fulltextSource: fulltext,

@@ -11,12 +11,13 @@ module.exports = function (content) {
 
   css(closebtn, {
     display: 'none',
-    zIndex: 1001,
+    zIndex: 3001,
     width: 30,
     height: 30,
     position: 'fixed',
     right: margin + 5,
-    top: margin + marginTopShim + 5
+    top: margin + marginTopShim + 5,
+    backgroundColor: 'white'
   })
 
   css(content, {
@@ -25,12 +26,12 @@ module.exports = function (content) {
     top: margin + marginTopShim,
     bottom: margin,
     right: margin,
-    zIndex: 1000,
+    zIndex: 3000,
     display: 'none',
     border: 'none',
-    backgroundColor: 'black',
+    backgroundColor: 'white',
     alignItems: 'center',
-    flexDirection: 'column',
+    flexDirection: 'row',
     overflowY: 'scroll'
   })
 

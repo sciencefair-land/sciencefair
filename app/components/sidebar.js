@@ -59,7 +59,7 @@ function Sidebar (container) {
     css(element, {
       margin: 0,
       width: fullwidth,
-      height: '100%',
+      height: 'calc(100% - 58px)',
       display: 'flex',
       position: 'relative',
       flexDirection: 'column',

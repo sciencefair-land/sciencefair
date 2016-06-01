@@ -11,9 +11,10 @@ function Paper (doc, opts) {
   if (!(this instanceof Paper)) return new Paper(doc, opts)
   var self = this
 
-  Object.assign(this, doc.document)
+  self.doc = _.cloneDeep(doc.document)
+  Object.assign(self, doc.document)
 
-  self.identifier = self.identifier.map((id) => {
+  self.identifier = self.doc.identifier.map((id) => {
     if (id.type === 'pmcid') {
       if (!(/^PMC/.test(id.id))) id.id = `PMC${id.id}`
     }
@@ -37,7 +38,7 @@ function Paper (doc, opts) {
 
   self.download = function (downloadfn, cb) {
     function done (a, b, c) {
-      if (self.downloadsRunning == 0) cb(a, b, c)
+      if (self.downloadsRunning === 0) cb(a, b, c)
     }
     downloadfn(self, done)
   }
@@ -127,7 +128,7 @@ function Paper (doc, opts) {
   }
 
   self.serialize = function () {
-    return JSON.stringify(doc.document)
+    return self.doc
   }
 }
 

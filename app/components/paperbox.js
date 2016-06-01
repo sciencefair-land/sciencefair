@@ -74,7 +74,6 @@ function PaperBox (paper, opts) {
   })
 
   self.layout = function () {
-
     var width = '160'
 
     css(box, {
@@ -107,14 +106,14 @@ function PaperBox (paper, opts) {
       right: '10px',
       bottom: '10px'
     }))
-
   }
 
   self.updateBar = function (done, total) {
-    css(bar, { width: `${Math.min((done / total) * 100, 100)}%`})
+    css(bar, { width: `${Math.min((done / total) * 100, 100)}%` })
   }
 
   self.downloadFailed = function (err) {
+    if (err) console.trace(err)
     css(bar, {
       width: '100%',
       backgroundColor: 'rgb(202,77,107)'
@@ -133,15 +132,15 @@ function PaperBox (paper, opts) {
   // self.updateBar(0, 9999)
   // self.loadFile()
 
-  box.onclick  = function () {
+  box.onclick = function () {
     self.emit('click')
   }
 
-  box.addEventListener("mouseenter", function(event) {
-    if (self.paper && contentServer.port) css(overlay, { display: 'flex' })
+  box.addEventListener('mouseenter', function (event) {
+    if (self.paper && opts.contentServer.port) css(overlay, { display: 'flex' })
   })
 
-  box.addEventListener("mouseleave", function(event) {
+  box.addEventListener('mouseleave', function (event) {
     css(overlay, { display: 'none' })
   })
 
@@ -149,7 +148,7 @@ function PaperBox (paper, opts) {
     self.emit('lens-click')
     lensReader = reader(self.paper, self.opts)
     lensReader.show()
-    // TODO: destroy on close
+  // TODO: destroy on close
   }
 
   self.box = box
