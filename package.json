@@ -24,6 +24,7 @@
     "download": "^4.4.3",
     "electron-prebuilt": "1.1.3",
     "hint": "github:blahah/hint",
+    "findandreplacedomtext": "^0.4.4",
     "install": "^0.6.1",
     "keymaster": "^1.6.2",
     "leveldown": "^1.4.6",

@@ -3,6 +3,7 @@ var inherits = require('inherits')
 var _ = require('lodash')
 var EventEmitter = require('events').EventEmitter
 var reader = require('../lib/reader.js')
+var highlight = require('../lib/highlight.js')
 
 inherits(PaperBox, EventEmitter)
 
@@ -27,6 +28,11 @@ function PaperBox (paper, opts) {
   title.innerHTML = self.paper.title
   author.innerHTML = self.paper.etalia()
   year.innerHTML = self.paper.year
+
+  if (opts.query) {
+    highlight(title, opts.query)
+    highlight(author, opts.query)
+  }
 
   var lensReader = null
 

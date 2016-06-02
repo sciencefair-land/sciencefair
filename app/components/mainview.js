@@ -33,6 +33,8 @@ function MainView (opts) {
   var searchCursor = {}
 
   var doSearch = _.debounce(function (query) {
+    // Globally state for the current query, used for result hihglight
+    opts.query = query
     searchCursor = self.metadataDB.search(query, { pageSize: 50 }, updateList)
   }, 200)
 
