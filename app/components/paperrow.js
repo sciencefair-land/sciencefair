@@ -10,14 +10,16 @@ var loading = require('./loading.js')
 var articletype = require('./articletype.js')
 var textMinedTerms = require('./textminedterms.js')
 var overlay = require('./overlay.js')
+var highlight = require('../lib/highlight.js')
 var _ = require('lodash')
 
 inherits(PaperRow, EventEmitter)
 
-function PaperRow (paper) {
-  if (!(this instanceof PaperRow)) return new PaperRow(paper)
+function PaperRow (paper, opts) {
+  if (!(this instanceof PaperRow)) return new PaperRow(paper, opts)
   var self = this
-  this.paper = paper
+  self.paper = paper
+  self.opts = opts
 
   var lensReader = null
 
@@ -104,6 +106,10 @@ function PaperRow (paper) {
       ${self.loading.element}
     </div>
     `
+    if (self.opts.query) {
+      highlight(row.getElementsByClassName('paper-title')[0], self.opts.query)
+      highlight(row.getElementsByClassName('paper-author')[0], self.opts.query)
+    }
 
     row.onclick = function () {
       self.emit('click')
