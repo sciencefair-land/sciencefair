@@ -11,7 +11,7 @@ app.on('ready', function () {
     width: 1050,
     'title-bar-style': 'hidden',
     fullscreen: false,
-    icon: './app/images/logo.png'
+    icon: './icon/logo.png'
   })
 
   main.maximize()
