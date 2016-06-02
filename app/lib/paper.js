@@ -39,6 +39,20 @@ function Paper (doc, opts) {
     return paths
   }
 
+  self.assetPathByFilename = function (filename) {
+    var assetPaths = self.assetPaths()
+    if (!assetPaths.length) return false
+
+    var filenameInAssetDir = path.join(self.assetDir(), filename)
+
+    var match = assetPaths.filter(function(apath) {
+      return apath == filenameInAssetDir
+    })
+
+    // Assume only 1 match?
+    return match.length ? match[0] : false
+  }
+
   self.download = function (downloadfn, cb) {
     function done (a, b, c) {
       if (self.downloadsRunning === 0) cb(a, b, c)
