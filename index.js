@@ -1,10 +1,10 @@
-var app = require('app')
-var browser = require('browser-window')
+const {app, BrowserWindow} = require('electron')
+var path = require('path')
 
 var main = null
 
 app.on('ready', function () {
-  main = new browser({
+  main = new BrowserWindow({
     height: 720,
     resizable: true,
     title: 'sciencefair',
@@ -16,7 +16,7 @@ app.on('ready', function () {
 
   main.maximize()
 
-  main.loadURL('file://' + __dirname + '/app/index.html')
+  main.loadURL(path.join('file://', __dirname, '/app/index.html'))
 
   main.on('closed', function () {
     main = null
