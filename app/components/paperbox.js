@@ -3,6 +3,7 @@ var inherits = require('inherits')
 var _ = require('lodash')
 var EventEmitter = require('events').EventEmitter
 var reader = require('../lib/reader.js')
+var DownloadPaperBtn = require('./downloadpaperbtn.js')
 
 inherits(PaperBox, EventEmitter)
 
@@ -12,6 +13,8 @@ function PaperBox (paper, opts) {
   self.paper = paper
   self.opts = opts
 
+  var downloadPaper = DownloadPaperBtn(paper, opts)
+
   var box = document.createElement('div')
   box.className = 'paper paper-box clickable'
   var title = box.appendChild(document.createElement('div'))
@@ -19,6 +22,7 @@ function PaperBox (paper, opts) {
   var year = box.appendChild(document.createElement('div'))
   var overlay = box.appendChild(document.createElement('div'))
   var lens = overlay.appendChild(document.createElement('img'))
+  var downloadBtn = overlay.appendChild(downloadPaper.element)
   var bar = box.appendChild(document.createElement('div'))
   lens.src = './images/lens.png'
 
@@ -75,6 +79,10 @@ function PaperBox (paper, opts) {
     display: hasFulltextDownloaded ? 'block' : 'none'
   })
 
+  css(downloadBtn, {
+    width: '20%'
+  })
+
   self.layout = function () {
 
     var width = '160'
@@ -123,10 +131,9 @@ function PaperBox (paper, opts) {
     })
   }
 
-  self.downloaded = function (file) {
-    self.file = file.path
-    css(bar, {
-      width: '100%'
+  self.downloaded = function () {
+    css(lens, {
+      display: 'block'
     })
   }
 
@@ -153,6 +160,8 @@ function PaperBox (paper, opts) {
     lensReader.show()
     // TODO: destroy on close
   }
+
+  downloadPaper.on('downloaded', self.downloaded)
 
   self.box = box
 }
