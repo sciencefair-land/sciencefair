@@ -4,7 +4,9 @@ var untildify = require('untildify')
 var testing = process.env['SCIENCEFAIR_DEVMODE'] === 'TRUE'
 testing = true // TODO: turn this off when we cut first release
 console.log('Testing mode', testing ? 'ON' : 'OFF')
-if (testing) require('debug-menu').install()
+if (testing) {
+  require('debug-menu').install()
+}
 
 // layout
 var header = document.getElementById('header')

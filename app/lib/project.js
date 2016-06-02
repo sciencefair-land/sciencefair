@@ -14,10 +14,12 @@ function Project (config, opts) {
   var self = this
 
   self.dir = config.dir
-  mkdirp(self.dir)
+  mkdirp.sync(self.dir)
 
   self.dbdir = path.join(self.dir, 'leveldb')
-  self.db = levelup(self.dbdir, { valueEncoding: 'json' })
+  self.db = levelup(self.dbdir, { valueEncoding: 'json' }, function (err) {
+    if (err) console.trace(err)
+  })
 
   self.size = null
   self.changed = true
@@ -31,11 +33,16 @@ function Project (config, opts) {
     var n = 0
     self.db
       .createKeyStream()
-      .on('data', function () { n += 1 })
+      .on('data', function (d) {
+        n += 1
+      })
       .on('end', function () {
         self.size = n
         self.changed = false
         cb(n)
+      })
+      .on('error', function (err) {
+        console.trace(err)
       })
   }
 

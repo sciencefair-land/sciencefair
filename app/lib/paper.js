@@ -11,6 +11,9 @@ function Paper (doc, opts) {
   if (!(this instanceof Paper)) return new Paper(doc, opts)
   var self = this
 
+  if (_.isString(doc.document)) {
+    doc.document = JSON.parse(doc.document)
+  }
   self.doc = _.cloneDeep(doc.document)
   Object.assign(self, doc.document)
 

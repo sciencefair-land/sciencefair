@@ -20,8 +20,8 @@ function ProjectManager (opts) {
   self.projects = function (cb) {
     return fs.readdirSync(self.dir).map(function (p) {
       var dir = path.join(self.dir, p)
-      return self._projects[dir] ||
-        (self._projects[dir] = project({ dir: dir }, opts))
+      var proj = self._projects[dir]
+      return proj || (self._projects[dir] = project({ dir: dir }, opts))
     })
   }
 

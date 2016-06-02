@@ -184,9 +184,7 @@ function CollectionList (controller, sidebar) {
       var el = `<div class="badge">${size}</div>`
       element.getElementsByClassName('project-count')[0].innerHTML = el
     })
-    // element.onclick = function () {
-    //   selectProject(project)
-    // }
+
     return element
   }
 

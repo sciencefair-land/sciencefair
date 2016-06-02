@@ -22,7 +22,7 @@
     "debug-menu": "^0.4.0",
     "dom-css": "^2.0.0",
     "download": "^4.4.3",
-    "electron-prebuilt": "^1.1.3",
+    "electron-prebuilt": "1.1.3",
     "hint": "github:blahah/hint",
     "install": "^0.6.1",
     "keymaster": "^1.6.2",
@@ -48,7 +48,8 @@
   },
   "devDependencies": {
     "debug-menu": "^0.4.0",
-    "random-subsets": "0.0.1"
+    "random-subsets": "0.0.1",
+    "stackup": "^1.0.1"
   },
   "productName": "ScienceFair"
 }
