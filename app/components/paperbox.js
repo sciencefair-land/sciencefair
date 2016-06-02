@@ -80,7 +80,8 @@ function PaperBox (paper, opts) {
   })
 
   css(downloadBtn, {
-    width: '20%'
+    width: '20%',
+    display: hasFulltextDownloaded ? 'none' : 'block'
   })
 
   self.layout = function () {
@@ -134,6 +135,10 @@ function PaperBox (paper, opts) {
   self.downloaded = function () {
     css(lens, {
       display: 'block'
+    })
+
+    css(downloadBtn, {
+      display: 'none'
     })
   }
 
