@@ -8,7 +8,7 @@ This isn’t an exhaustive list of things that you can’t do. Rather, take it i
 
 This code of conduct applies to all spaces managed by the Code For Science initiative. This includes gitter, the mailing lists, the issue tracker, repositories, and any other forums created by the project team which the community uses for communication such as Skype, Google Hangouts, etc. In addition, violations of this code outside these spaces may affect a person's ability to participate within them.
 
-If you believe someone is violating the code of conduct, we ask that you report it by contacting the [Code For Science Team](https://github.com/orgs/codeforscience/people) collectively. For more details please see our Reporting Guidelines
+If you believe someone is violating the code of conduct, we ask that you report it by contacting the [Code For Science Team](https://github.com/orgs/codeforscience/people) collectively. For more details please see our [Reporting Guidelines](#reporting).
 
 ## Be welcoming, friendly and patient.
 
@@ -36,7 +36,7 @@ We are a community of professionals, and we conduct ourselves professionally. Be
 
 When we disagree, try to understand why. Disagreements, both social and technical, happen all the time and this community is no exception. It is important that we resolve disagreements and differing views constructively. Different people have different perspectives on issues. Being unable to understand why someone holds a viewpoint doesn’t mean that they’re wrong. Don’t forget that it is human to err and blaming each other doesn’t get us anywhere. Instead, focus on helping to resolve issues and learning from mistakes.
 
-# Reporting Guide
+# <a name="reporting">Reporting Guidelines</a>
 
 If you believe someone is violating the code of conduct we ask that you report it to the Code For Science team by emailing conduct@codeforscience.com. All reports will be kept confidential. In some cases we may determine that a public statement will need to be made. If that's the case, the identities of all victims and reporters will remain confidential unless those individuals instruct us otherwise.
 
