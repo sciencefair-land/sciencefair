@@ -69,8 +69,10 @@ function PaperBox (paper, opts) {
     justifyContent: 'center'
   })
 
+  var hasFulltextDownloaded = paper.assetPathByFilename('fulltext.xml')
   css(lens, {
-    width: '20%'
+    width: '20%',
+    display: hasFulltextDownloaded ? 'block' : 'none'
   })
 
   self.layout = function () {
