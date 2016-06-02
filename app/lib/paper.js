@@ -11,9 +11,10 @@ function Paper (doc, opts) {
   if (!(this instanceof Paper)) return new Paper(doc, opts)
   var self = this
 
-  Object.assign(this, doc.document)
+  self.doc = _.cloneDeep(doc.document)
+  Object.assign(self, doc.document)
 
-  self.identifier = self.identifier.map((id) => {
+  self.identifier = self.doc.identifier.map((id) => {
     if (id.type === 'pmcid') {
       if (!(/^PMC/.test(id.id))) id.id = `PMC${id.id}`
     }
@@ -37,7 +38,7 @@ function Paper (doc, opts) {
 
   self.download = function (downloadfn, cb) {
     function done (a, b, c) {
-      if (self.downloadsRunning == 0) cb(a, b, c)
+      if (self.downloadsRunning === 0) cb(a, b, c)
     }
     downloadfn(self, done)
   }
@@ -95,6 +96,9 @@ function Paper (doc, opts) {
   }
 
   self.getId = _.memoize(function (type) {
+    if (!type) {
+      return self.getId('pmcid') || self.getId('pmid') || self.getId('doi')
+    }
     var hit = _.find(self.identifier, { type: type })
     return hit ? hit.id : null
   })
@@ -121,6 +125,10 @@ function Paper (doc, opts) {
     var url = `http://localhost:${port}/${dir}/${pmcid}/${assetPath}`
     console.log('paper should be served at', url)
     return url
+  }
+
+  self.serialize = function () {
+    return self.doc
   }
 }
 

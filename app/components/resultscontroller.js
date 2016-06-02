@@ -5,7 +5,6 @@ var EventEmitter = require('events').EventEmitter
 var list = require('./list.js')
 var table = require('./table.js')
 var downloadbtn = require('./downloadbtn.js')
-var projectMenu = require('./projectmenu.js')
 
 inherits(ResultsController, EventEmitter)
 
@@ -13,7 +12,20 @@ function ResultsController (container, opts) {
   if (!(this instanceof ResultsController)) return new ResultsController(container, opts)
   var self = this
 
-  self.display = list(container, opts)
+  self.barelement = yo`<div></div>`
+  self.element = yo`<div>${self.barelement}</div>`
+  css(self.element, {
+    marginBottom: 64,
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden'
+  })
+  container.appendChild(self.element)
+
+  self.display = { papers: [] }
+
+  self.opts = opts
 
   function button (type) {
     var btn = yo`
@@ -39,9 +51,11 @@ function ResultsController (container, opts) {
     self.emit('paper.click', a, b, c)
   }
 
-  function cleanup(old) {
+  function cleanup (old) {
     old.clear()
-    old.element.remove()
+    if (old.element) {
+      self.element.removeChild(old.element)
+    }
   }
 
   var activestyle = {
@@ -56,7 +70,7 @@ function ResultsController (container, opts) {
   var tablebtn = button('table')
   css(tablebtn, inactivestyle)
 
-  listbtn.onclick = function() {
+  listbtn.onclick = function () {
     if (self.display instanceof list) {
       return
     }
@@ -65,14 +79,14 @@ function ResultsController (container, opts) {
     css(listbtn, activestyle)
 
     var old = self.display
-    self.display = list(container, opts)
+    self.display = list(self.element, opts)
     self.display.update(old.papers)
     cleanup(old)
 
     self.display.on('click', bubbleClick)
   }
 
-  tablebtn.onclick = function() {
+  tablebtn.onclick = function () {
     if (self.display instanceof table) {
       return
     }
@@ -81,7 +95,7 @@ function ResultsController (container, opts) {
     css(tablebtn, activestyle)
 
     var old = self.display
-    self.display = table(container, opts)
+    self.display = table(self.element, opts)
     self.display.update(old.papers)
     cleanup(old)
 
@@ -90,40 +104,52 @@ function ResultsController (container, opts) {
 
   var dlbtn = downloadbtn(self, opts)
 
-  var projectbtn = button('project')
-  var projectmenu = projectMenu(projectbtn, self)
-  projectbtn.onclick = function() {
-    projectmenu.toggle()
+  var dashboard = require('./dashboard.js')(self.element, opts)
+
+  self.display = list(self.element, opts)
+
+  self.clear = function () {
+    self.display.clear()
+    dashboard.clear()
   }
 
-  self.update = function(items) {
+  var dashbtn = button('dashboard')
+  css(dashbtn, inactivestyle)
+
+  dashbtn.onclick = function () {
+    css(dashbtn, dashboard.hidden ? activestyle : inactivestyle)
+    dashboard.toggle()
+  }
+
+  self.update = function (items) {
     self.display.update(items)
+    dashboard.update(items)
     dlbtn.load()
   }
 
-  self.clear = function() {
-    self.display.clear()
-  }
-
-  self.element = yo`
+  var barelement = yo`
   <div class="display-controller">
-    <div class='button-wrapper'><div class='clickable'>${listbtn}</div></div>
-    <div class='button-wrapper'><div class='clickable'>${tablebtn}</div></div>
-    <div class='button-wrapper'>${dlbtn.element}</div>
-    <div class='button-wrapper'><div class='clickable'>${projectbtn}</div></div>
-    <div class='project-menu'>${projectmenu.element}</div>
+    <div class='button-wrapper' data-hint='grid view'>
+      <div class='clickable'>${listbtn}</div>
+    </div>
+    <div class='button-wrapper' data-hint='list view'>
+      <div class='clickable'>${tablebtn}</div>
+    </div>
+    <div class='button-wrapper' data-hint='download all'>${dlbtn.element}</div>
+    <div class='button-wrapper' data-hint='toggle dashboard'>${dashbtn}</div>
   </div>
   `
 
-  css(self.element, {
+  css(barelement, {
     display: 'flex',
     flexDirection: 'row',
-    position: 'absolute',
+    position: 'relative',
     marginTop: '3.2%',
-    left: 'calc(41% + 60px)'
+    marginLeft: 'calc(41% + 60px)',
+    height: 50
   })
 
-  container.appendChild(self.element)
+  yo.update(self.barelement, barelement)
 }
 
 module.exports = ResultsController

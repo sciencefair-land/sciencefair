@@ -34,9 +34,9 @@ function PaperRow (paper) {
     jpg: function (asset) {
       console.log('jpg-click', asset)
       var img = yo`
-      <div>
+      <div class="imglist">
       ${Array.from(asset.paths).map(function (p) {
-        return yo`<img src='${p}' />`
+        return yo`<img class="listimg" src='${p}' />`
       })}
       </div>
       `

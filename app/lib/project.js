@@ -3,57 +3,128 @@ var EventEmitter = require('events').EventEmitter
 var levelup = require('levelup')
 var path = require('path')
 var exists = require('path-exists')
+var mkdirp = require('mkdirp')
+var fs = require('fs')
+var Paper = require('./paper.js')
 
 inherits(Project, EventEmitter)
 
-function Project (opts) {
-  if (!(this instanceof Project)) return new Project(opts)
+function Project (config, opts) {
+  if (!(this instanceof Project)) return new Project(config, opts)
   var self = this
 
-  self.dir = opts.dir
+  self.dir = config.dir
   mkdirp(self.dir)
-
-  setup(opts)
 
   self.dbdir = path.join(self.dir, 'leveldb')
   self.db = levelup(self.dbdir, { valueEncoding: 'json' })
 
-  self.put = function (paper, cb) {
-    self.db.put(paper.getId(), paper, cb)
+  self.size = null
+  self.changed = true
+
+  self.getSize = function (cb) {
+    if (!self.changed) {
+      cb(self.size)
+      return
+    }
+
+    var n = 0
+    self.db
+      .createKeyStream()
+      .on('data', function () { n += 1 })
+      .on('end', function () {
+        self.size = n
+        self.changed = false
+        cb(n)
+      })
   }
 
-  self.putBatch = function(papers, cb) {
-    self.db.batch(papers.map(function(paper) {
-      return {
+  self.setup = function (config) {
+    var configpath = path.join(self.dir, 'project.json')
+    if (!exists.sync(configpath)) {
+      self.created = new Date()
+      fs.writeFileSync(configpath, JSON.stringify({
+        name: config.name,
+        created: self.created.toISOString()
+      }))
+      self.name = config.name
+    } else {
+      var cfg = require(configpath)
+      self.name = cfg.name
+      self.created = new Date(cfg.created)
+    }
+    self.getSize(function () {
+      // noop
+    })
+  }
+
+  self.setup(config)
+
+  self.put = function (paper, cb) {
+    self.db.put(paper.getId(), paper, function (err) {
+      self.changed = true
+      cb(err)
+    })
+  }
+
+  self.putBatch = function (papers, cb) {
+    var commands = papers.map(function (paper) {
+      var doc = {
         type: 'put',
         key: paper.getId(),
-        paper: paper.serialize()
+        value: paper.serialize()
       }
-    }), cb)
+      console.log(doc)
+      return doc
+    })
+    self.db.batch(commands, function (err) {
+      self.changed = true
+      cb(err)
+    })
   }
 
   self.get = self.db.get
 
   self.getBatch = function (keys, cb) {
-    keys.forEach(function(key) {
+    keys.forEach(function (key) {
       self.get(key, cb)
     })
   }
 
-  self.createReadStream = self.db.createReadStream
+  self.getAll = function (cb) {
+    var papers = []
+    self.db.createReadStream({})
+      .on('data', function (paper) {
+        papers.push(Paper({ document: paper.value }, opts))
+      })
+      .on('error', function (err) {
+        cb(err)
+      })
+      .on('end', function () {
+        cb(papers)
+      })
+  }
 
-  self.del = self.db.del
+  self.del = function (key, cb) {
+    self.db.del(key, function (err) {
+      self.changed = true
+      cb(err)
+    })
+  }
 
   self.delBatch = function (keys, cb) {
-    self.db.batch(keys.map(function(key) {
+    self.db.batch(keys.map(function (key) {
       return {
         type: 'del',
         key: key
       }
-    }), cb)
+    }), function () {
+      self.changed = true
+      cb()
+    })
   }
 
-  self.forEach = function(fn, cb) {
+  self.forEach = function (fn, cb) {
     self.createReadStream()
       .on('data', function (data) {
         fn(data)
@@ -65,24 +136,6 @@ function Project (opts) {
         cb(null)
       })
   }
-
-  function setup(opts) {
-    var configpath = path.join(self.dir, 'project.json')
-    console.log(configpath)
-    if (!exists.sync(configpath)) {
-      self.created = new Date()
-      fs.writeFileSync(configpath, JSON.stringify({
-        name: opts.name,
-        created: self.created.toISOString()
-      }))
-      self.name = opts.name
-    } else {
-      var config = require(configpath)
-      self.name = config.name
-      self.created = new Date(config.created)
-    }
-  }
-
 }
 
 module.exports = Project

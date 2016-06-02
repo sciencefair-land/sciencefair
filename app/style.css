@@ -1,73 +1,92 @@
 @font-face {
   font-family: "Aleo-Light";
-  src: url("./fonts/Aleo/Light/aleo-light-webfont.woff") format("woff"), url("./fonts/Aleo/Light/aleo-light-webfont.eot") format("eot"); }
+  src: url("./fonts/Aleo/Light/aleo-light-webfont.woff") format("woff"), url("./fonts/Aleo/Light/aleo-light-webfont.eot") format("eot");
+}
 
 @font-face {
   font-family: "Aleo-Regular";
-  src: url("./fonts/Aleo/Regular/aleo-regular-webfont.woff") format("woff"), url("./fonts/Aleo/Regular/aleo-regular-webfont.eot") format("eot"); }
+  src: url("./fonts/Aleo/Regular/aleo-regular-webfont.woff") format("woff"), url("./fonts/Aleo/Regular/aleo-regular-webfont.eot") format("eot");
+}
 
 @font-face {
   font-family: "CooperHewitt-Bold";
-  src: url("./fonts/CooperHewitt/CooperHewitt-Bold.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-Bold.eot") format("eot"); }
+  src: url("./fonts/CooperHewitt/CooperHewitt-Bold.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-Bold.eot") format("eot");
+}
 
 @font-face {
   font-family: "CooperHewitt-BoldItalic";
-  src: url("./fonts/CooperHewitt/CooperHewitt-BoldItalic.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-BoldItalic.eot") format("eot"); }
+  src: url("./fonts/CooperHewitt/CooperHewitt-BoldItalic.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-BoldItalic.eot") format("eot");
+}
 
 @font-face {
   font-family: "CooperHewitt-Medium";
-  src: url("./fonts/CooperHewitt/CooperHewitt-Medium.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-Medium.eot") format("eot"); }
+  src: url("./fonts/CooperHewitt/CooperHewitt-Medium.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-Medium.eot") format("eot");
+}
 
 @font-face {
   font-family: "CooperHewitt-MediumItalic";
-  src: url("./fonts/CooperHewitt/CooperHewitt-MediumItalic.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-MediumItalic.eot") format("eot"); }
+  src: url("./fonts/CooperHewitt/CooperHewitt-MediumItalic.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-MediumItalic.eot") format("eot");
+}
 
 @font-face {
   font-family: "CooperHewitt-Light";
-  src: url("./fonts/CooperHewitt/CooperHewitt-Light.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-Light.eot") format("eot"); }
+  src: url("./fonts/CooperHewitt/CooperHewitt-Light.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-Light.eot") format("eot");
+}
 
 @font-face {
   font-family: "CooperHewitt-LightItalic";
-  src: url("./fonts/CooperHewitt/CooperHewitt-LightItalic.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-LightItalic.eot") format("eot"); }
+  src: url("./fonts/CooperHewitt/CooperHewitt-LightItalic.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-LightItalic.eot") format("eot");
+}
 
 @font-face {
   font-family: "CooperHewitt-Book";
-  src: url("./fonts/CooperHewitt/CooperHewitt-Book.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-Book.eot") format("eot"); }
+  src: url("./fonts/CooperHewitt/CooperHewitt-Book.woff") format("woff"), url("./fonts/CooperHewitt/CooperHewitt-Book.eot") format("eot");
+}
 
 html {
- 	height: 100%;
- 	width: 100%;
- 	overflow: hidden;
- 	-webkit-user-select: none;
+   height: 100%;
+   width: 100%;
+   overflow: hidden;
+   -webkit-user-select: none;
 }
 
 body {
-	width: 100%;
-	height: 100%;
-	padding: 0px;
-	margin: 0px;
-	font-size: 16px;
-	font-family: 'Aleo';
-	overflow: auto;
-	-webkit-overflow-scrolling: touch;
-	background: rgb(43,43,51);
-	cursor: default;
+  width: 100%;
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+  font-size: 16px;
+  font-family: 'Aleo';
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  background: rgb(43,43,51);
+  cursor: default;
+  display: flex;
+  flex-direction: row;
 }
 
-#main {
-	position: absolute;
-	top: 30px;
-	width: 100%;
-	bottom: 50px;
-	background-color: rgb(111,174,193);
+#middle {
+  position: absolute;
+  top: 30px;
+  width: 100%;
+  bottom: 50px;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
 }
 
 #footer {
-	position: absolute;
-	bottom: 0;
-	height: 50px;
-	width: 100%;
+  position: absolute;
+  bottom: 0;
+  height: 50px;
+  width: 100%;
   display: flex;
+}
+
+#sidebar {
+  border-top: solid rgb(111, 174, 193) 4px;
+  border-bottom: solid rgb(111, 174, 193) 4px;
 }
 
 .clickable {
@@ -79,12 +98,12 @@ body {
 }
 
 .paper {
-	-webkit-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 
 
 ::-webkit-input-placeholder {
-	color: rgb(43,43,51);
+  color: rgb(43,43,51);
 }
 
 ::-webkit-scrollbar {
@@ -104,7 +123,7 @@ body {
 }
 
 ::selection {
-	background: white;
+  background: white;
 }
 
 /* fix for atom webview automatic sizing bug */
@@ -116,13 +135,13 @@ body {
 /* table view */
 .results-table {
   table-layout: auto;
+  max-height: 100%;
   font-family: 'CooperHewitt-Light';
   color: rgb(178, 180, 184);
-  position: absolute;
-  top: calc(4% + 100px);
-  left: 5%;
-  width: 90%;
-  height: calc(96% - 170px);
+  position: relative;
+  margin-top: 50px;
+  margin-left: 30px;
+  overflow-y: scroll;
 }
 .tbody {
   height: 100%;
@@ -164,9 +183,9 @@ body {
   margin: 5px;
 }
 .paper-type {
-  width: 48px;
-  max-width: 48px;
+  flex: 0 0 48px;
 }
+
 .paper-title {
   font-family: 'CooperHewitt-Book';
   width: 100%;
@@ -185,8 +204,10 @@ body {
   margin: 0;
 }
 .paper-data {
+  display: flex;
   justify-content: flex-end;
   max-width: 50%;
+  flex-wrap: nowrap;
 }
 .paper-terms {
   display: flex;
@@ -198,7 +219,7 @@ body {
   flex-wrap: wrap;
   justify-content: flex-end;
 }
-.paper-table-row-id {
+.paper-table-row-id, .badge {
   display: flex;
   margin: 5px;
   border-radius: 2px;
@@ -289,16 +310,31 @@ a {
   padding: 10px;
 }
 .project-entry {
+  font-family: "CooperHewitt-Light";
   color: rgb(178, 180, 184);
   margin: 5px;
   padding: 10px;
   opacity: 0.85;
-  width: 100%;
+  width: 90%;
   height: 30px;
-  background: inherit;
+  font-size: 1.3em;
+  background: none;
   display: flex;
   align-items: center;
+  align-content: center;
   justify-content: space-between;
+  border-bottom: solid rgba(178, 180, 184, 0.3) 2px;
+  margin-bottom: 0;
+  box-sizing: padding-box;
+}
+.project-entry > .row {
+  margin: 0;
+}
+.project-entry:last-of-type {
+  border-bottom: none;
+}
+.project-count {
+  margin-left: 10px;
 }
 .project-entry:hover {
   opacity: 1.0;
@@ -312,14 +348,113 @@ a {
   width: 50px;
   height: 50px;
 }
-.add-project-input {
-  width: 264px;
-  min-width: 264px;
+.add-project-input-wrapper {
+  width: 250px;
+  min-width: 250px;
 }
 .topbar {
   align-items: center;
   justify-items: center;
   justify-content: space-between;
   margin: 0;
-  padding-left: 10px;
+  /*margin: 0 20px;*/
+  width: 90%;
+  padding: 15px;
+  /*border: solid rgba(178, 180, 184, 0.3) 2px;*/
+  border-radius: 2px;
+  box-sizing: content-box;
+}
+
+::-webkit-input-placeholder {
+  color: rgba(178, 180, 184, 0.3);
+}
+
+.sidebar-section-title {
+  justify-content: flex-start;;
+  font-size: 1.8em;
+  font-family: "Aleo-Regular";
+  padding-left: 20px;
+  margin-bottom: 0;
+  border-left: solid 6px;
+}
+
+.badge {
+  margin-top: 0;
+  font-size: 0.8em;
+  padding: 4px;
+  padding-bottom: 0;
+}
+
+#sidebar input {
+  font-family: 'CooperHewitt-Book';
+  outline: none;
+  border: none;
+  width: 100%;
+  height: 100%;
+  background: none;
+  cursor: text;
+  font-size: 1em;
+  color: rgb(178, 180, 184);
+  -webkit-appearance: none;
+  background-color: none;
+  border-image-source: none;
+  border-image-slice: none;
+  border-image-width: none;
+  border-image-outset: none;
+  border-image-repeat: none;
+}
+
+.dashboard-block {
+  max-height: 300px;
+  width: 340px;
+  margin: 10px;
+  padding: 15px;
+  font-family: "CooperHewitt-Light";
+  color: rgb(178, 180, 184);
+  background: rgb(43, 43, 51);
+  opacity: 0.8;
+}
+
+.dashboard-block svg text {
+  fill: rgb(178, 180, 184);
+}
+
+.dashboard-block-title {
+  text-transform: uppercase;
+  font-family: "CooperHewitt-Book";
+  font-size: 1.3em;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+  padding: 5px;
+}
+
+.dashboard-block-subtitle {
+  font-family: "CooperHewitt-Book";
+  font-size: 0.8em;
+  margin-left: 10px;
+  text-transform: none;
+}
+
+#block-author-barplot .nv-legendWrap {
+  display: none;
+}
+
+#block-author-barplot .nv-controlsWrap {
+  display: none;
+}
+
+.imglist {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.listimg {
+  display: flex;
+  margin: 10px;
+  padding: 10px;
+  border: solid #333 1px;
 }

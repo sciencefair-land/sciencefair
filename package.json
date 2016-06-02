@@ -16,11 +16,14 @@
   "license": "MIT",
   "dependencies": {
     "csjs": "^1.0.1",
+    "d3": "^3.5.17",
     "d3-selection": "^0.6.11",
     "dat-manager": "^2.0.1",
+    "debug-menu": "^0.4.0",
     "dom-css": "^2.0.0",
     "download": "^4.4.3",
     "electron-prebuilt": "^1.1.3",
+    "hint": "github:blahah/hint",
     "install": "^0.6.1",
     "keymaster": "^1.6.2",
     "leveldown": "^1.4.6",
@@ -29,6 +32,7 @@
     "nan": "^2.2.0",
     "node-static": "^0.7.7",
     "npm": "^3.8.7",
+    "nvd3": "^1.8.3",
     "path-exists": "^2.1.0",
     "portfinder": "^1.0.3",
     "pump": "^1.0.1",
@@ -45,5 +49,6 @@
   "devDependencies": {
     "debug-menu": "^0.4.0",
     "random-subsets": "0.0.1"
-  }
+  },
+  "productName": "ScienceFair"
 }

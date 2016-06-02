@@ -41,7 +41,7 @@ function Search (container) {
     display: 'none'
   })
 
-  css(input,{
+  css(input, {
     position: 'absolute',
     marginTop: '4%',
     marginLeft: '5%',
@@ -122,8 +122,12 @@ function Search (container) {
     input.focus()
   }
 
+  self.clear = function () {
+    input.value = ''
+  }
+
   self.showButtons = function () {
-    ;[group.first, group.prev, group.next, group.last].forEach(function(b) {
+    ;[group.first, group.prev, group.next, group.last].forEach(function (b) {
       css(b, 'display', 'inline-block')
     })
   }
@@ -134,21 +138,18 @@ function Search (container) {
 
   self.offNext = function () {
     css(group.next, { opacity: 0.4 })
-
   }
 
   self.offFirst = function () {
     css(group.first, { opacity: 0.4 })
-
   }
 
   self.offLast = function () {
     css(group.last, { opacity: 0.4 })
-
   }
 
   self.hideButtons = function () {
-    ;[group.first, group.prev, group.next, group.last].forEach(function(b) {
+    ;[group.first, group.prev, group.next, group.last].forEach(function (b) {
       css(b, 'display', 'none')
     })
   }
@@ -169,24 +170,22 @@ function Search (container) {
     css(group.last, { opacity: 0.85 })
   }
 
-
-  self.updateButtons = function(stats) {
-    var first = stats.from == 0
+  self.updateButtons = function (stats) {
+    var first = stats.from === 0
     var mid = !first && stats.to < stats.total
     var last = stats.to >= stats.total
     if (first) {
-      css(prev, { display: 'none' })
-      css(next, { display: 'block' })
+      css(group.prev, { display: 'none' })
+      css(group.next, { display: 'block' })
     } else if (mid) {
-      search.showButtons()
+      self.showButtons()
     } else if (last) {
-      css(prev, { display: 'block' })
-      css(next, { display: 'none' })
+      css(group.prev, { display: 'block' })
+      css(group.next, { display: 'none' })
     }
   }
 
   self.hideButtons()
-
 }
 
 module.exports = Search

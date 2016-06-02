@@ -1,0 +1,58 @@
+/**
+ * hint - Awesome tooltips at your fingertips
+ * @version v1.4.0
+ * @link https://github.com/bevacqua/hint
+ * @license MIT
+ */
+[aria-label],
+[data-hint] {
+  position: relative;
+  transition: all 0s !important;
+}
+[aria-label]:not(.hint-before):after,
+[data-hint]:not(.hint-before):after,
+[aria-label].hint-before:before,
+[data-hint].hint-before:before {
+  display: none;
+  position: absolute;
+  top: 101%;
+  left: 6px;
+  z-index: 5000;
+  pointer-events: none;
+  padding: 8px 10px;
+  line-height: 15px;
+  white-space: nowrap;
+  text-decoration: none;
+  text-indent: 0;
+  overflow: visible;
+  font-family: "CooperHewitt-Light";
+  font-size: 14px;
+  color: #fff;
+  background-color: rgb(43,43,51);
+  border-radius: 2px;
+}
+[aria-label]:not(.hint-before):hover:after,
+[data-hint]:not(.hint-before):hover:after,
+[aria-label].hint-before:hover:before,
+[data-hint].hint-before:hover:before {
+  display: block;
+  transform: translateY(8px);
+}
+[aria-label]:not(.hint-before):after,
+[aria-label].hint-before:before {
+  content: attr(aria-label);
+}
+[data-hint]:not(.hint-before):after {
+  content: attr(data-hint);
+}
+[data-hint].hint-before:before {
+  content: attr(data-hint-before);
+}
+@media only print {
+  [aria-label]:not(.hint-before):after,
+  [data-hint]:not(.hint-before):after,
+  [aria-label].hint-before:before,
+  [data-hint].hint-before:before {
+    display: none;
+  }
+}

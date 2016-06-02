@@ -12,12 +12,12 @@ function List (container, opts) {
   if (!(this instanceof List)) return new List(container, opts)
   var self = this
 
-  var outer = container.appendChild(yo`<div></div>`)
+  self.element = container.appendChild(yo`<div></div>`)
   self.papers = []
 
   self.update = function (items) {
     self.papers = self.papers.concat(items)
-    yo.update(outer, render(self.papers))
+    render(self.papers)
   }
 
   self.clear = function () {
@@ -26,31 +26,29 @@ function List (container, opts) {
   }
 
   function render (data) {
-    self.element = yo`
+    var element = yo`
     <div class="results-list">
       ${data.map(renderBox)}
     </div>
     `
-    css(self.element,{
-      position: 'absolute',
-      top: 'calc(4% + 100px)',
-      left: '5%',
-      width: '90%',
-      height: 'calc(96% - 140px)',
+    css(element, {
+      maxHeight: '100%',
+      position: 'relative',
+      marginTop: 50,
+      marginLeft: 30,
       overflowY: 'scroll'
     })
 
-    return self.element
+    yo.update(self.element, element)
   }
 
   function renderBox (paper) {
     var pb = PaperBox(paper, opts)
-    pb.on('click', function() {
+    pb.on('click', function () {
       self.emit('click', pb)
     })
     return pb.box
   }
-
 }
 
 module.exports = List

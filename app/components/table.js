@@ -12,12 +12,12 @@ function Table (container, opts) {
   if (!(this instanceof Table)) return new Table(container, opts)
   var self = this
 
-  var outer = container.appendChild(yo`<div></div>`)
+  self.element = container.appendChild(yo`<div></div>`)
   self.papers = []
 
   self.update = function (items) {
     self.papers = self.papers.concat(items)
-    yo.update(outer, render(self.papers))
+    render(self.papers)
   }
 
   self.clear = function () {
@@ -26,12 +26,12 @@ function Table (container, opts) {
   }
 
   function render (data) {
-    self.element = yo`
+    var element = yo`
     <div class="results-table">
       ${tbody(data)}
     </div>
     `
-    return self.element
+    yo.update(self.element, element)
   }
 
   function tbody (rows) {
@@ -45,9 +45,9 @@ function Table (container, opts) {
 
     function renderRow (paper) {
       var pr = PaperRow(paper, opts)
-      ;['click', 'lens-click',
-       'xml-click', 'pdf-click'].forEach(function(clicktype) {
-        pr.on(clicktype, function() {
+      ;['click', 'lens-click', 'xml-click', 'pdf-click']
+      .forEach(function (clicktype) {
+        pr.on(clicktype, function () {
           self.emit(clicktype, pr)
         })
       })
