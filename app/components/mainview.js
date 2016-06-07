@@ -28,8 +28,6 @@ function MainView (opts) {
     opts
   )
 
-  require('./collectionList.js')(displayController, opts.containers.sidebar)
-
   var searchCursor = {}
 
   var doSearch = _.debounce(function (query) {
@@ -129,7 +127,7 @@ function MainView (opts) {
     if (item.paper.downloaded || item.paper.downloadStarted) {
       return
     }
-    statbar.updateSpeed(50)
+    // statbar.updateSpeed(50)
     opts.fulltextSource.downloadPaperHTTP(item.paper)
   })
 

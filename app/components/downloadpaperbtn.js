@@ -5,11 +5,11 @@ var EventEmitter = require('events').EventEmitter
 
 inherits(DownloadPaperButton, EventEmitter)
 
-function DownloadPaperButton(paper, opts) {
+function DownloadPaperButton (paper, opts) {
   if (!(this instanceof DownloadPaperButton)) return new DownloadPaperButton(paper, opts)
   var self = this
 
-  function button(type) {
+  function button (type) {
     var btn = yo`
     <div class="clickable"></div>
     `
@@ -26,11 +26,11 @@ function DownloadPaperButton(paper, opts) {
 
   var dlbtn = button('down_arrow')
 
-  dlbtn.onclick = function() {
+  dlbtn.onclick = function () {
     paper.download(opts.fulltextSource.downloadPaperHTTP, self.load)
   }
 
-  self.load = function() {
+  self.load = function () {
     self.emit('downloaded')
   }
 

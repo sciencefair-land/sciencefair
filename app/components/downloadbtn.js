@@ -2,8 +2,6 @@ var yo = require('yo-yo')
 var css = require('dom-css')
 var inherits = require('inherits')
 var EventEmitter = require('events').EventEmitter
-var list = require('./list.js')
-var table = require('./table.js')
 
 inherits(DownloadButton, EventEmitter)
 
@@ -13,7 +11,7 @@ function DownloadButton (controller, opts) {
 
   self.allDownloaded = false
 
-  function button(type) {
+  function button (type) {
     var btn = yo`
     <div class="clickable"></div>
     `
@@ -32,7 +30,7 @@ function DownloadButton (controller, opts) {
     return btn
   }
 
-  function icon(type) {
+  function icon (type) {
     var icon = yo`
     <div></div>
     `
@@ -97,7 +95,7 @@ function DownloadButton (controller, opts) {
   }
 
   function allDownloaded () {
-    setTimeout(function() {
+    setTimeout(function () {
       css(arrow, hiddenStyle)
       css(tick, activeStyle)
     }, 200)

@@ -12,7 +12,6 @@ if (testing) {
 var header = document.getElementById('header')
 var title = require('./components/title.js')(header)
 var mid = document.getElementById('middle')
-var sidebar = require('./components/sidebar.js')(mid)
 var main = require('./components/main.js')(mid)
 var footer = document.getElementById('footer')
 
@@ -37,7 +36,6 @@ var view = require('./components/mainview.js')({
     middle: mid,
     footer: footer,
     title: title,
-    sidebar: sidebar,
     main: main
   },
   pubdata: pubdata,
