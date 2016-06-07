@@ -3,7 +3,6 @@ var css = require('dom-css')
 var inherits = require('inherits')
 var EventEmitter = require('events').EventEmitter
 var list = require('./list.js')
-var downloadbtn = require('./downloadbtn.js')
 
 inherits(ResultsController, EventEmitter)
 
@@ -26,20 +25,16 @@ function ResultsController (container, opts) {
 
   self.opts = opts
 
-  var dlbtn = downloadbtn(self, opts)
-
   self.clear = function () {
     self.display.clear()
   }
 
   self.update = function (items) {
     self.display.update(items)
-    dlbtn.load()
   }
 
   var barelement = yo`
   <div class="display-controller">
-    <div class='button-wrapper' data-hint='download all'>${dlbtn.element}</div>
   </div>
   `
 

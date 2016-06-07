@@ -9,7 +9,7 @@ function Statbar (container) {
   var self = this
 
   var box = container.appendChild(document.createElement('div'))
-  css(box,{
+  css(box, {
     margin: 0,
     width: '100%',
     paddingLeft: '30px',
@@ -42,12 +42,12 @@ function Statbar (container) {
     speed.innerHTML = `${value} mb/s`
   }
 
-  self.setTotalResults = function(total) {
+  self.setTotalResults = function (total) {
     self.totalResults = total
   }
 
   // stats: object like { from: 1, to: 30}
-  self.updateResultStats = function(stats) {
+  self.updateResultStats = function (stats) {
     if (!stats) {
       self.resultstats = { from: 0, to: 0 }
       resultstats.innerHTML = ''
@@ -58,7 +58,7 @@ function Statbar (container) {
       resultstats.innerHTML =
         `results ${stats.from} .. ${stats.to} of ${self.totalResults}`
     } else {
-      setTimeout(function() { self.updateResultStats(stats) }, 200)
+      setTimeout(function () { self.updateResultStats(stats) }, 200)
     }
   }
 
@@ -69,7 +69,6 @@ function Statbar (container) {
   self.setTotalResults(0)
   self.updateResultStats()
   self.updateSpeed(0)
-
 }
 
 module.exports = Statbar
