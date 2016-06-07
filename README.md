@@ -12,6 +12,8 @@ Work in progress! Most of the functionality is being developed in branches. The 
 
 ### try it out
 
+This project uses node `v6.2`
+
 Clone this repo, then run
 
 - `npm install` to install dependencies
