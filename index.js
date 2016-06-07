@@ -9,7 +9,7 @@ app.on('ready', function () {
     resizable: true,
     title: 'sciencefair',
     width: 1050,
-    frame: false,
+    titleBarStyle: 'hidden',
     fullscreen: false,
     icon: './icon/logo.png'
   })
