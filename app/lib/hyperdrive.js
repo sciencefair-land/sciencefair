@@ -5,7 +5,7 @@ var untildify = require('untildify')
 var path = require('path')
 var exists = require('path-exists').sync
 var dir = untildify('~/.sciencefair/data/elife/')
-var key = 'c0b6950cde25661786cc75b8951e0bf4a6a20e10dc8f3025ab8b60ba16682dbb'
+var key = 'b179e1550a43916668fe580924ced04c6efba18aaa316067158ddfa35f49e148'
 
 var drive = hyperdrive(level(untildify('~/.sciencefair/data/elife.db')))
 var archive = drive.createArchive(
@@ -34,11 +34,15 @@ var through = require('through2')
 var pump = require('pump')
 
 function download (id, cb) {
+  console.log(id)
   pump(archive.list(), through.obj(visit), cb)
 
   function visit (entry, enc, cb) {
     var folder = entry.name.split('/')[0]
-    if (folder === id) return archive.download(entry, cb)
+    if (folder === id) {
+      console.log('found entry, downloading')
+      return archive.download(entry, cb)
+    }
     cb()
   }
 }
@@ -76,19 +80,21 @@ module.exports = {
 }
 
 function downloadPaper (paper, cb) {
-  download(paper.path, cb)
+  if (paper.assetPaths().length > 0) {
+    cb()
+  } else {
+    download(paper.path, cb)
+  }
 }
 
 function connect (cb) {
-  var get = !(exists(untildify('~/.sciencefair/data/elife.yuno')))
-
   var db = yuno(dbopts, (err, dbhandle) => {
     if (err) throw err
 
     db = dbhandle
     db.datasource = { name: 'eLife hyperdrive' }
 
-    if (get) {
+    if (!exists(dbopts.location)) {
       var meta = []
       metadata(meta, function () {
         db.add(meta, function (err) {
