@@ -12,8 +12,9 @@ function Reader (paper) {
   var encloser = document.createElement('div')
   var frame = encloser.appendChild(document.createElement('webview'))
   frame.disablewebsecurity = true
-  frame.addEventListener("dom-ready", function(){
-    frame.openDevTools()
+  frame.addEventListener("dom-ready", function () {
+    // uncomment line below if you want to debug the lens reader
+    // frame.openDevTools()
   })
   frame.shadowRoot.applyAuthorStyles = true
   frame.shadowRoot.children[1].style.cssText = "width: 100%; height: 100%"
