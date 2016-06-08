@@ -4,7 +4,10 @@ var raf = require('random-access-file')
 var untildify = require('untildify')
 var path = require('path')
 var exists = require('path-exists').sync
+var mkdirp = require('mkdirp').sync
+
 var dir = untildify('~/.sciencefair/data/elife/')
+mkdirp(dir)
 var key = 'b179e1550a43916668fe580924ced04c6efba18aaa316067158ddfa35f49e148'
 
 var drive = hyperdrive(level(untildify('~/.sciencefair/data/elife.db')))
