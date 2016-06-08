@@ -26,16 +26,16 @@ function Statbar (container) {
 
   css(speed, {
     marginRight: '40px',
-    fontFamily: 'CooperHewitt-Light',
+    fontFamily: 'CooperHewitt-Light'
   })
 
   css(resultstats, {
-    fontFamily: 'CooperHewitt-Light',
+    fontFamily: 'CooperHewitt-Light'
   })
 
   css(dbname, {
     marginLeft: '40px',
-    fontFamily: 'CooperHewitt-Light',
+    fontFamily: 'CooperHewitt-Light'
   })
 
   self.updateSpeed = function (value) {

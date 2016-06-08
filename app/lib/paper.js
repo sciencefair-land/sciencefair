@@ -16,6 +16,7 @@ function Paper (doc, opts) {
   }
   self.doc = _.cloneDeep(doc.document)
   Object.assign(self, doc.document)
+  console.log(self.doc)
 
   self.identifier = self.doc.identifier.map((id) => {
     if (id.type === 'pmcid') {
@@ -28,8 +29,8 @@ function Paper (doc, opts) {
 
   self.assetDir = _.memoize(function () {
     var dir = opts.fulltextSource.dir
-    var pmcid = self.getId('pmcid')
-    return path.join(opts.datadir, dir, pmcid)
+    var id = self.getId('publisher-id')
+    return path.join(opts.datadir, dir, id)
   })
 
   self.assetPaths = function () {
@@ -45,8 +46,8 @@ function Paper (doc, opts) {
 
     var filenameInAssetDir = path.join(self.assetDir(), filename)
 
-    var match = assetPaths.filter(function(apath) {
-      return apath == filenameInAssetDir
+    var match = assetPaths.filter(function (apath) {
+      return apath === filenameInAssetDir
     })
 
     // Assume only 1 match?
@@ -138,8 +139,8 @@ function Paper (doc, opts) {
   self.assetUrl = function (assetPath) {
     var port = opts.contentServer.port
     var dir = opts.fulltextSource.dir
-    var pmcid = self.getId('pmcid')
-    var url = `http://localhost:${port}/${dir}/${pmcid}/${assetPath}`
+    var id = self.getId('publisher-id')
+    var url = `http://localhost:${port}/${dir}/${id}/${assetPath}`
     console.log('paper should be served at', url)
     return url
   }

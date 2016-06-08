@@ -27,7 +27,7 @@ function DownloadPaperButton (paper, opts) {
   var dlbtn = button('down_arrow')
 
   dlbtn.onclick = function () {
-    paper.download(opts.fulltextSource.downloadPaperHTTP, self.load)
+    paper.download(opts.fulltextSource.downloadPaper, self.load)
   }
 
   self.load = function () {

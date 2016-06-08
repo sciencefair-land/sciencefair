@@ -37,7 +37,7 @@ function MainView (opts) {
   }, 200)
 
   function updateList (err, results) {
-    if (err) throw err
+    if (err) console.trace(err)
     opts.message.update('')
     opts.message.hide()
 

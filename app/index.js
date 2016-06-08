@@ -27,8 +27,9 @@ console.log('data directory:', datadir)
 var contentServer = require('./lib/contentServer.js')(datadir)
 var pubdata = require('./lib/pubdata.js')(datadir, testing)
 
-var metadata = pubdata.getMetadataSource(testing)[0]
-var fulltext = pubdata.getFulltextSource(testing)[0]
+// var metadata = pubdata.getMetadataSource(testing)[0]
+// var fulltext = pubdata.getFulltextSource(testing)[0]
+var elife = require('./lib/hyperdrive.js')
 
 var view = require('./components/mainview.js')({
   containers: {
@@ -39,8 +40,8 @@ var view = require('./components/mainview.js')({
     main: main
   },
   pubdata: pubdata,
-  fulltextSource: fulltext,
-  metadataSource: metadata,
+  fulltextSource: elife,
+  metadataSource: elife,
   datadir: datadir,
   contentServer: contentServer,
   testing: testing,
@@ -48,9 +49,14 @@ var view = require('./components/mainview.js')({
 })
 
 // start
-metadata.ensure(function () {
-  var metadataDB = require('./lib/database.js')(metadata)
-  metadataDB.on('ready', function () {
-    view.metadataReady(metadataDB)
-  })
+// metadata.ensure(function () {
+//   var metadataDB = require('./lib/database.js')(metadata)
+//   metadataDB.on('ready', function () {
+//     view.metadataReady(metadataDB)
+//   })
+// })
+
+elife.connect(function (err, db) {
+  if (err) throw err
+  view.metadataReady(db)
 })
