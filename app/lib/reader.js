@@ -13,7 +13,7 @@ function Reader (paper) {
   var frame = encloser.appendChild(document.createElement('webview'))
   frame.disablewebsecurity = true
   frame.addEventListener("dom-ready", function(){
-    // frame.openDevTools()
+    frame.openDevTools()
   })
   frame.shadowRoot.applyAuthorStyles = true
   frame.shadowRoot.children[1].style.cssText = "width: 100%; height: 100%"
@@ -34,9 +34,10 @@ function Reader (paper) {
     top: margin + marginTopShim + 5
   })
 
-  var xmlfile = paper.assetPaths().filter(function (path) {
+  var xmlfiles = paper.assetPaths().filter(function (path) {
     return /xml/.test(path)
-  })[0]
+  })
+  var xmlfile = xmlfiles[xmlfiles.length - 1]
   xmlfile = path.parse(xmlfile)
   var encodedURL = encodeURIComponent(paper.assetUrl(xmlfile.base))
   frame.src = `./lib/lens/index.html?url=${encodedURL}`
