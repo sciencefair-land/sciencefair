@@ -3,7 +3,7 @@ var level = require('level')
 var raf = require('random-access-file')
 var untildify = require('untildify')
 var path = require('path')
-
+var exists = require('path-exists').sync
 var dir = untildify('~/.sciencefair/data/elife/')
 var key = 'c0b6950cde25661786cc75b8951e0bf4a6a20e10dc8f3025ab8b60ba16682dbb'
 
@@ -80,18 +80,24 @@ function downloadPaper (paper, cb) {
 }
 
 function connect (cb) {
+  var get = !(exists(untildify('~/.sciencefair/data/elife.yuno')))
+
   var db = yuno(dbopts, (err, dbhandle) => {
     if (err) throw err
 
     db = dbhandle
+    db.datasource = { name: 'eLife hyperdrive' }
 
-    var meta = []
-    metadata(meta, function () {
-      db.add(meta, function (err) {
-        if (err) cb(err)
-        db.datasource = { name: 'eLife hyperdrive' }
-        cb(null, db)
+    if (get) {
+      var meta = []
+      metadata(meta, function () {
+        db.add(meta, function (err) {
+          if (err) cb(err)
+          cb(null, db)
+        })
       })
-    })
+    } else {
+      cb(null, db)
+    }
   })
 }
