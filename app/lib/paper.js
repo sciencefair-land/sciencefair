@@ -16,7 +16,6 @@ function Paper (doc, opts) {
   }
   self.doc = _.cloneDeep(doc.document)
   Object.assign(self, doc.document)
-  console.log(self.doc)
 
   self.identifier = self.doc.identifier.map((id) => {
     if (id.type === 'pmcid') {
