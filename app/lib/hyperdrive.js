@@ -6,11 +6,11 @@ var path = require('path')
 var exists = require('path-exists').sync
 var mkdirp = require('mkdirp').sync
 
-var dir = untildify('~/.sciencefair/data/elife_dws/')
+var dir = untildify('~/.sciencefair/data/elife_dws2/')
 mkdirp(dir)
-var key = '4b2e3d9a1a41f44658f3f89afba5e0c0e166bcbe20c5bcc276ef3828ca4db717'
+var key = 'c31c23c1d803caf53974dab82126956a03d30fc6c29eb2b5fdd35705f3d70d6f'
 
-var drive = hyperdrive(level(untildify('~/.sciencefair/data/elife_dws.db')))
+var drive = hyperdrive(level(untildify('~/.sciencefair/data/elife_dws2.db')))
 var archive = drive.createArchive(
   key,
   {
@@ -65,19 +65,20 @@ function metadata (meta, cb) {
 var yuno = require('yunodb')
 
 var dbopts = {
-  location: untildify('~/.sciencefair/data/elife_dws.yuno'),
+  location: untildify('~/.sciencefair/data/elife_dws2.yuno'),
   keyField: '$.identifier[?(@.type === "doi")].id',
   indexMap: {
     'title': true,
     'author[*].surname': true,
-    'year': false
+    'year': false,
+    'identifier': false
   }
 }
 
 module.exports = {
   name: 'eLife hyperdrive',
   key: key,
-  dir: 'elife_dws',
+  dir: 'elife_dws2',
   connect: connect,
   downloadPaper: downloadPaper
 }
