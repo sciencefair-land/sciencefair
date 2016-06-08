@@ -43,7 +43,13 @@
     "yunodb": "github:blahah/yunodb"
   },
   "devDependencies": {
-    "debug-menu": "^0.4.0"
+    "appdmg": "^0.4.5",
+    "cross-zip": "^2.1.3",
+    "debug-menu": "^0.4.0",
+    "electron-packager": "^7.0.3",
+    "minimist": "^1.2.0",
+    "mkdirp": "^0.5.1",
+    "rimraf": "^2.5.2"
   },
   "productName": "ScienceFair"
 }
