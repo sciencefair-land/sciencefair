@@ -35,9 +35,6 @@ function build () {
 var all = {
   dir: config.ROOT_PATH,
   asar: true,
-  // // Pattern which specifies which files to ignore when copying files to create the
-  // // package(s).
-  // ignore: /^\/dist|\/(appveyor.yml|\.appveyor.yml|\.github|appdmg|AUTHORS|CONTRIBUTORS|bench|benchmark|benchmark\.js|bin|bower\.json|component\.json|coverage|doc|docs|docs\.mli|dragdrop\.min\.js|example|examples|example\.html|example\.js|externs|ipaddr\.min\.js|Makefile|min|minimist|perf|rusha|simplepeer\.min\.js|simplewebsocket\.min\.js|static\/screenshot\.png|test|tests|test\.js|tests\.js|webtorrent\.min\.js|\.[^\/]*|.*\.md|.*\.markdown)$/,
   name: config.APP_NAME,
   out: DIST_PATH,
   overwrite: true,
