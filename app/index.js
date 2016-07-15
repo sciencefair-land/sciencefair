@@ -10,7 +10,7 @@ app.model({
         identifier: [{ doi: '10.1234/56789' }],
         title: 'Fluffier cat breeds have more powerful majick.',
         abstract: 'Kitty havana brown mouser but cheetah himalayan jaguar. Siamese havana brown so american bobtail. Maine coon kitten and munchkin tabby jaguar. Siamese cheetah persian so tabby tomcat malkin, norwegian forest. Tabby birman savannah puma. Cornish rex egyptian mau but turkish angora, and bengal for kitty but kitty.',
-        author: 'A Kitteh, M Eowww, P Urrrr',
+        author: 'A Kitteh, Me Owww, Puh Rrrr',
         date: { day: 2, month: 5, year: 2006 },
         tags: ['cats', 'fluffiness']
       },

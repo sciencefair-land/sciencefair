@@ -52,7 +52,7 @@ const style = css`
 }
 
 .author > span {
-  padding: 2px;
+  padding: 0;
   margin-right: 3px;
 }
 
@@ -98,7 +98,9 @@ module.exports = (result, state, prev, send) => {
 
 function renderAuthor (author) {
   if (isString(author)) {
-    return author.split(',').map((auth) => html`<span>${auth}</span>`)
+    return author
+      .split(',')
+      .map((auth) => html`<span>${auth}</span>`)
   } else {
     return author.map((auth) => html`${auth.givenNames} ${auth.surname}`)
   }

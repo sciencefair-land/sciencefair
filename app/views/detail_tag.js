@@ -20,20 +20,20 @@ module.exports = (tag, state, prev, send) => {
 
   .deltagbtnWrapper {
     background: ${C.DARKBLUE};
-    height: 20px;
-    width: 20px;
-    border-radius: 10px;
+    height: 16px;
+    width: 16px;
+    border-radius: 8px;
     position: absolute;
     top: 0;
     left: 0;
-    margin-top: -10px;
-    margin-left: -10px;
+    margin-top: -8px;
+    margin-left: -8px;
     display: none;
   }
 
   .deltagbtn {
-    height: 20px;
-    width: 20px;
+    height: 16px;
+    width: 16px;
     background-color: ${C.YELLOW};
     color: ${C.DARKBLUE};
     -webkit-mask: url(./images/delete2.svg) center / contain no-repeat;
