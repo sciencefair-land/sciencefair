@@ -1,62 +1,48 @@
-var mkdirp = require('mkdirp')
-var untildify = require('untildify')
+var requireDir = require('require-dir')
 
-var testing = process.env['SCIENCEFAIR_DEVMODE'] === 'TRUE'
-testing = true // TODO: turn this off when we cut first release
-console.log('Testing mode', testing ? 'ON' : 'OFF')
-if (testing) {
-  require('debug-menu').install()
-}
+const choo = require('choo')
+const app = choo()
 
-// layout
-var header = document.getElementById('header')
-var title = require('./components/title.js')(header)
-var mid = document.getElementById('middle')
-var main = require('./components/main.js')(mid)
-var footer = document.getElementById('footer')
-
-// setup data sources and server
-var message = require('./components/message.js')(main.element)
-message.update('Loading data sources...')
-message.show()
-
-var datadir = untildify('~/.sciencefair/data')
-mkdirp.sync(datadir)
-console.log('data directory:', datadir)
-
-var contentServer = require('./lib/contentServer.js')(datadir)
-var pubdata = require('./lib/pubdata.js')(datadir, testing)
-
-// var metadata = pubdata.getMetadataSource(testing)[0]
-// var fulltext = pubdata.getFulltextSource(testing)[0]
-var elife = require('./lib/hyperdrive.js')
-
-var view = require('./components/mainview.js')({
-  containers: {
-    header: header,
-    middle: mid,
-    footer: footer,
-    title: title,
-    main: main
+app.model({
+  state: {
+    results: [
+      {
+        identifier: [{ doi: '10.1234/56789' }],
+        title: 'Fluffier cat breeds have more powerful majick.',
+        abstract: 'Kitty havana brown mouser but cheetah himalayan jaguar. Siamese havana brown so american bobtail. Maine coon kitten and munchkin tabby jaguar. Siamese cheetah persian so tabby tomcat malkin, norwegian forest. Tabby birman savannah puma. Cornish rex egyptian mau but turkish angora, and bengal for kitty but kitty.',
+        author: 'A Kitteh, M Eowww, P Urrrr',
+        date: { day: 2, month: 5, year: 2006 },
+        tags: ['cats', 'fluffiness']
+      },
+      {
+        identifier: [{ doi: '10.1234/23521' }],
+        title: 'Comparative cuteness of feline coat patterns.',
+        abstract: 'Himalayan siberian but leopard. Maine coon egyptian mau so leopard american shorthair, bengal. Munchkin lynx. Ocelot egyptian mau, siamese, ragdoll tabby tabby but devonshire rex. Himalayan. Norwegian forest burmese and tabby siberian but grimalkin ragdoll mouser. Leopard tomcat, but havana brown thai. Sphynx cheetah but malkin. Savannah singapura. Bombay. Savannah devonshire rex or egyptian mau and maine coon bengal yet ragdoll kitty. Jaguar scottish fold kitten himalayan and american shorthair. Lynx bengal cheetah so panther jaguar. Devonshire rex russian blue bengal. Jaguar siberian russian blue so jaguar. Lynx kitty but ocicat but cheetah siamese yet tiger. Burmese egyptian mau. Persian tiger donskoy so tabby for turkish angora.',
+        author: 'Fe Line',
+        date: { day: 15, month: 7, year: 2013 },
+        tags: ['cats']
+      },
+      {
+        identifier: [{ doi: '10.1234/kitteh' }],
+        title: 'Kittehs in world history: an analysis of the subversive influence of cats on their pet politicians. Also a lot more words to test the ellipsis thing.',
+        abstract: 'Russian blue siberian yet siamese, bobcat havana brown and american bobtail. Burmese cougar yet devonshire rex. Lynx norwegian forest, munchkin norwegian forest. Scottish fold balinese for maine coon or jaguar. Savannah ragdoll bengal. Turkish angora maine coon. Scottish fold. Cheetah donskoy so bobcat burmese panther cornish rex and manx. Bobcat scottish fold. Cheetah ocicat. Maine coon bombay russian blue lion turkish angora. Thai. Abyssinian . Devonshire rex maine coon puma tomcat or thai panther. Bengal ocicat and norwegian forest. American shorthair. Tabby donskoy tabby and tabby. Malkin american shorthair panther yet persian burmese puma and panther. Bengal puma for balinese yet bobcat donskoy, so lion.',
+        author: 'Ben Gal, Anne Gora, Bob Tail',
+        date: { day: 21, month: 2, year: 1997 },
+        tags: ['world history', 'kittiluminati', 'cats']
+      }
+    ],
+    tags: { list: [], showAddField: false },
+    datasources: [],
+    detailshown: true
   },
-  pubdata: pubdata,
-  fulltextSource: elife,
-  metadataSource: elife,
-  datadir: datadir,
-  contentServer: contentServer,
-  testing: testing,
-  message: message
+  effects: requireDir('./effects'),
+  reducers: requireDir('./reducers')
+  // subscriptions: requireDir('./subscriptions')
 })
 
-// start
-// metadata.ensure(function () {
-//   var metadataDB = require('./lib/database.js')(metadata)
-//   metadataDB.on('ready', function () {
-//     view.metadataReady(metadataDB)
-//   })
-// })
+app.router('/', (route) => [
+  route('/', require('./views/home'))
+])
 
-elife.connect(function (err, db) {
-  if (err) throw err
-  view.metadataReady(db)
-})
+const tree = app.start()
+document.body.appendChild(tree)

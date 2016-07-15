@@ -1,0 +1,73 @@
+const html = require('choo/html')
+const css = require('csjs-inject')
+const C = require('../constants')
+
+module.exports = (tag, state, prev, send) => {
+  const style = css`
+
+  .tag {
+    border: 1px solid ${C.YELLOW};
+    padding: 5px;
+    border-radius: 2px;
+    color: ${C.YELLOW};
+    font-family: Aleo-Light;
+    margin-left: 12px;
+    margin-top: 12px;
+    justify-content: center;
+    align-content: center;
+    position: relative;
+  }
+
+  .deltagbtnWrapper {
+    background: ${C.DARKBLUE};
+    height: 20px;
+    width: 20px;
+    border-radius: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-top: -10px;
+    margin-left: -10px;
+    display: none;
+  }
+
+  .deltagbtn {
+    height: 20px;
+    width: 20px;
+    background-color: ${C.YELLOW};
+    color: ${C.DARKBLUE};
+    -webkit-mask: url(./images/delete2.svg) center / contain no-repeat;
+  }
+
+  .tag:hover > .deltagbtnWrapper {
+    display: flex;
+  }
+
+  `
+
+  const delbtn = html`
+
+  <div class="${style.deltagbtnWrapper}">
+    <div class="${style.deltagbtn}"></div>
+  </div>
+
+  `
+
+  delbtn.onclick = (e) => {
+    e.stopPropagation()
+    console.log('deleting tag', tag)
+  }
+
+  const tagdiv = html`
+
+  <div class="${style.tag} clickable">
+    ${tag}
+    ${delbtn}
+  </div>
+
+  `
+
+  tagdiv.onclick = () => { console.log('selecting tag', tag) }
+
+  return tagdiv
+}
