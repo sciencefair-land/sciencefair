@@ -58,6 +58,8 @@ module.exports = (state, prev, send) => {
     if (keyCode === 13) submit()
   }
 
+  input.autofocus = true
+
   const closebtn = html`<div class="${style.cancel} clickable"></div>`
 
   closebtn.onclick = () => { send('tag_stopadd') }

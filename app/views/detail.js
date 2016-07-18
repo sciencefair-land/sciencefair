@@ -5,7 +5,7 @@ const C = require('../constants')
 const isString = require('lodash/isString')
 
 const height = 200
-const padding = 10
+const padding = 5
 
 module.exports = (state, prev, send) => {
   const style = css`
@@ -28,6 +28,8 @@ module.exports = (state, prev, send) => {
 
   .column {
     width: 50%;
+    max-width: 50%;
+    overflow: hidden;
     flex-direction: column;
     justify-content: space-between;
   }
@@ -38,17 +40,19 @@ module.exports = (state, prev, send) => {
   }
 
   .datum {
+    position: absolute;
     padding: 5px;
-    flex-grow: 1;
-    flex-shrink: 0;
   }
 
   .title {
+    position: absolute;
     display: block;
     font-size: 130%;
+    top: 0;
+    left: 0;
+    right: 0;
     height: 32px;
     width: 100%;
-    margin-bottom: 16px;
     padding-right: 16px;
     overflow: hidden;
     white-space: nowrap;
@@ -56,9 +60,11 @@ module.exports = (state, prev, send) => {
   }
 
   .abstract {
-    width: 100%;
+    top: ${32 + 4}px;
+    left: 0;
+    width: 50%;
+    bottom: 34px;
     overflow: auto;
-    flex-shrink: 1;
     padding: 0;
     margin: 5px;
     font-family: CooperHewitt-Light;
@@ -66,10 +72,14 @@ module.exports = (state, prev, send) => {
   }
 
   .author {
+    left: 0;
+    bottom: 0;
     font-family: CooperHewitt-MediumItalic;
   }
 
   .date {
+    bottom: 0;
+    right: 50%;
     width: 100px;
     justify-content: flex-end;
     font-family: CooperHewitt-Medium;
@@ -90,7 +100,7 @@ module.exports = (state, prev, send) => {
   `
 
   function getcontent () {
-    if (state.selectedpaper) {
+    if (state.selectedpaper > -1) {
       const index = state.selectedpaper
       const paper = state.results[index]
 

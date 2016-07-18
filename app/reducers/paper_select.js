@@ -1,6 +1,6 @@
 module.exports = (data, state) => {
   if (state.selectedpaper === data.index) {
-    return { selectedpaper: null }
+    return { selectedpaper: -1 }
   } else {
     return { selectedpaper: data.index }
   }

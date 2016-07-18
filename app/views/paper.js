@@ -23,7 +23,6 @@ const style = css`
   position: relative;
   width: ${width}px;
   height: ${width * 1.31}px;
-  padding: ${width * 0.09}px;
   display: flex;
   flex-direction: row;
   justify-items: flex-start;

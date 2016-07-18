@@ -16,6 +16,8 @@ module.exports = (state, prev, send) => {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-items: flex-start;
+    align-content: flex-start;
     overflow-y: scroll;
   }
 
