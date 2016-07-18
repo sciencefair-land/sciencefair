@@ -33,7 +33,8 @@ app.model({
     ],
     tags: { list: [], showAddField: false },
     datasources: [],
-    detailshown: true
+    detailshown: true,
+    currentquery: { query: '', tags: [] }
   },
   effects: requireDir('./effects'),
   reducers: requireDir('./reducers')

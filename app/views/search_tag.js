@@ -6,20 +6,19 @@ module.exports = (tag, state, prev, send) => {
   const style = css`
 
   .tag {
-    border: 1px solid ${C.YELLOW};
+    border: 1px solid ${C.WHITE};
     padding: 5px;
     border-radius: 2px;
-    color: ${C.YELLOW};
+    color: ${C.WHITE};
     font-family: Aleo-Light;
-    margin-left: 12px;
-    margin-top: 12px;
+    margin-right: 12px;
     justify-content: center;
     align-content: center;
     position: relative;
   }
 
   .deltagbtnWrapper {
-    background: ${C.DARKBLUE};
+    background: ${C.BLUE};
     height: 16px;
     width: 16px;
     border-radius: 8px;
@@ -34,7 +33,7 @@ module.exports = (tag, state, prev, send) => {
   .deltagbtn {
     height: 16px;
     width: 16px;
-    background-color: ${C.YELLOW};
+    background-color: ${C.WHITE};
     color: ${C.DARKBLUE};
     -webkit-mask: url(./images/delete2.svg) center / contain no-repeat;
   }
@@ -55,7 +54,7 @@ module.exports = (tag, state, prev, send) => {
 
   delbtn.onclick = (e) => {
     e.stopPropagation()
-    console.log('deleting tag', tag)
+    send('search_removequery', { query: { tags: [tag] } })
   }
 
   const tagdiv = html`
@@ -66,10 +65,6 @@ module.exports = (tag, state, prev, send) => {
   </div>
 
   `
-
-  tagdiv.onclick = () => {
-    send('tag_filter', { tag: tag })
-  }
 
   return tagdiv
 }
