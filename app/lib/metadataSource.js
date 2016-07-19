@@ -55,7 +55,7 @@ MetadataSource.prototype.dbExists = function () {
 }
 
 MetadataSource.prototype.snapshotExists = function () {
-  return this.snapshotPath() && exist(this.snapshotPath())
+  return this.snapshotPath() && exists(this.snapshotPath())
 }
 
 MetadataSource.prototype.dbOpts = function() {

@@ -1,4 +1,9 @@
+const untildify = require('untildify')
+const DEVMODE = !!(process.env['SCIENCEFAIR_DEVMODE'])
+
 module.exports = {
+  // paths
+  DATAROOT: untildify(DEVMODE ? '~/.sciencefair_dev' : '~/.sciencefair'),
   // colours
   BLUE: 'rgb(111, 174, 193)',
   YELLOW: 'rgb(202, 172, 77)',
