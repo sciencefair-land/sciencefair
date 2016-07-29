@@ -69,15 +69,13 @@ module.exports = (state, prev, send) => {
   const input = html`<input class="${style.input}" />`
 
   input.oninput = (e) => {
-    send('search_setquery', {
-      newquery: { query: input.value, tags: state.currentquery.tags }
-    })
+    send('search_setquerystring', { query: input.value })
   }
 
   const tags = html`
 
   <div class="${style.tags}">
-    ${(state.currentquery.tags || []).map((tag) => {
+    ${(state.currentsearch.tags || []).map((tag) => {
       return require('./search_tag')(tag, state, prev, send)
     })}
   </div>

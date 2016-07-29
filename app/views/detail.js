@@ -80,7 +80,7 @@ module.exports = (state, prev, send) => {
   .date {
     bottom: 0;
     right: 50%;
-    width: 100px;
+    width: 170px;
     justify-content: flex-end;
     font-family: CooperHewitt-Medium;
   }
@@ -115,7 +115,7 @@ module.exports = (state, prev, send) => {
             <div class="${style.abstract} ${style.row} ${style.datum}">${paper.abstract}</div>
             <div class="${style.row}">
               <div class="${style.author} ${style.datum}">${renderAuthor(paper.author)}</div>
-              <div class="${style.date} ${style.datum}">${renderDate(paper.date)}</div>
+              <div class="${style.date} ${style.datum}">Published: ${renderDate(paper.date)}</div>
             </div>
           </div>
           <div class="${style.column}">

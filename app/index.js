@@ -1,7 +1,9 @@
 var requireDir = require('require-dir')
-var untildify = require('untildify')
 
 const DEVMODE = !!(process.env['SCIENCEFAIR_DEVMODE'])
+if (DEVMODE) {
+  require('debug-menu').install()
+}
 
 const choo = require('choo')
 const app = choo()
@@ -69,10 +71,14 @@ app.model({
     ],
     tags: { list: [], showAddField: false },
     datasources: [
-      { name: 'eLife' }
+      {
+        name: 'eLife',
+        search: (q) => { console.log(q) }
+      }
     ],
+    collection: require('./lib/localcollection'),
     detailshown: true,
-    currentquery: { query: '', tags: [] }
+    currentsearch: { query: '', tags: [] }
   },
   effects: requireDir('./effects'),
   reducers: requireDir('./reducers')

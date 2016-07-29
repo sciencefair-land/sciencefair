@@ -54,7 +54,7 @@ module.exports = (tag, state, prev, send) => {
 
   delbtn.onclick = (e) => {
     e.stopPropagation()
-    send('search_removequery', { query: { tags: [tag] } })
+    send('search_removetag', { tag: tag } )
   }
 
   const tagdiv = html`

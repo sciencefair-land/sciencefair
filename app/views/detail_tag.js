@@ -68,7 +68,7 @@ module.exports = (tag, state, prev, send) => {
   `
 
   tagdiv.onclick = () => {
-    send('tag_filter', { tag: tag })
+    send('search_addtag', { tag: tag })
   }
 
   return tagdiv
