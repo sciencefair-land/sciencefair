@@ -1,44 +1,56 @@
-var requireDir = require('require-dir')
-
-const DEVMODE = !!(process.env['SCIENCEFAIR_DEVMODE'])
-if (DEVMODE) {
-  require('debug-menu').install()
-  // require('./lib/dev/populate_collection')
-}
-
-const C = require('./constants')
+const C = require('../lib/constants')
 const mkdirp = require('mkdirp').sync
 mkdirp(C.DATAROOT)
 mkdirp(C.COLLECTION_PATH)
 
-const choo = require('choo')
-const app = choo()
+const DEVMODE = !!(process.env['SCIENCEFAIR_DEVMODE'])
+if (DEVMODE) {
+  require('debug-menu').install()
+  require('../mocks/populated_collection')({}, (err, local) => {
+    if (err) throw err
 
-const model = {
-  state: {
-    results: [],
-    tags: { tags: {}, showAddField: false },
-    datasources: [
-      {
-        name: 'eLife',
-        search: (q) => { console.log(q) }
-      }
-    ],
-    collection: require('./lib/localcollection'),
-    detailshown: true,
-    currentsearch: { query: '', tags: [] }
-  },
-  effects: requireDir('./effects'),
-  reducers: requireDir('./reducers')
+    local.close(start)
+  })
+} else {
+  start()
 }
 
-console.log(model)
+function start () {
+  const requireDir = require('require-dir')
+  const choo = require('choo')
+  const app = choo()
 
-app.model(model)
+  const model = {
+    state: {
+      results: [],
+      tags: { tags: {}, showAddField: false },
+      datasources: [
+        {
+          name: 'eLife',
+          search: (q) => { console.log(q) }
+        }
+      ],
+      detailshown: true,
+      currentsearch: { query: '', tags: [] }
+    },
+    effects: requireDir('./effects'),
+    reducers: requireDir('./reducers')
+  }
 
-app.router('/', (route) => [
-  route('/', require('./views/home'))
-])
+  require('../lib/localcollection')((err, db) => {
+    if (err) throw err
 
-const tree = app.start()
-document.body.appendChild(tree)
+    console.log(db)
+    model.state.collection = db
+    console.log(model)
+
+    app.model(model)
+
+    app.router('/', (route) => [
+      route('/', require('./views/home'))
+    ])
+
+    const tree = app.start()
+    document.body.appendChild(tree)
+  })
+}

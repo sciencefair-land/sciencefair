@@ -2,7 +2,7 @@ var inherits = require('inherits')
 var EventEmitter = require('events').EventEmitter
 var key = require('keymaster')
 var _ = require('lodash')
-var paper = require('../lib/paper.js')
+var paper = require('../../lib/paper.js')
 require('hint')
 
 inherits(MainView, EventEmitter)
@@ -83,7 +83,7 @@ function MainView (opts) {
       opts.message.update('Search for a paper.')
       opts.message.show()
     } else {
-      opts.message.update('Searching...')
+      opts.message.update('Searching..')
       opts.message.show()
       doSearch(input)
     }

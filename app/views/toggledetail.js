@@ -1,6 +1,6 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
-const C = require('../constants')
+const C = require('../../lib/constants')
 
 module.exports = (state, prev, send) => {
   var action = state.detailshown ? 'hide' : 'show'

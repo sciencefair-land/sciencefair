@@ -22,11 +22,7 @@ test('effect: search_collection', (t) => {
   function run (err, local) {
     if (err) throw err
 
-    const state = {
-      collection: {
-        index: local
-      }
-    }
+    const state = { collection: local }
 
     tagfilter()
     plainsearch()

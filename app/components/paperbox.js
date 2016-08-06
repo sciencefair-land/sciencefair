@@ -2,8 +2,8 @@ var css = require('dom-css')
 var inherits = require('inherits')
 var _ = require('lodash')
 var EventEmitter = require('events').EventEmitter
-var reader = require('../lib/reader.js')
-var highlight = require('../lib/highlight.js')
+var reader = require('../../lib/reader.js')
+var highlight = require('../../lib/highlight.js')
 var DownloadPaperBtn = require('./downloadpaperbtn.js')
 
 inherits(PaperBox, EventEmitter)

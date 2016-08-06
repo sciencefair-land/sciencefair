@@ -1,7 +1,7 @@
 const intersection = require('lodash/intersection')
 
 module.exports = (data, state, send, done) => {
-  if (!state.collection.index) {
+  if (!state.collection) {
     done(new Error('No local collection found (it may not have loaded yet)'))
   }
 
@@ -14,9 +14,7 @@ module.exports = (data, state, send, done) => {
   }
 
   function search () {
-    const index = state.collection.index
-
-    index.search(data.query, (err, results) => {
+    state.collection.search(data.query, (err, results) => {
       if (err) done(err)
       if (results.hits.length > 0) {
         if (data.tags && data.tags.length > 0) {
@@ -36,7 +34,7 @@ module.exports = (data, state, send, done) => {
   }
 
   function filter () {
-    const docstore = state.collection.index.docstore
+    const docstore = state.collection.docstore
     const hits = []
 
     docstore.createReadStream()

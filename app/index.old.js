@@ -17,19 +17,19 @@ var footer = document.getElementById('footer')
 
 // setup data sources and server
 var message = require('./components/message.js')(main.element)
-message.update('Loading data sources...')
+message.update('Loading data sources..')
 message.show()
 
 var datadir = untildify('~/.sciencefair/data')
 mkdirp.sync(datadir)
 console.log('data directory:', datadir)
 
-var contentServer = require('./lib/contentServer.js')(datadir)
-var pubdata = require('./lib/pubdata.js')(datadir, testing)
+var contentServer = require('../../lib/contentServer.js')(datadir)
+var pubdata = require('../../lib/pubdata.js')(datadir, testing)
 
 // var metadata = pubdata.getMetadataSource(testing)[0]
 // var fulltext = pubdata.getFulltextSource(testing)[0]
-var elife = require('./lib/hyperdrive.js')
+var elife = require('../../lib/hyperdrive.js')
 
 var view = require('./components/mainview.js')({
   containers: {
@@ -50,7 +50,7 @@ var view = require('./components/mainview.js')({
 
 // start
 // metadata.ensure(function () {
-//   var metadataDB = require('./lib/database.js')(metadata)
+//   var metadataDB = require('../../lib/database.js')(metadata)
 //   metadataDB.on('ready', function () {
 //     view.metadataReady(metadataDB)
 //   })

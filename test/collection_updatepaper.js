@@ -24,9 +24,7 @@ test('effect: collection_updatepaper', (t) => {
     if (err) throw err
 
     const state = {
-      collection: {
-        index: local
-      }
+      collection: local
     }
 
     const data = {

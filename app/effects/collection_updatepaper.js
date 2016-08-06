@@ -2,7 +2,7 @@ module.exports = (data, state, send, done) => {
   const paper = data
   const doc = paper.document
 
-  const index = state.collection.index
+  const index = state.collection
 
   index.get(paper.id, (err) => {
     if (err) {

@@ -1,6 +1,6 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
-const C = require('../constants')
+const C = require('../../lib/constants')
 
 const style = css`
 
@@ -40,7 +40,7 @@ const style = css`
 module.exports = (state, prev, send) => {
   if (!(state.tags.showAddField)) return
 
-  const input = html`<input class="${style.input}" placeholder="new tag name..." />`
+  const input = html`<input class="${style.input}" placeholder="new tag name.." />`
 
   function submit () {
     const payload = { tag: input.value, paper: state.selectedpaper }

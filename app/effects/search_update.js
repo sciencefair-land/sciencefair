@@ -9,7 +9,7 @@ module.exports = (data, state, send, done) => {
   // if we have tags, don't search datasources
   const searchdatasources = !(newquery.tags && newquery.tags.length)
 
-  const alldone = require('../lib/alldone')(searchdatasources ? 3 : 2, done)
+  const alldone = require('../../lib/alldone')(searchdatasources ? 3 : 2, done)
 
   send('search_collection', {
     query: newquery.query,
