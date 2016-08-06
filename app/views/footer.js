@@ -47,7 +47,9 @@ module.exports = (state, prev, send) => {
 
   <div class="${style.footer}">
     <div class="${style.left} ${style.part}">0 MB/s</div>
-    <div class="${style.mid} ${style.part}">3/3 results</div>
+    <div class="${style.mid} ${style.part}">
+      ${state.results.length} results
+    </div>
     <div class="${style.right} ${style.part}">1 data sources: eLife</div>
     <div class=${style.part}>
       ${require('./toggledetail')(state, prev, send)}

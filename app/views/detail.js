@@ -104,18 +104,25 @@ module.exports = (state, prev, send) => {
       const index = state.selectedpaper
       const paper = state.results[index]
 
+      if (!paper) return blank()
+
+      const doc = paper.document
+
       return html`
 
       <div class="${style.wrapper}">
         <div class="${style.row}">
-          <div class="${style.title} ${style.row} ${style.datum}">${paper.title}</div>
+          <div class="${style.title} ${style.row} ${style.datum}">${doc.title}</div>
         </div>
         <div class="${style.row} ${style.nottitle}">
           <div class="${style.column}">
-            <div class="${style.abstract} ${style.row} ${style.datum}">${paper.abstract}</div>
+            <div class="${style.abstract} ${style.row} ${style.datum}">${doc.abstract}</div>
             <div class="${style.row}">
-              <div class="${style.author} ${style.datum}">${renderAuthor(paper.author)}</div>
-              <div class="${style.date} ${style.datum}">Published: ${renderDate(paper.date)}</div>
+              <div class="${style.author} ${style.datum}">${renderAuthor(doc.author)}</div>
+              <div class="${style.date} ${style.datum}">
+                Published:
+                ${doc.date ? renderDate(doc.date) : 'unknown'}
+              </div>
             </div>
           </div>
           <div class="${style.column}">
@@ -126,12 +133,16 @@ module.exports = (state, prev, send) => {
 
       `
     } else {
-      return html`
-
-      <p>Select a paper to see detailed information here.</p>
-
-      `
+      return blank()
     }
+  }
+
+  function blank () {
+    return html`
+
+    <p>Select a paper to see detailed information here.</p>
+
+    `
   }
 
   return html`<div class="${style.detail}">${getcontent()}</div>`

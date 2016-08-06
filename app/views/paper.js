@@ -79,12 +79,19 @@ const style = css`
 module.exports = (result, state, prev, send) => {
   const selected = state.selectedpaper === result.index ? selectedmark() : ''
 
+  const doc = result.paper.document
+  console.log(doc)
+
   const paper = html`
     <div class="${style.paper} clickable">
       ${selected}
-      <div class="${style.title}">${result.paper.title}</div>
-      <div class="${style.author}">${renderAuthor(result.paper.author)}</div>
-      <div class="${style.year}">${result.paper.date.year}</div>
+      <div class="${style.title}">${doc.title}</div>
+      <div class="${style.author}">
+        ${renderAuthor(doc.author)}
+      </div>
+      <div class="${style.year}">
+        ${doc.date ? doc.date.year : 'none'}
+      </div>
     </div>
   `
 
@@ -96,7 +103,7 @@ module.exports = (result, state, prev, send) => {
 }
 
 function renderAuthor (author) {
-  if (isString(author)) {
+  if ((typeof author) === 'string') {
     return author
       .split(',')
       .map((auth) => html`<span>${auth}</span>`)

@@ -1,6 +1,8 @@
-const uniq = require('lodash/uniq')
+const cloneDeep = require('lodash/cloneDeep')
 
 module.exports = (data, state, send, done) => {
-  // TODO: add the paper to this tag in the tags leveldb
-  done()
+  const tags = cloneDeep(state.tags.tags) || {}
+
+  tags[data.tag] = [data.paper]
+  send('tags_replace', tags, done)
 }
