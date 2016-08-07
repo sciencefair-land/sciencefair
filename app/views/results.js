@@ -10,7 +10,7 @@ module.exports = (state, prev, send) => {
     position: absolute;
     top: 150px;
     width: 100%;
-    bottom: ${state.detailshown ? 200 : 50}px;
+    bottom: ${state.detailshown ? 200 : 70}px;
     padding: 0;
     margin: 50px;
     display: flex;

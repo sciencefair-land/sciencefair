@@ -12,9 +12,9 @@ module.exports = (state, prev, send) => {
 
   .detail {
     position: absolute;
+    bottom: 70px;
     height: ${state.detailshown ? height : 0}px;
     width: 100%;
-    bottom: 80px;
     padding: ${state.detailshown ? padding : 0}px;
     margin: 0;
     flex-direction: row;

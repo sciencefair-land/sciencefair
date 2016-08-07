@@ -61,7 +61,7 @@ module.exports = (tag, state, prev, send) => {
   const tagdiv = html`
 
   <div class="${style.tag} clickable">
-    ${tag}
+    #${tag}
     ${delbtn}
   </div>
 

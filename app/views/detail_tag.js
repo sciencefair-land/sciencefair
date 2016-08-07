@@ -56,13 +56,16 @@ module.exports = (tag, state, prev, send) => {
   delbtn.onclick = (e) => {
     e.preventDefault()
     e.stopPropagation()
-    send('paper_removetag', { tag: tag, paper: state.selectedpaper })
+    send('paper_removetag', {
+      tag: tag,
+      paper: state.selectedpaper
+    })
   }
 
   const tagdiv = html`
 
   <div class="${style.tag} clickable">
-    ${tag}
+    #${tag}
     ${delbtn}
   </div>
 
