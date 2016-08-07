@@ -6,7 +6,7 @@ module.exports = (data, state) => {
     currentsearch: {
       query: oldsearch.query,
       tags: oldsearch.tags,
-      tagquery: oldsearch.tagquery,
+      tagquery: null,
       striptagquery: true
     }
   }

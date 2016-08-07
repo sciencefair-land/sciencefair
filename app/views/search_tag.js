@@ -53,8 +53,9 @@ module.exports = (tag, state, prev, send) => {
   `
 
   delbtn.onclick = (e) => {
+    e.preventDefault()
     e.stopPropagation()
-    send('search_removetag', { tag: tag } )
+    send('search_removetag', { tag: tag })
   }
 
   const tagdiv = html`

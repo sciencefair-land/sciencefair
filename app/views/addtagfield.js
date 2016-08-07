@@ -48,13 +48,12 @@ module.exports = (state, prev, send) => {
     send('tag_add', payload, (err) => {
       if (err) console.log(err)
     })
-
-    send('tag_stopadd')
   }
 
-  input.onkeypress = (event) => {
-    if (!event) event = window.event
-    var keyCode = event.keyCode || event.which
+  input.onkeypress = (e) => {
+    if (!e) e = window.e
+    e.preventDefault()
+    var keyCode = e.keyCode || e.which
     if (keyCode === 13) submit()
   }
 
@@ -62,7 +61,10 @@ module.exports = (state, prev, send) => {
 
   const closebtn = html`<div class="${style.cancel} clickable"></div>`
 
-  closebtn.onclick = () => { send('tag_stopadd') }
+  closebtn.onclick = (e) => {
+    e.preventDefault()
+    send('tag_stopadd')
+  }
 
   return html`<div class="${style.wrapper}">${input}${closebtn}</div>`
 }

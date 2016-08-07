@@ -54,8 +54,9 @@ module.exports = (tag, state, prev, send) => {
   `
 
   delbtn.onclick = (e) => {
+    e.preventDefault()
     e.stopPropagation()
-    console.log('deleting tag', tag)
+    send('paper_removetag', { tag: tag, paper: state.selectedpaper })
   }
 
   const tagdiv = html`
@@ -68,6 +69,8 @@ module.exports = (tag, state, prev, send) => {
   `
 
   tagdiv.onclick = () => {
+    e.preventDefault()
+    e.stopPropagation()
     send('search_addtag', { tag: tag })
   }
 

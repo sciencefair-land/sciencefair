@@ -51,8 +51,8 @@ module.exports = (state, prev, send) => {
 
     `
 
-    row.onclick = () => {
-      send('search_striptagquery')
+    row.onclick = (e) => {
+      e.preventDefault()
       send('search_addtag', { tag: tag.original })
     }
 

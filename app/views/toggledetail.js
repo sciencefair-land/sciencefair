@@ -19,7 +19,8 @@ module.exports = (state, prev, send) => {
 
   var button = html`<div class="${style.button} clickable"></a>`
 
-  button.onclick = () => {
+  button.onclick = (e) => {
+    e.preventDefault()
     send('detail_toggle', (err) => { if (err) console.log(err) })
   }
 

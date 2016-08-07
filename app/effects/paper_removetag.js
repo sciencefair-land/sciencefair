@@ -1,14 +1,19 @@
 const cloneDeep = require('lodash/cloneDeep')
-const uniq = require('lodash/uniq')
 
 module.exports = (data, state, send, done) => {
+  const alldone = require('../../lib/alldone')(2, done)
   const paper = state.results[data.paper]
   const newPaper = cloneDeep(paper)
 
-  newPaper.tags = uniq(paper.tags.concat([data.tag]))
+  const tags = paper.document.tags
+  const removeidx = tags.indexOf(data.tag)
+  const newTags = (removeidx > -1) ? tags.splice(removeidx, 1) : tags
 
-  send('result_replace', { index: data.paper, paper: newPaper }, (err) => {
-    if (err) console.log(err)
-  })
-  done()
+  newPaper.document.tags = newTags
+
+  send('result_replace', { index: data.paper, paper: newPaper }, alldone)
+  send('tag_removepaper', {
+    tag: data.tag,
+    paper: paper.document.identifier[0].id
+  }, alldone)
 }

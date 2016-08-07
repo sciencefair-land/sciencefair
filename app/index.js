@@ -3,8 +3,7 @@ const mkdirp = require('mkdirp').sync
 mkdirp(C.DATAROOT)
 mkdirp(C.COLLECTION_PATH)
 
-const DEVMODE = !!(process.env['SCIENCEFAIR_DEVMODE'])
-if (DEVMODE) {
+if (process.env['SCIENCEFAIR_DEVMODE']) {
   require('debug-menu').install()
   require('../mocks/populated_collection')({}, (err, local) => {
     if (err) throw err

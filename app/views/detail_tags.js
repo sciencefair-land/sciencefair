@@ -41,7 +41,8 @@ module.exports = (state, prev, send) => {
     } else {
       const btn = html`<div class=${style.addtagbtn}>+</div>`
 
-      btn.onclick = () => {
+      btn.onclick = (e) => {
+        e.preventDefault()
         send('tag_startadd')
       }
 

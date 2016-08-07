@@ -15,7 +15,7 @@ module.exports = (data, state, send, done) => {
 
   send('results_clear', null, (err) => {
     if (err) return done(err)
-    send('search_update', update, done)
+    send('search_update', update, alldone)
   })
   send(`autocomplete_${tagquery ? 'show' : 'hide'}`, null, alldone)
 }

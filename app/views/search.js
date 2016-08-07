@@ -70,6 +70,7 @@ module.exports = (state, prev, send) => {
   const input = html`<input class="${style.input}" />`
 
   input.oninput = (e) => {
+    e.preventDefault()
     send('search_setquerystring', { query: e.target.value })
   }
 
@@ -79,8 +80,9 @@ module.exports = (state, prev, send) => {
   }
 
   if (state.currentsearch.striptagquery) {
-    const tagquery = '#' + state.currentsearch.tagquery
-    const newvalue = input.value.replace(tagquery, '')
+    console.log('stripping tag query')
+    const parts = input.value.split('#')
+    const newvalue = parts[0]
     input.setAttribute('value', newvalue)
     send('search_tagquerystripped')
   }
@@ -98,6 +100,8 @@ module.exports = (state, prev, send) => {
   const clearbtn = html`<div class="${style.clear} clickable"></div>`
 
   clearbtn.onclick = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
     clearing = true
     send('search_clear')
   }
