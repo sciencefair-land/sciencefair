@@ -11,8 +11,6 @@ module.exports = (data, state, send, done) => {
 
   newPaper.document.tags = tags
 
-  console.log('paper_removetag', newPaper)
-
   send('result_replace', { index: data.paper, paper: newPaper }, alldone)
   send('collection_updatepaper', newPaper, alldone)
   send('tag_removepaper', {
