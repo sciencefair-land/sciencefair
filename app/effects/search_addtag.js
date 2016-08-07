@@ -9,8 +9,6 @@ module.exports = (data, state, send, done) => {
   update.tagquery = null
   update.striptagquery = true
 
-  console.log(update)
-
   send('results_clear', null, (err) => {
     if (err) return done(err)
     send('search_update', update, alldone)
