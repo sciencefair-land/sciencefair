@@ -5,16 +5,29 @@ module.exports = (data, state, send, done) => {
     done(new Error('No local collection found (it may not have loaded yet)'))
   }
 
-  if (data.query) {
+  console.log(data)
+  if (data.query && data.query.trim().length > 0) {
     search()
   } else if (data.tags && data.tags.length) {
     filter()
   } else {
-    done(new Error('Empty search (no query or tags)'))
+    send('results_clear', null, done)
+  }
+
+  function parseresults (results) {
+    results.hits = results.hits.map((hit) => {
+      if (typeof hit.document === 'string') {
+        hit.document = JSON.parse(hit.document)
+      }
+      if (!hit.document.tags) hit.document.tags = []
+      return hit
+    })
+    return results
   }
 
   function search () {
-    state.collection.search(data.query, (err, results) => {
+    console.log(data.query)
+    state.collection.search(data.query.trim(), (err, results) => {
       if (err) done(err)
       if (results.hits.length > 0) {
         if (data.tags && data.tags.length > 0) {
@@ -26,7 +39,7 @@ module.exports = (data, state, send, done) => {
           })
           results.hits = hits
         }
-        send('results_receive', results, done)
+        send('results_receive', parseresults(results), done)
       } else {
         send('results_none', 'collection', done)
       }

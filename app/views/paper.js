@@ -80,6 +80,7 @@ module.exports = (result, state, prev, send) => {
   const selected = state.selectedpaper === result.index ? selectedmark() : ''
 
   const doc = result.paper.document
+  if (isString(doc)) doc = JSON.parse(doc)
   console.log(doc)
 
   const paper = html`
@@ -103,7 +104,7 @@ module.exports = (result, state, prev, send) => {
 }
 
 function renderAuthor (author) {
-  if ((typeof author) === 'string') {
+  if (isString(author)) {
     return author
       .split(',')
       .map((auth) => html`<span>${auth}</span>`)

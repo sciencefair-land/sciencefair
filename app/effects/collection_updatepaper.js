@@ -4,16 +4,5 @@ module.exports = (data, state, send, done) => {
 
   const index = state.collection
 
-  index.get(paper.id, (err) => {
-    if (err) {
-      // paper not yet in collection
-      index.add([doc], {}, done)
-    } else {
-      // paper already in index
-      index.del(paper.id, (err) => {
-        if (err) done(err)
-        index.add([doc], {}, done)
-      })
-    }
-  })
+  index.add([doc], {}, done)
 }

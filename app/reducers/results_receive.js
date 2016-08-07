@@ -1,11 +1,11 @@
+const uniqBy = require('lodash/uniqBy')
+
 module.exports = (data, state) => {
-  console.log('results received')
-
-  const hits = data.hits.map((hit) => {
-    if (!hit.tags) hit.tags = []
-    return hit
+  const results = uniqBy(state.results.concat(data.hits), (result) => {
+    return result.document.identifier[0].id
   })
-
   // TODO: intelligent merging of results based on TF-IDF score
-  return { results: state.results.concat(hits) }
+  return {
+    results: results
+  }
 }

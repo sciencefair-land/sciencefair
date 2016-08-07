@@ -65,11 +65,18 @@ const style = css`
 
 `
 
+var clearing = false
+
 module.exports = (state, prev, send) => {
   const input = html`<input class="${style.input}" />`
 
-  input.oninput = (e) => {
+  input.oninput = debounce((e) => {
     send('search_setquerystring', { query: input.value })
+  }, 200)
+
+  if (state.currentsearch.query.trim() === '' && clearing) {
+    input.setAttribute('value', '')
+    clearing = false
   }
 
   const tags = html`
@@ -85,6 +92,7 @@ module.exports = (state, prev, send) => {
   const clearbtn = html`<div class="${style.clear} clickable"></div>`
 
   clearbtn.onclick = (e) => {
+    clearing = true
     send('search_clear')
   }
 

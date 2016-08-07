@@ -6,7 +6,7 @@ module.exports = (data, state, send, done) => {
   const paper = state.results[data.paper]
   const newPaper = cloneDeep(paper)
 
-  newPaper.tags = uniq(paper.tags.concat([data.tag]))
+  newPaper.document.tags = uniq(paper.document.tags.concat([data.tag]))
 
   send('result_replace', { index: data.paper, paper: newPaper }, alldone)
   send('collection_updatepaper', newPaper, alldone)

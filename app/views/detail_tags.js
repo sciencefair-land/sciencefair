@@ -51,13 +51,14 @@ module.exports = (state, prev, send) => {
 
   const index = state.selectedpaper
   const paper = state.results[index]
+  const doc = paper.document
 
   const tag = require('./detail_tag')
 
   return html`
 
   <div class="${style.row} ${style.tags}">
-    ${paper.tags.map((t) => tag(t, state, prev, send))}
+    ${doc.tags.map((t) => tag(t, state, prev, send))}
     ${addTagButton()}
     ${require('./addtagfield')(state, prev, send)}
   </div>
