@@ -52,7 +52,6 @@ module.exports = (state, prev, send) => {
 
   input.onkeypress = (e) => {
     if (!e) e = window.e
-    e.preventDefault()
     var keyCode = e.keyCode || e.which
     if (keyCode === 13) submit()
   }

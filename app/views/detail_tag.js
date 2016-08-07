@@ -55,6 +55,7 @@ module.exports = (tag, state, prev, send) => {
 
   delbtn.onclick = (e) => {
     e.preventDefault()
+    e.stopPropagation()
     send('paper_removetag', { tag: tag, paper: state.selectedpaper })
   }
 
