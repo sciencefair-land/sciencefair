@@ -5,7 +5,6 @@ module.exports = (data, state, send, done) => {
     done(new Error('No local collection found (it may not have loaded yet)'))
   }
 
-  console.log(data)
   if (data.query && data.query.trim().length > 0) {
     search()
   } else if (data.tags && data.tags.length) {
@@ -26,7 +25,6 @@ module.exports = (data, state, send, done) => {
   }
 
   function search () {
-    console.log(data.query)
     state.collection.search(data.query.trim(), (err, results) => {
       if (err) done(err)
       if (results.hits.length > 0) {

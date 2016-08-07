@@ -19,6 +19,8 @@ const style = css`
 `
 
 module.exports = (state, prev, send) => {
+  send('tags_update')
+
   return html`
 
   <div class="${style.main}">

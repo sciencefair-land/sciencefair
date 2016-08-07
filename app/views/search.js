@@ -1,7 +1,6 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../../lib/constants')
-const debounce = require('lodash/debounce')
 
 const style = css`
 
@@ -70,9 +69,9 @@ var clearing = false
 module.exports = (state, prev, send) => {
   const input = html`<input class="${style.input}" />`
 
-  input.oninput = debounce((e) => {
+  input.oninput = (e) => {
     send('search_setquerystring', { query: input.value })
-  }, 200)
+  }
 
   if (state.currentsearch.query.trim() === '' && clearing) {
     input.setAttribute('value', '')
@@ -104,6 +103,7 @@ module.exports = (state, prev, send) => {
       ${tags}
       ${clearbtn}
       <img class="${style.img}" src="./images/search.svg" />
+      ${require('./autocomplete')(state, prev, send)}
     </div>
   </div>
 

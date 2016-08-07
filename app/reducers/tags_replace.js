@@ -3,5 +3,10 @@
 //   key = the tag
 //   value = array of paper IDs with this tag
 module.exports = (data, state) => {
-  return { tags: data, showAddField: state.tags.showAddField }
+  return {
+    tags: {
+      tags: data,
+      showAddField: state.tags.showAddField
+    }
+  }
 }

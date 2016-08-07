@@ -2,7 +2,8 @@ const after = require('lodash/after')
 
 module.exports = (data, state, send, done) => {
   if (!state.datasources || state.datasources.length === 1) {
-    done(new Error('No datasources found (they may not have loaded yet)'))
+    done()
+    // done(new Error('No datasources found (they may not have loaded yet)'))
   }
 
   const alldone = after(state.datasources.length, done)

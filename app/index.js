@@ -27,10 +27,11 @@ function start () {
       datasources: [
         {
           name: 'eLife',
-          search: (q) => { console.log(q) }
+          search: (q) => { }
         }
       ],
       detailshown: true,
+      autocompleteshown: false,
       currentsearch: { query: '', tags: [] }
     },
     effects: requireDir('./effects'),
@@ -40,9 +41,7 @@ function start () {
   require('../lib/localcollection')((err, db) => {
     if (err) throw err
 
-    console.log(db)
     model.state.collection = db
-    console.log(model)
 
     app.model(model)
 
