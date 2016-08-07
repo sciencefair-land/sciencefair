@@ -79,9 +79,8 @@ const style = css`
 module.exports = (result, state, prev, send) => {
   const selected = state.selectedpaper === result.index ? selectedmark() : ''
 
-  const doc = result.paper.document
+  var doc = result.paper.document
   if (isString(doc)) doc = JSON.parse(doc)
-  console.log(doc)
 
   const paper = html`
     <div class="${style.paper} clickable">

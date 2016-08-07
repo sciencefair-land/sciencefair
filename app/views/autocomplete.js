@@ -37,25 +37,23 @@ const matchopts = {
 }
 
 module.exports = (state, prev, send) => {
-  const query = state.currentsearch.query
-  const parts = query.split('#')
-  const tagpart = parts[parts.length - 1]
+  const tagquery = state.currentsearch.tagquery
 
-  if (tagpart.length === 0) { return }
+  if (!tagquery || tagquery.length === 0) { return }
 
   function tagmatchrow (tag) {
     const row = html`
 
     <div class="${style.tagrow} clickable">
-      ${html('<div>' + tag.string + '</div>')}
+      ${html('<div>#' + tag.string + '</div>')}
       <div>${state.tags.tags[tag.original].length}</div>
     </div>
 
     `
 
     row.onclick = () => {
+      send('search_striptagquery')
       send('search_addtag', { tag: tag.original })
-      send('search_setquerystring', { query: query.replace(tagpart, '') })
     }
 
     return row
@@ -63,7 +61,7 @@ module.exports = (state, prev, send) => {
 
   function taghits () {
     const alltags = Object.keys(state.tags.tags)
-    return fuzzy.filter(tagpart, alltags, matchopts)
+    return fuzzy.filter(tagquery, alltags, matchopts)
   }
 
   return html`

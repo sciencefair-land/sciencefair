@@ -53,7 +53,7 @@ module.exports = (data, state, send, done) => {
         const doc = JSON.parse(entry.value)
         const overlap = intersection(doc.tags, data.tags)
         if (overlap.length === data.tags.length) {
-          hits.push(doc)
+          hits.push({ document: doc })
         }
       })
       .on('error', done)

@@ -70,12 +70,19 @@ module.exports = (state, prev, send) => {
   const input = html`<input class="${style.input}" />`
 
   input.oninput = (e) => {
-    send('search_setquerystring', { query: input.value })
+    send('search_setquerystring', { query: e.target.value })
   }
 
   if (state.currentsearch.query.trim() === '' && clearing) {
     input.setAttribute('value', '')
     clearing = false
+  }
+
+  if (state.currentsearch.striptagquery) {
+    const tagquery = '#' + state.currentsearch.tagquery
+    const newvalue = input.value.replace(tagquery, '')
+    input.setAttribute('value', newvalue)
+    send('search_tagquerystripped')
   }
 
   const tags = html`

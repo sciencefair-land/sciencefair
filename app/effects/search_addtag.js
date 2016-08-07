@@ -5,8 +5,11 @@ module.exports = (data, state, send, done) => {
 
   var update = {
     query: oldsearch.query,
-    tags: uniq(oldsearch.tags.concat([data.tag]))
+    tags: uniq((oldsearch.tags || []).concat([data.tag]))
   }
 
-  send('search_update', update, done)
+  send('results_clear', null, (err) => {
+    if (err) return done(err)
+    send('search_update', update, done)
+  })
 }
