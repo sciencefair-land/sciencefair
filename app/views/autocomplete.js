@@ -19,7 +19,7 @@ const style = css`
   padding: 10px;
   justify-content: space-between;
   flex-direction: row;
-  font-family: CooperHewitt-Medium;
+  font-family: CooperHewitt-Light;
   font-size: 1.2em;
   color: ${C.LIGHTGREY};
 }
