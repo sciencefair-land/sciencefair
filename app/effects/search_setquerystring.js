@@ -1,21 +1,16 @@
+const cloneDeep = require('lodash/cloneDeep')
+
 module.exports = (data, state, send, done) => {
-  const alldone = require('../../lib/alldone')(2, done)
-
-  const oldsearch = state.currentsearch || {}
-
   const queryparts = data.query.split('#')
-  const newquery = queryparts[0]
-  const tagquery = queryparts[1]
+  const newquery = queryparts[0].trim()
+  const newtagquery = queryparts[1]
 
-  var update = {
-    query: newquery,
-    tags: oldsearch.tags,
-    tagquery: tagquery
-  }
+  var update = cloneDeep(state.currentsearch)
+  update.query = newquery
+  update.tagquery = newtagquery
 
   send('results_clear', null, (err) => {
     if (err) return done(err)
-    send('search_update', update, alldone)
+    send('search_update', update, done)
   })
-  send(`autocomplete_${tagquery ? 'show' : 'hide'}`, null, alldone)
 }

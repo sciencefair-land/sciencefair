@@ -39,7 +39,7 @@ const matchopts = {
 module.exports = (state, prev, send) => {
   const tagquery = state.currentsearch.tagquery
 
-  if (!tagquery || tagquery.length === 0) { return }
+  if (!tagquery || tagquery.length === 0) { return html`` }
 
   function tagmatchrow (tag) {
     const row = html`

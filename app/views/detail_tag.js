@@ -68,7 +68,7 @@ module.exports = (tag, state, prev, send) => {
 
   `
 
-  tagdiv.onclick = () => {
+  tagdiv.onclick = (e) => {
     e.preventDefault()
     e.stopPropagation()
     send('search_addtag', { tag: tag })

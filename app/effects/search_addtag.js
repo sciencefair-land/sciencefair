@@ -1,15 +1,15 @@
 const uniq = require('lodash/uniq')
+const cloneDeep = require('lodash/cloneDeep')
 
 module.exports = (data, state, send, done) => {
   const alldone = require('../../lib/alldone')(2, done)
-  const oldsearch = state.currentsearch || {}
+  const update = cloneDeep(state.currentsearch || {})
 
-  var update = {
-    query: oldsearch.query,
-    tags: uniq((oldsearch.tags || []).concat([data.tag]))
-  }
+  update.tags = uniq((update.tags || []).concat([data.tag]))
+  update.tagquery = null
+  update.striptagquery = true
 
-  send('search_striptagquery', null, alldone)
+  console.log(update)
 
   send('results_clear', null, (err) => {
     if (err) return done(err)

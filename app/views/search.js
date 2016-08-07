@@ -80,10 +80,7 @@ module.exports = (state, prev, send) => {
   }
 
   if (state.currentsearch.striptagquery) {
-    console.log('stripping tag query')
-    const parts = input.value.split('#')
-    const newvalue = parts[0]
-    input.setAttribute('value', newvalue)
+    input.setAttribute('value', state.currentsearch.query)
     send('search_tagquerystripped')
   }
 

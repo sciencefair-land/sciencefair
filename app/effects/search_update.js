@@ -1,22 +1,25 @@
 const uniq = require('lodash/uniq')
+const cloneDeep = require('lodash/cloneDeep')
 
 module.exports = (data, state, send, done) => {
   // query is an object containing:
   // `query` (String): text query
   // `tags` (Array): an array of 0 or more tags to filter by
-  const newquery = data
 
   // if we have tags, don't search datasources
-  const searchdatasources = !(newquery.tags && newquery.tags.length)
+  const searchdatasources = !(data.tags && data.tags.length)
 
   const alldone = require('../../lib/alldone')(searchdatasources ? 3 : 2, done)
 
-  send('search_collection', {
-    query: newquery.query,
-    tags: uniq(newquery.tags)
-  }, alldone)
+  const newsearch = cloneDeep(state.currentsearch)
+  newsearch.query = data.query
+  newsearch.tags = uniq(data.tags)
+  newsearch.tagquery = data.tagquery
+  newsearch.striptagquery = data.striptagquery || false
 
-  if (searchdatasources) send('search_datasources', newquery, alldone)
+  send('search_collection', newsearch, alldone)
 
-  send('search_trickle', newquery, alldone)
+  if (searchdatasources) send('search_datasources', newsearch, alldone)
+
+  send('search_trickle', newsearch, alldone)
 }
