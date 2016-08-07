@@ -40,7 +40,7 @@ const style = css`
 module.exports = (state, prev, send) => {
   if (!(state.tags.showAddField)) return
 
-  const input = html`<input class="${style.input}" placeholder="new tag name.." />`
+  const input = html`<input class="${style.input}" placeholder="new tag name.." autofocus>`
 
   function submit () {
     const payload = { tag: input.value, paper: state.selectedpaper }
@@ -55,8 +55,6 @@ module.exports = (state, prev, send) => {
     var keyCode = e.keyCode || e.which
     if (keyCode === 13) submit()
   }
-
-  input.autofocus = true
 
   const closebtn = html`<div class="${style.cancel} clickable"></div>`
 

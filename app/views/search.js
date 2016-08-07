@@ -67,7 +67,7 @@ const style = css`
 var clearing = false
 
 module.exports = (state, prev, send) => {
-  const input = html`<input class="${style.input}" />`
+  const input = html`<input class="${style.input}" autofocus>`
 
   input.oninput = (e) => {
     e.preventDefault()
