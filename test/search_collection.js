@@ -104,8 +104,16 @@ test('effect: search_collection', (t) => {
     }
 
     function emptysearch () {
-      effect({}, state, null, (err) => {
-        t.ok(err, 'empty search causes error')
+      const sent = {}
+
+      function send (msg, payload, cb) {
+        sent[msg] = payload || true
+        cb()
+      }
+
+      effect({}, state, send, (err) => {
+        if (err) throw err
+        t.ok(sent['results_clear'], 'empty search clears results')
         done()
       })
     }
