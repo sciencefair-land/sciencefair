@@ -38,6 +38,7 @@ const style = css`
 
 .right {
   justify-content: flex-end;
+  width: 200px;
 }
 
 `
@@ -50,7 +51,7 @@ module.exports = (state, prev, send) => {
     <div class="${style.mid} ${style.part}">
       ${state.results.length} results
     </div>
-    <div class="${style.right} ${style.part}">1 data sources: eLife</div>
+    <div class="${style.right} ${style.part}">1 data source</div>
     <div class=${style.part}>
       ${require('./toggledetail')(state, prev, send)}
     </div>

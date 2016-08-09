@@ -97,7 +97,7 @@ module.exports = (result, state, prev, send) => {
 
   paper.onclick = (e) => {
     e.preventDefault()
-    send('paper_select', { index: result.index })
+    send('paper_select_show', { index: result.index })
   }
 
   return paper

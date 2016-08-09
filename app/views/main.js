@@ -26,6 +26,7 @@ module.exports = (state, prev, send) => {
   <div class="${style.main}">
     ${require('./search')(state, prev, send)}
     ${require('./results')(state, prev, send)}
+    ${require('./message')(state, prev, send)}
     ${require('./detail')(state, prev, send)}
     ${require('./footer')(state, prev, send)}
   </div>

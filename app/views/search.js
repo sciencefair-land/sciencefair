@@ -6,7 +6,7 @@ const style = css`
 
 .search {
   height: 30px;
-  width: 100%;
+  width: 80%;
   bottom: 0;
   padding: 0;
   margin: 0;

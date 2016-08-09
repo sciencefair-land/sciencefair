@@ -97,6 +97,12 @@ module.exports = (state, prev, send) => {
     flex-shrink: 1;
   }
 
+  .empty {
+    margin: 50px;
+    font-size: 2em;
+    font-family: Aleo-Light;
+  }
+
   `
 
   function getcontent () {
@@ -140,7 +146,7 @@ module.exports = (state, prev, send) => {
   function blank () {
     return html`
 
-    <p>Select a paper to see detailed information here.</p>
+    <p class="${style.empty}">No paper selected.</p>
 
     `
   }

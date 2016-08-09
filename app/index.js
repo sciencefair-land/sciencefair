@@ -29,7 +29,7 @@ function start () {
           search: (q) => { }
         }
       ],
-      detailshown: true,
+      detailshown: false,
       autocompleteshown: false,
       currentsearch: { query: '', tags: [] }
     },
