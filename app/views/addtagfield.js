@@ -40,7 +40,7 @@ const style = css`
 module.exports = (state, prev, send) => {
   if (!(state.tags.showAddField)) return
 
-  const input = html`<input class="${style.input}" placeholder="new tag name.." autofocus>`
+  const input = html`<input class="${style.input}" placeholder="new tag name..">`
 
   function submit () {
     const payload = { tag: input.value, paper: state.selectedpaper }
@@ -62,6 +62,10 @@ module.exports = (state, prev, send) => {
     e.preventDefault()
     send('tag_stopadd')
   }
+
+  setTimeout(() => {
+    input.focus()
+  }, 200)
 
   return html`<div class="${style.wrapper}">${input}${closebtn}</div>`
 }
