@@ -132,6 +132,7 @@ module.exports = (state, prev, send) => {
             </div>
           </div>
           <div class="${style.column}">
+            ${require('./detail_license')(doc.license, state, prev, send)}
             ${require('./detail_tags')(state, prev, send)}
           </div>
         </div>
