@@ -65,9 +65,9 @@ const style = css`
 `
 
 const placeholders = [
-  'type a word or phrase',
-  'type a word, phrase or #',
-  'type a word, phrase, # or *'
+  'try:   a word or phrase',
+  'try:   a word or phrase   ..or..   #',
+  'try:   a word or phrase   ..or..   #   ..or..   *'
 ]
 
 var clearing = false
