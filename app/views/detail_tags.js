@@ -13,6 +13,7 @@ module.exports = (state, prev, send) => {
     position: absolute;
     right: 5px;
     bottom: 5px;
+    max-width: 50%;
   }
 
   .tag {
@@ -58,7 +59,7 @@ module.exports = (state, prev, send) => {
 
   return html`
 
-  <div class="${style.row} ${style.tags}">
+  <div class="${style.tags}">
     ${doc.tags.map((t) => tag(t, state, prev, send))}
     ${addTagButton()}
     ${require('./addtagfield')(state, prev, send)}
