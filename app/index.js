@@ -31,7 +31,8 @@ function start () {
       ],
       detailshown: false,
       autocompleteshown: false,
-      currentsearch: { query: '', tags: [] }
+      currentsearch: { query: '', tags: [] },
+      collectioncount: 0
     },
     effects: requireDir('./effects'),
     reducers: requireDir('./reducers')

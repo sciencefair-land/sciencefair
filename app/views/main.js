@@ -19,7 +19,7 @@ const style = css`
 `
 
 module.exports = (state, prev, send) => {
-  send('tags_update')
+  send('collection_scan')
 
   return html`
 

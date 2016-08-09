@@ -64,10 +64,23 @@ const style = css`
 
 `
 
+const placeholders = [
+  'type a word or phrase',
+  'type a word, phrase or #',
+  'type a word, phrase, # or *'
+]
+
 var clearing = false
 
+
 module.exports = (state, prev, send) => {
-  const input = html`<input class="${style.input}" autofocus>`
+  const placeidx = Math.min(state.collectioncount, 2)
+  const placeholder = placeholders[placeidx]
+  const input = html`
+
+  <input class="${style.input}" placeholder="${placeholder}" autofocus>
+
+  `
 
   input.oninput = (e) => {
     e.preventDefault()

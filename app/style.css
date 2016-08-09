@@ -73,7 +73,8 @@ body {
 }
 
 ::-webkit-input-placeholder {
-  color: rgb(43,43,51);
+  color: rgba(43, 43, 51, 0.5);
+  font-style: italic;
 }
 
 ::-webkit-scrollbar {

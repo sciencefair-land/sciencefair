@@ -1,14 +1,19 @@
 module.exports = (data, state, send, done) => {
   const tags = {}
+  var count = 0
   state.collection.docstore.createReadStream()
     .on('data', (data) => {
       const doc = JSON.parse(data.value)
+      count += 1
       doc.tags.forEach((tag) => {
         tags[tag] = (tags[tag] || []).concat(data.key)
       })
     })
     .on('error', done)
     .on('end', () => {
-      send('tags_replace', tags, done)
+      send('collection_setcount', { count: count }, (err) => {
+        if (err) done(err)
+        send('tags_replace', tags, done)
+      })
     })
 }
