@@ -37,7 +37,7 @@ const style = css`
 
 .right {
   justify-content: flex-end;
-  width: 200px;
+  width: 250px;
 }
 
 .toggletab {
@@ -53,7 +53,9 @@ module.exports = (state, prev, send) => {
     <div class="${style.left} ${style.part}">0 MB/s</div>
     <div class="${style.mid} ${style.part}">
       ${state.results.length} results
-      (${state.collectioncount} in collection)
+    </div>
+    <div class="${style.mid} ${style.part}">
+      ${state.collectioncount} papers in collection
     </div>
     <div class="${style.right} ${style.part}">1 data source</div>
     <div class="${style.part} ${style.toggletab}">
