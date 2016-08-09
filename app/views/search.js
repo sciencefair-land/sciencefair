@@ -72,7 +72,6 @@ const placeholders = [
 
 var clearing = false
 
-
 module.exports = (state, prev, send) => {
   const placeidx = Math.min(state.collectioncount, 2)
   const placeholder = placeholders[placeidx]
@@ -107,13 +106,25 @@ module.exports = (state, prev, send) => {
 
   `
 
-  const clearbtn = html`<div class="${style.clear} clickable"></div>`
+  function clearbtn () {
+    const query = state.currentsearch.query
+    const hasquery = query && query.length > 0
+    const tags = state.currentsearch.tags
+    const hastags = tags && tags.length > 0
+    if (hasquery || hastags) {
+      const btn = html`<div class="${style.clear} clickable"></div>`
 
-  clearbtn.onclick = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-    clearing = true
-    send('search_clear')
+      btn.onclick = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        clearing = true
+        send('search_clear')
+      }
+
+      return btn
+    } else {
+      return ''
+    }
   }
 
   return html`
@@ -122,7 +133,7 @@ module.exports = (state, prev, send) => {
     <div class="${style.wrapper}">
       ${input}
       ${tags}
-      ${clearbtn}
+      ${clearbtn()}
       <img class="${style.img}" src="./images/search.svg" />
       ${require('./autocomplete')(state, prev, send)}
     </div>
