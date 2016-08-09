@@ -19,8 +19,7 @@ module.exports = (state, prev, send) => {
     margin: 0;
     flex-direction: row;
     overflow-y: hidden;
-    background: ${C.DARKBLUE};
-    opacity: 0.8;
+    background: ${C.GREYBLUE};
     font-family: Aleo-Regular;
     font-size: 16px;
     color: ${C.LIGHTGREY};

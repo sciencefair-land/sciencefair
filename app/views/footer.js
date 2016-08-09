@@ -10,7 +10,6 @@ const style = css`
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 10px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -24,11 +23,11 @@ const style = css`
   height: 100%;
   display: flex;
   align-items: center;
-  margin: 0px 10px;
+  padding: 0px 20px;
 }
 
 .left {
-  width: 100px;
+  width: 200px;
 }
 
 .mid {
@@ -41,6 +40,10 @@ const style = css`
   width: 200px;
 }
 
+.toggletab {
+  background: ${C.GREYBLUE};
+}
+
 `
 
 module.exports = (state, prev, send) => {
@@ -50,9 +53,10 @@ module.exports = (state, prev, send) => {
     <div class="${style.left} ${style.part}">0 MB/s</div>
     <div class="${style.mid} ${style.part}">
       ${state.results.length} results
+      (${state.collectioncount} in collection)
     </div>
     <div class="${style.right} ${style.part}">1 data source</div>
-    <div class=${style.part}>
+    <div class="${style.part} ${style.toggletab}">
       ${require('./toggledetail')(state, prev, send)}
     </div>
   </div>
