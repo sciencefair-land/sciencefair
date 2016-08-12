@@ -77,14 +77,15 @@ const style = css`
 `
 
 module.exports = (result, state, prev, send) => {
-  const selected = state.selectedpaper === result.index ? selectedmark() : ''
+  const id = result.paper.document.identifier[0].id
+  const selected = state.selection.papers.indexOf(id) > -1
 
   var doc = result.paper.document
   if (isString(doc)) doc = JSON.parse(doc)
 
   const paper = html`
     <div class="${style.paper} clickable">
-      ${selected}
+      ${selectedmark(selected)}
       <div class="${style.title}">${doc.title}</div>
       <div class="${style.author}">
         ${renderAuthor(doc.author)}
@@ -97,7 +98,13 @@ module.exports = (result, state, prev, send) => {
 
   paper.onclick = (e) => {
     e.preventDefault()
-    send('paper_select_show', { index: result.index })
+    send('paper_select_show', {
+      index: result.index,
+      id: id,
+      shift: e.shiftKey,
+      ctrl: e.ctrlKey,
+      meta: e.metaKey
+    })
   }
 
   return paper
@@ -113,6 +120,6 @@ function renderAuthor (author) {
   }
 }
 
-function selectedmark () {
-  return html`<div class=${style.selected}></div>`
+function selectedmark (selected) {
+  return selected ? html`<div class=${style.selected}></div>` : null
 }

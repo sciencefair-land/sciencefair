@@ -32,7 +32,11 @@ function start () {
       detailshown: false,
       autocompleteshown: false,
       currentsearch: { query: '', tags: [] },
-      collectioncount: 0
+      collectioncount: 0,
+      selection: {
+        reference: null,
+        papers: []
+      }
     },
     effects: requireDir('./effects'),
     reducers: requireDir('./reducers')
