@@ -105,39 +105,28 @@ module.exports = (state, prev, send) => {
   `
 
   function getcontent () {
-    if (state.selectedpaper > -1) {
-      const index = state.selectedpaper
-      const paper = state.results[index]
+    if (state.selection.papers.length === 1) {
+      const id = state.selection.papers[0]
+      const paper = state.results.find((result) => {
+        return result.id === id
+      })
 
-      if (!paper) return blank()
+      if (!paper) {
+        return blank()
+      } else {
+        return singlepaper(paper, style, state, prev, send)
+      }
+    } else if (state.selection.papers.length > 1) {
+      const ids = state.selection.papers
+      const papers = state.results.filter((result) => {
+        return ids.indexOf(result.id) > -1
+      })
 
-      const doc = paper.document
-
-      return html`
-
-      <div class="${style.wrapper}">
-        <div class="${style.row}">
-          <div class="${style.title} ${style.row} ${style.datum}">${doc.title}</div>
-        </div>
-        <div class="${style.row} ${style.nottitle}">
-          <div class="${style.column}">
-            <div class="${style.abstract} ${style.row} ${style.datum}">${doc.abstract}</div>
-            <div class="${style.row}">
-              <div class="${style.author} ${style.datum}">${renderAuthor(doc.author)}</div>
-              <div class="${style.date} ${style.datum}">
-                Published:
-                ${doc.date ? renderDate(doc.date) : 'unknown'}
-              </div>
-            </div>
-          </div>
-          <div class="${style.column}">
-            ${require('./detail_license')(doc.license, state, prev, send)}
-            ${require('./detail_tags')(state, prev, send)}
-          </div>
-        </div>
-      </div>
-
-      `
+      if (papers.length === 0) {
+        return blank()
+      } else {
+        return multipaper(papers, style, state, prev, send)
+      }
     } else {
       return blank()
     }
@@ -160,4 +149,48 @@ function renderDate (date) {
 
 function renderAuthor (author) {
   return isString(author) ? author : `${author.givenNames} ${author.surName}`
+}
+
+function singlepaper (paper, style, state, prev, send) {
+  const doc = paper.document
+
+  return html`
+
+  <div class="${style.wrapper}">
+    <div class="${style.row}">
+      <div class="${style.title} ${style.row} ${style.datum}">${doc.title}</div>
+    </div>
+    <div class="${style.row} ${style.nottitle}">
+      <div class="${style.column}">
+        <div class="${style.abstract} ${style.row} ${style.datum}">${doc.abstract}</div>
+        <div class="${style.row}">
+          <div class="${style.author} ${style.datum}">${renderAuthor(doc.author)}</div>
+          <div class="${style.date} ${style.datum}">
+            Published:
+            ${doc.date ? renderDate(doc.date) : 'unknown'}
+          </div>
+        </div>
+      </div>
+      <div class="${style.column}">
+        ${require('./detail_single_license')(doc.license, state, prev, send)}
+        ${require('./detail_single_tags')(state, prev, send)}
+      </div>
+    </div>
+  </div>
+
+  `
+}
+
+function multipaper (papers, style, state, prev, send) {
+  return html`
+
+  <div class="${style.wrapper}">
+    <div class="${style.row}">
+      <div class="${style.title} ${style.row} ${style.datum}">
+        ${papers.length} papers selected
+      </div>
+    </div>
+  </div>
+
+  `
 }

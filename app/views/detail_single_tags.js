@@ -51,11 +51,11 @@ module.exports = (state, prev, send) => {
     }
   }
 
-  const index = state.selectedpaper
-  const paper = state.results[index]
+  const id = state.selection.papers[0]
+  const paper = state.results.find((result) => result.id === id)
   const doc = paper.document
 
-  const tag = require('./detail_tag')
+  const tag = require('./detail_single_tag')
 
   return html`
 
