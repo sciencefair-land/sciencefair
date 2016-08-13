@@ -35,7 +35,11 @@ function start () {
       ],
       detailshown: false,
       autocompleteshown: false,
-      currentsearch: { query: '', tags: [] },
+      currentsearch: {
+        query: '',
+        tagquery: null,
+        tags: []
+      },
       collectioncount: 0,
       selection: {
         reference: null,

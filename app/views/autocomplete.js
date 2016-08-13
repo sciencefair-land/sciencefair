@@ -2,6 +2,7 @@ const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../../lib/constants')
 const fuzzy = require('fuzzy')
+const sortBy = require('lodash/sortBy')
 
 const style = css`
 
@@ -39,14 +40,35 @@ const matchopts = {
 module.exports = (state, prev, send) => {
   const tagquery = state.currentsearch.tagquery
 
-  if (!tagquery || tagquery.length === 0) { return html`` }
+  if (!((typeof tagquery) === 'string')) return html``
 
-  function tagmatchrow (tag) {
+  function tagcount (tag) {
+    return {
+      string: tag.string,
+      count: state.tags.tags[tag.original].length
+    }
+  }
+
+  function taghits () {
+    const alltags = Object.keys(state.tags.tags)
+    if (tagquery.length === 0) {
+      return alltags.map((tag) => {
+        return {
+          string: tag,
+          original: tag
+        }
+      })
+    } else {
+      return fuzzy.filter(tagquery, alltags, matchopts)
+    }
+  }
+
+  function row (tag) {
     const row = html`
 
     <div class="${style.tagrow} clickable">
       ${html('<div>#' + tag.string + '</div>')}
-      <div>${state.tags.tags[tag.original].length}</div>
+      <div>${tag.count}</div>
     </div>
 
     `
@@ -59,17 +81,22 @@ module.exports = (state, prev, send) => {
     return row
   }
 
-  function taghits () {
-    const alltags = Object.keys(state.tags.tags)
-    return fuzzy.filter(tagquery, alltags, matchopts)
+  function rows () {
+    const hits = taghits().map(tagcount)
+
+    const sorted = sortBy(hits, (tag) => {
+      return 0 - tag.count
+    })
+
+    return sorted.map((hit) => {
+      return row(hit)
+    }).slice(0, 20)
   }
 
   return html`
 
   <div class="${style.autocomplete}">
-    ${taghits().map((hit) => {
-      return tagmatchrow(hit)
-    })}
+    ${rows()}
   </div>
 
   `
