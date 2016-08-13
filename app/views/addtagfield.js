@@ -47,9 +47,7 @@ module.exports = (state, prev, send) => {
       tag: e.target.value
     }
 
-    send('tag_add', payload, (err) => {
-      if (err) console.log(err)
-    })
+    send('tag_add', payload)
   }
 
   input.onkeypress = (e) => {
