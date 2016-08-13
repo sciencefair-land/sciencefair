@@ -5,7 +5,9 @@ module.exports = (data, state, send, done) => {
     done(new Error('No local collection found (it may not have loaded yet)'))
   }
 
-  if (data.query && data.query.trim().length > 0) {
+  if (data.query.trim() === '*') {
+    all()
+  } else if (data.query && data.query.trim().length > 0) {
     search()
   } else if (data.tags && data.tags.length) {
     filter()
@@ -22,6 +24,26 @@ module.exports = (data, state, send, done) => {
       return hit
     })
     return results
+  }
+
+  function all () {
+    const docstore = state.collection.docstore
+    const hits = []
+    docstore.createReadStream()
+      .on('data', (entry) => {
+        const doc = JSON.parse(entry.value)
+        hits.push({ document: doc })
+      })
+      .on('error', done)
+      .on('end', () => {
+        if (hits.length > 0) {
+          send('results_receive', {
+            hits: hits
+          }, done)
+        } else {
+          send('results_none', 'collection', done)
+        }
+      })
   }
 
   function search () {
