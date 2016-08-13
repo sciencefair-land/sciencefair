@@ -42,8 +42,10 @@ module.exports = (state, prev, send) => {
 
   const input = html`<input class="${style.input}" placeholder="new tag name..">`
 
-  function submit () {
-    const payload = { tag: input.value, paper: state.selectedpaper }
+  function submit (e) {
+    const payload = {
+      tag: e.target.value
+    }
 
     send('tag_add', payload, (err) => {
       if (err) console.log(err)
@@ -53,7 +55,7 @@ module.exports = (state, prev, send) => {
   input.onkeypress = (e) => {
     if (!e) e = window.e
     var keyCode = e.keyCode || e.which
-    if (keyCode === 13) submit()
+    if (keyCode === 13) submit(e)
   }
 
   const closebtn = html`<div class="${style.cancel} clickable"></div>`

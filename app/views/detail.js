@@ -3,6 +3,7 @@ const css = require('csjs-inject')
 const C = require('../../lib/constants')
 
 const isString = require('lodash/isString')
+const intersection = require('lodash/intersection')
 
 const height = 200
 const padding = 5
@@ -104,29 +105,25 @@ module.exports = (state, prev, send) => {
 
   `
 
-  function getcontent () {
+  function getcontent (state) {
+    const hasresults = state.results.length > 0
+    if (!hasresults) return blank()
+
     if (state.selection.papers.length === 1) {
       const id = state.selection.papers[0]
       const paper = state.results.find((result) => {
-        return result.id === id
+        return result.document.identifier[0].id === id
       })
 
-      if (!paper) {
-        return blank()
-      } else {
-        return singlepaper(paper, style, state, prev, send)
-      }
+      return singlepaper(paper, style, state, prev, send)
     } else if (state.selection.papers.length > 1) {
       const ids = state.selection.papers
       const papers = state.results.filter((result) => {
-        return ids.indexOf(result.id) > -1
+        const id = result.document.identifier[0].id
+        return ids.indexOf(id) > -1
       })
 
-      if (papers.length === 0) {
-        return blank()
-      } else {
-        return multipaper(papers, style, state, prev, send)
-      }
+      return multipaper(papers, style, state, prev, send)
     } else {
       return blank()
     }
@@ -140,7 +137,7 @@ module.exports = (state, prev, send) => {
     `
   }
 
-  return html`<div class="${style.detail}">${getcontent()}</div>`
+  return html`<div class="${style.detail}">${getcontent(state)}</div>`
 }
 
 function renderDate (date) {
@@ -173,12 +170,16 @@ function singlepaper (paper, style, state, prev, send) {
       </div>
       <div class="${style.column}">
         ${require('./detail_single_license')(doc.license, state, prev, send)}
-        ${require('./detail_single_tags')(state, prev, send)}
+        ${require('./detail_tags')(doc.tags, state, prev, send)}
       </div>
     </div>
   </div>
 
   `
+}
+
+function tags (papers) {
+  return intersection(...(papers.map((paper) => paper.document.tags))) || []
 }
 
 function multipaper (papers, style, state, prev, send) {
@@ -188,6 +189,20 @@ function multipaper (papers, style, state, prev, send) {
     <div class="${style.row}">
       <div class="${style.title} ${style.row} ${style.datum}">
         ${papers.length} papers selected
+      </div>
+    </div>
+    <div class="${style.row} ${style.nottitle}">
+      <div class="${style.column}">
+        <div class="${style.abstract} ${style.row} ${style.datum}">summary</div>
+        <div class="${style.row}">
+          <div class="${style.author} ${style.datum}">authors</div>
+          <div class="${style.date} ${style.datum}">
+            daterange
+          </div>
+        </div>
+      </div>
+      <div class="${style.column}">
+        ${require('./detail_tags')(tags(papers), state, prev, send)}
       </div>
     </div>
   </div>

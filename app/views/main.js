@@ -19,7 +19,9 @@ const style = css`
 `
 
 module.exports = (state, prev, send) => {
-  send('collection_scan')
+  if (!(state.tags.loaded)) {
+    send('collection_scan')
+  }
 
   return html`
 

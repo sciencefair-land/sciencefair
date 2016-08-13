@@ -22,7 +22,11 @@ function start () {
   const model = {
     state: {
       results: [],
-      tags: { tags: {}, showAddField: false },
+      tags: {
+        tags: {},
+        showAddField: false,
+        loaded: false
+      },
       datasources: [
         {
           name: 'eLife',

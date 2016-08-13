@@ -75,7 +75,9 @@ function toggleclicked (data, papers) {
 // compared to when it was set as reference, false otherwise
 function referenceunmoved (reference, results) {
   const result = results && results[reference.index]
-  return result && result.id && result.id === reference.id
+  return result &&
+    result.document.identifier[0].id &&
+    result.document.identifier[0].id === reference.id
 }
 
 // return the reference
@@ -114,7 +116,7 @@ function findcontiguous (reference, papers, results) {
 
   // backwards
   while (current && isselected(current, papers) && i >= 0) {
-    contiguous.push(current.id)
+    contiguous.push(current.document.identifier[0].id)
     i -= 1
     current = results[i]
   }
@@ -123,7 +125,7 @@ function findcontiguous (reference, papers, results) {
   i = reference.index + 1
   current = results[i]
   while (current && isselected(current, papers) && i < results.length) {
-    contiguous.push(current.id)
+    contiguous.push(current.document.identifier[0].id)
     i += 1
     current = results[i]
   }
@@ -136,6 +138,8 @@ function findcontiguous (reference, papers, results) {
 function selectrange (results, papers, start, end) {
   const low = Math.min(start.index, end.index)
   const high = Math.max(start.index, end.index) + 1
-  const morepapers = results.slice(low, high).map((result) => result.id)
+  const morepapers = results.slice(low, high).map((result) => {
+    return result.document.identifier[0].id
+  })
   return uniq(papers.concat(morepapers))
 }

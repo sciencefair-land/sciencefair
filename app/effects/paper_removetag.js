@@ -2,19 +2,28 @@ const cloneDeep = require('lodash/cloneDeep')
 
 module.exports = (data, state, send, done) => {
   const alldone = require('../../lib/alldone')(3, done)
-  const paper = state.results[data.paper]
-  const newPaper = cloneDeep(paper)
+  const papers = state.results.filter((result) => {
+    state.selection.papers.indexOf(result) > -1
+  })
 
-  const tags = cloneDeep(paper.document.tags)
-  const removeidx = tags.indexOf(data.tag)
-  if (removeidx > -1) tags.splice(removeidx, 1)
+  const newPapers = papers.map((paper) => {
+    const newPaper = cloneDeep(paper)
 
-  newPaper.document.tags = tags
+    const tags = cloneDeep(paper.document.tags)
+    const removeidx = tags.indexOf(data.tag)
+    if (removeidx > -1) tags.splice(removeidx, 1)
 
-  send('result_replace', { index: data.paper, paper: newPaper }, alldone)
-  send('collection_updatepaper', newPaper, alldone)
+    newPaper.document.tags = tags
+    return newPaper
+  })
+
+  send('result_replace', {
+    id: state.selection.papers,
+    paper: newPapers
+  }, alldone)
+  send('collection_updatepaper', newPapers, alldone)
   send('tag_removepaper', {
     tag: data.tag,
-    paper: paper.document.identifier[0].id
+    paper: state.selection.papers
   }, alldone)
 }

@@ -3,11 +3,28 @@ const uniq = require('lodash/uniq')
 
 module.exports = (data, state, send, done) => {
   const alldone = require('../../lib/alldone')(2, done)
-  const paper = state.results[data.paper]
-  const newPaper = cloneDeep(paper)
 
-  newPaper.document.tags = uniq(paper.document.tags.concat([data.tag]))
+  const ids = state.selection.papers
+  const resultsids = state.results.map((result) => {
+    return result.document.identifier[0].id
+  })
 
-  send('result_replace', { index: data.paper, paper: newPaper }, alldone)
-  send('collection_updatepaper', newPaper, alldone)
+  const papers = ids.map((id) => {
+    const idx = resultsids.indexOf(id)
+    return state.results[idx]
+  })
+
+  const newPapers = papers.map((paper) => {
+    const newPaper = cloneDeep(paper)
+    const newTags = uniq(paper.document.tags.concat([data.tag]))
+    newPaper.document.tags = newTags
+    return newPaper
+  })
+
+  send('result_replace', {
+    id: ids,
+    paper: newPapers
+  }, alldone)
+
+  send('collection_updatepaper', newPapers, alldone)
 }

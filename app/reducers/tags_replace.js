@@ -6,7 +6,8 @@ module.exports = (data, state) => {
   return {
     tags: {
       tags: data,
-      showAddField: state.tags.showAddField
+      showAddField: state.tags.showAddField,
+      loaded: true
     }
   }
 }

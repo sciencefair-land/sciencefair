@@ -57,8 +57,7 @@ module.exports = (tag, state, prev, send) => {
     e.preventDefault()
     e.stopPropagation()
     send('paper_removetag', {
-      tag: tag,
-      paper: state.selectedpaper
+      tag: tag
     })
   }
 
