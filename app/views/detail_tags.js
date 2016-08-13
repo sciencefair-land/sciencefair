@@ -31,16 +31,29 @@ module.exports = (tags, state, prev, send) => {
 
   .addtagbtn extends .tag {
     height: 29px;
-    width: 29px;
+    padding: 5px 8px;
+    justify-content: center;
+    align-content: center;
   }
 
   `
+
+  function msg () {
+    if (!tags || tags.length === 0) {
+      return 'no tags yet'
+    } else {
+      return null
+    }
+  }
 
   function addTagButton () {
     if (state.showAddField) {
       return ''
     } else {
-      const btn = html`<div class=${style.addtagbtn}>+</div>`
+      const btn = html`<div class=${style.addtagbtn}>
+        ${msg()}
+        +
+      </div>`
 
       btn.onclick = (e) => {
         e.preventDefault()
@@ -57,7 +70,7 @@ module.exports = (tags, state, prev, send) => {
     if (tags && tags.length > 0) {
       return tags.map((t) => tag(t, state, prev, send))
     } else {
-      return 'no tags yet'
+      return null
     }
   }
 
@@ -65,7 +78,7 @@ module.exports = (tags, state, prev, send) => {
 
   <div class="${style.tags}">
     ${rendertags()}
-    ${addTagButton()}
+    ${addTagButton(tags)}
     ${require('./addtagfield')(state, prev, send)}
   </div>
 

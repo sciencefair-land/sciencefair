@@ -3,7 +3,8 @@ const cloneDeep = require('lodash/cloneDeep')
 module.exports = (data, state, send, done) => {
   const alldone = require('../../lib/alldone')(3, done)
   const papers = state.results.filter((result) => {
-    state.selection.papers.indexOf(result) > -1
+    const id = result.document.identifier[0].id
+    return state.selection.papers.indexOf(id) > -1
   })
 
   const newPapers = papers.map((paper) => {
