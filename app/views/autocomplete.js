@@ -51,6 +51,7 @@ module.exports = (state, prev, send) => {
   function tagcount (tag) {
     return {
       string: tag.string,
+      original: tag.original,
       count: state.tags.tags[tag.original].length
     }
   }
