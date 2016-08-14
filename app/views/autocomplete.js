@@ -30,6 +30,12 @@ const style = css`
   color: ${C.YELLOW};
 }
 
+.more {
+  color: ${C.LIGHTGREY};
+  font-style: italic;
+  opacity: 0.5;
+}
+
 `
 
 const matchopts = {
@@ -88,9 +94,21 @@ module.exports = (state, prev, send) => {
       return 0 - tag.count
     })
 
-    return sorted.map((hit) => {
+    const fullrows = sorted.map((hit) => {
       return row(hit)
-    }).slice(0, 20)
+    }).slice(0, C.AUTOMAXTAGS)
+
+    if (sorted.length > C.AUTOMAXTAGS) {
+      const diff = sorted.length - C.AUTOMAXTAGS
+      const more = html`
+      <div class="${style.tagrow}">
+        <div class="${style.more}">... and ${diff} more tags</div>
+      </div>
+      `
+      fullrows.push(more)
+    }
+
+    return fullrows
   }
 
   return html`
