@@ -77,9 +77,15 @@ module.exports = (state, prev, send) => {
   const placeholder = placeholders[placeidx]
   const input = html`
 
-  <input class="${style.input}" placeholder="${placeholder}" autofocus>
+  <input class="${style.input}" placeholder="${placeholder}"
+   autofocus>
 
   `
+
+  if (state.populatesearch) {
+    input.setAttribute('value', state.populatesearch)
+    send('search_populatedone')
+  }
 
   input.oninput = (e) => {
     e.preventDefault()
