@@ -1,0 +1,109 @@
+const html = require('choo/html')
+const css = require('csjs-inject')
+const C = require('../../lib/constants')
+
+const flatten = require('lodash/flatten')
+const countBy = require('lodash/countBy')
+const isString = require('lodash/isString')
+const sortBy = require('lodash/sortBy')
+const toPairs = require('lodash/toPairs')
+const max = require('lodash/max')
+
+const maxwidth = 100
+
+const style = css`
+
+.plot {
+
+}
+
+.table {
+  font-family: CooperHewitt-Medium;
+}
+
+.th {
+  padding: 3px;
+  text-align: left;
+  font-family: CooperHewitt-Bold;
+}
+
+.tr {
+
+}
+
+.td {
+  padding: 3px;
+  padding-bottom: 0;
+}
+
+.bar {
+  height: 20px;
+  background: ${C.LIGHTGREY};
+}
+
+`
+
+module.exports = (papers, state, prev, send) => {
+  return html`
+
+  <div class="${style.plot}">
+    ${plot(authorcount(papers))}
+  </div>
+
+
+  `
+}
+
+function plot (authorcounts) {
+  const maxcount = max(authorcounts.map((ac) => ac.count))
+  const unit = maxwidth / maxcount
+
+  return html`
+    <table class="${style.table}">
+      <tr>
+        <th class="${style.th}">
+          Author
+        </th>
+        <th class="${style.th}">
+          Papers
+        </th>
+      </tr>
+      ${authorcounts.slice(0, 5).map((ac) => {
+        return plotrow(ac, unit)
+      })}
+    </table>
+  `
+}
+
+function plotrow (ac, unit) {
+  return html`
+    <tr>
+      <td class="${style.td}">
+        ${ac.author}
+      </td>
+      <td class="${style.td}">
+        <div class="${style.bar}" style="width: ${unit * ac.count}px;">
+        </div>
+      </td>
+    </tr>
+  `
+}
+
+function authorcount (papers) {
+  const authors = papers.map((paper) => {
+    const author = paper.document.author
+    if (isString(author)) {
+      return author.split(',').map((a) => a.trim())
+    } else {
+      return author
+    }
+  })
+
+  const counts = countBy(flatten(authors))
+
+  return sortBy(toPairs(counts), 1)
+    .reverse()
+    .map((pair) => {
+      return { author: pair[0], count: pair[1] }
+    })
+}

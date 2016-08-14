@@ -103,6 +103,12 @@ module.exports = (state, prev, send) => {
     font-family: Aleo-Light;
   }
 
+  .quart {
+    padding-top: 30px;
+    width: 25%;
+    max-width 25%;
+  }
+
   `
 
   function getcontent (state) {
@@ -192,16 +198,16 @@ function multipaper (papers, style, state, prev, send) {
       </div>
     </div>
     <div class="${style.row} ${style.nottitle}">
-      <div class="${style.column}">
-        <div class="${style.abstract} ${style.row} ${style.datum}">summary</div>
-        <div class="${style.row}">
-          <div class="${style.author} ${style.datum}">authors</div>
-          <div class="${style.date} ${style.datum}">
-            daterange
-          </div>
-        </div>
+      <div class="${style.column} ${style.quart}">
+        ${require('./detail_multi_terms')(papers, state, prev, send)}
       </div>
-      <div class="${style.column}">
+      <div class="${style.column} ${style.quart}">
+        ${require('./detail_multi_authors')(papers, state, prev, send)}
+      </div>
+      <div class="${style.column} ${style.quart}">
+        ${require('./detail_multi_dates')(papers, state, prev, send)}
+      </div>
+      <div class="${style.column} ${style.quart}">
         ${require('./detail_tags')(tags(papers), state, prev, send)}
       </div>
     </div>
