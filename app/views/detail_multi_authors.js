@@ -9,22 +9,24 @@ const sortBy = require('lodash/sortBy')
 const toPairs = require('lodash/toPairs')
 const max = require('lodash/max')
 
-const maxwidth = 100
+const maxwidth = 200
 
 const style = css`
 
 .plot {
-
+  border-right: 1px solid ${C.LIGHTGREY};
+  padding: 10px 20px;
+  height: 100%;
 }
 
 .table {
-  font-family: CooperHewitt-Medium;
+  font-family: CooperHewitt-Light;
 }
 
 .th {
   padding: 3px;
   text-align: left;
-  font-family: CooperHewitt-Bold;
+  font-family: CooperHewitt-Medium;
 }
 
 .tr {
@@ -39,7 +41,10 @@ const style = css`
 .bar {
   height: 20px;
   background: ${C.LIGHTGREY};
+  color: ${C.MIDBLUE};
+  padding: 2px 4px;
 }
+
 
 `
 
@@ -83,6 +88,7 @@ function plotrow (ac, unit) {
       </td>
       <td class="${style.td}">
         <div class="${style.bar}" style="width: ${unit * ac.count}px;">
+          ${ac.count}
         </div>
       </td>
     </tr>
@@ -96,7 +102,7 @@ function authorcount (papers) {
       return author.split(',').map((a) => a.trim())
     } else {
       return author.map((a) => {
-        return `${a['given-names']} ${a.surname}`
+        return `${a['given-names'].slice(0, 1)} ${a.surname}`
       })
     }
   })

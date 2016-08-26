@@ -14,6 +14,7 @@ module.exports = (state, prev, send) => {
     border-radius: 2px;
     color: ${C.LIGHTGREY};
     font-family: CooperHewitt-Medium;
+    font-size: 1.5em;
     margin-left: 12px;
     margin-top: 30px;
     padding: 6px;

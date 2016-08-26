@@ -10,23 +10,25 @@ const toPairs = require('lodash/toPairs')
 const min = require('lodash/min')
 const max = require('lodash/max')
 
-const maxwidth = 100
+const maxwidth = 200
 
 const style = css`
 
 .plot {
-
+  border-right: 1px solid ${C.LIGHTGREY};
+  padding: 10px 20px;
+  height: 100%;
 }
 
 .table {
-  font-family: CooperHewitt-Medium;
+  font-family: CooperHewitt-Light;
 }
 
 .th {
   padding: 3px;
   text-align: left;
   font-weight: bold;
-  font-family: CooperHewitt-Bold;
+  font-family: CooperHewitt-Medium;
 }
 
 .tr {
@@ -41,6 +43,8 @@ const style = css`
 .bar {
   height: 20px;
   background: ${C.LIGHTGREY};
+  color: ${C.MIDBLUE};
+  padding: 2px 4px;
 }
 
 `
@@ -85,6 +89,7 @@ function plotrow (ac, unit) {
       </td>
       <td class="${style.td}">
         <div class="${style.bar}" style="width: ${unit * ac.count}px;">
+          ${ac.count}
         </div>
       </td>
     </tr>

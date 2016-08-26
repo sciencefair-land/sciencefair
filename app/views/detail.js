@@ -104,8 +104,7 @@ module.exports = (state, prev, send) => {
   }
 
   .quart {
-    width: 25%;
-    max-width 25%;
+    max-width 24%;
     position: relative;
   }
 
@@ -172,6 +171,7 @@ function renderAbstract (abstract) {
 }
 
 function singlepaper (paper, style, state, prev, send) {
+  if (!paper) return null
   const doc = paper.document
 
   return html`

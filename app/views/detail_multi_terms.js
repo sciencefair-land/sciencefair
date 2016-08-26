@@ -16,22 +16,24 @@ const stopwords = [
   'et', 'al', 'al.', 'al.,', 'be', 'project:', 'which', 'these', 'or', 'have', 'at', 'our', 'were', 'show', 'during', 'can', 'not', 'its', 'their'
 ]
 
-const maxwidth = 100
+const maxwidth = 200
 
 const style = css`
 
 .plot {
-
+  border-right: 1px solid ${C.LIGHTGREY};
+  padding: 10px 20px;
+  height: 100%;
 }
 
 .table {
-  font-family: CooperHewitt-Medium;
+  font-family: CooperHewitt-Light;
 }
 
 .th {
   padding: 3px;
   text-align: left;
-  font-family: CooperHewitt-Bold;
+  font-family: CooperHewitt-Medium  ;
 }
 
 .tr {
@@ -46,6 +48,8 @@ const style = css`
 .bar {
   height: 20px;
   background: ${C.LIGHTGREY};
+  color: ${C.MIDBLUE};
+  padding: 2px 4px;
 }
 
 `
@@ -90,6 +94,7 @@ function plotrow (tc, unit) {
       </td>
       <td class="${style.td}">
         <div class="${style.bar}" style="width: ${unit * tc.count}px;">
+          ${tc.count}
         </div>
       </td>
     </tr>
