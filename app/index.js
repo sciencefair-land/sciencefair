@@ -40,10 +40,16 @@ function start () {
         tagquery: null,
         tags: []
       },
+      contentserver: require('../lib/contentServer')(C.DATAROOT),
       collectioncount: 0,
       selection: {
         reference: null,
-        papers: []
+        papers: [],
+        downloaded: 'loading'
+      },
+      reader: {
+        visible: false,
+        paper: null
       }
     },
     effects: requireDir('./effects'),

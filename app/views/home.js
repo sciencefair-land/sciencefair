@@ -5,6 +5,7 @@ module.exports = (state, prev, send) => {
     <div>
       ${require('./titlebar')(state, prev, send)}
       ${require('./main')(state, prev, send)}
+      ${require('./reader')(state, prev, send)}
     </div>
   `
 }
