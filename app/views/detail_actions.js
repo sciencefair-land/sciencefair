@@ -21,7 +21,8 @@ module.exports = (state, prev, send) => {
   }
 
   .actions {
-    justify-items: flex-end;
+    position: absolute;
+    top: 15px;
   }
 
   .downloaded {

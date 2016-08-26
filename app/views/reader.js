@@ -49,14 +49,11 @@ module.exports = (state, prev, send) => {
   frame.src = lensurl
   frame.addEventListener('dom-ready', function () {
     // uncomment line below if you want to debug the lens reader
-    // frame.loadURL(lensurl)
-
-    frame.openDevTools()
+    // frame.openDevTools()
   })
 
   frame.shadowRoot.applyAuthorStyles = true
   frame.shadowRoot.children[1].style.cssText = 'width: 100%; height: 100%'
-
 
   var closebtn = html`
     <img class="${style.closebtn}" src="./images/close.png">

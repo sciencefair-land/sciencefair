@@ -104,9 +104,9 @@ module.exports = (state, prev, send) => {
   }
 
   .quart {
-    padding-top: 30px;
     width: 25%;
     max-width 25%;
+    position: relative;
   }
 
   `
@@ -193,7 +193,6 @@ function singlepaper (paper, style, state, prev, send) {
       </div>
       <div class="${style.column}">
         ${require('./detail_actions')(state, prev, send)}
-        ${require('./detail_single_license')(doc.license, state, prev, send)}
         ${require('./detail_tags')(doc.tags, state, prev, send)}
       </div>
     </div>
@@ -210,11 +209,6 @@ function multipaper (papers, style, state, prev, send) {
   return html`
 
   <div class="${style.wrapper}">
-    <div class="${style.row}">
-      <div class="${style.title} ${style.row} ${style.datum}">
-        ${papers.length} papers selected
-      </div>
-    </div>
     <div class="${style.row} ${style.nottitle}">
       <div class="${style.column} ${style.quart}">
         ${require('./detail_multi_terms')(papers, state, prev, send)}
@@ -226,7 +220,6 @@ function multipaper (papers, style, state, prev, send) {
         ${require('./detail_multi_dates')(papers, state, prev, send)}
       </div>
       <div class="${style.column} ${style.quart}">
-        ${require('./detail_actions')(state, prev, send)}
         ${require('./detail_tags')(tags(papers), state, prev, send)}
       </div>
     </div>

@@ -44,6 +44,13 @@ const style = css`
   background: ${C.GREYBLUE};
 }
 
+.logo {
+  height: 70px;
+  width: 60px;
+  background-color: ${C.LIGHTGREY};
+  -webkit-mask: url(./images/elife.svg) center / contain no-repeat;
+}
+
 `
 
 module.exports = (state, prev, send) => {
@@ -63,10 +70,12 @@ module.exports = (state, prev, send) => {
   <div class="${style.footer}">
     <div class="${style.left} ${style.part}">0 MB/s</div>
     <div class="${style.mid} ${style.part}">
-      ${state.results.length} results
+      ${state.results.length} results (${state.selection.papers.length} selected)
     </div>
     ${collectioncount}
-    <div class="${style.right} ${style.part}">1 data source</div>
+    <div class="${style.right} ${style.part}">
+      <img class="${style.logo}">
+    </div>
     <div class="${style.part} ${style.toggletab}">
       ${require('./toggledetail')(state, prev, send)}
     </div>
