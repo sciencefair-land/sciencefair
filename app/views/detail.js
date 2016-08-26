@@ -167,6 +167,10 @@ function renderAuthor (author) {
   }
 }
 
+function renderAbstract (abstract) {
+  return html('<span>' + abstract + '</span>')
+}
+
 function singlepaper (paper, style, state, prev, send) {
   const doc = paper.document
 
@@ -178,7 +182,7 @@ function singlepaper (paper, style, state, prev, send) {
     </div>
     <div class="${style.row} ${style.nottitle}">
       <div class="${style.column}">
-        <div class="${style.abstract} ${style.row} ${style.datum}">${doc.abstract}</div>
+        <div class="${style.abstract} ${style.row} ${style.datum}">${renderAbstract(doc.abstract)}</div>
         <div class="${style.row}">
           <div class="${style.author} ${style.datum}">${renderAuthor(doc.author)}</div>
           <div class="${style.date} ${style.datum}">
@@ -188,6 +192,7 @@ function singlepaper (paper, style, state, prev, send) {
         </div>
       </div>
       <div class="${style.column}">
+        ${require('./detail_actions')(state, prev, send)}
         ${require('./detail_single_license')(doc.license, state, prev, send)}
         ${require('./detail_tags')(doc.tags, state, prev, send)}
       </div>
@@ -221,6 +226,7 @@ function multipaper (papers, style, state, prev, send) {
         ${require('./detail_multi_dates')(papers, state, prev, send)}
       </div>
       <div class="${style.column} ${style.quart}">
+        ${require('./detail_actions')(state, prev, send)}
         ${require('./detail_tags')(tags(papers), state, prev, send)}
       </div>
     </div>
