@@ -80,7 +80,7 @@ module.exports = (state, prev, send) => {
   .date {
     bottom: 0;
     right: 50%;
-    width: 170px;
+    width: 190px;
     justify-content: flex-end;
     font-family: CooperHewitt-Medium;
   }
@@ -151,7 +151,20 @@ function renderDate (date) {
 }
 
 function renderAuthor (author) {
-  return isString(author) ? author : `${author.givenNames} ${author.surName}`
+  const authors = isString(author)
+    ? author.split(/,\s?/)
+    : author.map(a => a.surname)
+  if (authors.length === 1) {
+    return html`<span>${authors[0]}`
+  } else if (authors.length < 4) {
+    return html`
+      <span>
+        ${authors.slice(0, -1).join(', ') + ' and ' + authors.slice(-1)[0]}
+      </span>
+    `
+  } else {
+    return html`<span>${authors[0]} et al.</span>`
+  }
 }
 
 function singlepaper (paper, style, state, prev, send) {

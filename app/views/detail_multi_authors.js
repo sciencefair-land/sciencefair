@@ -95,7 +95,9 @@ function authorcount (papers) {
     if (isString(author)) {
       return author.split(',').map((a) => a.trim())
     } else {
-      return author
+      return author.map((a) => {
+        return `${a['given-names']} ${a.surname}`
+      })
     }
   })
 

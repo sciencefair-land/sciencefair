@@ -8,7 +8,8 @@ module.exports = (data, state, send, done) => {
   const alldone = after(state.datasources.length, done)
 
   Object.keys(state.datasources).forEach((name) => {
-    const source = state.datasources[name]
+    console.log('SEARCHING DATASOURCE', state.datasources[name])
+    const source = state.datasources[name].db
 
     source.search(data.query, { pageSize: 1000 }, (err, results) => {
       if (err) console.log(err)

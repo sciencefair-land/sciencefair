@@ -5,6 +5,7 @@ module.exports = (data, state, send, done) => {
     .on('data', (data) => {
       const doc = JSON.parse(data.value)
       count += 1
+      if (!doc.tags) return
       doc.tags.forEach((tag) => {
         tags[tag] = (tags[tag] || []).concat(data.key)
       })

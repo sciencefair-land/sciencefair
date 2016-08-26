@@ -8,9 +8,10 @@ module.exports = (state, prev, send) => {
 
   .results {
     position: absolute;
-    top: 150px;
-    width: 100%;
-    bottom: ${state.detailshown ? 200 : 70}px;
+    top: 100px;
+    bottom: ${state.detailshown ? 250 : 70}px;
+    right: 20px;
+    left: 20px;
     padding: 0;
     margin: 50px;
     display: flex;

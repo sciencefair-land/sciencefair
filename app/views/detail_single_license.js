@@ -2,6 +2,13 @@ const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../../lib/constants')
 
+const licenseurls = {
+  'http://creativecommons.org/licenses/by/4.0/': 'CC-BY 4.0',
+  'http://creativecommons.org/licenses/by/3.0/': 'CC-BY 3.0',
+  'http://creativecommons.org/licenses/by/2.0/': 'CC-BY 2.0',
+  'http://creativecommons.org/licenses/by/1.0/': 'CC-BY 1.0'
+}
+
 module.exports = (license, state, prev, send) => {
   if (!license) return null
 
@@ -28,10 +35,18 @@ module.exports = (license, state, prev, send) => {
 
   `
 
+  function niceLicense () {
+    if (/^http/.test(license)) {
+      const resolved = licenseurls[license]
+      return resolved || license
+    }
+    return license
+  }
+
   const licensediv = html`
 
   <div class="${style.tag}">
-    ${license}
+    ${niceLicense()}
   </div>
 
   `

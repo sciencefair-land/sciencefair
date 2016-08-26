@@ -10,7 +10,10 @@ const max = require('lodash/max')
 const difference = require('lodash/difference')
 
 const stopwords = [
-  'and', 'but', 'the', 'a', 'an', 'and', 'so', 'yet'
+  'and', 'but', 'the', 'a', 'an', 'and', 'so', 'yet', 'of', 'in', 'to', 'by',
+  'is', 'that', 'for', 'we', 'published', 'study', 'from', 'with', 'as', 'on',
+  'between', 'experiment', 'experiments', 'results', 'biology', 'are', 'this',
+  'et', 'al', 'al.', 'al.,', 'be', 'project:', 'which', 'these', 'or', 'have', 'at', 'our', 'were', 'show', 'during', 'can', 'not', 'its', 'their'
 ]
 
 const maxwidth = 100
@@ -95,8 +98,12 @@ function plotrow (tc, unit) {
 
 function termcount (papers) {
   const terms = papers.map((paper) => {
-    const title = paper.document.title.replace('.', '').split(' ')
-    const abstract = paper.document.abstract.replace('.', '').split(' ')
+    const title = (paper.document.title ? paper.document.title : '')
+      .replace('.', '').split(' ')
+      .map(term => term.toLowerCase())
+    const abstract = (paper.document.abstract ? paper.document.abstract : '')
+      .replace('.', '').split(' ')
+      .map(term => term.toLowerCase())
     return difference(title.concat(abstract), stopwords)
   })
 

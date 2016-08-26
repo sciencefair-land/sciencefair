@@ -112,12 +112,19 @@ module.exports = (result, state, prev, send) => {
 }
 
 function renderAuthor (author) {
-  if (isString(author)) {
-    return author
-      .split(',')
-      .map((auth) => html`<span>${auth}</span>`)
+  const authors = isString(author)
+    ? author.split(/,\s?/)
+    : author.map(a => a.surname)
+  if (authors.length === 1) {
+    return html`<span>${authors[0]}`
+  } else if (authors.length < 4) {
+    return html`
+      <span>
+        ${authors.slice(0, -1).join(', ') + ' and ' + authors.slice(-1)[0]}
+      </span>
+    `
   } else {
-    return author.map((auth) => html`${auth.givenNames} ${auth.surname}`)
+    return html`<span>${authors[0]} et al.</span>`
   }
 }
 
