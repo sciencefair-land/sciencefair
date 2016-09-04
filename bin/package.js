@@ -86,6 +86,10 @@ function buildDarwin (cb) {
       console.log('OS X: Creating dmg...')
 
       var appDmg = require('appdmg')
+      if (!appDmg) {
+        throw "Can't create DMG without app-dmg!"
+      }
+
 
       var targetPath = path.join(DIST_PATH, BUILD_NAME + '.dmg')
       rimraf.sync(targetPath)
