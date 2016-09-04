@@ -6,6 +6,7 @@ var path = require('path')
 var mkdirp = require('mkdirp')
 var rimraf = require('rimraf')
 var zip = require('cross-zip')
+var targz = require('tar.gz')
 var minimist = require('minimist')
 var packager = require('electron-packager')
 var pkg = require('../package.json')
@@ -27,8 +28,14 @@ var argv = minimist(process.argv.slice(2), {})
 function build () {
   rimraf.sync(DIST_PATH)
   var platform = argv._[0]
+  if (!platform) {
+    buildDarwin(printDone)
+    buildLinux(printDone)
+  }
   if (platform === 'darwin') {
     buildDarwin(printDone)
+  } else if (platform === 'linux') {
+    buildLinux(printDone)
   }
 }
 
@@ -55,7 +62,26 @@ var darwin = {
   'helper-bundle-id': 'io.sciencefair.sciencefair-helper'
 }
 
+var linux = {
+  platform: 'linux',
+  arch: 'x64',
+  icon: config.APP_ICON + '.icns',
+}
+
 build()
+
+function buildLinux (cb) {
+  console.log('Linux: Packaging electron...')
+  packager(Object.assign({}, all, linux), function (err, buildPath) {
+    if (err) return cb(err);
+    console.log('Linux: Packaged electron. ' + buildPath);
+    var targetPath = path.join(DIST_PATH, BUILD_NAME + '_linux-x64.tar.gz');
+    rimraf.sync(targetPath);
+    targz().compress(buildPath[0], targetPath).then(function() {
+      console.log('Linux: Created tarball ' + targetPath);
+      }).catch(cb);
+  })
+}
 
 function buildDarwin (cb) {
   console.log('OS X: Packaging electron...')
