@@ -13,6 +13,7 @@ const style = css`
   width: 300px;
   flex-direction: column;
   background: ${C.DARKBLUE};
+  z-index: 1001;
 }
 
 .tagrow {
