@@ -17,8 +17,7 @@ const style = css`
 }
 
 .datasources {
-  width: 400px;
-  max-width: 50%;
+  width: 50%;
   max-height: 50%;
   background: ${C.BLUE};
   display: flex;

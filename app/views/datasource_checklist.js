@@ -1,6 +1,7 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../../lib/constants')
+const numeral = require('numeral')
 
 const style = css`
 
@@ -16,7 +17,9 @@ const style = css`
   height: 40px;
   font-size: 1.3em;
   align-items: center;
+  align-content: center;
   justify-content: space-between;
+  font-family: CooperHewitt-Light;
 }
 
 .checkbox {
@@ -31,16 +34,33 @@ const style = css`
 }
 
 .unchecked {
-  background-color: ${C.MIDBLUE};
+  background-color: ${C.MIDBLUEFADE};
   -webkit-mask: url(./images/uncheck.svg) center / contain no-repeat;
 }
 
 .name {
   flex-grow: 2;
+  padding-top: 3px;
 }
 
 .size {
   align-content: flex-end;
+  padding-top: 3px;
+}
+
+.loading {
+  flex-grow: 2;
+  font-family: CooperHewitt-LightItalic;
+  padding-top: 3px;
+}
+
+.shimmy {
+  margin-left: 1px;
+}
+
+.shortkey {
+  font-family: CooperHewitt-MediumItalic;
+  padding: 0 10px;
 }
 
 `
@@ -56,15 +76,37 @@ module.exports = (state, prev, send) => {
     return el
   }
 
-  const entry = datasource => html`
+  const entry = datasource => {
+    if (datasource.loading) {
+      const shortkey = html`
 
-  <div class="${style.entry}">
-    ${checkbox(datasource)}
-    <div class=${style.name}>${datasource.name}</div>
-    <div class="${style.size}">${datasource.size}</div>
-  </div>
+      <span class="${style.shortkey}">${datasource.key.slice(0, 6)}...</span>
 
-  `
+      `
+
+      return html`
+
+      <div class="${style.entry}">
+        <div class="spinner ${style.checkbox} ${style.shimmy}">
+          <div class="double-bounce1"></div>
+          <div class="double-bounce2"></div>
+        </div>
+        <div class=${style.loading}>loading datasource ${shortkey} from p2p network</div>
+      </div>
+
+      `
+    } else {
+      return html`
+
+      <div class="${style.entry}">
+        ${checkbox(datasource)}
+        <div class=${style.name}>${datasource.name}</div>
+        <div class="${style.size}">${numeral(datasource.size).format('0.0a')} papers</div>
+      </div>
+
+      `
+    }
+  }
 
   const list = html`
 

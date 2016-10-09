@@ -39,6 +39,7 @@
     "mkdirp": "^0.5.1",
     "node-static": "^0.7.7",
     "npm": "^3.8.7",
+    "numeral": "^1.5.3",
     "nvd3": "^1.8.4",
     "path-exists": "^2.1.0",
     "portfinder": "^1.0.3",
