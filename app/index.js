@@ -30,9 +30,20 @@ function start () {
         showAddField: false,
         loaded: false
       },
-      datasources: {
-
-      },
+      datasources: [
+        {
+          name: 'eLife',
+          key: 'blahblahblah',
+          active: true,
+          size: 1234
+        },
+        {
+          name: 'Europe PMC',
+          key: 'plehplehpleh',
+          active: true,
+          size: 1300000
+        }
+      ],
       detailshown: false,
       autocompleteshown: false,
       currentsearch: {

@@ -61,8 +61,20 @@ module.exports = (state, prev, send) => {
   `
 
   collectioncount.onclick = (e) => {
+    e.preventDefault()
     send('search_setquerystring', { query: '*' })
     send('search_populate', '*')
+  }
+
+  const datasource = html`
+  <div class="${style.right} ${style.part}">
+    <img class="${style.logo}">
+  </div>
+  `
+
+  datasource.onclick = (e) => {
+    e.preventDefault()
+    send('datasource_selector_toggle')
   }
 
   return html`
@@ -73,9 +85,7 @@ module.exports = (state, prev, send) => {
       ${state.results.length} results (${state.selection.papers.length} selected)
     </div>
     ${collectioncount}
-    <div class="${style.right} ${style.part}">
-      <img class="${style.logo}">
-    </div>
+    ${datasource}
     <div class="${style.part} ${style.toggletab}">
       ${require('./toggledetail')(state, prev, send)}
     </div>

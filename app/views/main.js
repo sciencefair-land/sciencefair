@@ -31,6 +31,7 @@ module.exports = (state, prev, send) => {
     ${require('./message')(state, prev, send)}
     ${require('./detail')(state, prev, send)}
     ${require('./footer')(state, prev, send)}
+    ${require('./datasource_selector')(state, prev, send)}
   </div>
 
   `
