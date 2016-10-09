@@ -43,6 +43,11 @@ const style = css`
   padding-top: 3px;
 }
 
+.shortName {
+  font-family: CooperHewitt-Medium;
+  margin-right: 10px;
+}
+
 .size {
   align-content: flex-end;
   padding-top: 3px;
@@ -96,12 +101,19 @@ module.exports = (state, prev, send) => {
 
       `
     } else {
+      const papercount = datasource.size < 1000
+        ? datasource.size
+        : numeral(datasource.size).format('0.0a')
+
       return html`
 
       <div class="${style.entry}">
         ${checkbox(datasource)}
-        <div class=${style.name}>${datasource.name}</div>
-        <div class="${style.size}">${numeral(datasource.size).format('0.0a')} papers</div>
+        <div class=${style.name}>
+          <span class="${style.shortName}">${datasource.shortName}</span>
+          ${datasource.name}
+        </div>
+        <div class="${style.size}">${papercount} papers</div>
       </div>
 
       `
