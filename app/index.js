@@ -31,24 +31,6 @@ function start () {
         loaded: false
       },
       datasources: [
-        {
-          name: 'eLife Official Feed',
-          shortName: 'eLife',
-          url: 'http://elifesciences.org',
-          key: 'blahblahblah',
-          active: true,
-          live: true,
-          size: 1234
-        },
-        {
-          name: 'Europe PubMed Central Official Feed',
-          shortName: 'EuropePMC',
-          url: 'http://europepmc.org',
-          key: 'plehplehpleh',
-          active: true,
-          live: true,
-          size: 1300000
-        }
       ],
       detailshown: false,
       autocompleteshown: false,

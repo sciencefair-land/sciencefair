@@ -1,6 +1,7 @@
 const datasource = require('../../lib/datasource')
 const after = require('lodash/after')
 const path = require('path')
+const fs = require('fs')
 
 module.exports = (data, state, send, done) => {
   const alldone = after(2, done)
@@ -32,9 +33,12 @@ module.exports = (data, state, send, done) => {
             console.log('error downloading sciencefair.json ')
             alldone(err)
           } else {
-            const info = require(path.join(source.datadir, entry.name))
+            const info = JSON.parse(
+              fs.readFileSync(path.join(source.datadir, entry.name))
+            )
             const updatesource = {
-              key: data.key
+              key: data.key,
+              source: source
             }
             Object.assign(updatesource, info)
             send('datasource_update', updatesource, alldone)
