@@ -1,4 +1,4 @@
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, protocol} = require('electron')
 var path = require('path')
 
 var main = null
@@ -20,5 +20,12 @@ app.on('ready', function () {
 
   main.on('closed', function () {
     main = null
+  })
+
+  protocol.registerFileProtocol('sciencefair', (request, callback) => {
+    console.log(request.url)
+    callback()
+  }, error => {
+    if (error) console.error('Failed to register protocol')
   })
 })

@@ -37,7 +37,7 @@ const style = css`
 `
 
 module.exports = (state, prev, send) => {
-  if (!state.datasourcesshown) return null
+  if (!state.datasources.shown) return null
 
   const checklist = require('./datasource_checklist')(state, prev, send)
 

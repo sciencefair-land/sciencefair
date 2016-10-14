@@ -120,10 +120,12 @@ module.exports = (state, prev, send) => {
     }
   }
 
+  console.log(state)
+
   const list = html`
 
   <div class="${style.list}">
-    ${state.datasources.length === 0 ? 'No datasources yet' : state.datasources.map(entry)}
+    ${state.datasources.list.length === 0 ? 'No datasources yet' : state.datasources.list.map(entry)}
   </div>
 
   `

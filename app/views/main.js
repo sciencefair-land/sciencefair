@@ -23,6 +23,10 @@ module.exports = (state, prev, send) => {
     send('collection_scan')
   }
 
+  if (!(state.datasources.loaded)) {
+    send('datasources_load')
+  }
+
   return html`
 
   <div class="${style.main}">

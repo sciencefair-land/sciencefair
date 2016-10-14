@@ -1,5 +1,5 @@
 module.exports = data => {
   return {
-    datasources: data
+    datasources: { list: data }
   }
 }
