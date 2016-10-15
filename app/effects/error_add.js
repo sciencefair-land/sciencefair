@@ -9,6 +9,6 @@ module.exports = (data, state, send, done) => {
   send('errors_set', update, err => {
     if (err) done(err)
 
-    setTimeout(() => send('error_remove', errorId, done), 50000)
+    setTimeout(() => send('error_remove', errorId, done), 3000)
   })
 }

@@ -109,8 +109,8 @@ module.exports = (state, prev, send) => {
 
       `
     } else {
-      const papercount = datasource.size < 1000
-        ? datasource.size
+      const papercount = datasource.stats.articleCount < 1000
+        ? datasource.stats.articleCount
         : numeral(datasource.size).format('0.0a')
 
       return html`
