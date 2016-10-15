@@ -39,7 +39,9 @@ module.exports = (state, prev, send) => {
 
   input.onkeydown = e => {
     if (e.keyCode === 13) {
-      send('datasource_add', { key: input.value, loading: true })
+      const value = input.value
+      send('datasource_add', { key: value, loading: true })
+      input.setAttribute('value', '')
       input.value = ''
     }
   }

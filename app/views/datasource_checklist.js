@@ -38,12 +38,12 @@ const style = css`
   -webkit-mask: url(./images/uncheck.svg) center / contain no-repeat;
 }
 
-.name {
+.description {
   flex-grow: 2;
   padding-top: 3px;
 }
 
-.shortName {
+.name {
   font-family: CooperHewitt-Medium;
   margin-right: 10px;
 }
@@ -117,9 +117,9 @@ module.exports = (state, prev, send) => {
 
       <div class="${style.entry}">
         ${checkbox(datasource)}
-        <div class=${style.name}>
-          <span class="${style.shortName}">${datasource.shortName}</span>
-          ${datasource.name}
+        <div class=${style.description}>
+          <span class="${style.name}">${datasource.name}</span>
+          ${datasource.description}
         </div>
         <div class="${style.size}">${papercount} papers</div>
       </div>
