@@ -1,10 +1,12 @@
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 
 const after = require('lodash/after')
 
 const datasource = require('../../lib/datasource')
 const C = require('../../lib/constants')
+
+fs.mkdirsSync(C.DATASOURCES_PATH)
 
 // perform a one-time load of any datasource in the data directory
 
