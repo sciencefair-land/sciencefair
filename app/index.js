@@ -11,7 +11,16 @@ start()
 function start () {
   const requireDir = require('require-dir')
   const choo = require('choo')
-  const app = choo()
+  const app = choo({
+    onError: (err, state, createSend) => {
+      console.groupCollapsed(`Error: ${err.message}`)
+      console.error(err)
+      console.groupEnd()
+
+      const send = createSend('onError: ')
+      if (err) send('error_add', err)
+    }
+  })
 
   const model = {
     state: {
@@ -39,7 +48,8 @@ function start () {
       reader: {
         visible: false,
         paper: null
-      }
+      },
+      errors: {}
     },
     effects: requireDir('./effects'),
     reducers: requireDir('./reducers'),

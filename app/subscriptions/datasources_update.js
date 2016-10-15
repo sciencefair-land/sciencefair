@@ -3,7 +3,10 @@
 // it also allows the datasource class to know nothing about the webapp
 
 const datasource = require('../../lib/datasource')
-const update = cb => cb(datasource.all().map(ds => ds.data()))
+const update = cb => {
+  const datasources = datasource.all().map(ds => ds.data())
+  return cb(datasources)
+}
 
 module.exports = (send, done) => {
   setInterval(

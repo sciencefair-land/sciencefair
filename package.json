@@ -17,7 +17,7 @@
   "author": "code-for-science",
   "license": "MIT",
   "dependencies": {
-    "choo": "^3.1.1",
+    "choo": "^3.3.0",
     "csjs": "^1.0.5",
     "csjs-inject": "^1.0.0",
     "d3": "^3.5.17",
@@ -51,6 +51,7 @@
     "sync-exec": "^0.6.2",
     "through2": "^2.0.1",
     "untildify": "^2.1.0",
+    "uuid": "^2.0.3",
     "yunodb": "^0.1.4"
   },
   "devDependencies": {

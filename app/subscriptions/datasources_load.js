@@ -9,13 +9,21 @@ const C = require('../../lib/constants')
 // perform a one-time load of any datasource in the data directory
 
 const load = cb => {
-  const datasources = fs.readdirSync(
+  const keys = fs.readdirSync(
     C.DATASOURCES_PATH
   ).filter(
     file => fs.statSync(path.join(C.DATASOURCES_PATH, file)).isDirectory()
-  ).map(
-    datasource.fetch
   )
+
+  if (keys.length === 0) return cb()
+
+  const datasources = []
+
+  keys.forEach(key => datasource.fetch(key, (err, ds) => {
+    if (err) return cb(err)
+
+    datasources.push(ds)
+  }))
 
   const done = after(datasources.length, cb)
 
