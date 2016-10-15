@@ -22,6 +22,7 @@ module.exports = (data, state, send, done) => {
   send('search_collection', newsearch, alldone)
 
   if (searchdatasources) send('search_datasources', newsearch, alldone)
+  else console.log('not searching datasources')
 
   send('search_trickle', newsearch, alldone)
 }

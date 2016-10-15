@@ -2,16 +2,20 @@ const after = require('lodash/after')
 const datasource = require('../../lib/datasource')
 
 module.exports = (data, state, send, done) => {
-  if (!state.datasources.list) {
+  if (!state.datasources.list || state.datasources.list.length === 0) {
     done(new Error('No datasources found (they may not have loaded yet)'))
   }
 
-  const active = state.datasources.list.filter(ds => ds.active && !ds.loading)
+  const active = state.datasources.list.filter(
+    ds => ds.active && !ds.loading && ds.stats.articleCount > 0
+  )
+
+  console.log(state.datasources.list)
   const alldone = after(active.length, done)
 
   active.forEach(ds => {
     console.log('SEARCHING DATASOURCE', ds.name)
-    datasource.fetch((err, source) => {
+    datasource.fetch(ds.key, (err, source) => {
       console.log(source)
       if (err) done(err)
 

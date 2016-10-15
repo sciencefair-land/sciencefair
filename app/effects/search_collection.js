@@ -2,8 +2,10 @@ const intersection = require('lodash/intersection')
 
 module.exports = (data, state, send, done) => {
   if (!state.collection) {
-    done(new Error('No local collection found (it may not have loaded yet)'))
+    return done(new Error('No local collection found (it may not have loaded yet)'))
   }
+
+  if (state.collectioncount === 0) return done()
 
   if (data.query.trim() === '*') {
     all()
