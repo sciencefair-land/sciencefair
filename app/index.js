@@ -1,8 +1,5 @@
 const C = require('../lib/constants')
-const datasource = require('../lib/datasource')
 const mkdirp = require('mkdirp').sync
-const fs = require('fs')
-const path = require('path')
 
 mkdirp(C.DATAROOT)
 mkdirp(C.COLLECTION_PATH)
@@ -24,7 +21,7 @@ function start () {
         showAddField: false,
         loaded: false
       },
-      datasources: { loaded: false, list: [] },
+      datasources: { shown: false, loaded: false, list: [] },
       detailshown: false,
       autocompleteshown: false,
       currentsearch: {

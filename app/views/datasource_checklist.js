@@ -71,6 +71,14 @@ const style = css`
 `
 
 module.exports = (state, prev, send) => {
+  if (!state.datasources.loaded) {
+    return html`
+
+    <div class="${style.list}"><p>loading datasources...</p></div>
+
+    `
+  }
+
   const checkbox = datasource => {
     const imgstyle = datasource.active ? style.checked : style.unchecked
     const el = html`<div class="${style.checkbox} ${imgstyle} clickable"></div>`
@@ -119,8 +127,6 @@ module.exports = (state, prev, send) => {
       `
     }
   }
-
-  console.log(state)
 
   const list = html`
 
