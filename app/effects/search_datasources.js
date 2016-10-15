@@ -10,18 +10,14 @@ module.exports = (data, state, send, done) => {
     ds => ds.active && !ds.loading && ds.stats.articleCount > 0
   )
 
-  console.log(state.datasources.list)
   const alldone = after(active.length, done)
 
   active.forEach(ds => {
-    console.log('SEARCHING DATASOURCE', ds.name)
     datasource.fetch(ds.key, (err, source) => {
-      console.log(source)
       if (err) done(err)
 
       source.db.search(data.query, (err, results) => {
-        console.log(data)
-        if (err) console.log(err)
+        if (err) done(err)
 
         if (results) {
           send('results_recieve', results, alldone)

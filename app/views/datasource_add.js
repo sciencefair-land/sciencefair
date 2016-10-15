@@ -33,16 +33,17 @@ const style = css`
 module.exports = (state, prev, send) => {
   const input = html`
 
-  <input class="${style.input}" placeholder="datasource key" />
+  <input type="text" class="${style.input}" placeholder="datasource key" />
 
   `
 
   input.onkeydown = e => {
     if (e.keyCode === 13) {
-      const value = input.value
-      send('datasource_add', { key: value.trim(), loading: true })
-      input.setAttribute('value', '')
-      input.value = ''
+      setTimeout(() => {
+        const value = input.value
+        send('datasource_add', { key: value.trim(), loading: true })
+        inpu.value = ''
+      }, 300)
     }
   }
 

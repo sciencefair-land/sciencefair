@@ -2,6 +2,7 @@ const cloneDeep = require('lodash/cloneDeep')
 const uuid = require('uuid').v4
 
 module.exports = (data, state, send, done) => {
+  if (!data.message) return done()
   const update = cloneDeep(state.errors)
   const errorId = uuid()
   update[errorId] = data
