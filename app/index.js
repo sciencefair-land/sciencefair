@@ -38,7 +38,7 @@ function start () {
         tagquery: null,
         tags: []
       },
-      contentserver: require('../lib/contentServer')(C.DATAROOT),
+      contentserver: require('../lib/contentserver')(C.DATASOURCES_PATH),
       collectioncount: 0,
       selection: {
         reference: null,

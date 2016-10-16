@@ -37,7 +37,8 @@ module.exports = (state, prev, send) => {
   `
 
   const paper = state.reader.paper
-  const xmlfile = `${paper.datasource}/articles/${paper.path}/${paper.entryfile}`
+  const doc = paper.document
+  const xmlfile = `${paper.source}/articles/${doc.path}/${doc.entryfile}`
   const docurl = `http://localhost:${state.contentserver.port}/${xmlfile}`
   const lensurl = `../lib/lens/index.html?url=${encodeURIComponent(docurl)}`
   console.log(docurl, lensurl)
