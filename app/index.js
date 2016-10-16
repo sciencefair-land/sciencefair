@@ -49,7 +49,11 @@ function start () {
         visible: false,
         paper: null
       },
-      errors: {}
+      errors: {},
+      downloads: {
+        totalspeed: 0,
+        list: []
+      }
     },
     effects: requireDir('./effects'),
     reducers: requireDir('./reducers'),

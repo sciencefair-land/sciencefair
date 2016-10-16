@@ -22,17 +22,14 @@ const style = css`
 .part {
   height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  padding: 0px 20px;
+  justify-items: center;
+  padding: 10px;
 }
 
 .left {
   width: 200px;
-}
-
-.mid {
-  width: calc(100% - 200px);
-  justify-content: center;
 }
 
 .right {
@@ -42,6 +39,7 @@ const style = css`
 
 .toggletab {
   background: ${C.GREYBLUE};
+  width: 80px;
 }
 
 .logo {
@@ -51,13 +49,42 @@ const style = css`
   -webkit-mask: url(./images/elife.svg) center / contain no-repeat;
 }
 
+.n {
+  font-size: 1.5em;
+}
+
 `
 
 module.exports = (state, prev, send) => {
-  const collectioncount = html`
-  <div class="${style.mid} ${style.part} clickable">
-    ${state.collectioncount} papers in collection
+  const downloads = html`
+
+  <div class="${style.left} ${style.part}">
+    <div class=${style.n}>
+      ${state.downloads.totalspeed}
+    </div>
+    <div>MB/s</div>
   </div>
+
+  `
+
+  const results = html`
+
+  <div class="${style.part}">
+    <div class=${style.n}>
+      ${state.results.length} (${state.selection.papers.length})
+    </div>
+    <div>results (selected)</div>
+  </div>
+
+  `
+
+  const collectioncount = html`
+
+  <div class="${style.mid} ${style.part} clickable">
+    <div class=${style.n}>${state.collectioncount}</div>
+    <div>papers in collection</div>
+  </div>
+
   `
 
   collectioncount.onclick = (e) => {
@@ -66,10 +93,14 @@ module.exports = (state, prev, send) => {
     send('search_populate', '*')
   }
 
+  const sources = state.datasources.list.filter(ds => ds.active)
   const datasource = html`
-  <div class="${style.right} ${style.part}">
-    <img class="${style.logo}">
+
+  <div class="${style.right} ${style.part} ${style.datasources}">
+    <div class=${style.n}>${sources.length}</div>
+    <div>datasources</div>
   </div>
+
   `
 
   datasource.onclick = (e) => {
@@ -80,10 +111,8 @@ module.exports = (state, prev, send) => {
   return html`
 
   <div class="${style.footer}">
-    <div class="${style.left} ${style.part}">0 MB/s</div>
-    <div class="${style.mid} ${style.part}">
-      ${state.results.length} results (${state.selection.papers.length} selected)
-    </div>
+    ${downloads}
+    ${results}
     ${collectioncount}
     ${datasource}
     <div class="${style.part} ${style.toggletab}">

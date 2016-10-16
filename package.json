@@ -52,6 +52,7 @@
     "recursive-readdir-sync": "^1.0.6",
     "require-dir": "^0.3.0",
     "speedometer": "^1.0.0",
+    "stream-array": "^1.1.2",
     "sync-exec": "^0.6.2",
     "through2": "^2.0.1",
     "untildify": "^2.1.0",

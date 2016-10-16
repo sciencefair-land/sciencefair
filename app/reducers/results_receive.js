@@ -1,17 +1,19 @@
 const uniqBy = require('lodash/uniqBy')
+const sortBy = require('lodash/sortBy')
 
 module.exports = (data, state) => {
   var selected = null
   if (state.selectedpaper) {
-    state.results[state.selectedpaper]
+    selected = state.results[state.selectedpaper]
   }
 
-  const results = uniqBy(state.results.concat(data.hits), (result) => {
-    return result.document.identifier[0].id
-  })
+  const results = uniqBy(
+    state.results.concat(data.hits),
+    result => result.document.identifier[0].id
+  )
 
   const update = {
-    results: results
+    results: sortBy(results, r => r.score)
   }
 
   if (selected) {

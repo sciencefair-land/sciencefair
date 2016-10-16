@@ -22,7 +22,10 @@ module.exports = (data, state, send, done) => {
     const write = (list, cb) => {
       count += list.length
       send('results_receive', {
-        hits: list.map(r => { r.source = ds.key })
+        hits: list.map(r => {
+          r.source = ds.key
+          return r
+        })
       }, cb)
     }
 
