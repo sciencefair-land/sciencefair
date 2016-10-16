@@ -2,17 +2,20 @@
 
 const datasource = require('../../lib/datasource')
 const sortBy = require('lodash/sortBy')
+const flatten = require('lodash/flatten')
+const sum = require('lodash/sum')
 
 const getdownloads = () => {
-  const list = datasource.all().map(ds => ds.downloads())
-  return {
-    list: sortBy(list, 'started'),
-    totalspeed: 0
+  const downloads = datasource.all().map(ds => ds.downloads())
+  const dlstats = {
+    list: sortBy(flatten(downloads.map(dl => dl.list)), 'started'),
+    totalspeed: sum(downloads.map(dl => dl.speed))
   }
+  return dlstats
 }
 
 const err = err => { if (err) console.error('error updating datasources', err) }
 
-module.exports = (send, done) => {
-  setInterval(() => send('downloads_update', getdownloads(), err), 1000)
-}
+module.exports = (send, done) => setInterval(
+  () => send('downloads_update', getdownloads(), err), 1000
+)

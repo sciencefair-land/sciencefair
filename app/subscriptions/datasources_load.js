@@ -29,6 +29,8 @@ const load = cb => {
 
   const done = after(datasources.length, cb)
 
+  console.log('DEBUG: datasources', datasources)
+
   datasources.forEach(ds => ds.connect(done))
 }
 

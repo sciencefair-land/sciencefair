@@ -47,9 +47,12 @@ module.exports = (state, prev, send) => {
   if (alldownloaded) {
     progress = 100
   } else {
-    const downloads = state.downloads.filter(
+    // console.log('selected ids', state.selection.papers)
+    // console.log('download ids', state.downloads.list)
+    const downloads = state.downloads.list.filter(
       d => includes(state.selection.papers, d.id)
     )
+    // console.log(downloads)
     const sum = downloads.map(d => d.progress).reduce((a, b) => a + b, 0)
     progress = sum / downloads.length * 100
   }
