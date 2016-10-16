@@ -21,8 +21,9 @@ module.exports = (data, state, send, done) => {
 
     const write = (list, cb) => {
       count += list.length
-      console.log('results', list)
-      send('results_receive', { hits: list }, cb)
+      send('results_receive', {
+        hits: list.map(r => { r.source = ds.key })
+      }, cb)
     }
 
     const flush = cb => {

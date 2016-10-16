@@ -23,6 +23,7 @@ module.exports = (data, state, send, done) => {
         hit.document = JSON.parse(hit.document)
       }
       if (!hit.document.tags) hit.document.tags = []
+      hit.collected = true
       return hit
     })
     return results
