@@ -14,10 +14,14 @@ module.exports = (data, state, send, done) => {
   ds.active = !data.active
 
   datasource.fetch(data.key, (err, ds) => {
-    if (err) done(err)
+    if (err) return done(err)
 
     ds.active = !data.active
-
-    send('datasources_update', update, done)
+    if (ds.active) {
+      ds.syncMetadata(err => {
+        if (err) done(err)
+        send('datasources_update', update, done)
+      })
+    } else send('datasources_update', update, done)
   })
 }

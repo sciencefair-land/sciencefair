@@ -16,7 +16,7 @@ module.exports = (data, state, send, done) => {
 
   const newPapers = papers.map((paper) => {
     const newPaper = cloneDeep(paper)
-    const newTags = uniq(paper.document.tags.concat([data.tag]))
+    const newTags = uniq((paper.document.tags || []).concat([data.tag]))
     newPaper.document.tags = newTags
     return newPaper
   })

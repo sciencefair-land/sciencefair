@@ -42,7 +42,7 @@ module.exports = (state, prev, send) => {
       setTimeout(() => {
         const value = input.value
         send('datasource_add', { key: value.trim(), loading: true })
-        inpu.value = ''
+        input.value = ''
       }, 300)
     }
   }
