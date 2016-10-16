@@ -50,7 +50,7 @@ const style = css`
 }
 
 .n {
-  font-size: 1.5em;
+  font-size: 1.3em;
 }
 
 `
