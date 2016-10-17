@@ -13,17 +13,17 @@ module.exports = (state, prev, send) => {
     padding: 5px;
     border-radius: 2px;
     color: ${C.LIGHTGREY};
-    font-family: CooperHewitt-Medium;
+    font-family: CooperHewitt-Light;
     font-size: 1.5em;
-    margin-left: 12px;
-    margin-top: 30px;
+    margin-right: 12px;
     padding: 6px;
     padding-bottom: 1px;
   }
 
   .actions {
-    position: absolute;
-    top: 15px;
+    width: 100%;
+    justify-content : flex-end;
+    padding-top: 10px;
   }
 
   `

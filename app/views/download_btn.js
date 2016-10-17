@@ -14,11 +14,11 @@ const style = css`
   padding: 5px;
   border-radius: 2px;
   color: ${C.LIGHTGREY};
-  font-family: CooperHewitt-Medium;
+  font-family: CooperHewitt-Light;
   font-size: 1.5em;
-  margin-left: 12px;
-  margin-top: 30px;
-  flex-direction: column;
+  margin-right: 12px;
+  padding: 6px;
+  padding-bottom: 1px;
 }
 
 .content {
@@ -67,7 +67,7 @@ module.exports = (state, prev, send) => {
 
   const btn = html`
 
-  <div class="${style.button}">
+  <div class="${style.button} clickable">
     <div style="${style.content}">
       download
     </div>

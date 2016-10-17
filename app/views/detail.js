@@ -34,37 +34,32 @@ module.exports = (state, prev, send) => {
     justify-content: space-between;
   }
 
+  .paper {
+    width: 70%;
+    overflow: auto;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+  }
+
   .row {
     flex-direction: row;
     justify-content: space-between;
   }
 
   .datum {
-    position: absolute;
+    position: relative;
     padding: 5px;
+    margin-bottom: 16px;
   }
 
   .title {
-    position: absolute;
     display: block;
     font-size: 130%;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 32px;
     width: 100%;
-    padding-right: 16px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
   }
 
   .abstract {
-    top: ${32 + 4}px;
-    left: 0;
-    width: 50%;
-    bottom: 34px;
-    overflow: auto;
     padding: 0;
     margin: 5px;
     font-family: CooperHewitt-Light;
@@ -72,15 +67,12 @@ module.exports = (state, prev, send) => {
   }
 
   .author {
-    left: 0;
-    bottom: 0;
     font-family: CooperHewitt-MediumItalic;
+    width: 100%;
   }
 
   .date {
-    bottom: 0;
-    right: 50%;
-    width: 190px;
+    width: 100%;
     justify-content: flex-end;
     font-family: CooperHewitt-Medium;
   }
@@ -91,10 +83,6 @@ module.exports = (state, prev, send) => {
     width: 100%;
     height: calc(100% - ${padding}px);
     position: relative;
-  }
-
-  .nottitle {
-    flex-shrink: 1;
   }
 
   .empty {
@@ -178,17 +166,19 @@ function singlepaper (paper, style, state, prev, send) {
 
   <div class="${style.wrapper}">
     <div class="${style.row}">
-      <div class="${style.title} ${style.row} ${style.datum}">${doc.title}</div>
-    </div>
-    <div class="${style.row} ${style.nottitle}">
-      <div class="${style.column}">
-        <div class="${style.abstract} ${style.row} ${style.datum}">${renderAbstract(doc.abstract)}</div>
+      <div class="${style.paper}">
+        <div class="${style.title} ${style.row} ${style.datum}">
+          ${doc.title}
+        </div>
         <div class="${style.row}">
           <div class="${style.author} ${style.datum}">${renderAuthor(doc.author)}</div>
           <div class="${style.date} ${style.datum}">
             Published:
             ${doc.date ? renderDate(doc.date) : 'unknown'}
           </div>
+        </div>
+        <div class="${style.abstract} ${style.row} ${style.datum}">
+          ${renderAbstract(doc.abstract)}
         </div>
       </div>
       <div class="${style.column}">
