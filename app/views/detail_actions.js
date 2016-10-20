@@ -1,14 +1,15 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../../lib/constants')
+const icon = require('./icon')
 
 module.exports = (state, prev, send) => {
   const style = css`
 
   .button {
-    justify-content: flex-end;
-    justify-items: flex-end;
-    align-items: flex-end;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
     border: 1px solid ${C.LIGHTGREY};
     padding: 5px;
     border-radius: 2px;
@@ -33,7 +34,7 @@ module.exports = (state, prev, send) => {
     if (state.selection.papers.length === 1) {
       const readbtn = html`
         <div class="${style.button} clickable">
-          read
+          read ${icon({ name: 'read' })}
         </div>
       `
 
@@ -50,7 +51,7 @@ module.exports = (state, prev, send) => {
 
   const sharebtn = html`
     <div class="${style.button} clickable">
-      share
+      share ${icon({ name: 'share' })}
     </div>
   `
   sharebtn.onclick = (e) => {

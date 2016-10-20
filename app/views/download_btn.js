@@ -3,6 +3,7 @@ const css = require('csjs-inject')
 const C = require('../../lib/constants')
 const includes = require('lodash/includes')
 const every = require('lodash/every')
+const icon = require('./icon')
 
 const style = css`
 
@@ -69,7 +70,7 @@ module.exports = (state, prev, send) => {
 
   <div class="${style.button} clickable">
     <div style="${style.content}">
-      download
+      download ${icon({ name: 'download' })}
     </div>
     ${progressbar}
   </div>
