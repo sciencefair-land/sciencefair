@@ -19,14 +19,28 @@ module.exports = (data, state, send, done) => {
   const resultbatcher = ds => {
     let count = 0
 
+    const getdlprogress = (article, cb) => {
+      ds.articleDownloadProgress(article, (err, progress) => {
+        if (err) return cb(err)
+
+        article.progress = progress
+        cb()
+      })
+    }
+
     const write = (list, cb) => {
+      const sendall = after(list.length, () => {
+        send('results_receive', {
+          hits: list.map(r => {
+            r.source = ds.key
+            return r
+          })
+        }, cb)
+      })
+
+      list.forEach(article => getdlprogress(article, sendall))
+
       count += list.length
-      send('results_receive', {
-        hits: list.map(r => {
-          r.source = ds.key
-          return r
-        })
-      }, cb)
     }
 
     const flush = cb => {
@@ -41,7 +55,7 @@ module.exports = (data, state, send, done) => {
   active.forEach(ds => datasource.fetch(ds.key, (err, source) => {
     if (err) return done(err)
 
-    pump(source.db.search(data.query), resultbatcher(ds), err => {
+    pump(source.db.search(data.query), resultbatcher(source), err => {
       if (err) return done(err)
       alldone()
     })

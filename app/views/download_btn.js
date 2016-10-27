@@ -2,7 +2,7 @@ const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../../lib/constants')
 const includes = require('lodash/includes')
-const every = require('lodash/every')
+const mean = require('lodash/mean')
 const icon = require('./icon')
 
 const style = css`
@@ -12,6 +12,7 @@ const style = css`
   justify-items: flex-end;
   align-items: flex-end;
   border: 1px solid ${C.LIGHTGREY};
+  border-bottom: none;
   padding: 5px;
   border-radius: 2px;
   color: ${C.LIGHTGREY};
@@ -19,7 +20,8 @@ const style = css`
   font-size: 1.5em;
   margin-right: 12px;
   padding: 6px;
-  padding-bottom: 1px;
+  padding-bottom: 10px;
+  position: relative;
 }
 
 .content {
@@ -27,13 +29,13 @@ const style = css`
   padding: 6px;
 }
 
-.outerbar {
-  width: 100%;
-  height: 10px;
-}
-
-.innerbar {
-  background: ${C.YELLOW};
+.progressbar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 8px;
+  width: 0;
+  background-color: ${C.YELLOW};
 }
 
 `
@@ -42,37 +44,18 @@ module.exports = (state, prev, send) => {
   const selected = state.results.filter(
     p => includes(state.selection.papers, p.id)
   )
-  const alldownloaded = every(selected.map(p => p.downloaded))
+  const progress = mean(selected.map(p => p.progress || 0))
 
-  let progress
-  if (alldownloaded) {
-    progress = 100
-  } else {
-    // console.log('selected ids', state.selection.papers)
-    // console.log('download ids', state.downloads.list)
-    const downloads = state.downloads.list.filter(
-      d => includes(state.selection.papers, d.id)
-    )
-    // console.log(downloads)
-    const sum = downloads.map(d => d.progress).reduce((a, b) => a + b, 0)
-    progress = sum / downloads.length * 100
-  }
-
-  const progressbar = html`
-
-  <div class="${style.outerbar}">
-    <div class="${style.innerbar}" style="width: ${progress}%;"/>
-  </div>
-
-  `
+  const btntext = progress === 100 ? 'downloaded' : 'download'
+  const btnicon = progress === 100 ? 'tick' : 'download'
 
   const btn = html`
 
   <div class="${style.button} clickable">
     <div style="${style.content}">
-      download ${icon({ name: 'download' })}
+      ${btntext} ${icon({ name: btnicon })}
     </div>
-    ${progressbar}
+    <div class="${style.progressbar}" style="width: ${progress}%"/>
   </div>
 
   `

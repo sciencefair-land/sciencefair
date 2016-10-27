@@ -41,7 +41,6 @@ module.exports = (state, prev, send) => {
   const xmlfile = `${paper.source}/articles/${doc.path}/${doc.entryfile}`
   const docurl = `http://localhost:${state.contentserver.port}/${xmlfile}`
   const lensurl = `../lib/lens/index.html?url=${encodeURIComponent(docurl)}`
-  console.log(docurl, lensurl)
 
   var frame = html`
     <webview class="${style.frame}"></webview>
@@ -50,7 +49,7 @@ module.exports = (state, prev, send) => {
   frame.src = lensurl
   frame.addEventListener('dom-ready', function () {
     // uncomment line below if you want to debug the lens reader
-    // frame.openDevTools()
+    frame.openDevTools()
   })
 
   frame.shadowRoot.applyAuthorStyles = true

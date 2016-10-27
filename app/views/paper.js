@@ -74,13 +74,23 @@ const style = css`
   right: 0;
 }
 
+.progressbar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 8px;
+  width: 0;
+  background-color: ${C.YELLOW};
+}
+
 `
 
 module.exports = (result, state, prev, send) => {
   const id = result.paper.document.identifier[0].id
   const selected = state.selection.papers.indexOf(id) > -1
 
-  var doc = result.paper.document
+  const hit = result.paper
+  let doc = hit.document
   if (isString(doc)) doc = JSON.parse(doc)
 
   const paper = html`
@@ -93,6 +103,7 @@ module.exports = (result, state, prev, send) => {
       <div class="${style.year}">
         ${doc.date ? doc.date.year : 'none'}
       </div>
+      <div class="${style.progressbar}" style="width: ${hit.progress}%"/>
     </div>
   `
 
