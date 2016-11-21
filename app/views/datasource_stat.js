@@ -38,10 +38,11 @@ const style = css`
 }
 
 .value {
-  width: 30px;
+  min-width: 30px;
   align-items: center;
   justify-content: center;
   font-weight: bold;
+  padding: 0 5px;
 }
 
 `

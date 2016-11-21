@@ -1,6 +1,7 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../../lib/constants')
+const bytes = require('bytes')
 
 const style = css`
 
@@ -60,9 +61,8 @@ module.exports = (state, prev, send) => {
 
   <div class="${style.left} ${style.part}">
     <div class=${style.n}>
-      ${state.downloads.totalspeed}
+      ${bytes(state.downloads.totalspeed, { unitSeparator: '\n' })}/s
     </div>
-    <div>MB/s</div>
   </div>
 
   `

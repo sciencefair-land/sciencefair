@@ -1,6 +1,7 @@
 const fs = require('fs-extra')
 const path = require('path')
 
+const exists = require('path-exists').sync
 const after = require('lodash/after')
 
 const datasource = require('../../lib/datasource')
@@ -8,6 +9,7 @@ const C = require('../../lib/constants')
 
 fs.mkdirsSync(C.DATASOURCES_PATH)
 
+// set up the default sources, then
 // perform a one-time load of any datasource in the data directory
 
 const load = cb => {
@@ -17,13 +19,14 @@ const load = cb => {
     file => fs.statSync(path.join(C.DATASOURCES_PATH, file)).isDirectory()
   )
 
+  console.log(`found ${keys.length} sources, loading...`)
   if (keys.length === 0) return cb()
 
   const datasources = []
 
   keys.forEach(key => datasource.fetch(key, (err, ds) => {
     if (err) return cb(err)
-
+    console.log(key, ds)
     datasources.push(ds)
   }))
 
@@ -32,6 +35,8 @@ const load = cb => {
   datasources.forEach(ds => ds.connect(done))
 }
 
+const defaults = require('../../lib/defaultsources')
+
 module.exports = (send, done) => {
-  load(() => send('datasources_setloaded', done))
+  load(() => send('datasources_setloaded', () => defaults(send, done)))
 }
