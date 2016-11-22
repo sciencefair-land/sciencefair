@@ -59,6 +59,11 @@ module.exports = (state, prev, send) => {
     width: 100%;
   }
 
+  .meta {
+    display: block;
+    width: 100%;
+  }
+
   .abstract {
     padding: 0;
     margin: 5px;
@@ -67,13 +72,12 @@ module.exports = (state, prev, send) => {
   }
 
   .author {
+    float: left;
     font-family: CooperHewitt-MediumItalic;
-    width: 100%;
   }
 
   .date {
-    width: 100%;
-    justify-content: flex-end;
+    float: right;
     font-family: CooperHewitt-Medium;
   }
 
@@ -168,13 +172,14 @@ function singlepaper (paper, style, state, prev, send) {
     <div class="${style.row}">
       <div class="${style.paper}">
         <div class="${style.title} ${style.row} ${style.datum}">
-          ${doc.title}
+          <span>${doc.title}</span>
         </div>
-        <div class="${style.row}">
-          <div class="${style.author} ${style.datum}">${renderAuthor(doc.author)}</div>
-          <div class="${style.date} ${style.datum}">
-            Published:
-            ${doc.date ? renderDate(doc.date) : 'unknown'}
+        <div class="${style.meta} ${style.row} ${style.datum}">
+          <div class="${style.author}">
+            <span>${renderAuthor(doc.author)}</span>
+          </div>
+          <div class="${style.date}">
+            <span>Published: ${doc.date ? renderDate(doc.date) : 'unknown'}</span>
           </div>
         </div>
         <div class="${style.abstract} ${style.row} ${style.datum}">
