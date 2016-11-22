@@ -13,12 +13,12 @@ module.exports = (data, state, send, done) => {
   const ds = update.list.find(ds => ds.key === data.key)
   ds.active = !data.active
 
-  datasource.fetch(data.key, (err, ds) => {
+  datasource.fetch(data.key, (err, source) => {
     if (err) return done(err)
 
-    ds.active = !data.active
-    if (ds.active) {
-      ds.syncMetadata(err => {
+    source.toggleActive()
+    if (source.stats.get('active').value()) {
+      source.syncMetadata(err => {
         if (err) done(err)
         send('datasources_update', update, done)
       })

@@ -171,7 +171,7 @@ module.exports = (datasource, state, prev, send) => {
         : '?'
 
       const metastat = datasource.stats.metadataSync
-      const syncdone = metastat.done/metastat.total
+      const syncdone = metastat.done / metastat.total
       const synced = metastat.total
         ? numeral(`${syncdone}`).format('0%')
         : '0%'
