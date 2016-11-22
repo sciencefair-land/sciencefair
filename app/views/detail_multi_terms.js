@@ -8,6 +8,7 @@ const sortBy = require('lodash/sortBy')
 const toPairs = require('lodash/toPairs')
 const max = require('lodash/max')
 const difference = require('lodash/difference')
+const uniq = require('lodash/uniq')
 
 const stopwords = [
   'and', 'but', 'the', 'a', 'an', 'and', 'so', 'yet', 'of', 'in', 'to', 'by',
@@ -109,7 +110,7 @@ function termcount (papers) {
     const abstract = (paper.document.abstract ? paper.document.abstract : '')
       .replace('.', '').split(' ')
       .map(term => term.toLowerCase())
-    return difference(title.concat(abstract), stopwords)
+    return difference(uniq(title.concat(abstract)), stopwords)
   })
 
   const counts = countBy(flatten(terms))
