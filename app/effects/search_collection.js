@@ -75,7 +75,9 @@ module.exports = (data, state, send, done) => {
 
     docstore.createReadStream()
       .on('data', (entry) => {
-        const doc = JSON.parse(entry.value)
+        const doc = (typeof entry.value === 'string')
+          ? JSON.parse(entry.value)
+          : entry.value
         const overlap = intersection(doc.tags, data.tags)
         if (overlap.length === data.tags.length) {
           hits.push({ document: doc })

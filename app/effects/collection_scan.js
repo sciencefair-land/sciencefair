@@ -3,7 +3,7 @@ module.exports = (data, state, send, done) => {
   var count = 0
   state.collection.docstore.createReadStream()
     .on('data', (data) => {
-      const doc = JSON.parse(data.value)
+      const doc = (typeof data.value === 'string') ? JSON.parse(data.value) : data.value
       count += 1
       if (!doc.tags) return
       doc.tags.forEach((tag) => {
