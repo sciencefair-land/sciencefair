@@ -68,6 +68,7 @@ const style = css`
 }
 
 .loading {
+  margin-left: 10px;
   flex-grow: 2;
   font-family: CooperHewitt-LightItalic;
   padding-top: 3px;
@@ -134,6 +135,7 @@ module.exports = (datasource, state, prev, send) => {
     </div>
 
     `
+
     el.onclick = (e) => {
       e.preventDefault()
       send('datasource_toggleactive', datasource)
@@ -146,7 +148,7 @@ module.exports = (datasource, state, prev, send) => {
     if (datasource.loading) {
       const shortkey = html`
 
-      <span class="${style.shortkey}">${datasource.key.slice(0, 6)}...</span>
+        <span class="${style.shortkey}">${datasource.key.slice(0, 6)}...</span>
 
       `
 
@@ -162,14 +164,17 @@ module.exports = (datasource, state, prev, send) => {
 
       `
     } else {
-      const papercount = datasource.stats.articleCount < 1000
-        ? numeral(datasource.stats.articleCountze).format('0,0')
-        : numeral(datasource.stats.articleCount).format('0.0a')
+      const papercount = datasource.stats.articleCount
+        ? (datasource.stats.articleCount < 1000
+          ? numeral(datasource.stats.articleCount).format('0,0')
+          : numeral(datasource.stats.articleCount).format('0.0a'))
+        : '?'
 
       const metastat = datasource.stats.metadataSync
       const synced = metastat.total
         ? numeral(`${metastat.done/metastat.total}`).format('0%')
         : '0%'
+      const peers = numeral(datasource.stats.peers).format('0a')
 
       const deletebtn = html`
 
@@ -199,9 +204,9 @@ module.exports = (datasource, state, prev, send) => {
               ${datasource.description}
           </div>
           <div class="${style.stats}">
-            ${stat('live', datasource.live)}
+            ${stat(datasource.live ? 'live' : 'static', datasource.live)}
             ${stat('synced', synced)}
-            ${stat('peers', datasource.stats.peers)}
+            ${stat('peers', peers)}
             ${stat('papers', papercount)}
           </div>
         </div>

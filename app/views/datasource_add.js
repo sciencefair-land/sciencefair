@@ -6,6 +6,7 @@ const style = css`
 
 .container {
   width: 100%;
+  height: 100px;
   flex-direction: column;
   padding: 20px;
 }
@@ -23,17 +24,12 @@ const style = css`
   outline: none;
 }
 
-.add {
-  font-weight: normal;
-}
-
-
 `
 
 module.exports = (state, prev, send) => {
   const input = html`
 
-  <input type="text" class="${style.input}" placeholder="datasource key" />
+  <input type="text" class="${style.input}" placeholder="add a datasource key" />
 
   `
 
@@ -50,7 +46,6 @@ module.exports = (state, prev, send) => {
   const field = html`
 
   <div class="${style.container}">
-    <div><h3 class="${style.add}">add a datasource:</h3></div>
     ${input}
   </div>
 

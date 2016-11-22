@@ -21,7 +21,7 @@ module.exports = (state, prev, send) => {
 
   button.onclick = (e) => {
     e.preventDefault()
-    send('detail_toggle', (err) => { if (err) console.log(err) })
+    send('detail_toggle')
   }
 
   return button

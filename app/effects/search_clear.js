@@ -8,5 +8,5 @@ module.exports = (data, state, send, done) => {
     tagquery: null,
     striptagquery: false
   }, alldone)
-  send('selection_clear', alldone)
+  send('selection_clear', null, alldone)
 }

@@ -19,14 +19,12 @@ const load = cb => {
     file => fs.statSync(path.join(C.DATASOURCES_PATH, file)).isDirectory()
   )
 
-  console.log(`found ${keys.length} sources, loading...`)
   if (keys.length === 0) return cb()
 
   const datasources = []
 
   keys.forEach(key => datasource.fetch(key, (err, ds) => {
     if (err) return cb(err)
-    console.log(key, ds)
     datasources.push(ds)
   }))
 
@@ -38,5 +36,5 @@ const load = cb => {
 const defaults = require('../../lib/defaultsources')
 
 module.exports = (send, done) => {
-  load(() => send('datasources_setloaded', () => defaults(send, done)))
+  load(() => send('datasources_setloaded', null, () => defaults(send, done)))
 }

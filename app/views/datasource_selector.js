@@ -18,6 +18,7 @@ const style = css`
 
 .datasources {
   width: 50%;
+  min-width: 600px;
   max-height: 50%;
   background: ${C.BLUE};
   display: flex;
@@ -32,6 +33,8 @@ const style = css`
   background: ${C.MIDBLUE};
   color: ${C.LIGHTGREY};
   margin: 0;
+  align-items: center;
+  font-family: Aleo-Regular;
 }
 
 `

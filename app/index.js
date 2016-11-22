@@ -53,7 +53,8 @@ function start () {
       downloads: {
         totalspeed: 0,
         list: []
-      }
+      },
+      online: false
     },
     effects: requireDir('./effects'),
     reducers: requireDir('./reducers'),
