@@ -28,6 +28,7 @@ const style = css`
 }
 
 .header {
+  letter-spacing: 1px;
   width: 100%;
   padding: 30px;
   background: ${C.MIDBLUE};
