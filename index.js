@@ -18,6 +18,10 @@ app.on('ready', function () {
 
   main.loadURL(path.join('file://', __dirname, '/app/index.html'))
 
+  main.on('close', event => {
+    main.webContents.send('quitting')
+  })
+
   main.on('closed', function () {
     main = null
   })

@@ -6,7 +6,7 @@ const style = css`
 
 .container {
   width: 100%;
-  height: 100px;
+  height: 80px;
   flex-direction: column;
   padding: 20px;
 }

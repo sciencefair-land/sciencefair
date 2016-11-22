@@ -13,12 +13,12 @@ function start () {
   const choo = require('choo')
   const app = choo({
     onError: (err, state, createSend) => {
-      console.groupCollapsed(`Error: ${err.message}`)
+      console.groupCollapsed(`ERROR (non-fatal) handled by sciencefair: ${err.message}`)
       console.error(err)
       console.groupEnd()
 
       const send = createSend('onError: ')
-      if (err) send('error_add', err)
+      if (err) send('error_add', err, () => {})
     }
   })
 
@@ -76,3 +76,8 @@ function start () {
     document.body.appendChild(tree)
   })
 }
+
+require('electron').ipcRenderer.on('quitting', () => {
+  console.log('APP QUITTING')
+  require('../lib/datasource').all().forEach(d => d.close())
+})

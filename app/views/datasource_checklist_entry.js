@@ -75,7 +75,7 @@ const style = css`
 }
 
 .shimmy {
-  margin-left: 1px;
+  margin: 1px;
 }
 
 .shortkey {
@@ -171,8 +171,9 @@ module.exports = (datasource, state, prev, send) => {
         : '?'
 
       const metastat = datasource.stats.metadataSync
+      const syncdone = metastat.done/metastat.total
       const synced = metastat.total
-        ? numeral(`${metastat.done/metastat.total}`).format('0%')
+        ? numeral(`${syncdone}`).format('0%')
         : '0%'
       const peers = numeral(datasource.stats.peers).format('0a')
 
@@ -205,7 +206,7 @@ module.exports = (datasource, state, prev, send) => {
           </div>
           <div class="${style.stats}">
             ${stat(datasource.live ? 'live' : 'static', datasource.live)}
-            ${stat('synced', synced)}
+            ${stat((syncdone > 0 && syncdone < 1) ? 'syncing' : 'synced', synced)}
             ${stat('peers', peers)}
             ${stat('papers', papercount)}
           </div>

@@ -30,7 +30,6 @@ const style = css`
 
 .left {
   margin-left: 20px;
-  width: 100px;
 }
 
 .right {
@@ -74,7 +73,7 @@ module.exports = (state, prev, send) => {
   <div class="${style.left} ${style.part}">
     <div class=${style.dl}>
       ${
-        state.online
+          (state.online || state.downloads.totalspeed > 0)
         ? bytes(state.downloads.totalspeed, { unitSeparator: '\n' }) + '/s'
         : html`<div class="${style.offline}">offline</div>`
       }

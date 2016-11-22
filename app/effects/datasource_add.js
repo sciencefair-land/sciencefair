@@ -8,6 +8,6 @@ module.exports = (data, state, send, done) => {
   datasource.fetch(data.key, (err, ds) => {
     if (err) return done(err)
 
-    ds.connect(done)
+    ds.connect(err => done(err, ds))
   })
 }
