@@ -8,20 +8,16 @@ const icon = require('./icon')
 const style = css`
 
 .button {
-  justify-content: flex-end;
-  justify-items: flex-end;
-  align-items: flex-end;
+  justify-content: center;
+  align-items: center;
   border: 1px solid ${C.LIGHTGREY};
-  border-bottom: none;
-  padding: 5px;
   border-radius: 2px;
   color: ${C.LIGHTGREY};
   font-family: CooperHewitt-Light;
   font-size: 1.5em;
   margin-right: 12px;
   padding: 6px;
-  padding-bottom: 10px;
-  position: relative;
+  padding-top: 9px;
 }
 
 .content {
@@ -46,8 +42,11 @@ module.exports = (state, prev, send) => {
   )
   const progress = mean(selected.map(p => p.progress || 0))
 
-  const btntext = progress === 100 ? 'downloaded' : 'download'
-  const btnicon = progress === 100 ? 'tick' : 'download'
+  const donetext = state.selection.papers.length === 1 ? 'read' : 'downloaded'
+  const doneicon = state.selection.papers.length === 1 ? 'read' : 'tick'
+
+  const btntext = progress === 100 ? donetext : 'download'
+  const btnicon = progress === 100 ? doneicon : 'download'
 
   const btn = html`
 
@@ -61,8 +60,8 @@ module.exports = (state, prev, send) => {
   `
 
   btn.onclick = e => {
-    e.preventDefault
-    send('download_add', selected)
+    e.preventDefault()
+    progress === 100 ? send('read_selection') : send('download_add', selected)
   }
 
   return btn

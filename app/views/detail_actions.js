@@ -8,17 +8,15 @@ module.exports = (state, prev, send) => {
 
   .button {
     justify-content: center;
-    justify-items: center;
     align-items: center;
     border: 1px solid ${C.LIGHTGREY};
-    padding: 5px;
     border-radius: 2px;
     color: ${C.LIGHTGREY};
     font-family: CooperHewitt-Light;
     font-size: 1.5em;
     margin-right: 12px;
     padding: 6px;
-    padding-bottom: 1px;
+    padding-top: 9px;
   }
 
   .actions {
@@ -28,26 +26,6 @@ module.exports = (state, prev, send) => {
   }
 
   `
-
-
-  function getreadbtn () {
-    if (state.selection.papers.length === 1) {
-      const readbtn = html`
-        <div class="${style.button} clickable">
-          read ${icon({ name: 'read' })}
-        </div>
-      `
-
-      readbtn.onclick = (e) => {
-        e.preventDefault()
-        send('read_selection')
-      }
-
-      return readbtn
-    } else {
-      return null
-    }
-  }
 
   const sharebtn = html`
     <div class="${style.button} clickable">
@@ -62,8 +40,7 @@ module.exports = (state, prev, send) => {
   const actiondiv = html`
 
   <div class="${style.actions}">
-    ${require('./download_btn')(state, prev, send)}
-    ${getreadbtn()}
+    ${require('./download_read_btn')(state, prev, send)}
     ${sharebtn}
   </div>
 
