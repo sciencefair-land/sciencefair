@@ -1,5 +1,11 @@
 const intersection = require('lodash/intersection')
 
+const parsedoc = doc => {
+  return (typeof doc === 'string')
+    ? JSON.parse(doc)
+    : doc
+}
+
 module.exports = (data, state, send, done) => {
   if (!state.collection) {
     return done(new Error('No local collection found (it may not have loaded yet)'))
@@ -19,9 +25,7 @@ module.exports = (data, state, send, done) => {
 
   function parseresults (results) {
     results.hits = results.hits.map((hit) => {
-      if (typeof hit.document === 'string') {
-        hit.document = JSON.parse(hit.document)
-      }
+      hit.document = parsedoc(hit.document)
       if (!hit.document.tags) hit.document.tags = []
       hit.collected = true
       return hit
@@ -34,7 +38,7 @@ module.exports = (data, state, send, done) => {
     const hits = []
     docstore.createReadStream()
       .on('data', (entry) => {
-        const doc = JSON.parse(entry.value)
+        const doc = parsedoc(entry.value)
         hits.push({ document: doc })
       })
       .on('error', done)
@@ -56,7 +60,7 @@ module.exports = (data, state, send, done) => {
         if (data.tags && data.tags.length > 0) {
           // filter by tags
           const hits = results.hits.filter((hit) => {
-            const doc = JSON.parse(hit.document)
+            const doc = parsedoc(hit.document)
             const overlap = intersection(doc.tags, data.tags)
             return overlap.length === data.tags.length
           })
@@ -75,9 +79,7 @@ module.exports = (data, state, send, done) => {
 
     docstore.createReadStream()
       .on('data', (entry) => {
-        const doc = (typeof entry.value === 'string')
-          ? JSON.parse(entry.value)
-          : entry.value
+        const doc = parsedoc(entry.value)
         const overlap = intersection(doc.tags, data.tags)
         if (overlap.length === data.tags.length) {
           hits.push({ document: doc })
