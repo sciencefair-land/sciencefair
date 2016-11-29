@@ -18,6 +18,7 @@ const style = css`
   margin-right: 12px;
   padding: 6px;
   padding-top: 9px;
+  position: relative;
 }
 
 .content {
@@ -40,7 +41,11 @@ module.exports = (state, prev, send) => {
   const selected = state.results.filter(
     p => includes(state.selection.papers, p.id)
   )
-  const progress = mean(selected.map(p => p.progress || 0))
+  const downloads = state.downloads.list.filter(
+    dl => includes(state.selection.papers, dl.id)
+  )
+
+  const progress = mean(downloads.map(dl => dl.progress || 0))
 
   const donetext = state.selection.papers.length === 1 ? 'read' : 'downloaded'
   const doneicon = state.selection.papers.length === 1 ? 'read' : 'tick'

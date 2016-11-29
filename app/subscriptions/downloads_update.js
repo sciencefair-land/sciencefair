@@ -14,9 +14,9 @@ const getdownloads = () => {
   return dlstats
 }
 
-const err = err => { if (err) console.error('error updating datasources', err) }
-
 module.exports = (send, done) => setInterval(
-  () => send('downloads_update', getdownloads(), err),
+  () => send('downloads_update', getdownloads(), err => {
+    if (err) return done(err)
+  }),
   1000
 )

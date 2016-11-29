@@ -31,7 +31,7 @@
     "fs-extra": "^0.30.0",
     "fuzzy": "^0.1.1",
     "hint": "github:blahah/hint",
-    "hyperdrive": "^7.8.0",
+    "hyperdrive": "^7.9.0",
     "hyperdrive-archive-swarm": "^5.0.4",
     "inherits": "^2.0.1",
     "is-online": "^5.1.2",

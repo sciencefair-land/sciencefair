@@ -7,5 +7,10 @@ const update = () => datasource.all().map(ds => ds.data())
 const err = err => { if (err) console.error('error updating datasources', err) }
 
 module.exports = (send, done) => {
-  setInterval(() => send('datasources_setlist', update(), err), 1000)
+  setInterval(
+    () => send('datasources_setlist', update(), err => {
+      if (err) return done(err)
+    }),
+    1000
+  )
 }
