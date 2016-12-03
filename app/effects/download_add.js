@@ -1,16 +1,8 @@
 const groupBy = require('lodash/groupBy')
-const datasource = require('../../lib/datasource')
+const datasource = require('../../lib/getdatasource')
 
 module.exports = (data, state, send, done) => {
-  const groups = groupBy(data, 'source')
-
-  const alldone = require('../../lib/alldone')(data.length, done)
-
-  const startdownloads = key => datasource.fetch(key, (err, ds) => {
-    if (err) return done(err)
-
-    groups[key].forEach(article => ds.download(article, alldone))
-  })
-
-  Object.keys(groups).forEach(key => startdownloads(key))
+  const alldone = require('../../lib/alldone')(data.length + 1, done)
+  data.forEach(d => d.download(alldone))
+  send('tag_add', { tag: '__local' }, alldone)
 }

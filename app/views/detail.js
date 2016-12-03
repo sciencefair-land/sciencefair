@@ -106,19 +106,12 @@ module.exports = (state, prev, send) => {
     const hasresults = state.results.length > 0
     if (!hasresults) return blank()
 
-    if (state.selection.papers.length === 1) {
-      const id = state.selection.papers[0]
-      const paper = state.results.find((result) => {
-        return result.document.identifier[0].id === id
-      })
+    if (state.selection.list.length === 1) {
+      const paper = state.selection.list[0]
 
       return singlepaper(paper, style, state, prev, send)
-    } else if (state.selection.papers.length > 1) {
-      const ids = state.selection.papers
-      const papers = state.results.filter((result) => {
-        const id = result.document.identifier[0].id
-        return ids.indexOf(id) > -1
-      })
+    } else if (state.selection.list.length > 1) {
+      const papers = state.selection.list
 
       return multipaper(papers, style, state, prev, send)
     } else {
@@ -164,7 +157,6 @@ function renderAbstract (abstract) {
 
 function singlepaper (paper, style, state, prev, send) {
   if (!paper) return null
-  const doc = paper.document
 
   return html`
 
@@ -172,23 +164,23 @@ function singlepaper (paper, style, state, prev, send) {
     <div class="${style.row}">
       <div class="${style.paper}">
         <div class="${style.title} ${style.row} ${style.datum}">
-          <span>${doc.title}</span>
+          <span>${paper.title}</span>
         </div>
         <div class="${style.meta} ${style.row} ${style.datum}">
           <div class="${style.author}">
-            <span>${renderAuthor(doc.author)}</span>
+            <span>${renderAuthor(paper.author)}</span>
           </div>
           <div class="${style.date}">
-            <span>Published: ${doc.date ? renderDate(doc.date) : 'unknown'}</span>
+            <span>Published: ${paper.date ? renderDate(paper.date) : 'unknown'}</span>
           </div>
         </div>
         <div class="${style.abstract} ${style.row} ${style.datum}">
-          ${renderAbstract(doc.abstract)}
+          ${renderAbstract(paper.abstract)}
         </div>
       </div>
       <div class="${style.column}">
         ${require('./detail_actions')(state, prev, send)}
-        ${require('./detail_tags')(doc.tags, state, prev, send)}
+        ${require('./detail_tags')(paper.tags, state, prev, send)}
       </div>
     </div>
   </div>
@@ -197,7 +189,7 @@ function singlepaper (paper, style, state, prev, send) {
 }
 
 function tags (papers) {
-  return intersection(...(papers.map((paper) => paper.document.tags))) || []
+  return intersection(...(papers.map((paper) => paper.tags))) || []
 }
 
 function multipaper (papers, style, state, prev, send) {

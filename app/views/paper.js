@@ -86,24 +86,21 @@ const style = css`
 `
 
 module.exports = (result, state, prev, send) => {
-  const id = result.paper.document.identifier[0].id
-  const selected = state.selection.papers.indexOf(id) > -1
-
-  const hit = result.paper
-  let doc = hit.document
-  if (isString(doc)) doc = JSON.parse(doc)
+  const selected = state.selection.lookup[result.paper.key]
+  const downloading = state.downloads.lookup[result.paper.key]
+  const progress = downloading ? downloading.progress : result.paper.progress
 
   const paper = html`
     <div class="${style.paper} clickable">
       ${selectedmark(selected)}
-      <div class="${style.title}">${doc.title}</div>
+      <div class="${style.title}">${result.paper.title}</div>
       <div class="${style.author}">
-        ${renderAuthor(doc.author)}
+        ${renderAuthor(result.paper.author)}
       </div>
       <div class="${style.year}">
-        ${doc.date ? doc.date.year : 'none'}
+        ${result.paper.date ? result.paper.date.year : 'none'}
       </div>
-      <div class="${style.progressbar}" style="width: ${hit.progress}%"/>
+      <div class="${style.progressbar}" style="width: ${result.paper.progress}%"/>
     </div>
   `
 
@@ -112,7 +109,7 @@ module.exports = (result, state, prev, send) => {
 
     send('paper_select_show', {
       index: result.index,
-      id: id,
+      paper: result.paper,
       shift: e.shiftKey,
       ctrl: e.ctrlKey,
       meta: e.metaKey

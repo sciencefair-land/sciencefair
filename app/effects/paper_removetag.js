@@ -4,7 +4,7 @@ module.exports = (data, state, send, done) => {
   const alldone = require('../../lib/alldone')(3, done)
   const papers = state.results.filter((result) => {
     const id = result.document.identifier[0].id
-    return state.selection.papers.indexOf(id) > -1
+    return state.selection.list.indexOf(id) > -1
   })
 
   const newPapers = papers.map((paper) => {
@@ -19,12 +19,12 @@ module.exports = (data, state, send, done) => {
   })
 
   send('result_replace', {
-    id: state.selection.papers,
+    id: state.selection.list,
     paper: newPapers
   }, alldone)
   send('collection_updatepaper', newPapers, alldone)
   send('tag_removepaper', {
     tag: data.tag,
-    paper: state.selection.papers
+    paper: state.selection.list
   }, alldone)
 }

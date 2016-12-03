@@ -2,6 +2,7 @@ const cloneDeep = require('lodash/cloneDeep')
 const findLastIndex = require('lodash/findLastIndex')
 const difference = require('lodash/difference')
 const uniq = require('lodash/uniq')
+const keyby = require('lodash/keyby')
 
 module.exports = (data, state, send, done) => {
   const update = cloneDeep(state.selection)
@@ -13,29 +14,29 @@ module.exports = (data, state, send, done) => {
   if (!results || results.length === 0) {
     // no results - clear selection
     update.reference = null
-    update.papers = []
+    update.list = []
   } else if (!shift && !ctrl) {
     // plain click
     // - select the clicked paper
     // - deselect everything else
     // - set clicked paper as reference
-    update.papers = [data.id]
+    update.list = [data.paper]
     update.reference = {
       index: data.index,
-      id: data.id
+      paper: data.paper
     }
   } else if (ctrl) {
     // ctrl-click
     // - toggle the clicked paper
     // - clear the reference
     // - if clicked is now selected, set as reference
-    update.papers = toggleclicked(data, update.papers)
+    update.list = toggleclicked(data, update.list)
     update.reference = null
 
-    if (isselected(data, update.papers)) {
+    if (isselected(data, update.list)) {
       update.reference = {
         index: data.index,
-        id: data.id
+        paper: paper
       }
     }
   } else if (data.shift) {
@@ -47,27 +48,28 @@ module.exports = (data, state, send, done) => {
     // and set it as reference point
     update.reference = findreference(update, results)
 
-    const contiguous = findcontiguous(update.reference, update.papers, results)
-    const nocontiguous = difference(update.papers, contiguous)
+    const contiguous = findcontiguous(update.reference, update.list, results)
+    const nocontiguous = difference(update.list, contiguous)
 
-    update.papers = selectrange(results, nocontiguous, update.reference, data)
+    update.list = selectrange(results, nocontiguous, update.reference, data)
   }
 
+  update.lookup = keyby(update.list, 'key')
   send('selection_set', update, done)
 }
 
 function isselected (data, papers) {
-  return papers.indexOf(data.id) > -1
+  return papers.indexOf(data.paper) > -1
 }
 
 function toggleclicked (data, papers) {
-  const idx = papers.indexOf(data.id)
+  const idx = papers.indexOf(data.paper)
   if (idx > -1) {
     const newpapers = papers.slice()
     newpapers.splice(idx, 1)
     return newpapers
   } else {
-    return papers.concat([data.id])
+    return papers.concat([data.paper])
   }
 }
 
@@ -76,8 +78,7 @@ function toggleclicked (data, papers) {
 function referenceunmoved (reference, results) {
   const result = results && results[reference.index]
   return result &&
-    result.document.identifier[0].id &&
-    result.document.identifier[0].id === reference.id
+    result.key === reference.key
 }
 
 // return the reference
@@ -90,23 +91,22 @@ function findreference (update, results) {
     // or if no papers are selected, first result
     var refindex = 0
 
-    if (update.papers && update.papers.length) {
-      const highest = findLastIndex(results, (result) => {
-        const id = result.document.identifier[0].id
-        return update.papers.indexOf(id) > -1
+    if (update.list && update.list.length) {
+      const highest = findLastIndex(results, result => {
+        return update.list.indexOf(result) > -1
       })
       refindex = Math.max(highest, 0)
     }
 
     const refresult = results[refindex]
     return {
-      id: refresult.document.identifier[0].id,
+      paper: refresult,
       index: refindex
     }
   }
 }
 
-// return the array of ids that are selected contiguously with
+// return the array of papers that are selected contiguously with
 // the reference in results
 function findcontiguous (reference, papers, results) {
   const contiguous = []
@@ -116,7 +116,7 @@ function findcontiguous (reference, papers, results) {
 
   // backwards
   while (current && isselected(current, papers) && i >= 0) {
-    contiguous.push(current.document.identifier[0].id)
+    contiguous.push(current)
     i -= 1
     current = results[i]
   }
@@ -125,7 +125,7 @@ function findcontiguous (reference, papers, results) {
   i = reference.index + 1
   current = results[i]
   while (current && isselected(current, papers) && i < results.length) {
-    contiguous.push(current.document.identifier[0].id)
+    contiguous.push(current)
     i += 1
     current = results[i]
   }
@@ -133,13 +133,11 @@ function findcontiguous (reference, papers, results) {
   return uniq(contiguous)
 }
 
-// return array of selected ids, including those originally selected
+// return array of selected papers, including those originally selected
 // and those between start and end in results, inclusive
 function selectrange (results, papers, start, end) {
   const low = Math.min(start.index, end.index)
   const high = Math.max(start.index, end.index) + 1
-  const morepapers = results.slice(low, high).map((result) => {
-    return result.document.identifier[0].id
-  })
+  const morepapers = results.slice(low, high)
   return uniq(papers.concat(morepapers))
 }

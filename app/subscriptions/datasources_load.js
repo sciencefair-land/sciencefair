@@ -4,7 +4,7 @@ const path = require('path')
 const exists = require('path-exists').sync
 const after = require('lodash/after')
 
-const datasource = require('../../lib/datasource')
+const datasource = require('../../lib/getdatasource')
 const C = require('../../lib/constants')
 
 fs.mkdirsSync(C.DATASOURCES_PATH)

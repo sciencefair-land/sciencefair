@@ -3,9 +3,7 @@ const isArray = require('lodash/isArray')
 
 module.exports = (data, state) => {
   const results = cloneDeep(state.results)
-  const resultsids = results.map((result) => {
-    return result.document.identifier[0].id
-  })
+  const resultsids = results.map(r => r.key)
 
   const ids = isArray(data.id) ? data.id : [data.id]
   const indices = ids.map((id) => resultsids.indexOf(id))

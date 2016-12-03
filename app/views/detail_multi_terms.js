@@ -104,11 +104,11 @@ function plotrow (tc, unit) {
 
 function termcount (papers) {
   const terms = papers.map((paper) => {
-    const title = (paper.document.title ? paper.document.title : '')
-      .replace('.', '').split(' ')
+    const title = (paper.title ? paper.title : '')
+      .replace('.', '').replace(/s$/, '').split(' ')
       .map(term => term.toLowerCase())
-    const abstract = (paper.document.abstract ? paper.document.abstract : '')
-      .replace('.', '').split(' ')
+    const abstract = (paper.abstract ? paper.abstract : '')
+      .replace('.', '').replace(/s$/, '').split(' ')
       .map(term => term.toLowerCase())
     return difference(uniq(title.concat(abstract)), stopwords)
   })

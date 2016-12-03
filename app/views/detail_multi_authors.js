@@ -97,7 +97,7 @@ function plotrow (ac, unit) {
 
 function authorcount (papers) {
   const authors = papers.map((paper) => {
-    const author = paper.document.author
+    const author = paper.author
     if (isString(author)) {
       return author.split(',').map((a) => a.trim())
     } else {

@@ -60,8 +60,8 @@ module.exports = (papers, state, prev, send) => {
   `
 }
 
-function plot (authorcounts) {
-  const maxcount = max(authorcounts.map((ac) => ac.count))
+function plot (daterangecounts) {
+  const maxcount = max(daterangecounts.map((ac) => ac.count))
   const unit = maxwidth / maxcount
 
   return html`
@@ -74,7 +74,7 @@ function plot (authorcounts) {
           Papers
         </th>
       </tr>
-      ${authorcounts.slice(0, 5).map((ac) => {
+      ${daterangecounts.slice(0, 5).map((ac) => {
         return plotrow(ac, unit)
       })}
     </table>
@@ -100,7 +100,7 @@ function daterangecount (papers) {
   const years = {}
 
   papers.forEach((paper) => {
-    const year = paper.document.date.year
+    const year = paper.date.year
     const count = years[year] || 0
     years[year] = count + 1
   })

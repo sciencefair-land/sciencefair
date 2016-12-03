@@ -1,5 +1,5 @@
 const after = require('lodash/after')
-const datasource = require('../../lib/datasource')
+const datasource = require('../../lib/getdatasource')
 const bulk = require('bulk-write-stream')
 const pump = require('pump')
 
@@ -19,28 +19,15 @@ module.exports = (data, state, send, done) => {
   const resultbatcher = ds => {
     let count = 0
 
-    const getdlprogress = (article, cb) => {
-      ds.articleDownloadProgress(article, (err, progress) => {
-        if (err) return cb(err)
-
-        article.progress = progress
-        cb()
-      })
-    }
-
     const write = (list, cb) => {
-      const sendall = after(list.length, () => {
-        send('results_receive', {
-          hits: list.map(r => {
-            r.source = ds.key
-            return r
-          })
-        }, cb)
-      })
-
-      list.forEach(article => getdlprogress(article, sendall))
-
       count += list.length
+
+      send('results_receive', {
+        hits: list.map(r => {
+          r.source = ds.key
+          return r
+        })
+      }, cb)
     }
 
     const flush = cb => {

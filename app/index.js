@@ -42,7 +42,8 @@ function start () {
       collectioncount: 0,
       selection: {
         reference: null,
-        papers: [],
+        list: [],
+        lookup: {},
         downloaded: 'loading'
       },
       reader: {
@@ -52,7 +53,8 @@ function start () {
       errors: {},
       downloads: {
         totalspeed: 0,
-        list: []
+        list: [],
+        lookup: {}
       },
       online: false
     },
@@ -79,5 +81,5 @@ function start () {
 
 require('electron').ipcRenderer.on('quitting', () => {
   console.log('APP QUITTING')
-  require('../lib/datasource').all().forEach(d => d.close())
+  require('../lib/getdatasource').all().forEach(d => d.close())
 })

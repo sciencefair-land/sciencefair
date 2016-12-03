@@ -28,6 +28,7 @@ module.exports = (data, state, send, done) => {
       hit.document = parsedoc(hit.document)
       if (!hit.document.tags) hit.document.tags = []
       hit.collected = true
+      hit.source = hit.document.source
       return hit
     })
     return results

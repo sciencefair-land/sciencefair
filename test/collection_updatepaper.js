@@ -9,7 +9,7 @@ const catpapers = require('../mocks/cats.json')
 const tmpdir = new tmp.Dir()
 const dbpath = path.join(tmpdir.path, 'yuno')
 
-const effect = require('../app/effects/collection_updatepaper')
+const effect = require('../app/effects/collection_updategetpaper')
 
 test('effect: collection_updatepaper', (t) => {
   require('../mocks/populated_collection')({
@@ -35,7 +35,7 @@ test('effect: collection_updatepaper', (t) => {
     data.document.tags = ['changed']
 
     effect(data, state, null, (err) => {
-      t.error(err, 'update paper')
+      t.error(err, 'update getpaper')
 
       if (err) {
         done()

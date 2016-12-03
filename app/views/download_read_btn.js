@@ -4,6 +4,7 @@ const C = require('../../lib/constants')
 const includes = require('lodash/includes')
 const mean = require('lodash/mean')
 const icon = require('./icon')
+const paper = require('../../lib/getpaper')
 
 const style = css`
 
@@ -38,19 +39,19 @@ const style = css`
 `
 
 module.exports = (state, prev, send) => {
-  const selected = state.results.filter(
-    p => includes(state.selection.papers, p.id)
-  )
-  const downloads = state.downloads.list.filter(
-    dl => includes(state.selection.papers, dl.id)
+  const selected = state.selection.list
+  const downloads = selected.map(
+    p => state.downloads.lookup[p.key]
+  ).map(
+    p => p ? p : { progress: 0 }
   )
 
   const progress = mean(downloads.map(dl => dl.progress || 0))
 
-  const donetext = state.selection.papers.length === 1 ? 'read' : 'downloaded'
-  const doneicon = state.selection.papers.length === 1 ? 'read' : 'tick'
+  const donetext = state.selection.list.length === 1 ? 'read' : 'downloaded'
+  const doneicon = state.selection.list.length === 1 ? 'read' : 'tick'
 
-  const btntext = progress === 100 ? donetext : 'download'
+  const btntext = progress === 100 ? donetext : progress === 0 ? 'download' : 'downloading'
   const btnicon = progress === 100 ? doneicon : 'download'
 
   const btn = html`
