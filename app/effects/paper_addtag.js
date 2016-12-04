@@ -4,7 +4,9 @@ const uniq = require('lodash/uniq')
 module.exports = (data, state, send, done) => {
   const alldone = require('../../lib/alldone')(2, done)
 
+
   const newpapers = state.selection.list.map(paper => {
+    if ((paper.tags || []).length === 0) paper.download(() => {})
     paper.tags = uniq((paper.tags || []).concat([data.tag]))
     return paper
   })
