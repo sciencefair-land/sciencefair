@@ -36,7 +36,7 @@ module.exports = (data, state, send, done) => {
     if (isselected(data, update.list)) {
       update.reference = {
         index: data.index,
-        paper: paper
+        paper: data.paper
       }
     }
   } else if (data.shift) {
@@ -92,8 +92,9 @@ function findreference (update, results) {
     var refindex = 0
 
     if (update.list && update.list.length) {
+      const updatekeys = update.list.map(p => p.key)
       const highest = findLastIndex(results, result => {
-        return update.list.indexOf(result) > -1
+        return updatekeys.indexOf(result.key) > -1
       })
       refindex = Math.max(highest, 0)
     }

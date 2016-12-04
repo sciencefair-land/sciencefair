@@ -1,11 +1,11 @@
 // {
 //   reference: {
 //     index: 0,
-//     id: 'blah'
+//     key: 'blah'
 //   },
 //   papers: [
-//     'id1',
-//     'id2'
+//     Paper{},
+//     Paper{}
 //   ]
 // }
 module.exports = (data, state) => {
