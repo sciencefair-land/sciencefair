@@ -3,15 +3,15 @@ const isArray = require('lodash/isArray')
 
 module.exports = (data, state) => {
   const results = cloneDeep(state.results)
-  const resultsids = results.map(r => r.key)
+  const resultkeys = results.map(r => r.key)
 
-  const ids = isArray(data.id) ? data.id : [data.id]
-  const indices = ids.map((id) => resultsids.indexOf(id))
+  const keys = isArray(data.key) ? data.key : [data.key]
+  const indices = keys.map((key) => resultkeys.indexOf(key))
   const papers = isArray(data.paper) ? data.paper : [data.paper]
 
-  for (var i in indices) {
-    const idx = indices[i]
-    const paper = papers[i]
+  for (let i in indices) {
+    let idx = indices[i]
+    let paper = papers[i]
     results[idx] = paper
   }
 

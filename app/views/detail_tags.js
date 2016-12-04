@@ -67,7 +67,8 @@ module.exports = (tags, state, prev, send) => {
 
   function rendertags () {
     if (tags && tags.length > 0) {
-      return tags.map((t) => tag(t, state, prev, send))
+      return tags.map(
+        t => tag(t, state, prev, send))
     } else {
       return null
     }

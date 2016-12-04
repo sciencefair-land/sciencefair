@@ -17,8 +17,7 @@ const style = css`
   font-family: CooperHewitt-Light;
   font-size: 1.5em;
   margin-right: 12px;
-  padding: 6px;
-  padding-top: 9px;
+  padding: 13px;
   position: relative;
 }
 

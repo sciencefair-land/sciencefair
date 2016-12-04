@@ -40,7 +40,7 @@ module.exports = (data, state, send, done) => {
     docstore.createReadStream()
       .on('data', (entry) => {
         const doc = parsedoc(entry.value)
-        hits.push({ document: doc })
+        hits.push(doc)
       })
       .on('error', done)
       .on('end', () => {
@@ -83,7 +83,7 @@ module.exports = (data, state, send, done) => {
         const doc = parsedoc(entry.value)
         const overlap = intersection(doc.tags, data.tags)
         if (overlap.length === data.tags.length) {
-          hits.push({ document: doc })
+          hits.push(doc)
         }
       })
       .on('error', done)

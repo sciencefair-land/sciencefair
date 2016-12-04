@@ -180,7 +180,7 @@ function singlepaper (paper, style, state, prev, send) {
       </div>
       <div class="${style.column}">
         ${require('./detail_actions')(state, prev, send)}
-        ${require('./detail_tags')(paper.tags, state, prev, send)}
+        ${require('./detail_tags')(paper.tags.filter(t => t !== '__local'), state, prev, send)}
       </div>
     </div>
   </div>
@@ -189,7 +189,7 @@ function singlepaper (paper, style, state, prev, send) {
 }
 
 function tags (papers) {
-  return intersection(...(papers.map((paper) => paper.tags))) || []
+  return intersection(...(papers.map(paper => paper.tags.filter(t => t !== '__local')))) || []
 }
 
 function multipaper (papers, style, state, prev, send) {

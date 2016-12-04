@@ -44,6 +44,7 @@ module.exports = (state, prev, send) => {
 
   function submit (e) {
     const payload = {
+      paper: state.selection.list,
       tag: e.target.value
     }
 

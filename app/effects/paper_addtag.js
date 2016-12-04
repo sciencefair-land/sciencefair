@@ -10,7 +10,7 @@ module.exports = (data, state, send, done) => {
   })
 
   send('result_replace', {
-    id: newpapers.map(p => p.key),
+    key: newpapers.map(p => p.key),
     paper: newpapers
   }, alldone)
 
