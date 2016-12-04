@@ -34,7 +34,11 @@ module.exports = (state, prev, send) => {
   `
   sharebtn.onclick = (e) => {
     e.preventDefault()
-    send('selection_share')
+    const doiurl = `http://doi.org/${state.selection.list[0].id}`
+    require('copy-paste').copy(doiurl, () => send('note_add', {
+      title: 'Article share',
+      message: `URL copied to clipboard: ${doiurl}`
+    }))
   }
 
   const actiondiv = html`

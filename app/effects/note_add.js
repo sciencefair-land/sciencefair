@@ -3,13 +3,13 @@ const uuid = require('uuid').v4
 
 module.exports = (data, state, send, done) => {
   if (!data.message) return done()
-  const update = cloneDeep(state.errors)
-  const errorId = uuid()
-  update[errorId] = data
+  const update = cloneDeep(state.notes)
+  const noteId = uuid()
+  update[noteId] = data
 
-  send('errors_set', update, err => {
+  send('notes_set', update, err => {
     if (err) done(err)
 
-    setTimeout(() => send('error_remove', errorId, done), 3000)
+    setTimeout(() => send('note_remove', noteId, done), 3000)
   })
 }

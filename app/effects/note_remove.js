@@ -1,8 +1,8 @@
 const cloneDeep = require('lodash/cloneDeep')
 
 module.exports = (data, state, send, done) => {
-  const update = cloneDeep(state.errors)
+  const update = cloneDeep(state.notes)
   if (update[data]) delete update[data]
 
-  send('errors_set', update, done)
+  send('notes_set', update, done)
 }

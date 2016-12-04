@@ -1,3 +1,3 @@
 module.exports = (data, state) => {
-  return { errors: data }
+  return { notes: data }
 }

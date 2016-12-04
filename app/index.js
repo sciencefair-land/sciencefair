@@ -18,7 +18,10 @@ function start () {
       console.groupEnd()
 
       const send = createSend('onError: ')
-      if (err) send('error_add', err, () => {})
+      if (err) send('note_add', {
+        title: 'Error',
+        message: err.message
+      }, () => {})
     }
   })
 
@@ -50,7 +53,7 @@ function start () {
         visible: false,
         paper: null
       },
-      errors: {},
+      notes: {},
       downloads: {
         totalspeed: 0,
         list: [],

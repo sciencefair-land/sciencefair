@@ -12,34 +12,38 @@ const style = css`
   z-index: 2000;
 }
 
-.error {
+.msgbox {
   position: relative;
   height: auto;
   width: 400px;
   padding: 0 20px;
-  background: ${C.LIGHTGREY};
-  border: 3px solid ${C.ERROR};
+  font-family: CooperHewitt-Light;
+  background: ${C.DARKBLUE};
+  color: ${C.LIGHTGREY};
+  border-radius: 6px;
+  opacity: 0.9;
   margin-bottom: 30px;
   flex-direction: column;
 }
 
 .title {
   margin-bottom: 0;
+  font-family: CooperHewitt-Bold;
 }
 
 `
 
 module.exports = (state, prev, send) => {
-  if (state.errors.length === 0) return null
+  if (state.notes.length === 0) return null
 
-  const error = errorId => {
-    const err = state.errors[errorId]
+  const notify = noteId => {
+    const note = state.notes[noteId]
 
     const el = html`
 
-    <div class="${style.error}">
-      <h3 class="${style.title}">Error</h3>
-      <p class="${style.message}">${err.message}</p>
+    <div class="${style.msgbox}">
+      <h3 class="${style.title}">${note.title}</h3>
+      <p class="${style.message}">${note.message}</p>
     </div>
 
     `
@@ -47,7 +51,7 @@ module.exports = (state, prev, send) => {
     el.onclick = e => {
       e.preventDefault()
       e.stopPropagation()
-      send('error_remove', errorId)
+      send('note_remove', noteId)
     }
 
     return el
@@ -56,7 +60,7 @@ module.exports = (state, prev, send) => {
   return html`
 
   <div class="${style.container}">
-    ${Object.keys(state.errors).map(error)}
+    ${Object.keys(state.notes).map(notify)}
   </div>
 
   `
