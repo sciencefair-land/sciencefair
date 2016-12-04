@@ -63,7 +63,7 @@ function isselected (data, papers) {
 }
 
 function toggleclicked (data, papers) {
-  const idx = papers.indexOf(data.paper)
+  const idx = papers.map(p => p.key).indexOf(data.paper.key)
   if (idx > -1) {
     const newpapers = papers.slice()
     newpapers.splice(idx, 1)
