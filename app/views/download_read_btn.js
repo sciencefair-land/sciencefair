@@ -41,9 +41,11 @@ const style = css`
 module.exports = (state, prev, send) => {
   const selected = state.selection.list
   const downloads = selected.map(
-    p => state.downloads.lookup[p.key]
+    p => {
+      return { paper: p, download: state.downloads.lookup[p.key] }
+    }
   ).map(
-    p => p ? p : { progress: 0 }
+    obj => obj.download || obj.paper
   )
 
   const progress = mean(downloads.map(dl => dl.progress || 0))

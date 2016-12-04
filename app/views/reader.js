@@ -1,8 +1,9 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
+const cache = require('cache-element')
 
-module.exports = (state, prev, send) => {
-  if (!(state.reader.visible)) return null
+const reader = (port, paper, send) => {
+  console.log('(re-)rendering reader')
 
   const margin = 0
   const marginTopShim = 30
@@ -36,15 +37,12 @@ module.exports = (state, prev, send) => {
 
   `
 
-  const paper = state.reader.paper
-  const doc = paper.document
-  const xmlfile = `${paper.source}/articles/${doc.path}/${doc.entryfile}`
-  const docurl = `http://localhost:${state.contentserver.port}/${xmlfile}`
+  const xmlfile = `${paper.source}/articles/${paper.path}/${paper.entryfile}`
+  const docurl = `http://localhost:${port}/${xmlfile}`
   const lensurl = `../lib/lens/index.html?url=${encodeURIComponent(docurl)}`
 
-  var frame = html`
-    <webview class="${style.frame}"></webview>
-  `
+  const frame = html`<webview class="${style.frame}"></webview>`
+
   frame.disablewebsecurity = true
   frame.src = lensurl
   frame.addEventListener('dom-ready', function () {
@@ -70,4 +68,16 @@ module.exports = (state, prev, send) => {
       ${frame}
     </div>
   `
+}
+
+function Reader () {
+  return cache(reader)
+}
+
+const cachedreader = Reader()
+
+module.exports = (state, prev, send) => {
+  if (!(state.reader.visible)) return null
+
+  return cachedreader(state.contentserver.port, state.reader.paper, send)
 }

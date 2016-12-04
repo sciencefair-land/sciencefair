@@ -19,6 +19,7 @@
   "dependencies": {
     "bulk-write-stream": "^1.1.3",
     "bytes": "^2.4.0",
+    "cache-element": "^2.0.0",
     "choo": "^3.3.0",
     "csjs": "^1.0.5",
     "csjs-inject": "^1.0.0",
@@ -64,6 +65,7 @@
     "through2": "^2.0.1",
     "untildify": "^2.1.0",
     "uuid": "^2.0.3",
+    "vdom-thunk": "^3.0.0",
     "yunodb": "github:blahah/yunodb#streaming"
   },
   "devDependencies": {
