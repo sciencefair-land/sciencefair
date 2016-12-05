@@ -207,6 +207,7 @@ function multipaper (papers, style, state, prev, send) {
         ${require('./detail_multi_dates')(papers, state, prev, send)}
       </div>
       <div class="${style.column} ${style.quart}">
+        ${require('./detail_actions')(state, prev, send)}
         ${require('./detail_tags')(tags(papers), state, prev, send)}
       </div>
     </div>
