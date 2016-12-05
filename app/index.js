@@ -13,6 +13,7 @@ function start () {
   const choo = require('choo')
   const app = choo({
     onError: (err, state, createSend) => {
+      if (/ENOENT/.test(err.message)) return // ugly hack to stop annoying error bubble
       console.groupCollapsed(`ERROR (non-fatal) handled by sciencefair: ${err.message}`)
       console.error(err)
       console.groupEnd()
