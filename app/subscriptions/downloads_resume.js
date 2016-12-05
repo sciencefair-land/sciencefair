@@ -23,8 +23,12 @@ const restartdownloads = cb => localcollection(
 
 module.exports = (send, done) => restartdownloads((err, n) => {
   if (err) return done(err)
-  send('note_add', {
-    title: 'Restoring downloads',
-    message: `${n} partially completed downloads have been restarted`
-  }, done)
+  if (n > 0) {
+    send('note_add', {
+      title: 'Restoring downloads',
+      message: `${n} partially completed downloads have been restarted`
+    }, done)
+  } else {
+    done()
+  }
 })
