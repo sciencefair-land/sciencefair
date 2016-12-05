@@ -2,7 +2,7 @@ const datasource = require('../../lib/getdatasource')
 const all = require('lodash/every')
 
 module.exports = (data, state, send, done) => {
-  const allready = data.forEach(p => p.ds.articleMetadataSynced())
+  const allready = all(data.forEach(p => p.ds.articleMetadataSynced()))
   const ntasks = data.length + allready ? 1 : 2
   const alldone = require('../../lib/alldone')(ntasks, done)
   data.forEach(p => p.download(alldone))
