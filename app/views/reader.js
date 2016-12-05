@@ -47,7 +47,7 @@ const reader = (port, paper, send) => {
   frame.src = lensurl
   frame.addEventListener('dom-ready', function () {
     // uncomment line below if you want to debug the lens reader
-    frame.openDevTools()
+    // frame.openDevTools()
   })
 
   frame.shadowRoot.applyAuthorStyles = true
