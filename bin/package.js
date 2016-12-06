@@ -1,16 +1,17 @@
 #!/usr/bin/env node
 
-var os = require('os')
-var fs = require('fs')
-var path = require('path')
-var mkdirp = require('mkdirp')
-var rimraf = require('rimraf')
-var zip = require('cross-zip')
-var minimist = require('minimist')
-var packager = require('electron-packager')
-var pkg = require('../package.json')
+const os = require('os')
+const fs = require('fs')
+const path = require('path')
+const mkdirp = require('mkdirp')
+const rimraf = require('rimraf')
+const zip = require('cross-zip')
+const minimist = require('minimist')
+const packager = require('electron-packager')
+const installer = require('electron-installer-windows')
+const pkg = require('../package.json')
 
-var config = {
+const config = {
   APP_COPYRIGHT: 'Copyright © 2016 Code For Science',
   ROOT_PATH: path.join(__dirname, '..'),
   APP_NAME: 'ScienceFair',
@@ -19,20 +20,27 @@ var config = {
   STATIC_PATH: path.join(__dirname, '..', 'static')
 }
 
-var BUILD_NAME = config.APP_NAME + '-v' + config.APP_VERSION
-var DIST_PATH = path.join(config.ROOT_PATH, 'dist')
+const BUILD_NAME = config.APP_NAME + '-v' + config.APP_VERSION
+const DIST_PATH = path.join(config.ROOT_PATH, 'dist')
 
-var argv = minimist(process.argv.slice(2), {})
+const argv = minimist(process.argv.slice(2), {})
 
 function build () {
   rimraf.sync(DIST_PATH)
-  var platform = argv._[0]
+  const platform = argv._[0]
   if (platform === 'darwin') {
     buildDarwin(printDone)
+  } else if (platform === 'win32') {
+    buildWin(printDone)
+  } else {
+    buildDarwin(err => {
+      if (err) return printDone(err)
+      buildWin(printDone)
+    })
   }
 }
 
-var all = {
+const all = {
   dir: config.ROOT_PATH,
   asar: true,
   name: config.APP_NAME,
@@ -46,16 +54,67 @@ var all = {
   'build-version': pkg.version
 }
 
-var darwin = {
+const darwin = {
   platform: 'darwin',
   arch: 'x64',
   icon: config.APP_ICON + '.icns',
   'app-bundle-id': 'io.sciencefair.sciencefair',
   'app-category-type': 'public.app-category.utilities',
-  'helper-bundle-id': 'io.sciencefair.sciencefair-helper'
+  'helper-bundle-id': 'io.sciencefair.sciencefair-helper',
+  'sign': true
+}
+
+const win32 = {
+  platform: 'win',
+  arch: 'x64',
+  icon: config.APP_ICON + '.ico'
+  win32metadata: {
+    'CompanyName': 'Code for Science',
+    'ProductName': 'ScienceFair'
+  }
 }
 
 build()
+
+function buildWin (cb) {
+  console.log('Windows: Packaging electron...')
+  packager(Object.assign({}, all, win32), function (err, buildPath) {
+    if (err) return cb(err)
+    console.log('Windows: Packaged electron. ' + buildPath)
+
+    var exePath = path.join(buildPath[0], config.APP_NAME + '.exe')
+
+    pack(cb)
+
+    function pack (cb) {
+      packageZip()
+      packageExe(cb)
+    }
+
+    function packageZip () {
+      console.log('Windows: Creating zip...')
+
+      var inPath = path.join(buildPath[0], config.APP_NAME + '.exe')
+      var outPath = path.join(DIST_PATH, BUILD_NAME + '-darwin.zip')
+      zip.zipSync(inPath, outPath)
+
+      console.log('Windows: Created zip.')
+    }
+
+    function packageExe () {
+      console.log('Windows: creating installer...')
+      const opts = {
+        src: 'dist/ScienceFair-win32-x64',
+        dest: 'dist/installers'
+      }
+      installer(opts, err => {
+        if (err) return cb(err)
+        console.log('Windows: created installer.')
+        cb()
+      })
+    }
+  })
+}
 
 function buildDarwin (cb) {
   console.log('OS X: Packaging electron...')
@@ -114,7 +173,7 @@ function buildDarwin (cb) {
       dmg.on('progress', function (info) {
         if (info.type === 'step-begin') console.log(info.title + '...')
       })
-      dmg.once('finish', function (info) {
+      dmg.once('end', function (info) {
         console.log('OS X: Created dmg.')
         cb(null)
       })
@@ -123,5 +182,6 @@ function buildDarwin (cb) {
 }
 
 function printDone (err) {
-  if (err) console.error(err.message || err)
+  if (err) return console.error(err.message || err)
+  console.log('All tasks completed.')
 }

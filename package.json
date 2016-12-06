@@ -76,6 +76,7 @@
     "debug": "^2.3.3",
     "debug-menu": "^0.4.0",
     "debug-stream": "^3.0.1",
+    "electron-installer-windows": "^0.2.0",
     "electron-packager": "^7.0.3",
     "minimist": "^1.2.0",
     "rimraf": "^2.5.2",
