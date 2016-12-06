@@ -171,10 +171,11 @@ module.exports = (datasource, state, prev, send) => {
         : '?'
 
       const metastat = datasource.stats.metadataSync
+      console.log('metastat', metastat)
       const syncdone = metastat.done / metastat.total
-      const synced = metastat.total
-        ? numeral(`${syncdone}`).format('0%')
-        : '0%'
+      const synced = metastat.finished
+        ? '100%'
+        : numeral(`${syncdone}`).format('0%')
       const peers = numeral(datasource.stats.peers).format('0a')
 
       const deletebtn = html`
