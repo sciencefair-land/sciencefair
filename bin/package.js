@@ -65,9 +65,10 @@ const darwin = {
 }
 
 const win32 = {
-  platform: 'win',
+  platform: 'win32',
   arch: 'x64',
-  icon: config.APP_ICON + '.ico'
+  icon: config.APP_ICON + '.ico',
+  iconUrl: 'https://github.com/codeforscience/sciencefair/raw/v1_dev/static/ScienceFair.ico',
   win32metadata: {
     'CompanyName': 'Code for Science',
     'ProductName': 'ScienceFair'

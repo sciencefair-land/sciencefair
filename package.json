@@ -14,7 +14,10 @@
     "type": "git",
     "url": "git+https://github.com/codeforscience/sciencefair.git"
   },
-  "author": "code-for-science",
+  "author": {
+    "name": "Code for Science",
+    "url": "http://codeforscience.org"
+  },
   "license": "MIT",
   "dependencies": {
     "bulk-write-stream": "^1.1.3",
