@@ -11,8 +11,11 @@ app.on('ready', function () {
     width: 1050,
     titleBarStyle: 'hidden',
     fullscreen: false,
-    icon: './icon/logo.png'
+    icon: './icon/logo.png',
+    frame: false
   })
+
+  main.setMenu(null)
 
   main.maximize()
 
