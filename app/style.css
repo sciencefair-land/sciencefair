@@ -1,3 +1,8 @@
+/* windows hackery to avoid horrible font rendering */
+text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+text-rendering: optimizeLegibility !important;
+-webkit-font-smoothing: antialiased !important;
+
 @font-face {
   font-family: "Aleo-Light";
   src: url("./fonts/Aleo/Light/aleo-light-webfont.woff") format("woff"), url("./fonts/Aleo/Light/aleo-light-webfont.eot") format("eot");
