@@ -1,7 +1,9 @@
 /* windows hackery to avoid horrible font rendering */
-text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
-text-rendering: optimizeLegibility !important;
--webkit-font-smoothing: antialiased !important;
+html body div {
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+  text-rendering: optimizeLegibility !important;
+  -webkit-font-smoothing: subpixel-rendering !important;
+}
 
 @font-face {
   font-family: "Aleo-Light";
