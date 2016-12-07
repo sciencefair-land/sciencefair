@@ -45,3 +45,5 @@ app.on('ready', function () {
     if (error) console.error('Failed to register protocol')
   })
 })
+
+app.on('window-all-closed', () => app.quit())
