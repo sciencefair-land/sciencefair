@@ -28,7 +28,7 @@ app.on('ready', function () {
   // hide the window until content is loaded
   main.webContents.on('did-finish-load', () => {
     setTimeout(() => main.show(), 40)
-  )]
+  })
 
   main.on('close', event => {
     main.webContents.send('quitting')
