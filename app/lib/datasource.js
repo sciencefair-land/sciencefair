@@ -21,7 +21,6 @@ const speed = require('speedometer')()
 const discover = require('hyperdiscovery')
 
 const debug = require('debug')('sciencefair')
-const debugStream = require('debug-stream')(debug)
 
 const C = require('./constants')
 

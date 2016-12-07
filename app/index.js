@@ -1,10 +1,11 @@
-const C = require('../lib/constants')
+const C = require('./lib/constants')
 const mkdirp = require('mkdirp').sync
 
 mkdirp(C.DATAROOT)
 mkdirp(C.COLLECTION_PATH)
 
-if (process.env['SCIENCEFAIR_DEVMODE']) require('debug-menu').install()
+// if (process.env['SCIENCEFAIR_DEVMODE']) require('debug-menu').install()
+require('debug-menu').install()
 
 start()
 
@@ -42,7 +43,7 @@ function start () {
         tagquery: null,
         tags: []
       },
-      contentserver: require('../lib/contentserver')(C.DATASOURCES_PATH),
+      contentserver: require('./lib/contentServer')(C.DATASOURCES_PATH),
       collectioncount: 0,
       selection: {
         reference: null,
@@ -67,7 +68,7 @@ function start () {
     subscriptions: requireDir('./subscriptions')
   }
 
-  require('../lib/localcollection')((err, db) => {
+  require('./lib/localcollection')((err, db) => {
     if (err) throw err
 
     model.state.collection = db
@@ -85,5 +86,5 @@ function start () {
 
 require('electron').ipcRenderer.on('quitting', () => {
   console.log('APP QUITTING')
-  require('../lib/getdatasource').all().forEach(d => d.close())
+  require('./lib/getdatasource').all().forEach(d => d.close())
 })

@@ -1,6 +1,6 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
-const C = require('../../lib/constants')
+const C = require('../lib/constants')
 
 const licenseurls = {
   'http://creativecommons.org/licenses/by/4.0/': 'CC-BY 4.0',

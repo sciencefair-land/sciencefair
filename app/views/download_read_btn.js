@@ -1,10 +1,10 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
-const C = require('../../lib/constants')
+const C = require('../lib/constants')
 const includes = require('lodash/includes')
 const mean = require('lodash/mean')
 const icon = require('./icon')
-const paper = require('../../lib/getpaper')
+const paper = require('../lib/getpaper')
 const all = require('lodash/every')
 
 const style = css`

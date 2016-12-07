@@ -1,5 +1,5 @@
 const cloneDeep = require('lodash/cloneDeep')
-const datasource = require('../../lib/getdatasource')
+const datasource = require('../lib/getdatasource')
 
 module.exports = (data, state, send, done) => {
   const entry = state.datasources.list.find(ds => ds.key === data.key)

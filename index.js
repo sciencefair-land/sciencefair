@@ -1,4 +1,7 @@
 const {app, BrowserWindow, protocol} = require('electron')
+
+require('electron-debug')({ showDevTools: true, enable: true })
+
 var path = require('path')
 
 var main = null
@@ -12,7 +15,7 @@ app.on('ready', function () {
     titleBarStyle: 'hidden',
     fullscreen: false,
     icon: './icon/logo.png',
-    frame: false
+    show: false
   })
 
   main.setMenu(null)
@@ -20,6 +23,12 @@ app.on('ready', function () {
   main.maximize()
 
   main.loadURL(path.join('file://', __dirname, '/app/index.html'))
+
+  // hack to avoid a blank white window showing briefly at startup
+  // hide the window until content is loaded
+  main.webContents.on('did-finish-load', () => {
+    setTimeout(() => main.show(), 40)
+  )]
 
   main.on('close', event => {
     main.webContents.send('quitting')

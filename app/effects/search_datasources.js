@@ -1,5 +1,5 @@
 const after = require('lodash/after')
-const datasource = require('../../lib/getdatasource')
+const datasource = require('../lib/getdatasource')
 const bulk = require('bulk-write-stream')
 const pump = require('pump')
 

@@ -2,7 +2,7 @@ const cloneDeep = require('lodash/cloneDeep')
 const uniq = require('lodash/uniq')
 
 module.exports = (data, state, send, done) => {
-  const alldone = require('../../lib/alldone')(2, done)
+  const alldone = require('../lib/alldone')(2, done)
 
 
   const newpapers = state.selection.list.map(paper => {

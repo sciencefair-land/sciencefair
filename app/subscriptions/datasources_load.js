@@ -4,8 +4,8 @@ const path = require('path')
 const exists = require('path-exists').sync
 const after = require('lodash/after')
 
-const datasource = require('../../lib/getdatasource')
-const C = require('../../lib/constants')
+const datasource = require('../lib/getdatasource')
+const C = require('../lib/constants')
 
 fs.mkdirsSync(C.DATASOURCES_PATH)
 
@@ -33,7 +33,7 @@ const load = cb => {
   datasources.forEach(ds => ds.connect(done))
 }
 
-const defaults = require('../../lib/defaultsources')
+const defaults = require('../lib/defaultsources')
 
 module.exports = (send, done) => {
   load(() => send('datasources_setloaded', null, () => defaults(send, done)))

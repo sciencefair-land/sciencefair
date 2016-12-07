@@ -1,6 +1,6 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
-const C = require('../../lib/constants')
+const C = require('../lib/constants')
 
 module.exports = (tags, state, prev, send) => {
   const style = css`

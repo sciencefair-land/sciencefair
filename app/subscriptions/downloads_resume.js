@@ -1,8 +1,8 @@
 // this subscription sets downloads running that were part-completed
 // when the app last quit
 
-const localcollection = require('../../lib/localcollection')
-const getpaper = require('../../lib/getpaper')
+const localcollection = require('../lib/localcollection')
+const getpaper = require('../lib/getpaper')
 
 const restartdownloads = cb => localcollection(
   (err, db) => {

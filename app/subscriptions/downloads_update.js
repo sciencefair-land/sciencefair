@@ -1,6 +1,6 @@
 // this subscription updates the downloads at 1 second intervals
 
-const datasource = require('../../lib/getdatasource')
+const datasource = require('../lib/getdatasource')
 const sortBy = require('lodash/sortBy')
 const flatten = require('lodash/flatten')
 const fromPairs = require('lodash/fromPairs')

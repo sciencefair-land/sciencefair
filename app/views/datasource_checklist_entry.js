@@ -1,6 +1,6 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
-const C = require('../../lib/constants')
+const C = require('../lib/constants')
 const numeral = require('numeral')
 const stat = require('./datasource_stat')
 
@@ -148,7 +148,7 @@ module.exports = (datasource, state, prev, send) => {
     if (datasource.loading) {
       const shortkey = html`
 
-        <span class="${style.shortkey}">${datasource.key.slice(0, 6)}...</span>
+      <span class="${style.shortkey}">${datasource.key.slice(0, 6)}...</span>
 
       `
 
@@ -171,7 +171,6 @@ module.exports = (datasource, state, prev, send) => {
         : '?'
 
       const metastat = datasource.stats.metadataSync
-      console.log('metastat', metastat)
       const syncdone = metastat.done / metastat.total
       const synced = metastat.finished
         ? '100%'

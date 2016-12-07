@@ -46,7 +46,7 @@ const all = {
   name: config.APP_NAME,
   out: DIST_PATH,
   overwrite: true,
-  prune: false,
+  prune: true,
   version: require('electron-prebuilt/package.json').version,
   'app-copyright': config.APP_COPYRIGHT,
   'app-version': pkg.version,

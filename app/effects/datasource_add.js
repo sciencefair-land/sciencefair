@@ -1,4 +1,4 @@
-const datasource = require('../../lib/getdatasource')
+const datasource = require('../lib/getdatasource')
 
 module.exports = (data, state, send, done) => {
   if (data.key.length !== 64) {

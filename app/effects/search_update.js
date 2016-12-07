@@ -11,7 +11,7 @@ module.exports = (data, state, send, done) => {
     !(data.query.trim() === '*') &&
     !(data.tags && data.tags.length)
 
-  const alldone = require('../../lib/alldone')(searchdatasources ? 3 : 2, done)
+  const alldone = require('../lib/alldone')(searchdatasources ? 3 : 2, done)
 
   const newsearch = cloneDeep(state.currentsearch)
   newsearch.query = data.query

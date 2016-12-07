@@ -2,7 +2,7 @@ const uniq = require('lodash/uniq')
 const cloneDeep = require('lodash/cloneDeep')
 
 module.exports = (data, state, send, done) => {
-  const alldone = require('../../lib/alldone')(2, done)
+  const alldone = require('../lib/alldone')(2, done)
   const update = cloneDeep(state.currentsearch || {})
 
   update.tags = uniq((update.tags || []).concat([data.tag]))

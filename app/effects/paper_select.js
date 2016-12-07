@@ -2,7 +2,7 @@ const cloneDeep = require('lodash/cloneDeep')
 const findLastIndex = require('lodash/findLastIndex')
 const difference = require('lodash/difference')
 const uniq = require('lodash/uniq')
-const keyby = require('lodash/keyby')
+const keyby = require('lodash/keyBy')
 
 module.exports = (data, state, send, done) => {
   const update = cloneDeep(state.selection)
