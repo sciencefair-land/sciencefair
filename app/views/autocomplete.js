@@ -11,7 +11,7 @@ const style = css`
   top: 100%;
   left: 40px;
   width: 300px;
-  max-height: 60vw;
+  max-height: 60vh;
   overflow-y: scroll;
   flex-direction: column;
   background: ${C.DARKBLUE};
@@ -78,7 +78,7 @@ module.exports = (state, prev, send) => {
     const row = html`
 
     <div class="${style.tagrow} clickable">
-      ${html(`<div>${tag.string}</div>`)}
+      ${html(`<div>#${tag.string}</div>`)}
       <div>${tag.count}</div>
     </div>
 
@@ -101,17 +101,7 @@ module.exports = (state, prev, send) => {
 
     const fullrows = sorted.map((hit) => {
       return row(hit)
-    }).slice(0, C.AUTOMAXTAGS)
-
-    if (sorted.length > C.AUTOMAXTAGS) {
-      const diff = sorted.length - C.AUTOMAXTAGS
-      const more = html`
-      <div class="${style.tagrow}">
-        <div class="${style.more}">... and ${diff} more tags</div>
-      </div>
-      `
-      fullrows.push(more)
-    }
+    })
 
     return fullrows
   }
