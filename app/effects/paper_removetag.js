@@ -5,7 +5,7 @@ module.exports = (data, state, send, done) => {
   const papers = state.selection.list
 
   const newPapers = papers.map(paper => {
-    const tags = paper.document.tags
+    const tags = paper.tags
     const removeidx = tags.indexOf(data.tag)
     if (removeidx > -1) tags.splice(removeidx, 1)
 
