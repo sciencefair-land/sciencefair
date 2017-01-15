@@ -132,8 +132,8 @@ const style = css`
 const chunkwords = desc => chunk(
   desc.split(' ').reverse(), 3
 ).map(
-  c => html`<span class="${style.chunk}">${c.reverse().join('\u00A0')}</span>`
-).reverse()
+  c => c.reverse().join('\u00A0')
+).reverse().join(' ')
 
 module.exports = (datasource, state, prev, send) => {
   const checkbox = datasource => {
