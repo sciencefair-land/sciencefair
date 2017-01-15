@@ -9,7 +9,7 @@ module.exports = (data, state, send, done) => {
     const removeidx = tags.indexOf(data.tag)
     if (removeidx > -1) tags.splice(removeidx, 1)
 
-    paper.document.tags = tags
+    paper.tags = tags
     return paper
   })
 
