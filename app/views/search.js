@@ -73,6 +73,8 @@ const placeholders = [
 var clearing = false
 
 module.exports = (state, prev, send) => {
+  if (state.initialising) return null
+
   const placeidx = Math.min(state.collectioncount, 2)
   const placeholder = placeholders[placeidx]
   const input = html`

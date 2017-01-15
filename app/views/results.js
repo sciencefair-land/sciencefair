@@ -4,6 +4,8 @@ const css = require('csjs-inject')
 const paper = require('./paper')
 
 module.exports = (state, prev, send) => {
+  if (state.initialising) return null
+
   const style = css`
 
   .results {

@@ -19,8 +19,11 @@ module.exports = (send, done) => {
   fs.mkdirsSync(elifeout)
 
   targz().extract(elifein, elifeout, err => {
-    if (err) console.error('Failed to extract default data source ', err)
+    if (err) return console.error('Failed to extract default data source ', err)
+    console.log('DONE EXTRACTING DEFAULT SOURCE')
+    send('initialising_start', true, err => {
+      if (err) return done(err)
+      send('datasource_add', { key: key, diskfirst: true }, done)
+    })
   })
-
-  send('datasource_add', { key: key }, done)
 }

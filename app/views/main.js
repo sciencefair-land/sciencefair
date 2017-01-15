@@ -14,6 +14,7 @@ const style = css`
   display: flex;
   flex-direction: column;
   background: ${C.BLUE};
+  -webkit-app-region: no-drag;
 }
 
 `
@@ -26,6 +27,7 @@ module.exports = (state, prev, send) => {
   return html`
 
   <div class="${style.main}">
+    ${require('./initialise')(state, prev, send)}
     ${require('./search')(state, prev, send)}
     ${require('./results')(state, prev, send)}
     ${require('./message')(state, prev, send)}

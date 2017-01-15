@@ -1,6 +1,6 @@
 const {app, BrowserWindow, protocol} = require('electron')
 
-require('electron-debug')({ showDevTools: true, enable: true })
+if (process.env['SCIENCEFAIR_DEVMODE']) require('electron-debug')({ enable: true })
 
 var path = require('path')
 
@@ -8,10 +8,10 @@ var main = null
 
 app.on('ready', function () {
   main = new BrowserWindow({
-    height: 720,
+    minHeight: 600,
+    minWidth: 800,
     resizable: true,
     title: 'sciencefair',
-    width: 1050,
     titleBarStyle: 'hidden',
     fullscreen: false,
     icon: './icon/logo.png',
@@ -36,13 +36,6 @@ app.on('ready', function () {
 
   main.on('closed', function () {
     main = null
-  })
-
-  protocol.registerFileProtocol('sciencefair', (request, callback) => {
-    console.log(request.url)
-    callback()
-  }, error => {
-    if (error) console.error('Failed to register protocol')
   })
 })
 

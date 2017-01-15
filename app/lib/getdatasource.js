@@ -3,8 +3,9 @@ const Datasource = require('./datasource')
 const datasources = {}
 
 module.exports = {
-  fetch: (key, cb) => {
-    const ds = datasources[key] || Datasource(key)
+  fetch: (opts, cb) => {
+    let key = typeof opts === 'string' ? opts : opts.key
+    const ds = datasources[key] || Datasource(key, opts)
     datasources[key] = ds
     return cb(null, ds)
   },

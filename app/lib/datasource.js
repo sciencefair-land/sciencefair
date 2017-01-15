@@ -3,6 +3,7 @@ const path = require('path')
 const low = require('lowdb')
 const hyperdrive = require('hyperdrive')
 const level = require('level')
+const arraystream = require('stream-from-array').obj
 const streaminto = require('level-write-stream')
 const multi = require('multi-write-stream')
 const eos = require('end-of-stream')
@@ -19,15 +20,22 @@ const remove = require('lodash/remove')
 const assign = require('lodash/assign')
 const speed = require('speedometer')()
 const discover = require('hyperdiscovery')
+const defaults = require('lodash/defaults')
 
 const debug = require('debug')('sciencefair')
 
 const C = require('./constants')
 
-function Datasource (key) {
-  if (!(this instanceof Datasource)) return new Datasource(key)
+function Datasource (key, opts) {
+  if (!(this instanceof Datasource)) return new Datasource(key, opts)
+
+  if (!opts) opts = {}
+  defaults(opts, {
+    diskfirst: false
+  })
 
   const self = this
+  self.opts = opts
   self.loading = true
   self.queuedDownloads = []
   console.log(self)
@@ -127,14 +135,12 @@ function Datasource (key) {
       })
     })
 
-    const loadjson = err => {
-      if (err) return done(err)
-
+    const loadjson = cb => {
       fs.readJson(filepath('_feed.json'), (err, obj) => {
-        if (err) return done(err)
+        if (err) return cb(err)
 
         Object.assign(self, obj)
-        process.nextTick(self.syncArticleMetadata)
+        self.syncArticleMetadata()
         return done()
       })
     }
@@ -160,22 +166,25 @@ function Datasource (key) {
       if (!self.archive.isEntryDownloaded(entry)) {
         self.archive.download(entry, loadjson)
       } else {
-        loadjson()
+        loadjson(err => {
+          if (err) return done(err)
+          if (!(self.stats.get('articleCount').value())) countArticles()
+        })
       }
     }
 
-    try {
-      loadjson()
-      if (!(self.stats.get('articleCount').value())) countArticles()
-    } catch (e) {
-      console.log('Could not load feed metadata JSON, syncing...', e)
-      self.archive.list({ live: false }).on('data', entry => {
-        if (entry.name === '_feed.json') {
-          fetchjson(entry)
-          if (!(self.stats.get('articleCount').value())) countArticles()
-        }
-      })
-    }
+    loadjson(err => {
+      if (err) {
+        console.log('Could not load feed metadata JSON, syncing...', err)
+        self.archive.list({ live: false }).on('data', entry => {
+          if (entry.name === '_feed.json') {
+            fetchjson(entry)
+          }
+        })
+      } else {
+        if (!(self.stats.get('articleCount').value())) countArticles()
+      }
+    })
   }
 
   self.maybeSyncMetadata = () => {
@@ -196,9 +205,9 @@ function Datasource (key) {
   // streaming check if the entry is a metadata file, and if so
   // that it has been downloaded
   self.ensureMetaFile = function () {
-    return parallel(128, (entry, next) => {
+    return parallel(28, (entry, next) => {
       if (/^meta.*json$/.test(entry.name)) {
-        if (self.archive.isEntryDownloaded(entry)) {
+        if (self.opts.diskfirst || self.archive.isEntryDownloaded(entry)) {
           next(null, self.loadEntry(entry))
         } else {
           self.archive.download(entry, err => {
@@ -212,17 +221,28 @@ function Datasource (key) {
     })
   }
 
+  self.initFromDisk = cb => {
+    console.log('INIT FRAWM DISK YA')
+  }
+
   // begin or resume syncing metadata from the hyperdrive archive
   // and adding it to the search index
   self.syncMetadata = cb => {
     if (self.stats.get('metadataSync.finished').value()) return cb()
 
-    var end
-    var metadataPos = self.stats.get('metadataSync.done').value() || 0
+    let metadataPos = self.stats.get('metadataSync.done').value() || 0
+    let metafiles = fs.readdirSync(
+      path.join(self.datadir, 'meta')
+    ).filter(
+      file => /json$/.test(file)
+    ).map(
+      file => { return { name: path.join('meta', file) } }
+    )
+    const end = self.opts.diskfirst ? metafiles.length : self.archive.metadata.blocks
 
     const count = through.ctor({ objectMode: true }, (data, enc, next) => {
       metadataPos += 1
-      if (metadataPos % 100 === 0) {
+      if (metadataPos % 30 === 0) {
         self.stats.get('metadataSync').assign({
           done: metadataPos,
           finished: false
@@ -237,14 +257,20 @@ function Datasource (key) {
       next(null, meta)
     })
 
-    const list = self.archive.list({
-      live: false,
-      offset: metadataPos
-    })
+    let list
+    if (self.opts.diskfirst) {
+      console.log('USING DISK METAFILES')
+      list = arraystream(metafiles)
+    } else {
+      list = self.archive.list({
+        live: false,
+        offset: metadataPos
+      })
+    }
 
     list.once('data', () => {
       self.stats.get('metadataSync').assign({
-        total: self.archive.metadata.blocks
+        total: end
       }).value()
     })
 
@@ -321,6 +347,8 @@ function Datasource (key) {
   }
 
   self.connectArticles = () => {
+    if (self.articles) return
+
     console.log('connecting articles', self.articleFeed)
     self.articles = self.articlesdrive.createArchive(
       new Buffer(self.articleFeed, 'hex'),
@@ -400,6 +428,7 @@ function Datasource (key) {
   }
 
   self.entrysetDownloadProgress = entries => {
+    if (!self.articles) return 0
     let totalBlocks = 0
     let downloadedBlocks = 0
 
@@ -421,6 +450,7 @@ function Datasource (key) {
   }
 
   self.download = (article, cb) => {
+    console.log('download', article, cb)
     if (!self.articles) {
       self.queuedDownloads.push({ article: article, cb: cb })
       return
@@ -428,7 +458,10 @@ function Datasource (key) {
 
     self.getArticleEntries(article, (err, entries) => {
       if (err) return cb(err)
+      const currentdl = self._downloads.map(d => d.id).indexOf(article.id)
+      if (currentdl !== -1) return cb()
 
+      console.log('got entries?', article, entries)
       const stats = {
         started: Date.now(),
         source: self.key,
@@ -436,6 +469,7 @@ function Datasource (key) {
         files: entries,
         progress: self.entrysetDownloadProgress(entries)
       }
+
       self._downloads.push(stats)
 
       const updateStats = () => {
@@ -458,6 +492,8 @@ function Datasource (key) {
   }
 
   self.downloads = () => ({ list: self._downloads.slice(), speed: speed() })
+
+  if (self.opts.diskfirst) self.initFromDisk()
 }
 
 module.exports = Datasource

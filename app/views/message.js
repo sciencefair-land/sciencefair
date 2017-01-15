@@ -18,8 +18,9 @@ module.exports = (state, prev, send) => {
   `
 
   var msg = ''
-
-  if (state.results.length === 0) {
+  if (state.initialising) {
+    msg = 'Syncing initial data.'
+  } else if (state.results.length === 0) {
     const query = state.currentsearch.query
     const hasquery = query && query.length > 0
     const tags = state.currentsearch.tags

@@ -212,7 +212,7 @@ module.exports = (datasource, state, prev, send) => {
           </div>
         </div>
         <div class=${style.right}>
-          ${deletebtn}
+          ${state.datasources.length > 1 ? deletebtn : null}
         </div>
       </div>
 
