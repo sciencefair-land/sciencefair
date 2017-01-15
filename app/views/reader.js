@@ -39,7 +39,7 @@ const reader = (port, paper, send) => {
 
   const xmlfile = `${paper.source}/articles/${paper.path}/${paper.entryfile}`
   const docurl = `http://localhost:${port}/${xmlfile}`
-  const lensurl = `../lib/lens/index.html?url=${encodeURIComponent(docurl)}`
+  const lensurl = `../app/lib/lens/index.html?url=${encodeURIComponent(docurl)}`
 
   const frame = html`<webview class="${style.frame}"></webview>`
 
