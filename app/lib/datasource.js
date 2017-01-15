@@ -163,7 +163,7 @@ function Datasource (key, opts) {
     }
 
     const fetchjson = entry => {
-      if (!self.archive.isEntryDownloaded(entry)) {
+      if (!self.opts.diskfirst && !self.archive.isEntryDownloaded(entry)) {
         self.archive.download(entry, loadjson)
       } else {
         loadjson(err => {
@@ -399,9 +399,7 @@ function Datasource (key, opts) {
   self.close = cb => {
     self.stats.write()
     self.archive.close(
-      () => self.db.close(
-        () => fs.remove(self.datadir, cb)
-      )
+      () => self.db.close(cb)
     )
   }
 
@@ -461,7 +459,6 @@ function Datasource (key, opts) {
       const currentdl = self._downloads.map(d => d.id).indexOf(article.id)
       if (currentdl !== -1) return cb()
 
-      console.log('got entries?', article, entries)
       const stats = {
         started: Date.now(),
         source: self.key,
