@@ -78,7 +78,7 @@ module.exports = (state, prev, send) => {
     const row = html`
 
     <div class="${style.tagrow} clickable">
-      <div>${tag.string}</div>
+      ${html(`<div>${tag.string}</div>`)}
       <div>${tag.count}</div>
     </div>
 
