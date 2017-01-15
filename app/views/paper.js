@@ -88,7 +88,7 @@ const style = css`
 module.exports = (result, state, prev, send) => {
   const selected = state.selection.lookup[result.paper.key]
   const downloading = state.downloads.lookup[result.paper.key]
-  const progress = downloading ? downloading.progress : result.paper.progress
+  const progress = downloading ? Math.max(downloading.progress, 20) : result.paper.progress
 
   const paper = html`
     <div class="${style.paper} clickable">
@@ -100,7 +100,7 @@ module.exports = (result, state, prev, send) => {
       <div class="${style.year}">
         ${result.paper.date ? result.paper.date.year : 'none'}
       </div>
-      <div class="${style.progressbar}" style="width: ${result.paper.progress}%"/>
+      <div class="${style.progressbar}" style="width: ${progress}%"/>
     </div>
   `
 
