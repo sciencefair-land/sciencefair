@@ -11,12 +11,15 @@ const style = css`
   top: 100%;
   left: 40px;
   width: 300px;
+  max-height: 60vw;
+  overflow-y: scroll;
   flex-direction: column;
   background: ${C.DARKBLUE};
   z-index: 1001;
 }
 
 .tagrow {
+  position: relative;
   height: 40px;
   padding: 10px;
   justify-content: space-between;
@@ -75,7 +78,7 @@ module.exports = (state, prev, send) => {
     const row = html`
 
     <div class="${style.tagrow} clickable">
-      ${html('<div>#' + tag.string + '</div>')}
+      <div>${tag.string}</div>
       <div>${tag.count}</div>
     </div>
 
