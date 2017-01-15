@@ -32,6 +32,7 @@ module.exports = (state, prev, send) => {
     overflow: hidden;
     flex-direction: column;
     justify-content: space-between;
+    position: relative;
   }
 
   .paper {

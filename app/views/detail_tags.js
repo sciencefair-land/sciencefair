@@ -13,6 +13,8 @@ module.exports = (tags, state, prev, send) => {
     position: absolute;
     right: 5px;
     bottom: 5px;
+    max-height: 50%;
+    overflow-y: scroll;
   }
 
   .tag {
