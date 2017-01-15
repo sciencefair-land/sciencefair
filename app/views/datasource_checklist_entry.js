@@ -3,6 +3,7 @@ const css = require('csjs-inject')
 const C = require('../lib/constants')
 const numeral = require('numeral')
 const stat = require('./datasource_stat')
+const chunk = require('lodash/chunk')
 
 const style = css`
 
@@ -122,7 +123,17 @@ const style = css`
   height: 100%;
 }
 
+.chunk {
+  margin-right: 5px;
+}
+
 `
+
+const chunkwords = desc => chunk(
+  desc.split(' ').reverse(), 3
+).map(
+  c => html`<span class="${style.chunk}">${c.reverse().join('\u00A0')}</span>`
+).reverse()
 
 module.exports = (datasource, state, prev, send) => {
   const checkbox = datasource => {
@@ -202,7 +213,7 @@ module.exports = (datasource, state, prev, send) => {
         <div class="${style.mid}">
           <div class=${style.description}>
               <span class="${style.name}">${datasource.name}</span>
-              ${datasource.description}
+              ${chunkwords(datasource.description || '')}
           </div>
           <div class="${style.stats}">
             ${stat(datasource.live ? 'live' : 'static', datasource.live)}
