@@ -8,8 +8,10 @@ var main = null
 
 app.on('ready', function () {
   main = new BrowserWindow({
-    minHeight: 600,
-    minWidth: 800,
+    height: 750,
+    width: 1080,
+    minHeight: 700,
+    minWidth: 1000,
     resizable: true,
     title: 'sciencefair',
     titleBarStyle: 'hidden',
@@ -19,8 +21,6 @@ app.on('ready', function () {
   })
 
   main.setMenu(null)
-
-  main.maximize()
 
   main.loadURL(path.join('file://', __dirname, '/app/index.html'))
 
