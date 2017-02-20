@@ -10,8 +10,8 @@ app.on('ready', function () {
   main = new BrowserWindow({
     height: 750,
     width: 1080,
-    minHeight: 700,
-    minWidth: 1000,
+    minHeight: 750,
+    minWidth: 1080,
     resizable: true,
     title: 'sciencefair',
     titleBarStyle: 'hidden',
