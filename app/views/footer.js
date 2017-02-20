@@ -111,7 +111,7 @@ module.exports = (state, prev, send) => {
   const sources = state.datasources.list.filter(ds => ds.active)
   const datasource = html`
 
-  <div class="${style.right} ${style.part}">
+  <div class="${style.right} ${style.part} clickable">
     <div class=${style.n}>${sources.length}</div>
     <div>datasources</div>
   </div>
