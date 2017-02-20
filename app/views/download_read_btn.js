@@ -74,6 +74,7 @@ module.exports = (state, prev, send) => {
 
   btn.onclick = e => {
     e.preventDefault()
+    if (selected.length > 1) return
     progress === 100 ? send('read_selection') : send('download_add', selected)
   }
 
