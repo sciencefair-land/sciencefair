@@ -51,7 +51,7 @@ module.exports = (tags, state, prev, send) => {
     if (state.showAddField) {
       return ''
     } else {
-      const btn = html`<div class=${style.addtagbtn}>
+      const btn = html`<div class="${style.addtagbtn} clickable">
         ${msg()}
         +
       </div>`
