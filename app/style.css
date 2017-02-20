@@ -107,6 +107,7 @@ body {
 
 .clickable {
   opacity: 0.8;
+  cursor: pointer;
 }
 
 .clickable:hover {
