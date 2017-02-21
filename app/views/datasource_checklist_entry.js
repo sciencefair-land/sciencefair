@@ -175,14 +175,16 @@ module.exports = (datasource, state, prev, send) => {
 
       `
     } else {
-      const papercount = datasource.stats.articleCount
-        ? (datasource.stats.articleCount < 1000
-          ? numeral(datasource.stats.articleCount).format('0,0')
-          : numeral(datasource.stats.articleCount).format('0.0a'))
+      const metastat = datasource.stats.metadataSync
+
+      const papercount = metastat.total
+      const papercounttxt = papercount
+        ? (papercount < 1000
+          ? numeral(papercount).format('0,0')
+          : numeral(papercount).format('0.0a'))
         : '?'
 
-      const metastat = datasource.stats.metadataSync
-      const syncdone = metastat.done / metastat.total
+      const syncdone = metastat.done / papercount
       const synced = metastat.finished
         ? '100%'
         : numeral(`${syncdone}`).format('0%')
@@ -219,7 +221,7 @@ module.exports = (datasource, state, prev, send) => {
             ${stat(datasource.live ? 'live' : 'static', datasource.live)}
             ${stat((syncdone > 0 && syncdone < 1) ? 'syncing' : 'synced', synced)}
             ${stat('peers', peers)}
-            ${stat('papers', papercount)}
+            ${stat('papers', papercounttxt)}
           </div>
         </div>
         <div class=${style.right}>
