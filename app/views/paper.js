@@ -113,7 +113,11 @@ module.exports = (result, state, prev, send) => {
   })
 
   const doubleClick = event => {
-    if (result.paper.progress === 100) send('read_selection')
+    if (result.paper.progress === 100) {
+      send('read_selection')
+    } else {
+      send('download_add', [result.paper])
+    }
   }
 
   paper.onclick = e => {
