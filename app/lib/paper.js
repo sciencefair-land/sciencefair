@@ -72,7 +72,7 @@ function Paper (data) {
   self.download = cb => self.ds.download(self, cb)
 
   self.getArticleEntries = cb => {
-    if (self.entries) return cb(self.entries)
+    if (self.entries) return cb(null, self.entries)
     self.ds.getArticleEntries(self, (err, entries) => {
       if (err) return cb(err)
       self.entries = entries
@@ -94,6 +94,19 @@ function Paper (data) {
       path: self.path,
       entryfile: self.entryfile
     }
+  }
+
+  self.removeFiles = cb => {
+    self.getArticleEntries((err, entries) => {
+      if (err) return cb(err)
+      entries.filter(
+        entry => entry.type === 'directory'
+      ).forEach(
+        entry => fs.emptyDirSync(path.join(self.ds.datadir, entry.name))
+      )
+
+      cb()
+    })
   }
 
   self.loadData()
