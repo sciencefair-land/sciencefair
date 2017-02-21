@@ -112,7 +112,9 @@ module.exports = (result, state, prev, send) => {
     meta: e.metaKey
   })
 
-  const doubleClick = event => send('read_selection')
+  const doubleClick = event => {
+    if (result.paper.progress === 100) send('read_selection')
+  }
 
   paper.onclick = e => {
     e.preventDefault()
