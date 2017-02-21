@@ -168,16 +168,19 @@ function renderAbstract (abstract) {
   return html('<span>' + abstract + '</span>')
 }
 
+function renderTitle (title) {
+  return html('<span>' + title + '</span>')
+}
+
 function singlepaper (paper, style, state, prev, send) {
   if (!paper) return null
-
   return html`
 
   <div class="${style.wrapper}">
     <div class="${style.row}">
       <div class="${style.paper}">
         <div class="${style.title} ${style.row} ${style.datum}">
-          <span>${paper.title}</span>
+          <span>${renderTitle(paper.title)}</span>
         </div>
         <div class="${style.meta} ${style.row} ${style.datum}">
           <div class="${style.author}">
