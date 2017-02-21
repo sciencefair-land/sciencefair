@@ -1,4 +1,6 @@
 const intersection = require('lodash/intersection')
+const bulk = require('bulk-write-stream')
+const pump = require('pump')
 
 const parsedoc = doc => {
   return (typeof doc === 'string')
@@ -24,14 +26,14 @@ module.exports = (data, state, send, done) => {
   }
 
   function parseresults (results) {
-    results.hits = results.hits.map((hit) => {
+    results = results.map(hit => {
       hit.document = parsedoc(hit.document)
       if (!hit.document.tags) hit.document.tags = []
       hit.collected = true
       hit.source = hit.document.source
       return hit
     })
-    return results
+    return { hits: results }
   }
 
   function all () {
@@ -55,23 +57,33 @@ module.exports = (data, state, send, done) => {
   }
 
   function search () {
-    state.collection.search(data.query.trim(), (err, results) => {
-      if (err) done(err)
-      if (results.hits.length > 0) {
+    const query = data.query.replace('*', '').trim()
+
+    const resultbatcher = () => {
+      let count = 0
+
+      const write = (list, cb) => {
+        count += list.length
+
         if (data.tags && data.tags.length > 0) {
           // filter by tags
-          const hits = results.hits.filter((hit) => {
+          list = list.filter(hit => {
             const doc = parsedoc(hit.document)
             const overlap = intersection(doc.tags, data.tags)
             return overlap.length === data.tags.length
           })
-          results.hits = hits
         }
-        send('results_receive', parseresults(results), done)
-      } else {
-        send('results_none', 'collection', done)
+        send('results_receive', parseresults(list), cb)
       }
-    })
+
+      const flush = cb => {
+        if (count === 0) send('results_none', 'collection', done)
+      }
+
+      return bulk.obj({ highWaterMark: 50 }, write, flush)
+    }
+
+    pump(state.collection.search(data.query), resultbatcher(), done)
   }
 
   function filter () {

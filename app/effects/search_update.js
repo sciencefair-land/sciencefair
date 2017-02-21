@@ -8,7 +8,7 @@ module.exports = (data, state, send, done) => {
 
   // if query is '*' or we have tags, don't search datasources
   const searchdatasources =
-    !(data.query.trim() === '*') &&
+    !(data.query[0] === '*') &&
     !(data.tags && data.tags.length)
 
   const alldone = require('../lib/alldone')(searchdatasources ? 3 : 2, done)
