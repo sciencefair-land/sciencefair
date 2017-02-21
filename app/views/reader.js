@@ -60,7 +60,7 @@ const reader = (port, paper, send) => {
   })
 
   var closebtn = html`
-    <img class="${style.closebtn}" src="./images/close.png">
+    <img class="${style.closebtn}" src="./images/close.svg">
   `
 
   closebtn.onclick = (e) => {
