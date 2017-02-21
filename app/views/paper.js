@@ -104,16 +104,24 @@ module.exports = (result, state, prev, send) => {
     </div>
   `
 
-  paper.onclick = (e) => {
-    e.preventDefault()
+  const singleClick = e => send('paper_select_show', {
+    index: result.index,
+    paper: result.paper,
+    shift: e.shiftKey,
+    ctrl: e.ctrlKey,
+    meta: e.metaKey
+  })
 
-    send('paper_select_show', {
-      index: result.index,
-      paper: result.paper,
-      shift: e.shiftKey,
-      ctrl: e.ctrlKey,
-      meta: e.metaKey
-    })
+  const doubleClick = event => send('read_selection')
+
+  paper.onclick = e => {
+    e.preventDefault()
+    singleClick(e)
+  }
+
+  paper.ondblclick = e => {
+    e.preventDefault()
+    doubleClick(e)
   }
 
   return paper
