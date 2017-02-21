@@ -79,7 +79,8 @@ function Datasource (key, opts) {
     keyField: '$.id',
     indexMap: {
       'title': true,
-      'author': true,
+      'author': false,
+      'authorstr': true,
       'date': false,
       'identifier': false,
       'abstract': true,

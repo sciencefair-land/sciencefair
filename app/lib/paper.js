@@ -84,6 +84,7 @@ function Paper (data) {
     return {
       title: self.title,
       author: self.author,
+      authorstr: self.author.map(a => `${a['given-names']} ${a.surname}`).join(' '),
       date: self.date,
       abstract: self.abstract,
       tags: self.tags,
