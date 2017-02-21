@@ -9,7 +9,7 @@ const catpapers = require('../mocks/cats.json')
 const tmpdir = new tmp.Dir()
 const dbpath = path.join(tmpdir.path, 'yuno')
 
-const effect = require('../app/effects/collection_updategetpaper')
+const effect = require('../app/effects/collection_updatepaper')
 
 test('effect: collection_updatepaper', (t) => {
   require('../mocks/populated_collection')({

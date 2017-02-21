@@ -56,12 +56,17 @@ function Paper (data) {
   }
 
   self.filesPresent = cb => {
-    if (self.progress === 1) return cb(null, 1)
-    self.getArticleEntries((err, entries) => {
-      if (err) return cb(err)
-      self.progress = self.ds.entrysetDownloadProgress(entries)
-      cb(null, self.progress)
-    })
+    if (self.ds && self.ds.articles && self.ds.articles.content) {
+      if (self.progress === 1) return cb(null, 1)
+      return self.getArticleEntries((err, entries) => {
+        if (err) return cb(err)
+        self.progress = self.ds.entrysetDownloadProgress(entries)
+        cb(null, self.progress)
+      })
+    } else {
+      // datasource not ready to check progress, try again after delay
+      return setTimeout(() => self.filesPresent(cb), 500)
+    }
   }
 
   self.download = cb => self.ds.download(self, cb)
@@ -91,7 +96,6 @@ function Paper (data) {
   }
 
   self.loadData()
-
 }
 
 module.exports = Paper
