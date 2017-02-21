@@ -14,7 +14,9 @@ const stopwords = [
   'and', 'but', 'the', 'a', 'an', 'and', 'so', 'yet', 'of', 'in', 'to', 'by',
   'is', 'that', 'for', 'we', 'published', 'study', 'from', 'with', 'as', 'on',
   'between', 'experiment', 'experiments', 'results', 'biology', 'are', 'this',
-  'et', 'al', 'al.', 'al.,', 'be', 'project:', 'which', 'these', 'or', 'have', 'at', 'our', 'were', 'show', 'during', 'can', 'not', 'its', 'their'
+  'et', 'al', 'al.', 'al.,', 'be', 'project:', 'which', 'these', 'or', 'have',
+  'at', 'our', 'were', 'show', 'during', 'can', 'not', 'its', 'their', 'has',
+  'here'
 ]
 
 const maxwidth = 200
