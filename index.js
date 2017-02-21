@@ -2,7 +2,8 @@ const {app, BrowserWindow, protocol} = require('electron')
 
 if (process.env['SCIENCEFAIR_DEVMODE']) require('electron-debug')({ enable: true })
 
-var path = require('path')
+const path = require('path')
+const open = require('open')
 
 var main = null
 
@@ -28,6 +29,11 @@ app.on('ready', function () {
   // hide the window until content is loaded
   main.webContents.on('did-finish-load', () => {
     setTimeout(() => main.show(), 40)
+  })
+
+  main.webContents.on('new-window', (event, url) => {
+    event.preventDefault()
+    open(url)
   })
 
   main.on('close', event => {
