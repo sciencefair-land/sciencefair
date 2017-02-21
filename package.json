@@ -1,6 +1,6 @@
 {
   "name": "sciencefair",
-  "version": "1.0.0-alpha2",
+  "version": "1.0.0-alpha3",
   "description": "search, browse, and download open access papers",
   "main": "index.js",
   "scripts": {
@@ -55,6 +55,7 @@
     "npm": "^3.8.7",
     "numeral": "^1.5.3",
     "nvd3": "^1.8.4",
+    "open": "0.0.5",
     "parallel-transform": "^1.1.0",
     "path-exists": "^2.1.0",
     "portfinder": "^1.0.3",

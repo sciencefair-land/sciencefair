@@ -1,6 +1,7 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
 const cache = require('cache-element')
+const open = require('open')
 
 const reader = (port, paper, send) => {
   console.log('(re-)rendering reader')
@@ -52,6 +53,11 @@ const reader = (port, paper, send) => {
 
   frame.shadowRoot.applyAuthorStyles = true
   frame.shadowRoot.children[1].style.cssText = 'width: 100%; height: 100%'
+
+  frame.addEventListener('new-window', (event, url) => {
+    event.preventDefault()
+    open(event.url)
+  })
 
   var closebtn = html`
     <img class="${style.closebtn}" src="./images/close.png">
