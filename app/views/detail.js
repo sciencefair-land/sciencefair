@@ -66,10 +66,22 @@ module.exports = (state, prev, send) => {
   }
 
   .abstract {
+    display: inline-block;
     padding: 0;
     margin: 5px;
     font-family: CooperHewitt-Light;
     line-height: 18px;
+  }
+
+  .doi {
+    padding: 0;
+    margin: 5px;
+    font-family: CooperHewitt-Medium;
+    color: ${C.LIGHTGREY};
+  }
+
+  .doi a {
+    color: ${C.LIGHTGREY};
   }
 
   .author {
@@ -177,6 +189,9 @@ function singlepaper (paper, style, state, prev, send) {
         </div>
         <div class="${style.abstract} ${style.row} ${style.datum}">
           ${renderAbstract(paper.abstract)}
+        </div>
+        <div class="${style.doi} ${style.row} ${style.datum}">
+          <span>DOI: <a href="http://doi.org/${paper.id}">${paper.id}</a></span>
         </div>
       </div>
       <div class="${style.column}">
