@@ -6,7 +6,7 @@ module.exports = (data, state, send, done) => {
   const newtagquery = queryparts.length === 2 ? queryparts[1] || '' : null
 
   var update = cloneDeep(state.currentsearch)
-  update.query = newquery
+  update.query = newquery.replace(/et al\.?$/, '')
   update.tagquery = newtagquery
 
   send('results_clear', null, (err) => {
