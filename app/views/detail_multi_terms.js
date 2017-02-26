@@ -9,6 +9,7 @@ const toPairs = require('lodash/toPairs')
 const max = require('lodash/max')
 const difference = require('lodash/difference')
 const uniq = require('lodash/uniq')
+const uniqBy = require('lodash/uniqBy')
 
 const stopwords = [
   'and', 'but', 'the', 'a', 'an', 'and', 'so', 'yet', 'of', 'in', 'to', 'by',
@@ -16,7 +17,8 @@ const stopwords = [
   'between', 'experiment', 'experiments', 'results', 'biology', 'are', 'this',
   'et', 'al', 'al.', 'al.,', 'be', 'project:', 'which', 'these', 'or', 'have',
   'at', 'our', 'were', 'show', 'during', 'can', 'not', 'its', 'their', 'has',
-  'here'
+  'here', 'also', 'it', 'required', 'additional', 'find', 'because', 'most',
+  'both'
 ]
 
 const maxwidth = 200
@@ -105,13 +107,13 @@ function plotrow (tc, unit) {
 }
 
 function termcount (papers) {
-  const terms = papers.map((paper) => {
+  const terms = uniqBy(papers, 'key').map(paper => {
     const title = (paper.title ? paper.title : '')
       .replace('.', '').replace(/s$/, '').split(' ')
-      .map(term => term.toLowerCase())
+      .map(term => term.toLowerCase().replace(/[,\.]/, ''))
     const abstract = (paper.abstract ? paper.abstract : '')
       .replace('.', '').replace(/s$/, '').split(' ')
-      .map(term => term.toLowerCase())
+      .map(term => term.toLowerCase().replace(/[,\.]/, ''))
     return difference(uniq(title.concat(abstract)), stopwords)
   })
 

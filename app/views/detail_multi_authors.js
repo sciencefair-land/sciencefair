@@ -8,6 +8,7 @@ const isString = require('lodash/isString')
 const sortBy = require('lodash/sortBy')
 const toPairs = require('lodash/toPairs')
 const max = require('lodash/max')
+const uniqBy = require('lodash/uniqBy')
 
 const maxwidth = 200
 
@@ -96,7 +97,7 @@ function plotrow (ac, unit) {
 }
 
 function authorcount (papers) {
-  const authors = papers.map((paper) => {
+  const authors = uniqBy(papers, 'key').map(paper => {
     const author = paper.author
     if (isString(author)) {
       return author.split(',').map((a) => a.trim())
