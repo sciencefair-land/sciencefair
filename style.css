@@ -21,3 +21,22 @@ html, body {
   margin: 0 auto;
   padding-bottom: 5%;
 }
+
+#external-logos {
+  width: 85vw;
+  height: 15vw;
+  margin: 0 0 0 7%;
+  background-color: #212127;
+  border-radius: 4px;
+}
+
+#external-logos > a {
+  float: left;
+  width: 23%;
+  margin-bottom: 10%;
+}
+
+.logo {
+  margin: 0 auto;
+  padding: 15%;
+}
