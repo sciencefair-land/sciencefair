@@ -15,6 +15,7 @@ html, body {
 }
 
 .text {
+  display: flex;
   font-family: 'Slabo 27px', serif;
   font-size: 2vw;
   width: 70vw;
@@ -28,6 +29,7 @@ html, body {
   margin: 0 0 0 7%;
   background-color: #212127;
   border-radius: 4px;
+  padding-bottom: 2%
 }
 
 #external-logos > a {
