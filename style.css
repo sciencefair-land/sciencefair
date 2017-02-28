@@ -5,5 +5,19 @@ html, body {
 }
 
 #content {
-  background-image: url("assets/site_mocks.svg");
+  background-color: #6eacc1;
+}
+
+#back-img {
+  top: 0;
+  left: 0;
+  width: 100vw;
+}
+
+.text {
+  font-family: 'Slabo 27px', serif;
+  font-size: 2vw;
+  width: 70vw;
+  margin: 0 auto;
+  padding-bottom: 5%;
 }
