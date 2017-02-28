@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 18.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="78.2 255.8 449.6 273.7" enable-background="new 78.2 255.8 449.6 273.7" xml:space="preserve">
+<g id="board">
+	<g>
+		<g>
+			<rect x="177" y="277.4" fill="#212127" width="252.1" height="252.1"/>
+			<polyline fill="#212127" points="175.9,529.5 78.2,529.5 78.2,255.8 175.9,277.4 			"/>
+			<polyline fill="#212127" points="430.1,529.5 527.8,529.5 527.8,255.8 430.1,277.4 			"/>
+		</g>
+	</g>
+</g>
+<g id="rosette">
+	<g id="ribbons">
+	</g>
+	<g>
+		<polygon fill="#CAAD4D" stroke="#CAAD4D" stroke-width="2" stroke-miterlimit="10" points="361.7,348.4 346.7,394.7 357.5,385.5 
+			360.1,400.4 373.9,363.2 386.9,410.1 390,395.2 401.3,401.9 386.3,351.9 		"/>
+		<polygon fill="#6EACC1" stroke="#CAAD4D" stroke-width="16" stroke-miterlimit="10" points="348.3,312.2 373.3,297.8 398.2,312.2 
+			398.2,341 373.3,355.5 348.3,341 		"/>
+	</g>
+</g>
+<g id="text">
+	<g>
+		<text transform="matrix(1 0 0 1 205.7837 398.8291)" fill="#6EACC1" font-family="'Aleo-Regular'" font-size="37.041">science</text>
+	</g>
+	<g>
+		<text transform="matrix(1 0 0 1 204.7544 434.3271)" fill="#CAAD4D" font-family="'Aleo-Regular'" font-size="37.041">fair</text>
+	</g>
+	<g id="logo" display="none">
+	</g>
+</g>
+</svg>
