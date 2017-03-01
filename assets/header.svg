@@ -1,35 +1,126 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 18.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="78.2 255.8 449.6 273.7" enable-background="new 78.2 255.8 449.6 273.7" xml:space="preserve">
-<g id="board">
-	<g>
-		<g>
-			<rect x="177" y="277.4" fill="#212127" width="252.1" height="252.1"/>
-			<polyline fill="#212127" points="175.9,529.5 78.2,529.5 78.2,255.8 175.9,277.4 			"/>
-			<polyline fill="#212127" points="430.1,529.5 527.8,529.5 527.8,255.8 430.1,277.4 			"/>
-		</g>
-	</g>
-</g>
-<g id="rosette">
-	<g id="ribbons">
-	</g>
-	<g>
-		<polygon fill="#CAAD4D" stroke="#CAAD4D" stroke-width="2" stroke-miterlimit="10" points="361.7,348.4 346.7,394.7 357.5,385.5 
-			360.1,400.4 373.9,363.2 386.9,410.1 390,395.2 401.3,401.9 386.3,351.9 		"/>
-		<polygon fill="#6EACC1" stroke="#CAAD4D" stroke-width="16" stroke-miterlimit="10" points="348.3,312.2 373.3,297.8 398.2,312.2 
-			398.2,341 373.3,355.5 348.3,341 		"/>
-	</g>
-</g>
-<g id="text">
-	<g>
-		<text transform="matrix(1 0 0 1 205.7837 398.8291)" fill="#6EACC1" font-family="'Aleo-Regular'" font-size="37.041">science</text>
-	</g>
-	<g>
-		<text transform="matrix(1 0 0 1 204.7544 434.3271)" fill="#CAAD4D" font-family="'Aleo-Regular'" font-size="37.041">fair</text>
-	</g>
-	<g id="logo" display="none">
-	</g>
-</g>
+
+<svg width="450px" height="231px" viewBox="78 246 450 231" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="70" height="56"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="70" height="56" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <rect id="path-3" x="8.3255814" y="31.5" width="8.95348837" height="24.5"></rect>
+        <mask id="mask-4" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="8.95348837" height="24.5" fill="white">
+            <use xlink:href="#path-3"></use>
+        </mask>
+        <rect id="path-5" x="22.7906977" y="21" width="8.95348837" height="35"></rect>
+        <mask id="mask-6" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="8.95348837" height="35" fill="white">
+            <use xlink:href="#path-5"></use>
+        </mask>
+        <rect id="path-7" x="37.255814" y="12.25" width="8.95348837" height="43.75"></rect>
+        <mask id="mask-8" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="8.95348837" height="43.75" fill="white">
+            <use xlink:href="#path-7"></use>
+        </mask>
+        <rect id="path-9" x="51.7209302" y="31.5" width="8.95348837" height="24.5"></rect>
+        <mask id="mask-10" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="8.95348837" height="24.5" fill="white">
+            <use xlink:href="#path-9"></use>
+        </mask>
+        <polygon id="path-11" points="0 2.72512665 69 0 69 60 0 70.9630066"></polygon>
+        <mask id="mask-12" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="69" height="70.9630066" fill="white">
+            <use xlink:href="#path-11"></use>
+        </mask>
+        <rect id="path-13" x="0" y="0" width="11" height="120"></rect>
+        <mask id="mask-14" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="11" height="120" fill="white">
+            <use xlink:href="#path-13"></use>
+        </mask>
+        <rect id="path-15" x="81" y="17" width="11" height="103"></rect>
+        <mask id="mask-16" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="11" height="103" fill="white">
+            <use xlink:href="#path-15"></use>
+        </mask>
+        <rect id="path-17" x="81" y="0" width="11" height="120"></rect>
+        <mask id="mask-18" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="11" height="120" fill="white">
+            <use xlink:href="#path-17"></use>
+        </mask>
+        <rect id="path-19" x="0" y="24" width="11" height="103"></rect>
+        <mask id="mask-20" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="11" height="103" fill="white">
+            <use xlink:href="#path-19"></use>
+        </mask>
+    </defs>
+    <g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(78.000000, 246.000000)">
+        <g id="science-fair">
+            <g id="header">
+                <g id="board" fill-rule="nonzero" fill="#212127">
+                    <g id="Group">
+                        <rect id="Rectangle-path" x="99" y="25.7796364" width="252.1" height="188.845818"></rect>
+                        <polyline id="Shape" points="97.9 214.625455 0.2 230.420013 0.2 0.309127592 97.9 25.7796364"></polyline>
+                        <polyline id="Shape" points="352.1 214.625455 449.8 230.420013 449.8 0.309997559 352.1 25.7796364"></polyline>
+                    </g>
+                </g>
+                <g id="rosette" transform="translate(263.000000, 61.000000)" fill-rule="nonzero" stroke="#CAAD4D">
+                    <g id="Group">
+                        <polygon id="Shape" stroke-width="2" fill="#CAAD4D" points="15.7 51.4 0.7 97.7 11.5 88.5 14.1 103.4 27.9 66.2 40.9 113.1 44 98.2 55.3 104.9 40.3 54.9"></polygon>
+                        <polygon id="Shape" stroke-width="16" fill="#6EACC1" points="2.3 15.2 27.3 0.8 52.2 15.2 52.2 44 27.3 58.5 2.3 44"></polygon>
+                    </g>
+                </g>
+                <g id="text" transform="translate(126.000000, 112.000000)" font-size="37.041" font-family="Aleo-Regular, Aleo" font-weight="normal">
+                    <text id="science" fill="#6EACC1">
+                        <tspan x="1.7837" y="34.8291">science</tspan>
+                    </text>
+                    <text id="fair" fill="#CAAD4D">
+                        <tspan x="0.7544" y="70.3271">fair</tspan>
+                    </text>
+                </g>
+            </g>
+            <g id="mid-panel" transform="translate(121.000000, 46.000000)" stroke="#383838">
+                <g id="plot">
+                    <use id="Rectangle-2" mask="url(#mask-2)" stroke-width="6" xlink:href="#path-1"></use>
+                    <use id="Rectangle-3" mask="url(#mask-4)" stroke-width="2" fill="#383838" xlink:href="#path-3"></use>
+                    <use id="Rectangle-3-Copy" mask="url(#mask-6)" stroke-width="2" fill="#383838" xlink:href="#path-5"></use>
+                    <use id="Rectangle-3-Copy-2" mask="url(#mask-8)" stroke-width="2" fill="#383838" xlink:href="#path-7"></use>
+                    <use id="Rectangle-3-Copy-3" mask="url(#mask-10)" stroke-width="2" fill="#383838" xlink:href="#path-9"></use>
+                </g>
+                <path d="M81.5,1.5 L115.514703,1.5" id="Line" stroke-width="3" stroke-linecap="square"></path>
+                <path d="M81.5,13.5 L115.514703,13.5" id="Line-Copy-4" stroke-width="3" stroke-linecap="square"></path>
+                <path d="M81.5,26.5 L115.514703,26.5" id="Line-Copy-5" stroke-width="3" stroke-linecap="square"></path>
+                <path d="M81.5,40.5 L115.514703,40.5" id="Line-Copy-7" stroke-width="3" stroke-linecap="square"></path>
+                <path d="M81.5,54.5 L115.514703,54.5" id="Line-Copy-6" stroke-width="3" stroke-linecap="square"></path>
+            </g>
+            <g id="left-panel" transform="translate(3.000000, 21.000000)">
+                <path d="M11.5,13.5 L80.5,25.5" id="Line" stroke="#383838" stroke-width="4" stroke-linecap="square"></path>
+                <path d="M12,41 L80.5,48.5" id="Line-Copy" stroke="#383838" stroke-width="4" stroke-linecap="square"></path>
+                <path d="M12,67 L80.5,71.5" id="Line-Copy-2" stroke="#383838" stroke-width="4" stroke-linecap="square"></path>
+                <path d="M12,94.5 L80.5,94.5" id="Line-Copy-3" stroke="#383838" stroke-width="4" stroke-linecap="square"></path>
+                <g id="left-plot" transform="translate(12.000000, 115.000000)" stroke="#383838">
+                    <use id="Rectangle" mask="url(#mask-12)" stroke-width="6" xlink:href="#path-11"></use>
+                    <circle id="Oval" fill="#383838" cx="16" cy="27" r="4"></circle>
+                    <circle id="Oval-Copy" fill="#383838" cx="35" cy="35" r="4"></circle>
+                    <circle id="Oval-Copy-2" fill="#383838" cx="53" cy="23" r="4"></circle>
+                    <polyline id="Path-2" stroke-width="2" points="2.29998233 33.7174099 16.2111658 27.2597638 35.2509131 35.3502297 53.8138843 22.6466335 67.621981 12.5919975"></polyline>
+                </g>
+                <use id="Rectangle-4" stroke="#212127" mask="url(#mask-14)" stroke-width="2" fill="#212127" xlink:href="#path-13"></use>
+                <use id="Rectangle-5" stroke="#212127" mask="url(#mask-16)" stroke-width="2" fill="#212127" xlink:href="#path-15"></use>
+            </g>
+            <g id="right-panel" transform="translate(354.000000, 14.000000)">
+                <path d="M11.5,20.5 L80.5,32.5" id="Line" stroke="#383838" stroke-width="4" stroke-linecap="square" transform="translate(46.000000, 26.500000) scale(-1, 1) translate(-46.000000, -26.500000) "></path>
+                <path d="M12,48 L80.5,55.5" id="Line-Copy" stroke="#383838" stroke-width="4" stroke-linecap="square" transform="translate(46.500000, 52.000000) scale(-1, 1) translate(-46.500000, -52.000000) "></path>
+                <path d="M12,74 L80.5,78.5" id="Line-Copy-2" stroke="#383838" stroke-width="4" stroke-linecap="square" transform="translate(46.500000, 76.500000) scale(-1, 1) translate(-46.500000, -76.500000) "></path>
+                <path d="M12,101.5 L80.5,101.5" id="Line-Copy-3" stroke="#383838" stroke-width="4" stroke-linecap="square" transform="translate(46.500000, 101.500000) scale(-1, 1) translate(-46.500000, -101.500000) "></path>
+                <use id="Rectangle-4-Copy" stroke="#212127" mask="url(#mask-18)" stroke-width="2" fill="#212127" xlink:href="#path-17"></use>
+                <use id="Rectangle-5-Copy" stroke="#212127" mask="url(#mask-20)" stroke-width="2" fill="#212127" xlink:href="#path-19"></use>
+                <g id="graph" transform="translate(16.000000, 122.000000)" stroke="#383838">
+                    <circle id="Oval-2" fill="#383838" cx="30" cy="31" r="7"></circle>
+                    <path d="M29.4377209,29.0957676 L4,12" id="Line" stroke-width="2" stroke-linecap="square"></path>
+                    <path d="M29.5,30.5 L59.3756627,10.9352468" id="Line" stroke-width="2" stroke-linecap="square"></path>
+                    <path d="M30,29.5 L30,6.64242165" id="Line" stroke-width="2" stroke-linecap="square"></path>
+                    <path d="M29.5,30.5 L8.10290999,38.4593986" id="Line" stroke-width="2" stroke-linecap="square"></path>
+                    <path d="M29.5,30.5 L48.5,47.5" id="Line" stroke-width="2" stroke-linecap="square"></path>
+                    <path d="M29.5,31.5 L22.0785226,65.7295152" id="Line" stroke-width="2" stroke-linecap="square"></path>
+                    <circle id="Oval-3" fill="#383838" cx="4" cy="12" r="4"></circle>
+                    <circle id="Oval-3-Copy" fill="#383838" cx="30" cy="4" r="4"></circle>
+                    <circle id="Oval-3-Copy-2" fill="#383838" cx="22" cy="67" r="4"></circle>
+                    <circle id="Oval-3-Copy-3" fill="#383838" cx="7" cy="39" r="4"></circle>
+                    <circle id="Oval-3-Copy-4" fill="#383838" cx="49" cy="48" r="4"></circle>
+                    <circle id="Oval-3-Copy-5" fill="#383838" cx="59" cy="11" r="4"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
 </svg>
