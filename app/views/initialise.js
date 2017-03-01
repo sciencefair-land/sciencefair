@@ -37,6 +37,8 @@ const style = css`
 `
 
 let start
+let lastsyncdone
+let lastestimate
 
 module.exports = (state, prev, send) => {
   if (!state.initialising) return null
@@ -53,15 +55,27 @@ module.exports = (state, prev, send) => {
     return null
   }
 
-  const syncdone = metastat.done / metastat.total
-  const synced = metastat.finished
-    ? '100%'
-    : numeral(`${syncdone}`).format('0%')
-  const elapsed = new Date() - start
-  const estimate = (syncdone == 1) ? 0 : (elapsed * (metastat.total / metastat.done))
+  const syncleft = metastat.total - metastat.done
+  let estimate
+
+  // don't update estimate unless progress has changed
+  if (metastat.done === lastsyncdone) {
+    estimate = lastestimate
+  } else {
+    const elapsed = new Date() - start
+    const unittime = elapsed / metastat.done
+    estimate = unittime * syncleft
+    lastestimate = estimate
+    lastsyncdone = metastat.done
+  }
+
   const estimatetxt = estimate === Infinity || isNaN(estimate)
     ? 'calculating estimated time'
     : 'estimated ' + prettyms(estimate, { compact: true })
+
+  const synced = metastat.finished
+    ? '100%'
+    : numeral(`${metastat.done / metastat.total}`).format('0%')
 
   const remaining = html`
 

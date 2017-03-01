@@ -243,7 +243,7 @@ function Datasource (key, opts) {
 
     const count = through.ctor({ objectMode: true }, (data, enc, next) => {
       metadataPos += 1
-      if (metadataPos % 30 === 0) {
+      if (metadataPos % 30 === 0 || (end > 0 && metadataPos === end)) {
         self.stats.get('metadataSync').assign({
           done: metadataPos,
           finished: false
