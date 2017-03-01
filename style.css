@@ -18,17 +18,22 @@ a:hover {
   background-color: #6eacc1;
   margin: 0;
   padding: 0;
+  padding-bottom: 100px;
 }
 
 #header {
   top: 0;
   left: 0;
-  width: 100vw;
-  margin: 0;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .text-a h1, .text-b h1 {
   margin: 0;
+}
+
+.first-text {
+  margin-top:
 }
 
 .text-a {
@@ -37,7 +42,7 @@ a:hover {
   border-radius: 4px;
   font-family: 'Slabo 27px', serif;
   font-size: 1.8em;
-  width: 70vw;
+  width: 68%;
   margin: 0 auto;
   padding: 40px;
   margin-bottom: 40px;
@@ -47,17 +52,12 @@ a:hover {
   font-family: 'Slabo 27px', serif;
   font-size: 1.8em;
   color: rgb(178 ,180, 184);
-  width: 70vw;
+  width: 68%;
   margin: 0 auto;
   background-color: #212127;
   border-radius: 4px;
   padding: 40px;
   margin-bottom: 40px;
-}
-
-.credits-text {
-  padding: 30px;
-  padding-top: 0;
 }
 
 .text-b > a {
@@ -68,4 +68,6 @@ a:hover {
 .logo {
   margin: 0 auto;
   padding: 15%;
+  width: 75%;
+  max-width: 100%;
 }

@@ -3,17 +3,14 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0.5 189.9 612 365.4" enable-background="new 0.5 189.9 612 365.4" xml:space="preserve">
-<g id="bg">
-	<rect x="0.5" y="189.9" fill="#6EACC1" width="612" height="365.4"/>
-</g>
 <g id="board">
 	<g>
 		<g>
-			
+
 				<rect x="177.3" y="253.8" fill="#212127" stroke="#6EACC1" stroke-width="2" stroke-miterlimit="10" width="252.5" height="252.5"/>
-			<polyline fill="#212127" stroke="#6EACC1" stroke-width="2" stroke-miterlimit="10" points="176.2,506.3 78.3,506.3 78.3,232.2 
+			<polyline fill="#212127" stroke="#6EACC1" stroke-width="2" stroke-miterlimit="10" points="176.2,506.3 78.3,506.3 78.3,232.2
 				176.2,253.8 			"/>
-			<polyline fill="#212127" stroke="#6EACC1" stroke-width="2" stroke-miterlimit="10" points="430.8,506.3 528.7,506.3 
+			<polyline fill="#212127" stroke="#6EACC1" stroke-width="2" stroke-miterlimit="10" points="430.8,506.3 528.7,506.3
 				528.7,232.2 430.8,253.8 			"/>
 		</g>
 	</g>
@@ -22,9 +19,9 @@
 	<g id="ribbons">
 	</g>
 	<g>
-		<polygon fill="#CAAD4D" stroke="#CAAD4D" stroke-width="2" stroke-miterlimit="10" points="362.3,324.9 347.3,371.3 358.1,362.1 
+		<polygon fill="#CAAD4D" stroke="#CAAD4D" stroke-width="2" stroke-miterlimit="10" points="362.3,324.9 347.3,371.3 358.1,362.1
 			360.7,377 374.5,339.7 387.5,386.7 390.6,371.8 402,378.5 386.9,328.4 		"/>
-		<polygon fill="#6EACC1" stroke="#CAAD4D" stroke-width="16" stroke-miterlimit="10" points="348.9,288.7 373.9,274.2 398.9,288.7 
+		<polygon fill="#6EACC1" stroke="#CAAD4D" stroke-width="16" stroke-miterlimit="10" points="348.9,288.7 373.9,274.2 398.9,288.7
 			398.9,317.5 373.9,332 348.9,317.5 		"/>
 	</g>
 </g>
