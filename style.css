@@ -32,6 +32,7 @@ a:hover {
 }
 
 .text-a {
+  background-color: rgba(178 ,180, 184, 0.5);
   border: 2px solid #212127;
   border-radius: 4px;
   font-family: 'Slabo 27px', serif;
