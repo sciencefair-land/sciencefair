@@ -4,38 +4,64 @@ html, body {
   padding: 0;
 }
 
-#content {
-  background-color: #6eacc1;
+a {
+  color: rgba(55, 63, 72, 0.8);
+  text-decoration: none;
 }
 
-#back-img {
+a:hover {
+  color: rgba(55, 63, 72, 0.99);
+  text-decoration: none;
+}
+
+#content {
+  background-color: #6eacc1;
+  margin: 0;
+  padding: 0;
+}
+
+#header {
   top: 0;
   left: 0;
   width: 100vw;
+  margin: 0;
 }
 
-.text {
-  display: flex;
+.text-a h1, .text-b h1 {
+  margin: 0;
+}
+
+.text-a {
+  border: 2px solid #212127;
+  border-radius: 4px;
   font-family: 'Slabo 27px', serif;
-  font-size: 2vw;
+  font-size: 1.8em;
   width: 70vw;
   margin: 0 auto;
-  padding-bottom: 5%;
+  padding: 40px;
+  margin-bottom: 40px;
 }
 
-#external-logos {
-  width: 85vw;
-  height: 15vw;
-  margin: 0 0 0 7%;
+.text-b {
+  font-family: 'Slabo 27px', serif;
+  font-size: 1.8em;
+  color: rgb(178 ,180, 184);
+  width: 70vw;
+  margin: 0 auto;
   background-color: #212127;
   border-radius: 4px;
-  padding-bottom: 2%
+  padding: 40px;
+  margin-bottom: 40px;
 }
 
-#external-logos > a {
-  float: left;
+.credits-text {
+  padding: 30px;
+  padding-top: 0;
+}
+
+.text-b > a {
   width: 23%;
-  margin-bottom: 10%;
+  display: inline-block;
 }
 
 .logo {
