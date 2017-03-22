@@ -1,4 +1,3 @@
-
 html, body {
   margin: 0;
   padding: 0;
@@ -16,6 +15,10 @@ a {
 a:hover {
   color: rgba(55, 63, 72, 0.99);
   text-decoration: none;
+}
+
+.view {
+  height: 100vh;
 }
 
 #content {
@@ -86,4 +89,24 @@ p, li {
   padding: 15%;
   width: 75%;
   max-width: 100%;
+}
+
+#cta-download {
+  width: 120px;
+  background-color: #CAAD4D;
+  color: #212127;
+  border-radius: 4px;
+  margin: 0 auto;
+  padding: 5px;
+  font-family: "Open Sans";
+  white-space: nowrap;
+  font-size: 0.7em;
+  vertical-align: middle;
+  margin-bottom: 30px;
+}
+
+#cta-download > img {
+  display: inline-block;
+  width: 30px;
+  vertical-align: middle;
 }

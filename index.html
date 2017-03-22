@@ -4,58 +4,72 @@
     <meta http-equiv="content-type" content="text/html"; charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
     <title>sciencefair</title>
-
     <link href="assets/logo.png" rel="icon" type="image/png"/>
     <link href="style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto+Slab" rel="stylesheet">
   </head>
   <body>
     <div id="content">
-      <div class="header">
-        <img class="headimg" src="assets/header.svg" />
-      </div>
-      <div class="text-a">
-        <h1>Download</h1>
-        <p>TODO: download links for mac, windows, linux</p>
-        <p>Or get the source code on github.</a>
-      </div>
-      <div class="text-b">
-        <h1>Features</h1>
-        <ul>
-          <li>Search, download, organise and read scientific papers.</li>
-          <li>Clean, modern user interface.</li>
-          <li>Rich interactive reading experience with Lens reader.</li>
-          <li>Data is transmitted peer-to-peer.</li>
-          <li>You control the datasources you want to use.</li>
-          <li>Collected papers are ready for text-mining analysis, stored in JATS XML format.</li>
-        </ul>
-      </div>
-      <div class="text-a">
-        <h1>Technology</h1>
-        <ul>
-          <li>ScienceFair is built on <a href="http://electron.io">electron</a> for easy cross-platform compatibility.</li>
-          <li>p2p data sharing using <a href="https://github.com/mafintosh/hyperdrive">hyperdrive technology</a> developed by the <a href="http://datproject.org">Dat project</a>.</li>
-          <li>Articles are displayed with <a href="http://lens.elifesciences.org/about/">Lens reader</a> developed by <a href="http://substance.io">Substance</a> for <a href="http://elifesciences.org">eLife</a>.</li>
-        </ul>
-      </div>
-      <div class="text-b">
-        <div class="credits-text">
-          <h1>Credits</h1>
-          <p>ScienceFair was developed by CodeForScience and FathomLabs, with support from eLife and the Dat project.</p>
+      <div class="view">
+        <div class="header">
+          <img class="headimg" src="assets/header.svg" />
         </div>
-        <a href="http://codeforscience.org" target="_blank">
-          <img class="logo" src="assets/codeforscience.png">
-        </a>
-        <a href="http://datproject.org" target="_blank">
-          <img class="logo" src="assets/dat.png">
-        </a>
-        <a href="http://fathomlabs.io" target="_blank">
-          <img class="logo" src="assets/fathomlabs.png">
-        </a>
-        <a href="http://elifesciences.org" target="_blank">
-          <img class="logo" style="margin-bottom: 22%; width: 100%" src="assets/elife.png">
-        </a>
+        <div id="cta-download">
+          <span>Download now</span>
+          <img class="dlbtn" src="assets/download.svg" />
+        </div>
+      </div>
+      <div class="view">
+        <div class="text-a">
+          <h1>Features</h1>
+          <ul>
+            <li>Search, download, organise and read scientific papers.</li>
+            <li>Clean, modern user interface.</li>
+            <li>Rich interactive reading experience with Lens reader.</li>
+            <li>Data is transmitted peer-to-peer.</li>
+            <li>You control the datasources you want to use.</li>
+            <li>Collected papers are ready for text-mining analysis, stored in JATS XML format.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="view">
+        <div class="text-b">
+          <h1>Download</h1>
+          <p>TODO: download links for mac, windows, linux</p>
+          <p>Or get the source code on github.</a>
+        </div>
+      </div>
+      <div class="view">
+        <div class="text-a">
+          <h1>Technology</h1>
+          <ul>
+            <li>ScienceFair is built on <a href="http://electron.io">electron</a> for easy cross-platform compatibility.</li>
+            <li>p2p data sharing using <a href="https://github.com/mafintosh/hyperdrive">hyperdrive technology</a> developed by the <a href="http://datproject.org">Dat project</a>.</li>
+            <li>Articles are displayed with <a href="http://lens.elifesciences.org/about/">Lens reader</a> developed by <a href="http://substance.io">Substance</a> for <a href="http://elifesciences.org">eLife</a>.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="view">
+        <div class="text-b">
+          <div class="credits-text">
+            <h1>Credits</h1>
+            <p>ScienceFair was developed by CodeForScience and FathomLabs, with support from eLife and the Dat project.</p>
+          </div>
+          <a href="http://codeforscience.org" target="_blank">
+            <img class="logo" src="assets/codeforscience.png">
+          </a>
+          <a href="http://datproject.org" target="_blank">
+            <img class="logo" src="assets/dat.png">
+          </a>
+          <a href="http://fathomlabs.io" target="_blank">
+            <img class="logo" src="assets/fathomlabs.png">
+          </a>
+          <a href="http://elifesciences.org" target="_blank">
+            <img class="logo" style="margin-bottom: 22%; width: 100%" src="assets/elife.png">
+          </a>
+        </div>
       </div>
     </div>
+    <script src="assets/bundle.js"></script>
   </body>
 </html>
