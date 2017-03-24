@@ -97,16 +97,32 @@ p, li {
   color: #212127;
   border-radius: 4px;
   margin: 0 auto;
-  padding: 5px;
+  padding: 15px;
+  padding-right: 220px;
   font-family: "Open Sans";
   white-space: nowrap;
-  font-size: 0.7em;
+  font-size: 1.5em;
   vertical-align: middle;
   margin-bottom: 30px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
 
-#cta-download > img {
+#cta-download > a > img {
   display: inline-block;
   width: 30px;
   vertical-align: middle;
+}
+
+.dlbtn {
+  opacity: 0.5;
+}
+
+#cta-download:active {
+  box-shadow: 0 20px 40px rgba(0,0,0,0.19), 0 12px 12px rgba(0,0,0,0.23);
+}
+
+#download {
+  position: relative;
+  height: 40px;
+  top: -135px;
 }
