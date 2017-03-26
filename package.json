@@ -6,7 +6,8 @@
     "pack": "build --dir",
     "build": "build",
     "buildall": "build -mwl",
-    "buildtravis": "build -ml",
+    "buildlinux": "build -l",
+    "buildosx": "build -m",
     "buildappveyor": "build -w",
     "postinstall": "electron-rebuild -f --types prod,dev,optional --version 1.6.2 --build-from-source"
   },

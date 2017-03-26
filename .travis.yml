@@ -35,7 +35,8 @@ install:
 - yarn add electron-builder@next --dev # force install next version to test electron-builder
 
 script:
-- yarn run buildtravis
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then yarn run buildosx ; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then yarn run buildlinux ; fi
 
 branches:
   except:
