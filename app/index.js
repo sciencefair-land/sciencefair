@@ -45,8 +45,7 @@ function start () {
       route('/', require('./views/home'))
     ])
 
-    const tree = app.start()
-    document.body.appendChild(tree)
+    app.mount('body')
   })
 }
 
