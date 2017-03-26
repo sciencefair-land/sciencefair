@@ -1,56 +1,56 @@
-var mkdirp = require('mkdirp')
-var untildify = require('untildify')
+const C = require('./lib/constants')
+const mkdirp = require('mkdirp').sync
 
-var testing = process.env['SCIENCEFAIR_DEVMODE'] === 'TRUE'
-testing = true // TODO: turn this off when we cut first release
-console.log('Testing mode', testing ? 'ON' : 'OFF')
-if (testing) {
-  require('debug-menu').install()
+mkdirp(C.DATAROOT)
+mkdirp(C.COLLECTION_PATH)
+
+// if (process.env['SCIENCEFAIR_DEVMODE']) require('debug-menu').install()
+require('debug-menu').install()
+
+start()
+
+function start () {
+  const requireDir = require('require-dir')
+  const choo = require('choo')
+  const app = choo({
+    onError: (err, state, createSend) => {
+      if (/ENOENT/.test(err.message)) return // ugly hack to stop annoying error bubble
+      console.groupCollapsed(`ERROR (non-fatal) handled by sciencefair: ${err.message}`)
+      console.error(err)
+      console.groupEnd()
+
+      const send = createSend('onError: ')
+      if (err) send('note_add', {
+        title: 'Error',
+        message: err.message
+      }, () => {})
+    }
+  })
+
+  const model = {
+    state: require('./state'),
+    effects: requireDir('./effects'),
+    reducers: requireDir('./reducers'),
+    subscriptions: requireDir('./subscriptions')
+  }
+
+  require('./lib/localcollection')((err, db) => {
+    if (err) throw err
+
+    model.state.collection = db
+
+    app.model(model)
+
+    app.router('/', (route) => [
+      route('/', require('./views/home'))
+    ])
+
+    const tree = app.start()
+    document.body.appendChild(tree)
+  })
 }
 
-// layout
-var header = document.getElementById('header')
-var title = require('./components/title.js')(header)
-var mid = document.getElementById('middle')
-var main = require('./components/main.js')(mid)
-var footer = document.getElementById('footer')
-
-// setup data sources and server
-var message = require('./components/message.js')(main.element)
-message.update('Loading data sources...')
-message.show()
-
-var datadir = untildify('~/.sciencefair/data')
-mkdirp.sync(datadir)
-console.log('data directory:', datadir)
-
-var contentServer = require('./lib/contentServer.js')(datadir)
-var pubdata = require('./lib/pubdata.js')(datadir, testing)
-
-var metadata = pubdata.getMetadataSource(testing)[0]
-var fulltext = pubdata.getFulltextSource(testing)[0]
-
-var view = require('./components/mainview.js')({
-  containers: {
-    header: header,
-    middle: mid,
-    footer: footer,
-    title: title,
-    main: main
-  },
-  pubdata: pubdata,
-  fulltextSource: fulltext,
-  metadataSource: metadata,
-  datadir: datadir,
-  contentServer: contentServer,
-  testing: testing,
-  message: message
-})
-
-// start
-metadata.ensure(function () {
-  var metadataDB = require('./lib/database.js')(metadata)
-  metadataDB.on('ready', function () {
-    view.metadataReady(metadataDB)
-  })
+require('electron').ipcRenderer.on('quitting', () => {
+  console.log('APP QUITTING')
+  require('./lib/getdatasource').all().forEach(d => d.close())
 })

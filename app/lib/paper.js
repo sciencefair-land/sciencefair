@@ -1,152 +1,115 @@
-var inherits = require('inherits')
-var _ = require('lodash')
-var EventEmitter = require('events').EventEmitter
-var readdir = require('recursive-readdir-sync')
-var mkdirp = require('mkdirp')
-var path = require('path')
+const path = require('path')
+const fs = require('fs-extra')
 
-inherits(Paper, EventEmitter)
+const C = require('./constants')
 
-function Paper (doc, opts) {
-  if (!(this instanceof Paper)) return new Paper(doc, opts)
-  var self = this
+function Paper (data) {
+  if (data instanceof Paper) return data
+  if (!(this instanceof Paper)) return new Paper(data)
 
-  if (_.isString(doc.document)) {
-    doc.document = JSON.parse(doc.document)
+  if (data.document) {
+    Object.assign(data, data.document)
+    delete data.document
   }
-  self.doc = _.cloneDeep(doc.document)
-  Object.assign(self, doc.document)
 
-  self.identifier = self.doc.identifier.map((id) => {
-    if (id.type === 'pmcid') {
-      if (!(/^PMC/.test(id.id))) id.id = `PMC${id.id}`
+  const self = this
+  self.progress = 0
+
+  self.loadData = () => {
+    self.loadBib()
+    self.loadSearchResult()
+  }
+
+  self.loadBib = () => {
+    self.title = data.title || 'no title'
+    self.author = data.author || 'unknown'
+    self.abstract = data.abstract || 'no abstract given'
+    self.date = data.date || { year: 'unknown ', month: 'unknown', day: 'unknown'}
+    self.tags = data.tags || []
+    self.identifiers = data.identifier || []
+    self.source = data.source
+    if (!self.source) {
+      throw new Error('Paper requires a source:', data)
     }
-    return id
-  })
-  self.identifier = _.sortBy(self.identifier, 'type')
-  self.identifier = _.uniqBy(self.identifier, 'type')
-
-  self.assetDir = _.memoize(function () {
-    var dir = opts.fulltextSource.dir
-    var pmcid = self.getId('pmcid')
-    return path.join(opts.datadir, dir, pmcid)
-  })
-
-  self.assetPaths = function () {
-    mkdirp.sync(self.assetDir())
-    var paths = readdir(self.assetDir())
-    if (paths.length > 0) self.downloaded = true
-    return paths
+    self.loadDatasource()
+    self.loadID()
   }
 
-  self.assetPathByFilename = function (filename) {
-    var assetPaths = self.assetPaths()
-    if (!assetPaths.length) return false
-
-    var filenameInAssetDir = path.join(self.assetDir(), filename)
-
-    var match = assetPaths.filter(function(apath) {
-      return apath == filenameInAssetDir
+  self.loadDatasource = () => {
+    self.path = data.path
+    self.entryfile = data.entryfile
+    require('./getdatasource').fetch(self.source, (err, ds) => {
+      if (err)  return cb(err)
+      self.ds = ds
     })
-
-    // Assume only 1 match?
-    return match.length ? match[0] : false
   }
 
-  self.download = function (downloadfn, cb) {
-    function done (a, b, c) {
-      if (self.downloadsRunning === 0) cb(a, b, c)
-    }
-    downloadfn(self, done)
+  self.loadSearchResult = () => {
+    if (data.score) self.score = data.score
   }
 
-  self.downloadsRunning = 0
+  self.loadID = () => {
+    if (data.key) self.key = data.key
+    var doi = self.identifiers.find(id => id.type.toLowerCase() === 'doi')
+    self.id = doi ? doi.id : self.identifiers[0].id
+    self.key = `${self.source}:${self.id}`
+  }
 
-  self.downloading = function (res, url, type) {
-    // if we don't know the actual size of the file,
-    // assume it's 1MB so the user sees some progress
-    var total = parseInt(res.headers['content-length'], 10) || 100000
-
-    self.downloadsRunning += 1
-    var bytesReceived = 0
-
-    self.emit('download.start', {
-      type: type,
-      url: url,
-      response: res
-    })
-
-    res.on('data', function (data) {
-      bytesReceived += data.length
-      self.emit('download.data', {
-        type: type,
-        url: url,
-        response: res,
-        data: data,
-        bytesReceived: bytesReceived
+  self.filesPresent = cb => {
+    if (self.ds && self.ds.articles && self.ds.articles.content) {
+      if (self.progress === 1) return cb(null, 1)
+      return self.getArticleEntries((err, entries) => {
+        if (err) return cb(err)
+        self.progress = self.ds.entrysetDownloadProgress(entries)
+        cb(null, self.progress)
       })
-    })
-
-    res.on('error', function (err) {
-      console.log(err)
-      self.emit('download.error', {
-        type: type,
-        url: url,
-        response: res,
-        error: err
-      })
-    })
-
-    res.on('end', function () {
-      self.emit('download.end', {
-        type: type,
-        url: url,
-        response: res,
-        bytesReceived: bytesReceived
-      })
-    })
-  }
-
-  self.downloadFinished = function (a, b, c) {
-    self.downloadsRunning -= 1
-    self.emit('download.finished', a, b, c)
-  }
-
-  self.getId = _.memoize(function (type) {
-    if (!type) {
-      return self.getId('pmcid') || self.getId('pmid') || self.getId('doi')
-    }
-    var hit = _.find(self.identifier, { type: type })
-    return hit ? hit.id : null
-  })
-
-  self.stringForAuthor = function (author) {
-    return `${author.surname}`
-  }
-
-  self.etalia = _.memoize(function () {
-    var authorStrs = self.author.map(self.stringForAuthor)
-    if (self.author.length > 3) {
-      return self.stringForAuthor(self.author[0]) + ' et al.'
-    } else if (self.author.length === 2) {
-      return authorStrs.join(' & ')
     } else {
-      return authorStrs.join(', ')
+      // datasource not ready to check progress, try again after delay
+      return setTimeout(() => self.filesPresent(cb), 500)
     }
-  })
-
-  self.assetUrl = function (assetPath) {
-    var port = opts.contentServer.port
-    var dir = opts.fulltextSource.dir
-    var pmcid = self.getId('pmcid')
-    var url = `http://localhost:${port}/${dir}/${pmcid}/${assetPath}`
-    console.log('paper should be served at', url)
-    return url
   }
 
-  self.serialize = function () {
-    return self.doc
+  self.download = cb => self.ds.download(self, cb)
+
+  self.getArticleEntries = cb => {
+    if (self.entries) return cb(null, self.entries)
+    self.ds.getArticleEntries(self, (err, entries) => {
+      if (err) return cb(err)
+      self.entries = entries
+      return cb(null, entries)
+    })
   }
+
+  self.metadata = () => {
+    return {
+      title: self.title,
+      author: self.author,
+      authorstr: self.author.map(a => `${a['given-names']} ${a.surname}`).join(' '),
+      date: self.date,
+      abstract: self.abstract,
+      tags: self.tags,
+      source: self.source,
+      id: self.id,
+      identifier: self.identifiers,
+      path: self.path,
+      entryfile: self.entryfile
+    }
+  }
+
+  self.removeFiles = cb => {
+    self.getArticleEntries((err, entries) => {
+      if (err) return cb(err)
+      entries.filter(
+        entry => entry.type === 'directory'
+      ).forEach(
+        entry => fs.emptyDirSync(path.join(self.ds.datadir, entry.name))
+      )
+
+      cb()
+    })
+  }
+
+  self.loadData()
 }
 
 module.exports = Paper
