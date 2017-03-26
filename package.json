@@ -89,6 +89,7 @@
     "standard": "^7.1.2",
     "tape": "^4.6.0",
     "temporary": "0.0.8"
+    "tar.gz": "^1.0.5"
   },
   "optionalDependencies": {
     "appdmg": "^0.4.5"

@@ -6,6 +6,7 @@ const path = require('path')
 const mkdirp = require('mkdirp')
 const rimraf = require('rimraf')
 const zip = require('cross-zip')
+const targz = require('tar.gz')
 const minimist = require('minimist')
 const packager = require('electron-packager')
 const installer = require('electron-installer-windows')
@@ -28,16 +29,17 @@ const argv = minimist(process.argv.slice(2), {})
 function build () {
   rimraf.sync(DIST_PATH)
   const platform = argv._[0]
+  if (!platform) {
+    buildDarwin(printDone)
+    buildLinux(printDone)
+    buildWin(printDone)
+  }
   if (platform === 'darwin') {
     buildDarwin(printDone)
+  } else if (platform === 'linux') {
+    buildLinux(printDone)
   } else if (platform === 'win32') {
     buildWin(printDone)
-  } else {
-    buildDarwin(err => {
-      if (err) return printDone(err)
-      buildWin(printDone)
-    })
-  }
 }
 
 const all = {
@@ -73,6 +75,12 @@ const win32 = {
     'CompanyName': 'Code for Science',
     'ProductName': 'ScienceFair'
   }
+}
+
+var linux = {
+  platform: 'linux',
+  arch: 'x64',
+  icon: config.APP_ICON + '.icns',
 }
 
 build()
@@ -114,6 +122,19 @@ function buildWin (cb) {
         cb()
       })
     }
+  }
+}
+
+function buildLinux (cb) {
+  console.log('Linux: Packaging electron...')
+  packager(Object.assign({}, all, linux), function (err, buildPath) {
+    if (err) return cb(err);
+    console.log('Linux: Packaged electron. ' + buildPath);
+    var targetPath = path.join(DIST_PATH, BUILD_NAME + '_linux-x64.tar.gz');
+    rimraf.sync(targetPath);
+    targz().compress(buildPath[0], targetPath).then(function() {
+      console.log('Linux: Created tarball ' + targetPath);
+    }).catch(cb);
   })
 }
 
@@ -146,6 +167,10 @@ function buildDarwin (cb) {
       console.log('OS X: Creating dmg...')
 
       var appDmg = require('appdmg')
+      if (!appDmg) {
+        throw "Can't create DMG without app-dmg!"
+      }
+
 
       var targetPath = path.join(DIST_PATH, BUILD_NAME + '.dmg')
       rimraf.sync(targetPath)
