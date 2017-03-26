@@ -1,7 +1,7 @@
 const filter = require('lodash/filter')
 const cloneDeep = require('lodash/cloneDeep')
 
-module.exports = (data, state, send, done) => {
+module.exports = (state, data, send, done) => {
   const update = cloneDeep(state.currentsearch || {})
 
   update.tags = filter(state.currentsearch.tags, (t) => {

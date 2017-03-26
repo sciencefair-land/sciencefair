@@ -8,7 +8,7 @@
 //     Paper{}
 //   ]
 // }
-module.exports = (data, state) => {
+module.exports = (state, data) => {
   return {
     selection: data
   }

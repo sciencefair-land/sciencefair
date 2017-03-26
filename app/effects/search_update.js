@@ -1,7 +1,7 @@
 const uniq = require('lodash/uniq')
 const cloneDeep = require('lodash/cloneDeep')
 
-module.exports = (data, state, send, done) => {
+module.exports = (state, data, send, done) => {
   // query is an object containing:
   // `query` (String): text query
   // `tags` (Array): an array of 0 or more tags to filter by

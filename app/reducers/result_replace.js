@@ -1,7 +1,7 @@
 const cloneDeep = require('lodash/cloneDeep')
 const isArray = require('lodash/isArray')
 
-module.exports = (data, state) => {
+module.exports = (state, data) => {
   const results = cloneDeep(state.results)
   const resultkeys = results.map(r => r.key)
 

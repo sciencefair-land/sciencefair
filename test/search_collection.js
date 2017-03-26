@@ -41,7 +41,7 @@ test('effect: search_collection', (t) => {
         cb()
       }
 
-      effect(data, state, send, (err) => {
+      effect(state, data, send, (err) => {
         t.error(err, 'run tag filter')
 
         if (err) {
@@ -66,7 +66,7 @@ test('effect: search_collection', (t) => {
         cb()
       }
 
-      effect(data, state, send, (err) => {
+      effect(state, data, send, (err) => {
         t.error(err, 'run search')
 
         if (err) {
@@ -91,7 +91,7 @@ test('effect: search_collection', (t) => {
         cb()
       }
 
-      effect(data, state, send, (err) => {
+      effect(state, data, send, (err) => {
         t.error(err, 'run tag filter')
 
         if (err) {

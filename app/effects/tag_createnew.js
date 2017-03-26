@@ -1,6 +1,6 @@
 const cloneDeep = require('lodash/cloneDeep')
 
-module.exports = (data, state, send, done) => {
+module.exports = (state, data, send, done) => {
   const tags = cloneDeep(state.tags.tags) || {}
 
   tags[data.tag] = data.paper.map(p => p.key)
