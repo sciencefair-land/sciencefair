@@ -1,6 +1,6 @@
 const afterall = require('../lib/alldone')
 
-module.exports = (data, state, send, done) => {
+module.exports = (state, data, send, done) => {
   if (typeof data === 'string') data = [data]
 
   const removefromdb = afterall(data.length, () => {

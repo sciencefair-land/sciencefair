@@ -34,7 +34,7 @@ test('effect: collection_updatepaper', (t) => {
 
     data.document.tags = ['changed']
 
-    effect(data, state, null, (err) => {
+    effect(state, data, null, (err) => {
       t.error(err, 'update getpaper')
 
       if (err) {

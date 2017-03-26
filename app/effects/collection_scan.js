@@ -1,4 +1,4 @@
-module.exports = (data, state, send, done) => {
+module.exports = (state, data, send, done) => {
   const tags = {}
   var count = 0
   state.collection.docstore.createReadStream()

@@ -1,6 +1,6 @@
 const datasource = require('../lib/getdatasource')
 
-module.exports = (data, state, send, done) => {
+module.exports = (state, data, send, done) => {
   datasource.del(data.key)
   done()
 }

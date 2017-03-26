@@ -1,4 +1,4 @@
-module.exports = (data, state) => {
+module.exports = (state, data) => {
   return {
     initialising: data
   }

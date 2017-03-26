@@ -6,7 +6,7 @@ const through = require('through2').obj
 
 const noop = () => {}
 
-module.exports = (data, state, send, done) => {
+module.exports = (state, data, send, done) => {
   const papers = isArray(data) ? data : [data]
   const docs = stream(papers)
   const keys = papers.filter(p => !p.collected).map(p => p.key)

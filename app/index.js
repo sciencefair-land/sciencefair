@@ -41,8 +41,8 @@ function start () {
 
     app.model(model)
 
-    app.router('/', (route) => [
-      route('/', require('./views/home'))
+    app.router([
+      ['/', require('./views/home')]
     ])
 
     const tree = app.start()

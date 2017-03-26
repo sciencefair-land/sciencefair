@@ -2,7 +2,7 @@
 // which should be an object where each:
 //   key = the tag
 //   value = array of paper IDs with this tag
-module.exports = (data, state) => {
+module.exports = (state, data) => {
   return {
     tags: {
       tags: data,
