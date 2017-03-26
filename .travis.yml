@@ -30,6 +30,7 @@ before_install:
   - export PATH="$HOME/.yarn/bin:$PATH"
 
 install:
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install --no-install-recommends -y icnsutils graphicsmagick xz-utils rpm bsdtar ; fi
 - nvm install 7
 - yarn install
 - yarn add electron-builder@next --dev # force install next version to test electron-builder
