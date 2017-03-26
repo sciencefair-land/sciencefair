@@ -65,9 +65,9 @@ const style = css`
 `
 
 const placeholders = [
-  'try:   a word or phrase',
-  'try:   a word or phrase   ..or..   #',
-  'try:   a word or phrase   ..or..   #   ..or..   *'
+  'type a keyword to search',
+  'type \'* keyword\' to search your local collection',
+  'type # to access tagged papers, or \'* keyword\' to search local collection'
 ]
 
 var clearing = false
@@ -75,7 +75,9 @@ var clearing = false
 module.exports = (state, prev, send) => {
   if (state.initialising) return null
 
-  const placeidx = Math.min(state.collectioncount, 2)
+  const hastags = state.tags.tags && Object.keys(state.tags.tags).length > 1
+  const hascollection = state.collectioncount > 0
+  const placeidx = hascollection + hastags
   const placeholder = placeholders[placeidx]
   const input = html`
 

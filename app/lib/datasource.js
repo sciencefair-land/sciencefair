@@ -449,7 +449,6 @@ function Datasource (key, opts) {
   }
 
   self.download = (article, cb) => {
-    console.log('download', article, cb)
     if (!self.articles) {
       self.queuedDownloads.push({ article: article, cb: cb })
       return

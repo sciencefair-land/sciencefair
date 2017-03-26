@@ -36,42 +36,16 @@ const style = css`
 
 `
 
-let start
-let lastsyncdone
-let lastestimate
-
 module.exports = (state, prev, send) => {
   if (!state.initialising) return null
   if (!state.datasources.loaded) return null
   if (!state.datasources.list[0]) return null
-
-  if (!start) {
-    start = new Date()
-  }
 
   const metastat = state.datasources.list[0].stats.metadataSync
   if (metastat.finished) {
     send('initialising_stop')
     return null
   }
-
-  const syncleft = metastat.total - metastat.done
-  let estimate
-
-  // don't update estimate unless progress has changed
-  if (metastat.done === lastsyncdone) {
-    estimate = lastestimate
-  } else {
-    const elapsed = new Date() - start
-    const unittime = elapsed / metastat.done
-    estimate = unittime * syncleft
-    lastestimate = estimate
-    lastsyncdone = metastat.done
-  }
-
-  const estimatetxt = estimate === Infinity || isNaN(estimate)
-    ? 'calculating estimated time'
-    : 'estimated ' + prettyms(estimate, { compact: true })
 
   const synced = metastat.finished
     ? '100%'
@@ -80,7 +54,7 @@ module.exports = (state, prev, send) => {
   const remaining = html`
 
   <div class="${style.remaining}">
-    ${estimatetxt} remaining (${synced})
+    ${synced} done
   </div>
 
   `

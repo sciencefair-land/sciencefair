@@ -13,9 +13,7 @@ module.exports = (data, state, send, done) => {
   const active = state.datasources.list.filter(
     ds => ds.active && !ds.loading
   )
-
-  console.log('searching datasources', active)
-
+  
   if (active.length === 0) return send('results_none', done)
 
   const resultbatcher = ds => {

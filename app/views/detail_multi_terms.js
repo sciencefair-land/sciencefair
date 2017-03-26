@@ -18,7 +18,7 @@ const stopwords = [
   'et', 'al', 'al.', 'al.,', 'be', 'project:', 'which', 'these', 'or', 'have',
   'at', 'our', 'were', 'show', 'during', 'can', 'not', 'its', 'their', 'has',
   'here', 'also', 'it', 'required', 'additional', 'find', 'because', 'most',
-  'both'
+  'both', 'thus'
 ]
 
 const maxwidth = 200

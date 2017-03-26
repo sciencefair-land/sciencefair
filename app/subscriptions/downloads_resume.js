@@ -23,6 +23,7 @@ const restartdownloads = cb => localcollection(
               if (err) return cb(err)
               loaded ++
               if (progress < 100) {
+                console.log('restarting paper download')
                 incomplete++
                 paper.download(() => {})
               }
