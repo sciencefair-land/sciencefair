@@ -6,7 +6,6 @@
   "scripts": {
     "start": "electron index.js",
     "package": "node ./bin/package.js darwin",
-    "test": "tape test/**/*.js",
     "dev": "SCIENCEFAIR_DEVMODE=TRUE electron index.js",
     "postinstall": "electron-rebuild -f --types prod,dev,optional --version 1.6.2 --build-from-source"
   },
@@ -91,7 +90,6 @@
     "minimist": "^1.2.0",
     "rimraf": "^2.5.2",
     "standard": "^7.1.2",
-    "tape": "^4.6.0",
     "tar.gz": "^1.0.5",
     "temporary": "0.0.8"
   },
