@@ -1,10 +1,12 @@
 appId: com.codeforscience.ScienceFair
 copyright: "Copyright © 2017 CodeForScience"
 productName: ScienceFair
-build:
-  appId: sciencefair
-  category: science
 forceCodeSigning: true
 artifactName: "${productName}-${os}-${arch}-${version}.${ext}"
 mac:
   category: public.app-category.reference
+  publish: github
+linux:
+  publish: github
+win:
+  publish: github

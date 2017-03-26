@@ -30,7 +30,6 @@
     "d3": "^3.5.17",
     "d3-selection": "^0.6.11",
     "download": "^4.4.3",
-    "electron": "^1.6.2",
     "electron-updater": "^1.11.1",
     "end-of-stream": "^1.1.0",
     "eta": "0.0.0",
