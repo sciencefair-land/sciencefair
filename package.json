@@ -28,16 +28,10 @@
     "electron": "^1.6.2",
     "electron-builder": "^16.3.0",
     "electron-debug": "^1.1.0",
-    "electron-installer-windows": "^0.2.0",
-    "electron-packager": "^7.0.3",
     "electron-rebuild": "^1.5.7",
     "minimist": "^1.2.0",
     "rimraf": "^2.5.2",
     "standard": "^7.1.2",
-    "tar.gz": "^1.0.5",
     "temporary": "0.0.8"
-  },
-  "optionalDependencies": {
-    "appdmg": "^0.4.5"
   }
 }
