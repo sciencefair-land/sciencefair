@@ -86,4 +86,4 @@ Finally, the team may choose to a public report of the incident.
 Only permanent resolutions (such as bans) may be appealed. To appeal a decision of the working group, please contact the Code For Science team at conduct@codeforscience.com who will escalate this to our independent arbiter, Mozilla Science Lab to review the case.
 
 
-This Code of Conduct is based on the CoC's from the [https://www.djangoproject.com/conduct/](Django) and [https://web.archive.org/web/20141205224353/http://speakup.io/coc.html](Speak Up!) projects and following [https://adainitiative.org/2014/02/18/howto-design-a-code-of-conduct-for-your-community/](guidance from the Ada Initiative).
+This Code of Conduct is based on the CoC's from the [Django](https://www.djangoproject.com/conduct/) and [Speak Up!](https://web.archive.org/web/20141205224353/http://speakup.io/coc.html) projects and following [guidance from the Ada Initiative](https://adainitiative.org/2014/02/18/howto-design-a-code-of-conduct-for-your-community/).
