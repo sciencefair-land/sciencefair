@@ -88,7 +88,7 @@
     "rimraf": "^2.5.2",
     "standard": "^7.1.2",
     "tape": "^4.6.0",
-    "temporary": "0.0.8"
+    "temporary": "0.0.8",
     "tar.gz": "^1.0.5"
   },
   "optionalDependencies": {
