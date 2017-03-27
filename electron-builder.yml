@@ -6,7 +6,35 @@ artifactName: "${productName}-${os}-${arch}-${version}.${ext}"
 mac:
   category: public.app-category.reference
   publish: github
+dmg:
+  background: "build/appdmg.png"
+  icon: "build/icon.icns"
+  iconSize: 128
+  contents:
+    - x: 380
+      y: 240
+      type: link
+      path: /Applications
+    - x: 122
+      y: 240
+      type: file
 linux:
   publish: github
+  synopsis: ScienceFair
+  category: ""
+  packageCategory: "GNOME;GTK;Science;Literature"
+  description: "ScienceFair desktop science reading app for Linux"
+  target:
+    - deb
+    - AppImage
+  title: ScienceFair
+  license: MIT
+  maintainer: "Richard Smith-Unna <rik@fathomlabs.io>"
 win:
   publish: github
+  target: nsis
+  icon: "build/icon.ico"
+  iconUrl: "https://raw.githubusercontent.com/codeforscience/sciencefair/electron-builder/build/icon.ico"
+nsis:
+  perMachine: true
+  oneClick: false
