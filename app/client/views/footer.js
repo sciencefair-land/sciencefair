@@ -68,7 +68,6 @@ const style = css`
 `
 
 module.exports = (state, prev, send) => {
-  console.log('footer state', state)
   const downloads = html`
 
   <div class="${style.left} ${style.part}">
