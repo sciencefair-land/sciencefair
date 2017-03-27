@@ -3,6 +3,7 @@ copyright: "Copyright © 2017 CodeForScience"
 productName: ScienceFair
 forceCodeSigning: true
 artifactName: "${productName}-${os}-${arch}-${version}.${ext}"
+asar: false
 mac:
   category: public.app-category.reference
   publish: github
