@@ -36,6 +36,13 @@ app.on('ready', function () {
     open(url)
   })
 
+  // Initate auto-updates on MacOS and Windows
+  main.webContents.once('did-frame-finish-load', () => {
+    const winormac = process.platform === 'darwin' || process.platform === 'win32'
+    const dev = process.env['SCIENCEFAIR_DEVMODE']
+		if (winormac && !dev) require('./client/lib/updater')()
+	})
+
   main.on('close', event => {
     main.webContents.send('quitting')
   })
