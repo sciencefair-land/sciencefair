@@ -123,6 +123,39 @@ p, li {
 
 #download {
   position: relative;
-  height: 40px;
-  top: -135px;
+  height: 60px;
+  top: -100px;
+}
+
+.download-for {
+  cursor: pointer;
+  font-size: 25px;
+  color: #212127;
+  float: left;
+  position: relative;
+  background-color: #CAAD4D;
+  width: 200px;
+  height: 60px;
+  margin: 40px 40px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  border-radius: 4px;
+}
+
+.download-for > img {
+  float: left;
+}
+
+.download-for > p {
+  margin-top: 10px;
+  margin-left: 65px;
+}
+
+.dl-icon {
+  height: 80%;
+  padding: 2.5%;
+  padding-left: 6%
+}
+
+#github-msg {
+  margin-left: 140px;
 }
