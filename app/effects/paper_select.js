@@ -4,7 +4,7 @@ const difference = require('lodash/difference')
 const uniq = require('lodash/uniq')
 const keyby = require('lodash/keyBy')
 
-module.exports = (data, state, send, done) => {
+module.exports = (state, data, send, done) => {
   const update = cloneDeep(state.selection)
   const results = state.results
 

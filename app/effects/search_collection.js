@@ -8,7 +8,7 @@ const parsedoc = doc => {
     : doc
 }
 
-module.exports = (data, state, send, done) => {
+module.exports = (state, data, send, done) => {
   if (!state.collection) {
     return done(new Error('No local collection found (it may not have loaded yet)'))
   }

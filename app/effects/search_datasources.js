@@ -3,7 +3,7 @@ const datasource = require('../lib/getdatasource')
 const bulk = require('bulk-write-stream')
 const pump = require('pump')
 
-module.exports = (data, state, send, done) => {
+module.exports = (state, data, send, done) => {
   if (!state.datasources.list || state.datasources.list.length === 0) {
     return done(
       new Error('No datasources found (they may not have loaded yet)')

@@ -1,7 +1,7 @@
 const cloneDeep = require('lodash/cloneDeep')
 const uniq = require('lodash/uniq')
 
-module.exports = (data, state, send, done) => {
+module.exports = (state, data, send, done) => {
   const alldone = require('../lib/alldone')(2, done)
 
 

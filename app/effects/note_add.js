@@ -1,7 +1,7 @@
 const cloneDeep = require('lodash/cloneDeep')
 const uuid = require('uuid').v4
 
-module.exports = (data, state, send, done) => {
+module.exports = (state, data, send, done) => {
   if (!data.message) return done()
   const update = cloneDeep(state.notes)
   const noteId = uuid()
