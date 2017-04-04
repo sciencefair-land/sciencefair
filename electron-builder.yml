@@ -4,6 +4,7 @@ productName: ScienceFair
 forceCodeSigning: true
 artifactName: "${productName}-${os}-${arch}-${version}.${ext}"
 asar: false
+compression: store
 mac:
   category: public.app-category.reference
   publish: github

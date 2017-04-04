@@ -123,7 +123,10 @@ function Datasource (key, opts) {
       }
     )
 
-    self.archive.on('download', data => speed(data.length))
+    self.archive.on('download', data => {
+      console.log('data', data.length)
+      console.log('speed', speed(data.length))
+    })
 
     const swarm = discover(self.archive)
 
@@ -370,7 +373,10 @@ function Datasource (key, opts) {
       })
     })
 
-    self.articles.on('download', data => speed(data.length))
+    self.articles.on('download', data => {
+      console.log('data', data.length)
+      console.log('speed', speed(data.length))
+    })
 
     if (self.queuedDownloads.length > 0) {
       console.log('Processing queued downloads')
