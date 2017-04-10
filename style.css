@@ -88,19 +88,22 @@ p, li {
   max-width: 100%;
 }
 
+#description {
+  float: left;
+}
+
 #cta-download {
+  float: right;
+  margin-top: 3vw;
   width: 120px;
   background-color: #CAAD4D;
   color: #212127;
   border-radius: 4px;
-  margin: 0 auto;
   padding: 15px;
   padding-right: 220px;
   font-family: "Open Sans";
   white-space: nowrap;
   font-size: 1.5em;
-  vertical-align: middle;
-  margin-bottom: 30px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
 
@@ -118,10 +121,8 @@ p, li {
   box-shadow: 0 20px 40px rgba(0,0,0,0.19), 0 12px 12px rgba(0,0,0,0.23);
 }
 
-#download {
+#download-skip-space {
   position: relative;
-  height: 60px;
-  top: -100px;
 }
 
 .download-for {
@@ -160,14 +161,29 @@ p, li {
 /*---------------------- Wide screens ----------------------*/
 
 @media screen
-  and (min-width: 1100px)
-  and (max-width: 2400px) {
+  and (min-width: 1100px) {
 
     .header {
-      margin: 6vw auto;
-      margin-bottom: 50px;
+      margin: 3vw auto;
+      margin-bottom: 40px;
       width: 68%;
     }
+
+    #below-head-content {
+      width: 58vw;
+      margin: 0 auto;
+    }
+
+    #description {
+      width: 31vw;
+      font-size: 1.8vw;
+    }
+
+    #download-skip-space {
+      height: 240px;
+      top: -100px;
+    }
+
 }
 
 /*----------------------- Medium width -----------------------*/
@@ -181,6 +197,11 @@ p, li {
       margin-bottom: 50px;
       width: 80%;
     }
+
+    #download-skip-space {
+      height: 60px;
+      top: -100px;
+    }
 }
 
 /*----------------------- Small width ------------------------*/
@@ -192,5 +213,10 @@ p, li {
       margin: 6vw auto;
       margin-bottom: 50px;
       width: 95%;
+    }
+
+    #download-skip-space {
+      height: 160px;
+      top: -100px;
     }
 }
