@@ -40,9 +40,6 @@ p, li {
 .header {
   top: 0;
   left: 0;
-  width: 68%;
-  margin: 30px auto;
-  margin-bottom: 50px;
 }
 
 .headimg {
@@ -158,4 +155,42 @@ p, li {
 
 #github-msg {
   margin-left: 140px;
+}
+
+/*---------------------- Wide screens ----------------------*/
+
+@media screen
+  and (min-width: 1100px)
+  and (max-width: 2400px) {
+
+    .header {
+      margin: 6vw auto;
+      margin-bottom: 50px;
+      width: 68%;
+    }
+}
+
+/*----------------------- Medium width -----------------------*/
+
+@media screen
+  and (min-width: 600px)
+  and (max-width: 1100px) {
+
+    .header {
+      margin: 6vw auto;
+      margin-bottom: 50px;
+      width: 80%;
+    }
+}
+
+/*----------------------- Small width ------------------------*/
+
+@media screen
+  and (max-width: 600px) {
+
+    .header {
+      margin: 6vw auto;
+      margin-bottom: 50px;
+      width: 95%;
+    }
 }
