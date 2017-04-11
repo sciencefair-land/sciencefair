@@ -5,7 +5,8 @@ const exists = require('path-exists').sync
 const after = require('lodash/after')
 const any = require('lodash/some')
 const deepequal = require('lodash/isEqual')
-const bulk = require('bulk-write-stream')
+const batchify = require('byte-stream')
+const through = require('through2')
 const pumpify = require('pumpify')
 
 const datasource = require('../lib/getdatasource')
@@ -56,11 +57,14 @@ module.exports = (state, bus) => {
 
   const debug = msg => bus.emit('log:debug', '[model:datasources] ' + msg)
 
-  const activesearches = []
+  let activesearches = []
 
   const cancelsearch = () => {
-    activesearches.forEach(resultstream => resultstream.destroy())
-    activesearches = []
+    if (activesearches.length > 0) {
+      debug(`cancelling ${activesearches.length} active searches`)
+      activesearches.forEach(resultstream => resultstream.destroy())
+      activesearches = []
+    }
   }
 
   const search = () => {
@@ -78,10 +82,10 @@ module.exports = (state, bus) => {
 
     const query  = state.search.query.trim().replace(/et al\.?$/, '')
 
-    const resultbatcher = ds => {
+    const resultify = ds => {
       let count = 0
 
-      const write = (list, cb) => {
+      const write = (list, _, cb) => {
         count += list.length
 
         bus.emit('results:receive', {
@@ -100,19 +104,20 @@ module.exports = (state, bus) => {
         } else {
           bus.emit('results:count', { count: count, source: ds.name })
         }
+        cb()
       }
 
-      return bulk.obj(write, flush)
+      return through.obj(write, flush)
     }
 
     active.forEach(ds => datasource.fetch(ds.key, (err, source) => {
       if (err) throw err
 
-      // source.db.search(query).on('data', data => console.log(data))
-
-      const resultstream = pumpify(source.db.search(query), resultbatcher(source), err => {
-        if (err) throw err
-      })
+      const resultstream = pumpify(
+        source.db.search(query),
+        batchify(30),
+        resultify(source)
+      )
       activesearches.push(resultstream)
     }))
   }

@@ -27,7 +27,7 @@ module.exports = (state, emit) => {
   return html`
 
   <div class="${style.results}">
-    ${state.results.map((result, index) => {
+    ${state.results.slice(0, 50).map((result, index) => {
       return paper({ index: index, paper: result }, state, emit)
     })}
   </div>

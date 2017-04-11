@@ -1,8 +1,9 @@
 const intersection = require('lodash/intersection')
 const diff = require('lodash/difference')
 const uniq = require('lodash/uniq')
-const bulk = require('bulk-write-stream')
-const pump = require('pump')
+const batchify = require('byte-stream')
+const through = require('through2')
+const pumpify = require('pumpify')
 
 const parsedoc = doc => (typeof doc === 'string') ? JSON.parse(doc) : doc
 
@@ -22,6 +23,8 @@ const throwerr = err => { throw err }
 module.exports = (state, bus) => {
   state.collectioncount = 0
   state.collection = null
+
+  const debug = msg => bus.emit('log:debug', '[model:collection] ' + msg)
 
   const scan = () => {
     const tags = {}
@@ -72,10 +75,21 @@ module.exports = (state, bus) => {
     scan()
   }
 
+  let activesearches = []
+
+  const cancelsearch = () => {
+    if (activesearches.length > 0) {
+      debug(`cancelling ${activesearches.length} active searches`)
+      activesearches.forEach(resultstream => resultstream.destroy())
+      activesearches = []
+    }
+  }
+
   const all = () => {
+    cancelsearch()
     const docstore = state.collection.docstore
     const hits = []
-    docstore.createReadStream().on(
+    const stream = docstore.createReadStream().on(
       'data', entry => {
         const doc = parsedoc(entry.value)
         hits.push(doc)
@@ -93,15 +107,17 @@ module.exports = (state, bus) => {
         }
       }
     )
+    activesearches.push(stream)
   }
 
   const search = (query, tags) => {
+    cancelsearch()
     const cleanquery = query.replace('*', '').trim().replace(/et al\.?$/, '')
 
-    const resultbatcher = () => {
+    const resultify = () => {
       let count = 0
 
-      const write = (list, cb) => {
+      const write = (list, _, cb) => {
         count += list.length
 
         if (tags && tags.length > 0) {
@@ -112,25 +128,38 @@ module.exports = (state, bus) => {
             return overlap.length === tags.length
           })
         }
-        bus.emit('results:receive', parseresults(list))
-      }
 
-      const flush = cb => {
-        if (count === 0) bus.emit('results:none', 'collection')
+        bus.emit('results:receive', parseresults(list))
+
         cb()
       }
 
-      return bulk.obj({ highWaterMark: 50 }, write, flush)
+      const flush = cb => {
+        if (count === 0) {
+          bus.emit('results:none', 'collection')
+        } else {
+          bus.emit('results:count', { count: count, source: 'collection'})
+        }
+        cb()
+      }
+
+      return through(write, flush)
     }
 
-    pump(state.collection.search(cleanquery), resultbatcher())
+    const stream = pumpify(
+      state.collection.search(cleanquery),
+      batchify(30),
+      resultify()
+    )
+    activesearches.push(stream)
   }
 
   const filter = tags => {
+    cancelsearch()
     const docstore = state.collection.docstore
     const hits = []
 
-    docstore.createReadStream().on(
+    const stream = docstore.createReadStream().on(
       'data', entry => {
         const doc = parsedoc(entry.value)
         const overlap = intersection(doc.tags, tags)
@@ -147,6 +176,8 @@ module.exports = (state, bus) => {
         }
       }
     )
+
+    activesearches.push(stream)
   }
 
 
