@@ -1,56 +1,56 @@
-const C = require('./lib/constants')
-const mkdirp = require('mkdirp').sync
+const {app, BrowserWindow, protocol} = require('electron')
 
-mkdirp(C.DATAROOT)
-mkdirp(C.COLLECTION_PATH)
+// if (process.env['SCIENCEFAIR_DEVMODE']) require('electron-debug')({ enable: true })
+require('electron-debug')({ enable: true })
 
-// if (process.env['SCIENCEFAIR_DEVMODE']) require('debug-menu').install()
-require('debug-menu').install()
+const path = require('path')
+const open = require('open')
 
-start()
+var main = null
 
-function start () {
-  const requireDir = require('require-dir')
-  const choo = require('choo')
-  const app = choo({
-    onError: (err, state, createSend) => {
-      if (/ENOENT/.test(err.message)) return // ugly hack to stop annoying error bubble
-      console.groupCollapsed(`ERROR (non-fatal) handled by sciencefair: ${err.message}`)
-      console.error(err)
-      console.groupEnd()
-
-      const send = createSend('onError: ')
-      if (err) send('note_add', {
-        title: 'Error',
-        message: err.message
-      }, () => {})
-    }
+app.on('ready', function () {
+  main = new BrowserWindow({
+    height: 750,
+    width: 1080,
+    minHeight: 750,
+    minWidth: 1080,
+    resizable: true,
+    title: 'sciencefair',
+    titleBarStyle: 'hidden',
+    fullscreen: false,
+    icon: './icon/logo.png',
+    show: false
   })
 
-  const model = {
-    state: require('./state'),
-    effects: requireDir('./effects'),
-    reducers: requireDir('./reducers'),
-    subscriptions: requireDir('./subscriptions')
-  }
+  main.setMenu(null)
 
-  require('./lib/localcollection')((err, db) => {
-    if (err) throw err
+  main.loadURL(path.join('file://', __dirname, '/client/index.html'))
 
-    model.state.collection = db
-
-    app.model(model)
-
-    app.router([
-      ['/', require('./views/home')]
-    ])
-
-    const tree = app.start()
-    document.body.appendChild(tree)
+  // hack to avoid a blank white window showing briefly at startup
+  // hide the window until content is loaded
+  main.webContents.on('did-finish-load', () => {
+    setTimeout(() => main.show(), 40)
   })
-}
 
-require('electron').ipcRenderer.on('quitting', () => {
-  console.log('APP QUITTING')
-  require('./lib/getdatasource').all().forEach(d => d.close())
+  main.webContents.on('new-window', (event, url) => {
+    event.preventDefault()
+    open(url)
+  })
+
+  // Initate auto-updates on MacOS and Windows
+  main.webContents.once('did-frame-finish-load', () => {
+    const winormac = process.platform === 'darwin' || process.platform === 'win32'
+    const dev = process.env['SCIENCEFAIR_DEVMODE']
+		if (winormac && !dev) require('./client/lib/updater')()
+	})
+
+  main.on('close', event => {
+    main.webContents.send('quitting')
+  })
+
+  main.on('closed', function () {
+    main = null
+  })
 })
+
+app.on('window-all-closed', () => app.quit())
