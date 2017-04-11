@@ -46,6 +46,40 @@ p, li {
   width: 100%;
 }
 
+#header-buttons {
+  position: relative;
+  top: -10.3vw;
+  left: 25.1vw;
+}
+
+#header-buttons > div {
+  float: left;
+  padding-left: 1.5%;
+  padding-right: 1.5%;
+}
+
+.btn {
+  opacity: 0.5;
+  font-size: 2.2vw;
+  font-family: 'Roboto Slab', serif;
+}
+
+.btn > a {
+  color: #6eacc1;
+}
+
+#download > a {
+  color: #caad4d !important;
+}
+
+.btn:hover {
+  opacity: 0.7;
+}
+
+.btn:active {
+  opacity: 0.9;
+}
+
 .text-a h1, .text-b h1 {
   margin: 0;
 }
@@ -90,35 +124,6 @@ p, li {
 
 #description {
   float: left;
-}
-
-#cta-download {
-  float: right;
-  margin-top: 3vw;
-  width: 120px;
-  background-color: #CAAD4D;
-  color: #212127;
-  border-radius: 4px;
-  padding: 15px;
-  padding-right: 220px;
-  font-family: "Open Sans";
-  white-space: nowrap;
-  font-size: 1.5em;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-}
-
-#cta-download > a > img {
-  display: inline-block;
-  width: 30px;
-  vertical-align: middle;
-}
-
-.dlbtn {
-  opacity: 0.5;
-}
-
-#cta-download:active {
-  box-shadow: 0 20px 40px rgba(0,0,0,0.19), 0 12px 12px rgba(0,0,0,0.23);
 }
 
 #download-skip-space {
@@ -166,7 +171,7 @@ p, li {
     .header {
       margin: 3vw auto;
       margin-bottom: 40px;
-      width: 68%;
+      width: 90%;
     }
 
     #below-head-content {
