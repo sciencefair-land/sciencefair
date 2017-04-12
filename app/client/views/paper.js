@@ -86,10 +86,21 @@ const style = css`
 
 `
 
-module.exports = (result, state, emit) => {
-  const selected = state.selection.lookup[result.paper.key]
-  const downloading = state.downloads.lookup[result.paper.key]
-  const progress = downloading ? Math.max(downloading.progress, 20) : result.paper.progress
+const elementcache = {}
+
+const CacheComponent = require('cache-component')
+
+function CachedPaper (result, emit) {
+  if (!(this instanceof CachedPaper)) return new CachedPaper(result, emit)
+  this._result = result
+  this._emit = emit
+  CacheComponent.call(this)
+}
+CachedPaper.prototype = Object.create(CacheComponent.prototype)
+
+CachedPaper.prototype._render = function (selected, progress) {
+  const result = this._result
+  const emit = this._emit
 
   const title = html`<div class="${style.title}"></div>`
   title.innerHTML = result.paper.title
@@ -135,6 +146,21 @@ module.exports = (result, state, emit) => {
   }
 
   return paper
+}
+
+module.exports = (result, state, emit) => {
+  const selected = state.selection.lookup[result.paper.key]
+  const downloading = state.downloads.lookup[result.paper.key]
+  const progress = downloading ? Math.max(downloading.progress, 10) : result.paper.progress
+
+  let el = elementcache[result.paper.key]
+  if (el) {
+    return el.render(selected, progress)
+  } else {
+    const newel = CachedPaper(result, emit)
+    elementcache[result.paper.key] = newel
+    return newel.render(selected, progress)
+  }
 }
 
 function renderAuthor (author) {

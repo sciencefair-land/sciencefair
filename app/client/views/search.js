@@ -3,6 +3,7 @@ const css = require('csjs-inject')
 const C = require('../lib/constants')
 const imgpath = require('../lib/imgpath')
 const throttle = require('lodash/throttle')
+const equal = require('lodash/isEqual')
 
 const debug = require('debug')('sciencefair:view:search')
 
@@ -68,29 +69,19 @@ const style = css`
 
 `
 
-const placeholders = [
-  'type a keyword to search',
-  'type \'* keyword\' to search your local collection',
-  'type # to access tagged papers, or \'* keyword\' to search local collection'
-]
+const CacheComponent = require('cache-component')
 
-const getplaceholder = state => {
-  const sometags = Object.keys(state.tags.tags).length > 1
-  const somecollection = state.collectioncount > 0
-  const placeidx = somecollection + sometags
-  return placeholders[placeidx]
+function CachedSearch () {
+  if (!(this instanceof CachedSearch)) return new CachedSearch()
+  this._color = null
+  CacheComponent.call(this)
 }
+CachedSearch.prototype = Object.create(CacheComponent.prototype)
 
-const getinputvalue = (clearing, querystring) => {
-  if (clearing) {
-    return null
-  } else {
-    return (' ' + querystring).slice(1)
-  }
-}
+CachedSearch.prototype._render = function (state, emit) {
+  this._searchstate
 
-module.exports = (state, emit) => {
-  const emitify = throttle(emit, 50, { leading: true })
+  const emitify = throttle(emit, 200, { leading: true })
   const placeholder = getplaceholder(state)
 
   const clearing = state.search.clearing
@@ -103,32 +94,7 @@ module.exports = (state, emit) => {
   const hastagquery = !!tagquery
   const hastags = tags.length > 0
 
-  const inputvalue = getinputvalue(clearing, querystring)
-  console.log(`SEARCH INPUT '${inputvalue}'`)
-
-  const input = html`
-
-  <input
-    class="${style.input}"
-    placeholder="${placeholder}"
-    value="${inputvalue}"
-    autofocus
-  >
-
-  `
-
-  input.onsubmit = e => {
-    e.preventDefault()
-  }
-
-  input.onkeydown = e => {
-    if (e.keyCode == 32 || e.keyCode === 13) {
-      emitify(
-        'search:set-query-string',
-        e.target.value + (e.keyCode === 32 ? ' ' : '')
-      )
-    }
-  }
+  const input =
 
   const tagbadges = tags.length ? html`
 
@@ -138,36 +104,13 @@ module.exports = (state, emit) => {
 
   ` : null
 
-  const clearbtn = () => {
-    if (inputvalue) {
-      const btn = html`<div class="${style.clear} clickable"></div>`
-
-      btn.onclick = e => {
-        e.preventDefault()
-        emitify('search:clear')
-      }
-
-      return btn
-    } else {
-      return null
-    }
-  }
-
-  const autocomplete = () => {
-    if (hastagquery) {
-      return require('./autocomplete')(state, emit)
-    } else {
-      return null
-    }
-  }
-
   return html`
 
   <div class="${style.search}">
     <div class="${style.wrapper}">
-      ${input}
+      ${require('./search_input')(state, emit)}
       ${tagbadges}
-      ${clearbtn()}
+      ${require('./search_clearbtn')(state, emit)}
       <img class="${style.img}" src="${imgpath('search.svg')}" />
       ${autocomplete()}
     </div>
@@ -175,3 +118,12 @@ module.exports = (state, emit) => {
 
   `
 }
+
+// Override default shallow compare _update function
+CachedSearch.prototype._update = function (state, emit) {
+  return !equal(state.search, this._searchstate)
+}
+
+const searchel = CachedSearch()
+
+module.exports = (state, emit) => searchel.render(state, emit)

@@ -180,8 +180,7 @@ module.exports = (state, bus) => {
     activesearches.push(stream)
   }
 
-
-  bus.on('collection:search', () => {
+  const dosearch = () => {
     if (!state.collection) return
     const query = state.search.query
     const tags = state.search.tags
@@ -193,7 +192,10 @@ module.exports = (state, bus) => {
     } else if (tags && tags.length) {
       filter(tags)
     }
-  })
+  }
+
+  bus.on('collection:search', dosearch)
+  bus.on('datasources:cancel-search', cancelsearch)
 
   bus.on('collection:addpaper', () => {})
   bus.on('collection:updatepaper', () => {})
