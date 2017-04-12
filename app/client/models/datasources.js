@@ -139,10 +139,12 @@ module.exports = (state, bus) => {
       if (source.active) ds.setActive()
       ds.connect()
 
-      bus.emit('notification:add', {
-        title: 'Datasource added',
-        message: 'datasource added:\n' + source.name
-      })
+      if (datasource.all().length > 1) {
+        bus.emit('notification:add', {
+          title: 'Datasource added',
+          message: 'datasource added:\n' + source.name
+        })
+      }
 
       ds.on('connected', () => bus.emit('initialising:stop'))
       ds.on('progress', () => {

@@ -7,7 +7,8 @@ module.exports = (state, bus) => {
     query: null,
     tagquery: null,
     tags: [],
-    clearing: false
+    clearing: false,
+    searching: false
   }
 
   const render = () => bus.emit('render')
@@ -24,6 +25,7 @@ module.exports = (state, bus) => {
   const gettags = () => state.search.tags
   const settags = tags => { state.search.tags = tags }
 
+  const setsearching = bool => { state.search.searching = bool }
   const setclearing = bool => { state.search.clearing = bool }
 
   const settagquery = tagquery => {
@@ -39,6 +41,7 @@ module.exports = (state, bus) => {
   }
 
   const update = () => {
+    setsearching(true)
     // if query is '*' or we have tags, don't search datasources
     const searchdatasources = !(getquery()[0] === '*') && !(gettags().length)
     if (searchdatasources) bus.emit('datasources:search')
@@ -64,6 +67,7 @@ module.exports = (state, bus) => {
     settagquery(null)
     settags([])
     setclearing(true)
+    setsearching(false)
     bus.emit('results:clear')
     bus.emit('selection:clear')
   }
@@ -74,6 +78,7 @@ module.exports = (state, bus) => {
     const tags = uniq(gettags()).concat(tag)
     settags(tags)
     settagquery(null)
+    setstring(getquery())
     render()
     update()
   }

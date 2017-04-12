@@ -195,7 +195,7 @@ module.exports = (state, bus) => {
   }
 
   bus.on('collection:search', dosearch)
-  bus.on('datasources:cancel-search', cancelsearch)
+  bus.on('collection:cancel-search', cancelsearch)
 
   bus.on('collection:addpaper', () => {})
   bus.on('collection:updatepaper', () => {})

@@ -2,7 +2,10 @@ const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../lib/constants')
 const imgpath = require('../lib/imgpath')
-
+const throttle = require('lodash/throttle')
+const equal = require('lodash/isEqual')
+const clone = require('lodash/cloneDeep')
+const CacheComponent = require('cache-component')
 
 const debug = require('debug')('sciencefair:view:search')
 
@@ -60,8 +63,17 @@ const getinputvalue = state => {
   }
 }
 
-module.exports = (state, emit) => {
-  const emitify = throttle(emit, 200, { leading: true })
+function CachedInput () {
+  if (!(this instanceof CachedInput)) return new CachedInput()
+  CacheComponent.call(this)
+}
+CachedInput.prototype = Object.create(CacheComponent.prototype)
+
+CachedInput.prototype._render = function (state, emit) {
+  if (this._element) return this._element
+  this._searchtags = clone(state.search.tags)
+
+  const emitify = throttle(emit, 500, { leading: false })
 
   const inputvalue = getinputvalue(state)
   const placeholder = getplaceholder(state)
@@ -84,6 +96,7 @@ module.exports = (state, emit) => {
 
   input.onkeydown = e => {
     if (e.keyCode == 32 || e.keyCode === 13) {
+      emitify.cancel()
       // space or enter submits the search immediately
       const querystring = e.target.value + (e.keyCode === 32 ? ' ' : '')
       emit('search:set-query-string', querystring)
@@ -92,11 +105,31 @@ module.exports = (state, emit) => {
       // if there's an existing timer (from a previous keypress)
       // it gets cancelled - this reduces the number of searches
       // that get submitted while a user is still typing the query
-      emitify.cancel()
       const querystring = e.target.value
-      if (querystring.length > 3) emitify('search:set-query-string', e.target.value)
+      if (querystring.length > 3) {
+        emitify.cancel()
+        emitify('search:set-query-string', e.target.value)
+      }
     }
   }
 
+  this._input = input
+
   return input
 }
+
+// Override default shallow compare _update function
+CachedInput.prototype._update = function (state, emit) {
+  if (state.search.clearing) {
+    this._input.value = ''
+    emit('search:done-clearing')
+  }
+  if (!equal(state.search.tags, this._searchtags)) {
+    this._input.value = state.search.querystring
+  }
+  return false
+}
+
+const inputel = CachedInput()
+
+module.exports = (state, emit) => inputel.render(state, emit)

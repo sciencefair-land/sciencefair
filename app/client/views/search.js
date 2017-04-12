@@ -2,7 +2,8 @@ const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../lib/constants')
 const imgpath = require('../lib/imgpath')
-const equal = require('lodash/isEqual')
+  const equal = require('lodash/isEqual')
+const clone = require('lodash/cloneDeep')
 const CacheComponent = require('cache-component')
 
 const debug = require('debug')('sciencefair:view:search')
@@ -46,11 +47,11 @@ function CachedSearch () {
 CachedSearch.prototype = Object.create(CacheComponent.prototype)
 
 CachedSearch.prototype._render = function (state, emit) {
-  this._searchstate = state
+  this._searchstate = clone(state.search)
 
-  return html`
+  const search = html`
 
-  <div class="${style.search}">
+  <div id="search-component" class="${style.search}">
     <div class="${style.wrapper}">
       <img class="${style.img}" src="${imgpath('search.svg')}" />
       ${require('./search_input')(state, emit)}
@@ -61,6 +62,8 @@ CachedSearch.prototype._render = function (state, emit) {
   </div>
 
   `
+
+  return search
 }
 
 // Override default shallow compare _update function

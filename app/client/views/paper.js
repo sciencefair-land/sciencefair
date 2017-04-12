@@ -145,6 +145,8 @@ CachedPaper.prototype._render = function (selected, progress) {
     doubleClick(e)
   }
 
+  paper.setAttribute('id', 'paper-' + result.paper.key)
+
   return paper
 }
 
