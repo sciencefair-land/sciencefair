@@ -8,26 +8,6 @@ const debug = require('debug')('sciencefair:view:search')
 
 const style = css`
 
-.search {
-  height: 30px;
-  width: 80%;
-  bottom: 0;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: row;
-  background: ${C.BLUE};
-  position: relative;
-}
-
-.wrapper {
-  position: relative;
-  margin: 50px;
-  width: 100%;
-  height: 50px;
-  display: flex;
-}
-
 .input {
   width: 100%;
   height: 30px;
@@ -55,17 +35,6 @@ const style = css`
   right: 34px;
 }
 
-.clear {
-  position: absolute;
-  padding: 5px;
-  right: 8px;
-  top: 0;
-  width: 20px;
-  height: 30px;
-  background-color: ${C.DARKBLUE};
-  -webkit-mask: url(${imgpath('close.svg')}) center / contain no-repeat;
-}
-
 `
 
 const placeholders = [
@@ -81,7 +50,9 @@ const getplaceholder = state => {
   return placeholders[placeidx]
 }
 
-const getinputvalue = (clearing, querystring) => {
+const getinputvalue = state => {
+  const clearing = state.search.clearing
+  const querystring = state.search.querystring
   if (clearing) {
     return null
   } else {
@@ -90,8 +61,10 @@ const getinputvalue = (clearing, querystring) => {
 }
 
 module.exports = (state, emit) => {
+  const emitify = throttle(emit, 200, { leading: true })
 
-  const inputvalue = getinputvalue(clearing, querystring)
+  const inputvalue = getinputvalue(state)
+  const placeholder = getplaceholder(state)
 
   const input = html`
 
@@ -124,4 +97,6 @@ module.exports = (state, emit) => {
       if (querystring.length > 3) emitify('search:set-query-string', e.target.value)
     }
   }
+
+  return input
 }

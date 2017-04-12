@@ -1,3 +1,14 @@
+
+
+const style = css`
+
+.tags {
+  position: absolute;
+  right: 34px;
+}
+
+`
+
 module.exports = (state, emit) => {
   if (!state.search.tags) return null
 
