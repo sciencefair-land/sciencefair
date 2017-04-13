@@ -73,7 +73,7 @@ CachedInput.prototype._render = function (state, emit) {
   if (this._element) return this._element
   this._searchtags = clone(state.search.tags)
 
-  const emitify = throttle(emit, 500, { leading: false })
+  const emitify = throttle(emit, 200, { leading: false })
 
   const inputvalue = getinputvalue(state)
   const placeholder = getplaceholder(state)
