@@ -40,7 +40,7 @@
     "fuzzy": "^0.1.1",
     "hint": "github:blahah/hint",
     "hyperdiscovery": "^1.3.0",
-    "hyperdrive": "mafintosh/hyperdrive",
+    "hyperdrive": "^8.2.1",
     "inherits": "^2.0.3",
     "is-online": "^5.1.2",
     "leveldown": "^1.5.0",
