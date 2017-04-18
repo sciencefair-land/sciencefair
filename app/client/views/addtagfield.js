@@ -43,12 +43,12 @@ module.exports = (state, emit) => {
 
   const input = html`<input class="${style.input}" placeholder="new tag name..">`
 
-  function submit (e) {
+  const submit = e => {
     e.preventDefault()
-    emit('tags:add', e.target.value)
+    emit('tags:add', { tag: e.target.value, papers: state.selection.list })
   }
 
-  input.onkeypress = (e) => {
+  input.onkeypress = e => {
     if (!e) e = window.e
     var keyCode = e.keyCode || e.which
     if (keyCode === 13) submit(e)
@@ -56,7 +56,7 @@ module.exports = (state, emit) => {
 
   const closebtn = html`<div class="${style.cancel} clickable"></div>`
 
-  closebtn.onclick = (e) => {
+  closebtn.onclick = e => {
     e.preventDefault()
     emit('tags:stop-add')
   }

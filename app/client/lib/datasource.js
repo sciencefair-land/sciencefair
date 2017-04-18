@@ -84,39 +84,41 @@ function Datasource (key, opts) {
 
   // connect to the hyperdrive swarm and activate the DB
   self.connect = cb => {
-    if (self.drive) return cb()
+    if (self.metadata) return cb()
 
     // callback after an error, or when both database and hyperdrive
     // (_feed.json) are connected
     const done = require('../lib/alldone')(2, err => {
       if (err) return cb(err)
       self.maybeSyncMetadata()
+      self.connectarticles()
       debug(`source ${self.name || self.key}: database and hyperdrive connected`)
       if (cb) cb()
     })
 
-    self.connecthyperdrive(done)
+    self.connectmeta(done)
     self.connectdb(done)
-
-    // self.drive.on('download', data => {
-    //   console.log('data', data.length)
-    //   console.log('speed', speed(data.length))
-    // })
   }
 
-  self.connecthyperdrive = cb => {
-    self.drive = hyperdrive(self.jsondir, self.key, { sparse: true })
+  self.connectmeta = cb => {
+    self.metadata = hyperdrive(self.jsondir, self.key, { sparse: true })
 
-    self.drive.once('ready', () => {
+    self.metadata.once('ready', () => {
       debug('datasource metadata drive ready', self.key)
 
-      self.driveswarm = discover(self.drive)
+      self.metadataswarm = discover(self.metadata, {
+        tcp: false
+      })
     })
 
-    self.drive.once('content', () => {
-      debug('archive length', self.drive.metadata.length)
+    self.metadata.once('content', () => {
+      debug('archive length', self.metadata.metadata.length)
 
-      self.drive.readFile('/_feed.json', 'utf8', (err, data) => {
+      self.metadata.content.on('download', (index, data, from) => {
+        speed(data.length)
+      })
+
+      self.metadata.readFile('/_feed.json', 'utf8', (err, data) => {
         if (err) throw err
         const parsed = JSON.parse(data)
         Object.assign(self, parsed)
@@ -142,7 +144,7 @@ function Datasource (key, opts) {
 
   self.maybeSyncMetadata = () => {
     debug('resuming metadata sync')
-    self.syncMetadata(
+    self.syncmeta(
       err => {
         if (err) throw err
       }
@@ -158,7 +160,7 @@ function Datasource (key, opts) {
 
   // begin or resume syncing metadata from the hyperdrive archive
   // and adding it to the search index
-  self.syncMetadata = cb => {
+  self.syncmeta = cb => {
     if (self.stats.get('metadataSync').value().finished) {
       self.connected = true
       self.emit('connected')
@@ -198,7 +200,7 @@ function Datasource (key, opts) {
       data => data.type ==='file' && /^\/meta\/.*json$/.test(data.name)
     )
 
-    const getentry = require('./hyperdrive-sync-entry')(this.drive)
+    const getentry = require('./hyperdrive-sync-entry')(self.metadata)
 
     n = 0
     const getprogress = through.ctor({ objectMode: true }, (data, _, next) => {
@@ -232,40 +234,46 @@ function Datasource (key, opts) {
     }
 
     pumpify.obj(
-      walker('/meta', { fs: self.drive }),
+      walker('/meta', { fs: self.metadata }),
       addname(),
       filtermeta(),
       getentry(),
       getprogress(),
       addsource(),
       getpaper(),
-      getmeta()
-      // self.db.add(done)
-    ).on('data', data => { console.log(data) })
+      getmeta(),
+      self.db.add(done)
+    )
   }
 
-  self.connectArticles = () => {
+  self.connectarticles = () => {
     if (self.articles) return
 
-    self.articles = hyperdrive(self.articledir, self.articleFeed)
-    self.articlesswarm = discover(self.articles)
-    self.articlesswarm.on('connection', (peer, type) => {
-      self.stats.set('peers', swarm.connections.length).value()
-      peer.on('close', () => {
+    self.articles = hyperdrive(self.articledir, self.articleFeed, { sparse: true })
+
+    self.articles.once('ready', () => {
+      debug('datasource articles drive ready', self.articleFeed)
+
+      self.articlesswarm = discover(self.articles)
+      self.articlesswarm.on('connection', (peer, type) => {
         self.stats.set('peers', swarm.connections.length).value()
+        peer.on('close', () => {
+          self.stats.set('peers', swarm.connections.length).value()
+        })
       })
     })
 
-    // self.articles.on('download', data => {
-    //   console.log('data', data.length)
-    //   console.log('speed', speed(data.length))
-    // })
-    //
-    // if (self.queuedDownloads.length > 0) {
-    //   console.log('Processing queued downloads')
-    //   self.queuedDownloads.forEach(entry => self.download(entry.article, entry.cb))
-    //   self.queuedDownloads = []
-    // }
+    self.articles.once('content', () => {
+      self.articles.content.on('download', (index, data, from) => {
+        speed(data.length)
+      })
+
+      if (self.queuedDownloads.length > 0) {
+        console.log('Processing queued downloads')
+        self.queuedDownloads.forEach(entry => self.download(entry.article, entry.cb))
+        self.queuedDownloads = []
+      }
+    })
   }
 
   self.toggleActive = () => {
@@ -300,38 +308,6 @@ function Datasource (key, opts) {
   // close all databases, then delete the datasource directory
   self.remove = cb => self.close(() => fs.remove(self.datadir, cb))
 
-  self.getArticleEntries = (article, cb) => {
-    const entries = []
-    self.filedb.createReadStream(
-      {
-        gte: `articles/${article.path}`,
-        lte: `articles/${article.path}${String.fromCodePoint(0xFFFF)}`,
-        keys: false
-      }
-    ).on(
-      'data', data => entries.push(data)
-    ).on(
-      'error', err => cb(err)
-    ).on(
-      'end', () => cb(null, entries)
-    ).on(
-      'close', () => cb(null, entries)
-    )
-  }
-
-  self.entrysetDownloadProgress = entries => {
-    if (!self.articles) return 0
-    let totalBlocks = 0
-    let downloadedBlocks = 0
-
-    entries.forEach(entry => {
-      downloadedBlocks += self.articles.countDownloadedBlocks(entry)
-      totalBlocks += entry.blocks
-    })
-
-    return (downloadedBlocks / totalBlocks) * 100
-  }
-
   self.articleDownloadProgress = (article, cb) => {
     self.getArticleEntries(article, (err, entries) => {
       if (err) return cb(err)
@@ -347,37 +323,8 @@ function Datasource (key, opts) {
       return
     }
 
-    self.getArticleEntries(article, (err, entries) => {
-      if (err) return cb(err)
-      const currentdl = self._downloads.map(d => d.id).indexOf(article.id)
-      if (currentdl !== -1) return cb()
-
-      const stats = {
-        started: Date.now(),
-        source: self.key,
-        id: article.id,
-        files: entries,
-        progress: self.entrysetDownloadProgress(entries)
-      }
-
-      self._downloads.push(stats)
-
-      const updateStats = () => {
-        stats.progress = self.entrysetDownloadProgress(entries)
-        article.progress = stats.progress
-      }
-
-      updateStats()
-
-      const timerId = setInterval(updateStats, 200)
-      const alldone = require('./alldone')(entries.length, err => {
-        if (err) return cb(err)
-        clearInterval(timerId)
-        remove(self._downloads, stats)
-        cb()
-      })
-
-      entries.forEach(hit => self.articles.download(hit, alldone))
+    article.files.forEach(file => {
+      console.log('article file', file)
     })
   }
 

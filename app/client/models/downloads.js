@@ -4,37 +4,31 @@ module.exports = (state, bus) => {
     list: [],
     lookup: {}
   }
+
+  const speed = () => state.downloads.totalspeed
+  const setspeed = speed => { state.downloads.totalspeed = speed }
+
+  const list = () => state.downloads.list
+  const setlist = list => { state.downloads.list = list }
+
+  const lookup = () => state.downloads.lookup
+  const setlookup = lookup => { state.downloads.lookup = lookup }
+
+  const add = papers => {
+    const allready = all(papers.forEach(p => p.ds.articleMetadataSynced()))
+    papers.forEach(p => p.download(alldone))
+    if (!allready) {
+      emit('notification:add', {
+        title: `Download${papers.length > 1 ? 's' : ''} queued`,
+        message: 'Datasource is still syncing metadata, downloads queued'
+      })
+    }
+    emit('tags:add', { tag: '__local', paper: papers })
+  }
+
+  bus.emit('downloads:add', add)
 }
 
-// // add
-//
-// const datasource = require('../lib/getdatasource')
-// const all = require('lodash/every')
-//
-// module.exports = (state, data, emit, done) => {
-//   const allready = all(data.forEach(p => p.ds.articleMetadataSynced()))
-//   const ntasks = data.length + allready ? 1 : 2
-//   const alldone = require('../lib/alldone')(ntasks, done)
-//   data.forEach(p => p.download(alldone))
-//   if (!allready) {
-//     emit('note_add', {
-//       title: `Download${data.length > 1 ? 's' : ''} queued`,
-//       message: 'Datasource is still syncing metadata, downloads queued'
-//     }, alldone)
-//   }
-//   emit('tag_add', { tag: '__local', paper: data }, alldone)
-// }
-//
-//
-// // update
-//
-// module.exports = (state, data) => {
-//   return {
-//     downloads: data
-//   }
-// }
-//
-//
 // // online
 //
 // const online = require('is-online')

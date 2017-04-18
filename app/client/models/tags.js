@@ -14,21 +14,20 @@ module.exports = (state, bus) => {
   }
 
   const render = () => bus.emit('render')
-  const selected = () => state.selection.list.map(p => p.key)
   const replace = tags => { state.tags.tags = tags }
   const get = tag => state.tags.tags[tag] || []
   const set = (tag, papers) => { state.tags.tags[tag] = papers }
 
-  const add = tag => {
-    const papers = get(tag)
-    const newPapers = uniq(papers.concat(selected()))
-    set(tag, newPapers)
+  const add = data => {
+    const papers = get(data.tag)
+    const newPapers = uniq(papers.concat(data.papers))
+    set(data.tag, newPapers)
   }
 
-  const remove = tag => {
-    const papers = get(tag)
-    const newPapers = diff(papers, selected())
-    set(tag, newPapers)
+  const remove = data => {
+    const papers = get(data.tag)
+    const newPapers = diff(papers, data.papers)
+    set(data.tag, newPapers)
   }
 
   const startadd = () => {
@@ -41,15 +40,15 @@ module.exports = (state, bus) => {
     render()
   }
 
-  bus.on('tags:add', tag => {
-    add(tag)
+  bus.on('tags:add', data => {
+    add(data)
     stopadd()
-    bus.emit('paper:add-tag', tag)
+    bus.emit('paper:add-tag', data)
     render()
   })
 
-  bus.on('tags:remove', tag => {
-    remove(tag)
+  bus.on('tags:remove', data => {
+    remove(data)
     render()
   })
 

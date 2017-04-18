@@ -120,24 +120,16 @@ module.exports = (state, emit) => {
     if (!hasresults) return blank()
 
     if (state.selection.list.length === 1) {
-      const paper = state.selection.list[0]
-
-      return singlepaper(paper, style, state, emit)
+      return singlepaper(state.selection.list[0], style, state, emit)
     } else if (state.selection.list.length > 1) {
-      const papers = state.selection.list
-
-      return multipaper(papers, style, state, emit)
+      return multipaper(state.selection.list, style, state, emit)
     } else {
       return blank()
     }
   }
 
   function blank () {
-    return html`
-
-    <p class="${style.empty}">No paper selected.</p>
-
-    `
+    return html`<p class="${style.empty}">No paper selected.</p>`
   }
 
   return html`<div class="${style.detail}">${getcontent(state)}</div>`
