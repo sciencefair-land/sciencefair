@@ -279,11 +279,6 @@ function Datasource (key, opts) {
         speed(data.length)
       })
 
-      self.articles.readdir('/', { wait: true }, (err, files) => {
-        if (err) throw err
-        debug('articles root listing', files)
-      })
-
       if (self.queuedDownloads.length > 0) {
         debug('Processing queued downloads')
         self.queuedDownloads.forEach(entry => paper(entry).download())
@@ -324,7 +319,7 @@ function Datasource (key, opts) {
   // close all databases, then delete the datasource directory
   self.remove = cb => self.close(() => fs.remove(self.datadir, cb))
 
-  self.articlestats = (files, cb) => {
+  self.articlestats = (files, cb) => process.nextTick(() => {
     const stats = {
       size: 0,
       local: 0,
@@ -340,7 +335,6 @@ function Datasource (key, opts) {
         const file = stats.files[f]
         file.progress = file.local / file.size
       })
-      debug('articlestats', stats)
       cb(null, stats)
     })
 
@@ -349,7 +343,6 @@ function Datasource (key, opts) {
     // get the current size on disk
     const errorStat = { size: 0 }
     const disk = collectStats(files.map(self.filepath), { errorStat: errorStat }, (err, data) => {
-      debug('articlestat disk', err, data)
       if (err) return done(err)
       stats.local = data.summary.size
       data.files.forEach(f => {
@@ -361,13 +354,12 @@ function Datasource (key, opts) {
 
     // get the size in the archive
     const archive = collectStats(files, { fs: self.articles }, (err, data) => {
-      debug('articlestat archive', err, data)
       if (err) return done(err)
       stats.size = data.summary.size
       data.files.forEach(f => stats.files[f.path].size = f.size)
       done()
     })
-  }
+  })
 
   self.ready = () => (!!self.metadata && !!self.articles)
 
@@ -387,7 +379,6 @@ function Datasource (key, opts) {
 
     const update = data => {
       Object.assign(data, progress)
-      debug('download update', data)
     }
 
     const remove = () => {

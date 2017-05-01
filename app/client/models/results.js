@@ -4,7 +4,6 @@ const isArray = require('lodash/isArray')
 
 const paper = require('../lib/getpaper')
 
-
 module.exports = (state, bus) => {
   state.results = []
 

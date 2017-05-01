@@ -1,9 +1,13 @@
 const intersection = require('lodash/intersection')
 const diff = require('lodash/difference')
 const uniq = require('lodash/uniq')
+const isArray = require('lodash/isArray')
 const batchify = require('byte-stream')
 const through = require('through2')
 const pumpify = require('pumpify')
+const stream = require('stream-from-array').obj
+const eos = require('end-of-stream')
+const afterall = require('../lib/alldone')
 
 const parsedoc = doc => (typeof doc === 'string') ? JSON.parse(doc) : doc
 
@@ -194,48 +198,53 @@ module.exports = (state, bus) => {
     }
   }
 
+  const updatepaper = data => {
+    const papers = isArray(data) ? data : [data]
+    const docs = stream(papers)
+    const keys = papers.filter(p => !p.collected).map(p => p.key)
+
+    const index = state.collection
+
+    const metadataify = through.obj({ objectMode: true }, (paper, enc, next) => {
+      next(null, paper.metadata())
+    })
+
+    index.del(keys, err => {
+      if (err) throw err
+      eos(pumpify(docs, metadataify, index.add(err => {
+        if (err) throw err
+      })), err => {
+        if (err) throw err
+        scan()
+      })
+    })
+  }
+
+  const removepaper = data => {
+    if (typeof data === 'string') data = [data]
+
+    const removefromdb = afterall(data.length, () => {
+      state.collection.del(data.map(d => d.key), err => {
+        if (err) return done(err)
+
+        const n = data.length
+        send('note_add', {
+          title: 'Papers deleted',
+          message: `${n} ${n === 1 ? '' : 's'} ha${n === 1 ? 's' : 've'} been removed from the local collection`
+        }, done)
+      })
+    })
+
+    data.forEach(paper => paper.removeFiles(removefromdb))
+  }
+
   bus.on('collection:search', dosearch)
   bus.on('collection:cancel-search', cancelsearch)
 
-  bus.on('collection:addpaper', () => {})
-  bus.on('collection:updatepaper', () => {})
-  bus.on('collection:removepaper', () => {})
+  bus.on('collection:updatepaper', updatepaper)
+  bus.on('collection:removepaper', removepaper)
 
   bus.on('DOMContentLoaded', () => {})
 }
 
-
-//
-// // updatepaper
-//
-// const isArray = require('lodash/isArray')
-// const stream = require('stream-from-array').obj
-// const pumpify = require('pumpify')
-// const eos = require('end-of-stream')
-// const through = require('through2').obj
-//
-// const noop = () => {}
-//
-// module.exports = (state, data, emit, done) => {
-//   const papers = isArray(data) ? data : [data]
-//   const docs = stream(papers)
-//   const keys = papers.filter(p => !p.collected).map(p => p.key)
-//
-//   const index = state.collection
-//
-//   const metadataify = through({ objectMode: true }, (paper, enc, next) => {
-//     const meta = paper.metadata()
-//     meta.key = paper.key
-//     next(null, meta)
-//   })
-//
-//   index.del(keys, err => {
-//     if (err) return done(err)
-//     eos(pumpify(docs, metadataify, index.add(err => {
-//       if (err) return done(err)
-//     })), err => {
-//       if (err) return done(err)
-//       emit('collection_scan', null, done)
-//     })
-//   })
-// }
+const noop = () => {}

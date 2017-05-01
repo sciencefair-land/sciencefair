@@ -60,19 +60,19 @@ function Paper (data) {
   }
 
   self.filesPresent = cb => {
-    if (self.ds && self.ds.articles && self.ds.articles.content) {
-      if (self.progress === 1) return cb(null, 1)
-      if (self.downloading) return cb(null, self.progress)
-      return self.ds.articlestats(self.files, (err, stats) => {
-        if (err) return cb(err)
-        self.stats = stats
-        self.progress = stats.progress * 100
-        cb(null, self.progress)
-      })
-    } else {
+    if (self.downloading) return cb(null, self.progress)
+    if (self.progress === 1) return cb(null, self.progress)
+    if (self.progresschecked) return cb(null, self.progress)
+    if (!(self.ds && self.ds.articles && self.ds.articles.content)) {
       // datasource not ready to check progress, try again after delay
       return setTimeout(() => self.filesPresent(cb), 500)
     }
+    self.ds.articlestats(self.files, (err, stats) => {
+      if (err) return cb(err)
+      self.progress = stats.progress * 100
+      self.progresschecked = true
+      cb(null, self.progress)
+    })
   }
 
   self.candownload = () => self.ds.ready()
@@ -111,25 +111,15 @@ function Paper (data) {
       tags: self.tags,
       source: self.source,
       id: self.id,
+      key: self.key,
       identifier: self.identifiers,
-      path: self.path,
-      files: self.files,
+      path: data.path,
+      files: data.files,
       entryfile: self.entryfile
     }
   }
 
-  self.removeFiles = cb => {
-    self.getArticleEntries((err, entries) => {
-      if (err) return cb(err)
-      entries.filter(
-        entry => entry.type === 'directory'
-      ).forEach(
-        entry => fs.emptyDirSync(path.join(self.ds.datadir, entry.name))
-      )
-
-      cb()
-    })
-  }
+  self.removeFiles = cb => self.ds.unlink(self.path, cb)
 
   self.loadData()
 }

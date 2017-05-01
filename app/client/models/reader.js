@@ -1,10 +1,13 @@
 module.exports = (state, bus) => {
+  state.reading = null
+
   bus.on('reader:read', paper => {
-    const key = encodeURIComponent(paper.key)
-    bus.emit('pushState', `/reader/${key}`)
+    state.reading = paper
+    bus.emit('pushState', `/reader`)
   })
 
   bus.on('reader:quit', () => {
+    state.reading = null
     bus.emit('pushState', '/home')
   })
 }

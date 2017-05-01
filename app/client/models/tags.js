@@ -5,10 +5,7 @@ const diff = require('lodash/difference')
 
 module.exports = (state, bus) => {
   state.tags = {
-    tags: {
-      tag1: ['blah'],
-      tag2: ['blah']
-    },
+    tags: {},
     showAddField: false,
     loaded: true
   }

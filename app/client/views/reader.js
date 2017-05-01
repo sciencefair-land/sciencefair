@@ -8,8 +8,7 @@ const imgpath = require('../lib/imgpath')
 
 const reader = (state, emit) => {
   console.log('(re-)rendering reader')
-  const key = decodeURIComponent(state.params.paperkey)
-  const paper = getpaper(key)
+  const paper = state.reading
 
   const margin = 0
   const marginTopShim = 30
@@ -54,7 +53,7 @@ const reader = (state, emit) => {
   frame.src = lensurl
   frame.addEventListener('dom-ready', () => {
     // uncomment line below if you want to debug the lens reader
-    frame.openDevTools()
+    // frame.openDevTools()
   })
 
   frame.shadowRoot.applyAuthorStyles = true
