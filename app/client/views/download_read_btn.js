@@ -67,7 +67,7 @@ module.exports = (state, emit) => {
     e.preventDefault()
     if (progress === 100) {
       if (selected.length > 1) return
-      emit('reader:read')
+      emit('reader:read', selected[0])
     } else {
       emit('downloads:add', selected)
     }

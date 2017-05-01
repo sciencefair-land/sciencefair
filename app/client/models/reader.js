@@ -1,36 +1,10 @@
 module.exports = (state, bus) => {
-  bus.on('reader:loadpaper', paperkey => {
-    bus.emit('pushState', `/reader/${paperkey}`)
+  bus.on('reader:read', paper => {
+    const key = encodeURIComponent(paper.key)
+    bus.emit('pushState', `/reader/${key}`)
   })
 
   bus.on('reader:quit', () => {
-    bus.emit('pushState', '/')
+    bus.emit('pushState', '/home')
   })
-}
-
-
-// setstate
-
-module.exports = (state, data) => {
-  return { reader: data }
-}
-
-
-// none
-
-module.exports = (state, data, emit, done) => {
-  emit('reader_setstate', {
-    visible: false,
-    paper: null
-  }, done)
-}
-
-
-// selection
-
-module.exports = (state, data, emit, done) => {
-  emit('reader_setstate', {
-    visible: true,
-    paper: state.selection.list[0]
-  }, done)
 }

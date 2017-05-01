@@ -29,7 +29,7 @@ var qs = function () {
 // This document gets loaded by default
 // --------
 
-var documentURL = "data/PMC4467057/fulltext.xml";
+var documentURL = "";
 
 $(function() {
 
@@ -1154,7 +1154,7 @@ CitationView.Prototype = function() {
         }));
       });
 
-      frag.appendChild(citationUrlsEl);      
+      frag.appendChild(citationUrlsEl);
     }
 
     this.content.appendChild(frag);
@@ -1555,9 +1555,9 @@ ContributorView.Prototype = function() {
     // -------
 
     if (this.node.role) {
-      this.content.appendChild($$('.role', {text: this.node.role}));  
+      this.content.appendChild($$('.role', {text: this.node.role}));
     }
-    
+
 
     // Add Affiliations
     // -------
@@ -2385,7 +2385,7 @@ var ResourceView = require('../../resource_view');
 var FigureView = function(node, viewFactory, options) {
   CompositeView.call(this, node, viewFactory);
 
-  
+
   // Mix-in
   ResourceView.call(this, options);
 };
@@ -3853,7 +3853,7 @@ var ParagraphView = function(node, viewFactory) {
 };
 
 ParagraphView.Prototype = function() {
-  
+
 };
 
 ParagraphView.Prototype.prototype = CompositeView.prototype;
@@ -5076,7 +5076,7 @@ ResourceView.Prototype = function() {
   };
 
   this.renderBody = function() {
-    
+
   };
 
   this.getHeader = function() {
@@ -5651,7 +5651,7 @@ NlmToLensConverter.Prototype = function() {
 
   // Overridden to create a Lens Article instance
   this.createDocument = function() {
-    
+
     var doc = new Article();
     return doc;
   };
@@ -8275,29 +8275,29 @@ LensController.Prototype = function() {
       that.createReader(doc, state);
     } else {
       this.trigger("loading:started", "Loading article");
-      $.get(this.config.document_url)
-      .done(function(data) {
-        var doc;
-
-        // Determine type of resource
-        if ($.isXMLDoc(data)) {
-          doc = that.convertDocument(data);
-        } else {
-          if(typeof data == 'string') data = $.parseJSON(data);
-          doc = that.Article.fromSnapshot(data);
-        }
+      fetch(
+        this.config.document_url
+      ).then(
+        res => res.text()
+      ).then(data => {
+        var parser = new DOMParser()
+        var xmlDoc = parser.parseFromString(data,"text/xml")
+        console.log('converting XML')
+        var doc = that.convertDocument(xmlDoc);
         // Extract headings
         // TODO: this should be solved with an index on the document level
         // This same code occurs in TOCView!
+        console.log('extracting headings')
         if (state.panel === "toc" && doc.getHeadings().length <= 2) {
           state.panel = "info";
         }
+        console.log('creating reader')
         that.createReader(doc, state);
+      }).catch(err => {
+        that.view.startLoading("Error during loading.<br>Please try again.");
+        console.error(err)
+        throw err
       })
-      .fail(function(err) {
-        that.view.startLoading("Error during loading. Please try again.");
-        console.error(err);
-      });
     }
   };
 };
@@ -8772,7 +8772,7 @@ var CORRECTION = 0; // Extra offset from the top
 
 /* Adding + 1 pixel solves an edge case where clicking on a
    TOC item did not mark it as active, but the previous one */
-var MENU_BAR_HEIGHT = 1; 
+var MENU_BAR_HEIGHT = 1;
 
 var ContentPanelView = function( panelCtrl, viewFactory, config ) {
   ContainerPanelView.call(this, panelCtrl, viewFactory, config);
@@ -8869,7 +8869,7 @@ ContentPanelView.Prototype = function() {
           console.error('Could not find element for node %s', tocNode.id);
           continue;
         }
-        
+
         // HACK: we subtract height of menu bar so marking of active nodes stays accurate
         var elTopOffset = $(el).offset().top - MENU_BAR_HEIGHT;
         if (elTopOffset <= 0) {
@@ -9883,7 +9883,7 @@ ReaderView.Prototype = function() {
 
     self.updateScrollbars();
     _.delay(function() {
-      self.updateScrollbars();        
+      self.updateScrollbars();
     }, 2000);
   };
 
@@ -10156,7 +10156,7 @@ var Application = function(config) {
 };
 
 Application.Prototype = function() {
-  
+
   // Init router
   // ----------
 
@@ -10219,7 +10219,7 @@ Controller.Prototype = function() {
   //
   // Maybe this should updateContext, so it can't be confused with the app state
   // which might be more than just the current context
-  // 
+  //
 
   this.updateState = function(context, state) {
     console.error('updateState is deprecated, use modifyState. State is now a rich object where context replaces the old state variable');
@@ -10240,7 +10240,7 @@ Controller.Prototype = function() {
     if (state.context && state.context !== prevContext) {
       this.trigger('context-changed', state.context);
     }
-    
+
     this.trigger('state-changed', this.state.context);
   };
 };
@@ -15852,6 +15852,7 @@ SciFaireLifeConverter.Prototype = function() {
           .replace('.tif', '.jpg')
           .replace('.jpg.jpg', '.jpg')
           .replace('.tif.jpg', '.jpg')
+          .replace('.jpg', '-600w.jpg')
         node.url = this.getAssetUrl(url, state)
       }
     }
