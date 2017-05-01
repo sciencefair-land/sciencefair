@@ -11,7 +11,7 @@
     "buildappveyor": "build --win nsis-web --ia32 --x64",
     "postinstall": "electron-rebuild -f --types prod,dev,optional --version 1.6.4 --build-from-source",
     "start": "electron app/index.js",
-    "dev": "DEBUG='*' SCIENCEFAIR_DEVMODE=true electron --enable-features=V8Ignition app/index.js"
+    "dev": "DEBUG='sciencefair*' SCIENCEFAIR_DEVMODE=true electron --enable-features=V8Ignition app/index.js"
   },
   "engines": {
     "node": "7.x"

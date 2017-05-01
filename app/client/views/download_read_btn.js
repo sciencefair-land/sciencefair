@@ -40,18 +40,9 @@ const style = css`
 
 module.exports = (state, emit) => {
   const selected = state.selection.list
-  const downloads = selected.map(
-    p => {
-      return { paper: p, download: state.downloads.lookup[p.key] }
-    }
-  )
-  const alldownloading = all(downloads.map(p => !!p.download))
+  const alldownloading = all(selected.map(p => p.downloading))
 
-  const progressstats = downloads.map(
-    obj => obj.download || obj.paper
-  )
-
-  const progress = mean(progressstats.map(dl => dl.progress || 0))
+  const progress = mean(selected.map(p => p.progress || 0))
 
   const donetext = state.selection.list.length === 1 ? 'read' : 'downloaded'
   const doneicon = state.selection.list.length === 1 ? 'read' : 'tick'

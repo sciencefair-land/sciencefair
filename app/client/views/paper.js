@@ -152,8 +152,8 @@ CachedPaper.prototype._render = function (selected, progress) {
 
 module.exports = (result, state, emit) => {
   const selected = state.selection.lookup[result.paper.key]
-  const downloading = state.downloads.lookup[result.paper.key]
-  const progress = downloading ? Math.max(downloading.progress, 10) : result.paper.progress
+  const downloading = result.paper.downloading
+  const progress = downloading ? Math.max(result.paper.progress, 10) : result.paper.progress
 
   let el = elementcache[result.paper.key]
   if (el) {

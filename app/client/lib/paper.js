@@ -2,6 +2,7 @@ const path = require('path')
 const fs = require('fs-extra')
 
 const C = require('./constants')
+const debug = require('debug')('sciencefair:paper')
 
 function Paper (data) {
   if (data instanceof Paper) return data
@@ -38,8 +39,8 @@ function Paper (data) {
   self.loadDatasource = () => {
     // TODO: remove this path hack once hyperdrive is optimised,
     // else have sciencefair datasource generator handle it
-    self.path = data.path.split('').join('/')
-    self.files = data.files
+    self.path = path.join('/articles', data.path.split('').join('/'))
+    self.files = data.files.map(file => path.join(self.path, file))
     self.entryfile = data.entryfile
     require('./getdatasource').fetch(self.source, (err, ds) => {
       if (err)  return cb(err)
@@ -59,28 +60,45 @@ function Paper (data) {
   }
 
   self.filesPresent = cb => {
-    // if (self.ds && self.ds.articles && self.ds.articles.content) {
-    //   if (self.progress === 1) return cb(null, 1)
-    //   return self.getArticleEntries((err, entries) => {
-    //     if (err) return cb(err)
-    //     self.progress = self.ds.entrysetDownloadProgress(entries)
-    //     cb(null, self.progress)
-    //   })
-    // } else {
-    //   // datasource not ready to check progress, try again after delay
-    //   return setTimeout(() => self.filesPresent(cb), 500)
-    // }
+    if (self.ds && self.ds.articles && self.ds.articles.content) {
+      if (self.progress === 1) return cb(null, 1)
+      if (self.downloading) return cb(null, self.progress)
+      return self.ds.articlestats(self.files, (err, stats) => {
+        if (err) return cb(err)
+        self.stats = stats
+        self.progress = stats.progress * 100
+        cb(null, self.progress)
+      })
+    } else {
+      // datasource not ready to check progress, try again after delay
+      return setTimeout(() => self.filesPresent(cb), 500)
+    }
   }
 
-  self.download = cb => self.ds.download(self, cb)
+  self.candownload = () => self.ds.ready()
 
-  self.getArticleEntries = cb => {
-    if (self.entries) return cb(null, self.entries)
-    self.ds.getArticleEntries(self, (err, entries) => {
-      if (err) return cb(err)
-      self.entries = entries
-      return cb(null, entries)
+  self.download = () => {
+    debug('downloading', self.key)
+    if (self.downloading) return null
+    self.downloading = true
+    const download = self.ds.download(self)
+    if (!download) return null
+
+    download.on('progress', data => {
+      self.progress = data.progress * 100
     })
+
+    download.on('error', err => {
+      self.downloading = false
+      console.error('error downloading paper: ', self.key)
+      throw err
+    })
+
+    download.on('end', () => {
+      self.downloading = false
+    })
+
+    return download
   }
 
   self.metadata = () => {

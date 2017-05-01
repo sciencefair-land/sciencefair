@@ -5,6 +5,7 @@ const inherits = require('inherits')
 
 const low = require('lowdb')
 const hyperdrive = require('hyperdrive')
+const storage = require('dat-storage')
 const walker = require('folder-walker')
 const fs = require('fs-extra')
 const mkdirp = require('mkdirp').sync
@@ -17,8 +18,13 @@ const assign = require('lodash/assign')
 const speed = require('speedometer')()
 const discover = require('hyperdiscovery')
 const defaults = require('lodash/defaults')
+const alldone = require('./alldone')
+const paper = require('./getpaper')
 
-const debug = require('debug')('sciencefair')
+const multiprogress = require('./fs-readstreams-progress')
+const collectStats = require('./fs-collect-stats')
+
+const debug = require('debug')('sciencefair:datasource')
 
 const C = require('./constants')
 
@@ -61,6 +67,7 @@ function Datasource (key, opts) {
   // prepare the hyperdrive
   self.jsondir = path.join(self.datadir, 'meta_feed')
   self.articledir = path.join(self.datadir, 'article_feed')
+  self.filepath = file => path.join(self.articledir, file)
 
   // prepare the search index
   const dbopts = {
@@ -88,7 +95,7 @@ function Datasource (key, opts) {
 
     // callback after an error, or when both database and hyperdrive
     // (_feed.json) are connected
-    const done = require('../lib/alldone')(2, err => {
+    const done = alldone(2, err => {
       if (err) return cb(err)
       self.maybeSyncMetadata()
       self.connectarticles()
@@ -101,7 +108,11 @@ function Datasource (key, opts) {
   }
 
   self.connectmeta = cb => {
-    self.metadata = hyperdrive(self.jsondir, self.key, { sparse: true })
+    self.metadata = hyperdrive(storage(self.jsondir), self.key, {
+      latest: true,
+      sparse: false,
+      live: false
+    })
 
     self.metadata.once('ready', () => {
       debug('datasource metadata drive ready', self.key)
@@ -153,10 +164,6 @@ function Datasource (key, opts) {
 
   // load a bibjson metadata entry
   self.loadEntry = entry => fs.readJsonSync(path.join(self.datadir, entry.name))
-
-  self.initFromDisk = cb => {
-    console.log('INIT FRAWM DISK YA')
-  }
 
   // begin or resume syncing metadata from the hyperdrive archive
   // and adding it to the search index
@@ -249,16 +256,20 @@ function Datasource (key, opts) {
   self.connectarticles = () => {
     if (self.articles) return
 
-    self.articles = hyperdrive(self.articledir, self.articleFeed, { sparse: true })
+    self.articles = hyperdrive(
+      storage(self.articledir),
+      self.articleFeed,
+      { sparse: true, latest: true }
+    )
 
     self.articles.once('ready', () => {
       debug('datasource articles drive ready', self.articleFeed)
 
       self.articlesswarm = discover(self.articles)
       self.articlesswarm.on('connection', (peer, type) => {
-        self.stats.set('peers', swarm.connections.length).value()
+        self.stats.set('peers', self.articlesswarm.connections.length).value()
         peer.on('close', () => {
-          self.stats.set('peers', swarm.connections.length).value()
+          self.stats.set('peers', self.articlesswarm.connections.length).value()
         })
       })
     })
@@ -268,9 +279,14 @@ function Datasource (key, opts) {
         speed(data.length)
       })
 
+      self.articles.readdir('/', { wait: true }, (err, files) => {
+        if (err) throw err
+        debug('articles root listing', files)
+      })
+
       if (self.queuedDownloads.length > 0) {
-        console.log('Processing queued downloads')
-        self.queuedDownloads.forEach(entry => self.download(entry.article, entry.cb))
+        debug('Processing queued downloads')
+        self.queuedDownloads.forEach(entry => paper(entry).download())
         self.queuedDownloads = []
       }
     })
@@ -308,24 +324,83 @@ function Datasource (key, opts) {
   // close all databases, then delete the datasource directory
   self.remove = cb => self.close(() => fs.remove(self.datadir, cb))
 
-  self.articleDownloadProgress = (article, cb) => {
-    self.getArticleEntries(article, (err, entries) => {
-      if (err) return cb(err)
+  self.articlestats = (files, cb) => {
+    const stats = {
+      size: 0,
+      local: 0,
+      files: {}
+    }
 
-      article.progress = self.entrysetDownloadProgress(entries)
-      cb(null, article.progress)
+    files.forEach(f => stats.files[f] = {})
+
+    const done = alldone(2, err => {
+      if (err) return cb(err)
+      stats.progress = stats.local / stats.size
+      Object.keys(stats.files).forEach(f => {
+        const file = stats.files[f]
+        file.progress = file.local / file.size
+      })
+      debug('articlestats', stats)
+      cb(null, stats)
+    })
+
+    const strippath = filepath => filepath.replace(self.articlepath, '')
+
+    // get the current size on disk
+    const errorStat = { size: 0 }
+    const disk = collectStats(files.map(self.filepath), { errorStat: errorStat }, (err, data) => {
+      debug('articlestat disk', err, data)
+      if (err) return done(err)
+      stats.local = data.summary.size
+      data.files.forEach(f => {
+        const file = strippath(f.path)
+        stats.files[file].local = f.size
+      })
+      done()
+    })
+
+    // get the size in the archive
+    const archive = collectStats(files, { fs: self.articles }, (err, data) => {
+      debug('articlestat archive', err, data)
+      if (err) return done(err)
+      stats.size = data.summary.size
+      data.files.forEach(f => stats.files[f.path].size = f.size)
+      done()
     })
   }
 
-  self.download = (article, cb) => {
+  self.ready = () => (!!self.metadata && !!self.articles)
+
+  self.download = article => {
     if (!self.articles) {
-      self.queuedDownloads.push({ article: article, cb: cb })
+      self.queuedDownloads.push({ article: article })
       return
     }
 
-    article.files.forEach(file => {
-      console.log('article file', file)
-    })
+    if (self._downloads.find(d => d.key === article.key)) {
+      debug('already downloading', article.key)
+      return
+    }
+
+    const progress = { key: article.key }
+    self._downloads.push(progress)
+
+    const update = data => {
+      Object.assign(data, progress)
+      debug('download update', data)
+    }
+
+    const remove = () => {
+      self._downloads = self.downloads.filter(x => x.key !== progress.key)
+    }
+
+    const stream = multiprogress(article.files, { fs: self.articles })
+    stream.on('data', () => speed(data.length))
+    stream.on('progress', update)
+    stream.on('end', remove)
+    self.emit('download', article, stream)
+
+    return stream
   }
 
   self.downloads = () => ({ list: self._downloads.slice(), speed: speed() })

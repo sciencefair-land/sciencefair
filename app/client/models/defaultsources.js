@@ -6,7 +6,8 @@ const C = require('../lib/constants.js')
 const exists = require('path-exists').sync
 
 const defaults = [
-  'd46701afd5da330f8ddcd106787cbf9def1134ecae46b38cce46afddd8e770ef' //elife
+  'ce62c46f51f1e50fbf9da718540003b47ffce5f19279162ce975a7d0aca164de' //elife
+  // '129a96d556e77a47fbccfbb8914379ca7e81add926efd4bea384c01e9f42a6e6'
 ]
 
 module.exports = (state, bus) => {

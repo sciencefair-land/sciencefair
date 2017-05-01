@@ -1,9 +1,16 @@
+const all = require('lodash/every')
+const debounce = require('lodash/debounce')
+
+const debug = require('debug')('sciencefair:downloads')
+
 module.exports = (state, bus) => {
   state.downloads = {
     totalspeed: 0,
     list: [],
     lookup: {}
   }
+
+  const render = debounce(() => bus.emit('render'), 250)
 
   const speed = () => state.downloads.totalspeed
   const setspeed = speed => { state.downloads.totalspeed = speed }
@@ -15,18 +22,23 @@ module.exports = (state, bus) => {
   const setlookup = lookup => { state.downloads.lookup = lookup }
 
   const add = papers => {
-    const allready = all(papers.forEach(p => p.ds.articleMetadataSynced()))
-    papers.forEach(p => p.download(alldone))
+    debug('adding downloads', papers)
+    papers = papers.filter(p => !p.downloading)
+    const allready = all(papers.forEach(p => p.candownload()))
+    papers.forEach(p => {
+      const dl = p.download()
+      if (dl) dl.on('progress', render).on('end', render)
+    })
     if (!allready) {
-      emit('notification:add', {
+      bus.emit('notification:add', {
         title: `Download${papers.length > 1 ? 's' : ''} queued`,
         message: 'Datasource is still syncing metadata, downloads queued'
       })
     }
-    emit('tags:add', { tag: '__local', paper: papers })
+    bus.emit('tags:add', { tag: '__local', paper: papers })
   }
 
-  bus.emit('downloads:add', add)
+  bus.on('downloads:add', add)
 }
 
 // // online
