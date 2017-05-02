@@ -9,9 +9,7 @@ function ReadStreamsProgress (files, opts) {
   if (!(this instanceof ReadStreamsProgress)) return new ReadStreamsProgress(files, opts)
   events.EventEmitter.call(this)
 
-  files = files.slice(0, 1)
-
-  debug('progress streams for ' + files.length + ' files')
+  debug(files.length + ' files')
 
   if (!opts) opts = {}
   fs = opts.fs || require('fs')

@@ -22,20 +22,30 @@ module.exports = (state, bus) => {
   const setlookup = lookup => { state.downloads.lookup = lookup }
 
   const add = papers => {
+    if (!Array.isArray(papers)) papers = [papers]
     debug('adding downloads', papers)
-    papers = papers.filter(p => !p.downloading)
+
+    papers = papers.filter(p => !p.downloading && !(p.progress === 1))
+    if (papers.length === 0) {
+      debug ('no papers to download')
+      return
+    }
+
     const allready = all(papers.forEach(p => p.candownload()))
+
     papers.forEach(p => {
       const dl = p.download()
       if (dl) dl.on('progress', render).on('end', render)
     })
+
     if (!allready) {
       bus.emit('notification:add', {
         title: `Download${papers.length > 1 ? 's' : ''} queued`,
         message: 'Datasource is still syncing metadata, downloads queued'
       })
     }
-    bus.emit('tags:add', { tag: '__local', paper: papers })
+
+    bus.emit('tags:add', { tag: '__local', papers: papers })
   }
 
   bus.on('downloads:add', add)

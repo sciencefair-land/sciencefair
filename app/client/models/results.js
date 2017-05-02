@@ -1,6 +1,7 @@
 const uniqBy = require('lodash/uniqBy')
 const sortBy = require('lodash/sortBy')
 const isArray = require('lodash/isArray')
+const debounce = require('lodash/debounce')
 
 const paper = require('../lib/getpaper')
 
@@ -12,7 +13,7 @@ module.exports = (state, bus) => {
     const query = state.search
     return `'${query.query}${query.tags.map(t => ` #${t}`)}'`
   }
-  const render = () => bus.emit('render')
+  const render = debounce(() => bus.emit('render'), 250)
 
   const get = () => state.results
   const set = results => { state.results = results }
@@ -24,9 +25,13 @@ module.exports = (state, bus) => {
     debug('results cleared')
   }
 
+  const checkfiles = p => p.filesPresent(
+    (err, progress, updated) => { if (updated) render() }
+  )
+
   const receive = incoming => {
     const papers = incoming.hits.map(paper)
-    papers.forEach(p => p.filesPresent(() => {}))
+    papers.forEach(checkfiles)
 
     set(uniqBy(get().concat(papers), result => result.key))
     if (get().length < 200) render()
@@ -34,18 +39,7 @@ module.exports = (state, bus) => {
   }
 
   const replace = data => {
-    const resultkeys = get().map(r => r.key)
-
-    const keys = isArray(data.key) ? data.key : [data.key]
-    const indices = keys.map(key => resultkeys.indexOf(key))
-    const papers = isArray(data.paper) ? data.paper : [data.paper]
-
-    for (let i in indices) {
-      let idx = indices[i]
-      let paper = papers[i]
-      setone(idx, paper)
-    }
-
+    set(data)
     render()
     debug('results replaced')
   }

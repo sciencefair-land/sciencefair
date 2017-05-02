@@ -61,7 +61,7 @@ function Paper (data) {
 
   self.filesPresent = cb => {
     if (self.downloading) return cb(null, self.progress)
-    if (self.progress === 1) return cb(null, self.progress)
+    if (self.progress === 100) return cb(null, self.progress)
     if (self.progresschecked) return cb(null, self.progress)
     if (!(self.ds && self.ds.articles && self.ds.articles.content)) {
       // datasource not ready to check progress, try again after delay
@@ -69,9 +69,10 @@ function Paper (data) {
     }
     self.ds.articlestats(self.files, (err, stats) => {
       if (err) return cb(err)
+      debug('progress stats', self.title, stats)
       self.progress = stats.progress * 100
       self.progresschecked = true
-      cb(null, self.progress)
+      cb(null, self.progress, true)
     })
   }
 
@@ -84,19 +85,25 @@ function Paper (data) {
     const download = self.ds.download(self)
     if (!download) return null
 
+    const done = () => {
+      if (!self.downloading) return
+      debug('downloaded', self.key)
+      self.downloading = false
+      self.progresschecked = true
+    }
+
     download.on('progress', data => {
       self.progress = data.progress * 100
+      if (self.progress === 100) done()
     })
 
     download.on('error', err => {
       self.downloading = false
-      console.error('error downloading paper: ', self.key)
+      debug('error downloading paper: ', self.key)
       throw err
     })
 
-    download.on('end', () => {
-      self.downloading = false
-    })
+    download.on('end', done)
 
     return download
   }

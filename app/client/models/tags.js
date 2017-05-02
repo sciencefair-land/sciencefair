@@ -46,6 +46,7 @@ module.exports = (state, bus) => {
 
   bus.on('tags:remove', data => {
     remove(data)
+    bus.emit('paper:remove-tag', data)
     render()
   })
 

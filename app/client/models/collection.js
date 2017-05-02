@@ -70,7 +70,7 @@ module.exports = (state, bus) => {
       bus.emit('note_add', {
         title: 'Papers deleted',
         message: `${n} ${n === 1 ? '' : 's'} ha${n === 1 ? 's' : 've'} been removed from the local collection`
-      }, done)
+      })
     })
 
     bus.emit('results:replace', diff(state.results, data))
@@ -103,9 +103,7 @@ module.exports = (state, bus) => {
     ).on(
       'end', () => {
         if (hits.length > 0) {
-          bus.emit('results:receive', {
-            hits: hits
-          }, done)
+          bus.emit('results:receive', { hits: hits })
         } else {
           bus.emit('results:none', 'collection')
         }
@@ -147,7 +145,7 @@ module.exports = (state, bus) => {
         cb()
       }
 
-      return through(write, flush)
+      return through.obj(write, flush)
     }
 
     const stream = pumpify(
@@ -225,13 +223,13 @@ module.exports = (state, bus) => {
 
     const removefromdb = afterall(data.length, () => {
       state.collection.del(data.map(d => d.key), err => {
-        if (err) return done(err)
+        if (err) throw err
 
         const n = data.length
         send('note_add', {
           title: 'Papers deleted',
           message: `${n} ${n === 1 ? '' : 's'} ha${n === 1 ? 's' : 've'} been removed from the local collection`
-        }, done)
+        })
       })
     })
 

@@ -57,7 +57,7 @@ module.exports = (tag, state, emit) => {
   delbtn.onclick = e => {
     e.preventDefault()
     e.stopPropagation()
-    emit('paper:remove-tag', tag)
+    emit('tags:remove', { tag: tag, papers: state.selection.list.slice() })
   }
 
   const tagdiv = html`

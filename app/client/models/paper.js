@@ -1,44 +1,39 @@
 const uniq = require('lodash/uniq')
 
 module.exports = (state, bus) => {
+  const render = () => bus.emit('render')
+
   const selectshow = data => {
     bus.emit('selection:update', data)
     bus.emit('detail:show')
   }
 
-  const addtag = tag => {
-    const newpapers = state.selection.list.map(paper => {
-      if ((paper.tags || []).length === 0) paper.download(() => {})
-      paper.tags = uniq((paper.tags || []).concat([tag]))
+  const addtag = data => {
+    const newpapers = data.papers.map(paper => {
+      if ((paper.tags || []).length === 0) {
+        bus.emit('downloads:add', paper)
+      }
+      paper.tags = uniq((paper.tags || []).concat([data.tag]))
       return paper
     })
 
-    bus.emit('results:replace', {
-      key: newpapers.map(p => p.key),
-      paper: newpapers
-    })
-
+    render()
     bus.emit('collection:updatepaper', newpapers)
   }
 
-  const removetag = tag => {
-    const papers = state.selection.list
+  const removetag = data => {
 
-    const newPapers = papers.map(paper => {
+    const newpapers = data.papers.map(paper => {
       const tags = paper.tags
-      const removeidx = tags.indexOf(tag)
+      const removeidx = tags.indexOf(data.tag)
       if (removeidx > -1) tags.splice(removeidx, 1)
 
       paper.tags = tags
       return paper
     })
 
-    bus.emit('results:replace', {
-      key: papers.map(p => p.key),
-      paper: newPapers
-    })
-
-    bus.emit('collection:updatepaper', newPapers)
+    render()
+    bus.emit('collection:updatepaper', newpapers)
   }
 
   bus.on('paper:select-show', selectshow)
