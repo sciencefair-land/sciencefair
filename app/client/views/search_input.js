@@ -96,8 +96,8 @@ CachedInput.prototype._render = function (state, emit) {
 
   input.onkeydown = e => {
     if (e.keyCode == 32 || e.keyCode === 13) {
-      emitify.cancel()
       // space or enter submits the search immediately
+      emitify.cancel()
       const querystring = e.target.value + (e.keyCode === 32 ? ' ' : '')
       emit('search:set-query-string', querystring)
     } else {

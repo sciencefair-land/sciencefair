@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs-extra')
+const uniq = require('lodash/uniq')
 
 const C = require('./constants')
 const debug = require('debug')('sciencefair:paper')
@@ -40,7 +41,8 @@ function Paper (data) {
     // TODO: remove this path hack once hyperdrive is optimised,
     // else have sciencefair datasource generator handle it
     self.path = path.join('/articles', data.path.split('').join('/'))
-    self.files = data.files.map(file => path.join(self.path, file))
+    self.files = uniq(data.files.concat([data.entryfile]))
+      .map(file => path.join(self.path, file))
     self.entryfile = data.entryfile
     require('./getdatasource').fetch(self.source, (err, ds) => {
       if (err)  return cb(err)

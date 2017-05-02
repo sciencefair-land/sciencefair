@@ -2,7 +2,7 @@ const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../lib/constants')
 const imgpath = require('../lib/imgpath')
-  const equal = require('lodash/isEqual')
+const equal = require('lodash/isEqual')
 const clone = require('lodash/cloneDeep')
 const CacheComponent = require('cache-component')
 

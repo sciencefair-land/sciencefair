@@ -6,6 +6,7 @@ const mean = require('lodash/mean')
 const icon = require('./icon')
 const paper = require('../lib/getpaper')
 const all = require('lodash/every')
+const any = require('lodash/some')
 
 const style = css`
 
@@ -40,14 +41,15 @@ const style = css`
 
 module.exports = (state, emit) => {
   const selected = state.selection.list
-  const alldownloading = all(selected.map(p => p.downloading))
+  const downloading = any(selected.map(p => p.downloading))
+    && all(selected.map(p => p.downloading || p.progress === 100))
 
   const progress = mean(selected.map(p => p.progress || 0))
 
   const donetext = state.selection.list.length === 1 ? 'read' : 'downloaded'
   const doneicon = state.selection.list.length === 1 ? 'read' : 'tick'
 
-  const btntext = alldownloading
+  const btntext = downloading
     ? 'downloading'
     : progress === 100 ? donetext : 'download'
   const btnicon = progress === 100 ? doneicon : 'download'

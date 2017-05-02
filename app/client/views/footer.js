@@ -105,7 +105,7 @@ module.exports = (state, emit) => {
 
   collectioncount.onclick = (e) => {
     e.preventDefault()
-    emit('search:setquerystring', '*')
+    emit('search:set-query-string', '*')
   }
 
   const sources = state.datasources.list.filter(ds => ds.active)
