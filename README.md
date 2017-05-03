@@ -13,7 +13,7 @@ Some of the things that ScienceFair does differently:
 - datasources are backed by peer-to-peer networks (using [dat](https://datproject.org/))
 - anyone can create a datasource (tools to make this easy coming soon)
 - papers are stored in JATS XML format - perfect for data mining
-- basic data-mining and bibliometrics are built-in (see [screenshots](#selection-stats))
+- basic data-mining and bibliometrics are built-in (see [screenshots](#selection--stats))
 - we use the beautiful [Lens reader](https://github.com/elifesciences/lens) - no PDFs
 
 ScienceFair also follows a few simple design principles that we feel are missing from the ecosystem:
@@ -28,7 +28,7 @@ ScienceFair also follows a few simple design principles that we feel are missing
 - [screenshots](#screenshots)
 	- [home screen](#home-screen)
 	- [search results](#search-results)
-	- [selection & stats](#selection-stats)
+	- [selection & stats](#selection--stats)
 	- [reader](#reader)
 - [development](#development)
 
