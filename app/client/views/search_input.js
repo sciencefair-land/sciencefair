@@ -126,6 +126,7 @@ CachedInput.prototype._update = function (state, emit) {
   }
   if (!equal(state.search.tags, this._searchtags)) {
     this._input.value = state.search.querystring
+    this._searchtags = state.search.tags
   }
   return false
 }
