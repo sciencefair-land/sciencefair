@@ -1,6 +1,6 @@
 {
   "name": "sciencefair-repo",
-  "version": "1.0.0-beta2",
+  "version": "1.0.0-beta3",
   "description": "container repo for sciecefair app src and build tools",
   "scripts": {
     "pack": "build --dir",
@@ -26,9 +26,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "choo-log": "^6.1.1",
     "cross-zip": "^2.1.3",
-    "debug": "^2.6.3",
     "electron": "1.6.4",
     "electron-builder": "^15.6.3",
     "electron-debug": "^1.1.0",
