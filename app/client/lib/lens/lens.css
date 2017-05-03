@@ -197,12 +197,12 @@
 .lens-article .intro .intro-text {
   float: left; }
 
-.lens-article .intro .send-feedback {
+.lens-article .intro .emit-feedback {
   float: right;
   color: #E40000;
   font-weight: bold; }
 
-.lens-article .intro .send-feedback:hover {
+.lens-article .intro .emit-feedback:hover {
   color: #ff0000; }
 
 .content-node.supplement > .content {

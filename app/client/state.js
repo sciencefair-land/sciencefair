@@ -8,7 +8,7 @@ module.exports = {
   datasources: { shown: false, loaded: false, list: [] },
   detailshown: false,
   autocompleteshown: false,
-  currentsearch: {
+  search: {
     query: '',
     tagquery: null,
     tags: []

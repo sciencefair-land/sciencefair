@@ -33,6 +33,7 @@ const style = css`
 }
 
 .title extends ${shared.base} {
+  display: block;
   left: 10px;
   right: 10px;
   top: 10px;
@@ -85,15 +86,29 @@ const style = css`
 
 `
 
-module.exports = (result, state, prev, send) => {
-  const selected = state.selection.lookup[result.paper.key]
-  const downloading = state.downloads.lookup[result.paper.key]
-  const progress = downloading ? Math.max(downloading.progress, 20) : result.paper.progress
+const elementcache = {}
+
+const CacheComponent = require('cache-component')
+
+function CachedPaper (result, emit) {
+  if (!(this instanceof CachedPaper)) return new CachedPaper(result, emit)
+  this._result = result
+  this._emit = emit
+  CacheComponent.call(this)
+}
+CachedPaper.prototype = Object.create(CacheComponent.prototype)
+
+CachedPaper.prototype._render = function (selected, progress) {
+  const result = this._result
+  const emit = this._emit
+
+  const title = html`<div class="${style.title}"></div>`
+  title.innerHTML = result.paper.title
 
   const paper = html`
     <div class="${style.paper} clickable">
       ${selectedmark(selected)}
-      <div class="${style.title}">${result.paper.title}</div>
+      ${title}
       <div class="${style.author}">
         ${renderAuthor(result.paper.author)}
       </div>
@@ -104,7 +119,7 @@ module.exports = (result, state, prev, send) => {
     </div>
   `
 
-  const singleClick = e => send('paper_select_show', {
+  const singleClick = e => emit('paper:select-show', {
     index: result.index,
     paper: result.paper,
     shift: e.shiftKey,
@@ -114,9 +129,9 @@ module.exports = (result, state, prev, send) => {
 
   const doubleClick = event => {
     if (result.paper.progress === 100) {
-      send('read_selection')
+      emit('reader:read')
     } else {
-      send('download_add', [result.paper])
+      emit('downloads:add', [result.paper])
     }
   }
 
@@ -130,7 +145,24 @@ module.exports = (result, state, prev, send) => {
     doubleClick(e)
   }
 
+  paper.setAttribute('id', 'paper-' + result.paper.key)
+
   return paper
+}
+
+module.exports = (result, state, emit) => {
+  const selected = state.selection.lookup[result.paper.key]
+  const downloading = result.paper.downloading
+  const progress = downloading ? Math.max(result.paper.progress, 10) : result.paper.progress
+
+  let el = elementcache[result.paper.key]
+  if (el) {
+    return el.render(selected, progress)
+  } else {
+    const newel = CachedPaper(result, emit)
+    elementcache[result.paper.key] = newel
+    return newel.render(selected, progress)
+  }
 }
 
 function renderAuthor (author) {

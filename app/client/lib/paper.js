@@ -1,7 +1,9 @@
 const path = require('path')
 const fs = require('fs-extra')
+const uniq = require('lodash/uniq')
 
 const C = require('./constants')
+const debug = require('debug')('sciencefair:paper')
 
 function Paper (data) {
   if (data instanceof Paper) return data
@@ -36,7 +38,11 @@ function Paper (data) {
   }
 
   self.loadDatasource = () => {
-    self.path = data.path
+    // TODO: remove this path hack once hyperdrive is optimised,
+    // else have sciencefair datasource generator handle it
+    self.path = path.join('/articles', data.path.split('').join('/'))
+    self.files = uniq(data.files.concat([data.entryfile]))
+      .map(file => path.join(self.path, file))
     self.entryfile = data.entryfile
     require('./getdatasource').fetch(self.source, (err, ds) => {
       if (err)  return cb(err)
@@ -49,35 +55,59 @@ function Paper (data) {
   }
 
   self.loadID = () => {
-    if (data.key) self.key = data.key
+    // if (data.key) self.key = data.key
     var doi = self.identifiers.find(id => id.type.toLowerCase() === 'doi')
     self.id = doi ? doi.id : self.identifiers[0].id
     self.key = `${self.source}:${self.id}`
   }
 
   self.filesPresent = cb => {
-    if (self.ds && self.ds.articles && self.ds.articles.content) {
-      if (self.progress === 1) return cb(null, 1)
-      return self.getArticleEntries((err, entries) => {
-        if (err) return cb(err)
-        self.progress = self.ds.entrysetDownloadProgress(entries)
-        cb(null, self.progress)
-      })
-    } else {
+    if (self.downloading) return cb(null, self.progress)
+    if (self.progress === 100) return cb(null, self.progress)
+    if (self.progresschecked) return cb(null, self.progress)
+    if (!(self.ds && self.ds.articles && self.ds.articles.content)) {
       // datasource not ready to check progress, try again after delay
       return setTimeout(() => self.filesPresent(cb), 500)
     }
+    self.ds.articlestats(self.files, (err, stats) => {
+      if (err) return cb(err)
+      debug('progress stats', self.title, stats)
+      self.progress = stats.progress * 100
+      self.progresschecked = true
+      cb(null, self.progress, true)
+    })
   }
 
-  self.download = cb => self.ds.download(self, cb)
+  self.candownload = () => self.ds.ready()
 
-  self.getArticleEntries = cb => {
-    if (self.entries) return cb(null, self.entries)
-    self.ds.getArticleEntries(self, (err, entries) => {
-      if (err) return cb(err)
-      self.entries = entries
-      return cb(null, entries)
+  self.download = () => {
+    debug('downloading', self.key)
+    if (self.downloading) return null
+    self.downloading = true
+    const download = self.ds.download(self)
+    if (!download) return null
+
+    const done = () => {
+      if (!self.downloading) return
+      debug('downloaded', self.key)
+      self.downloading = false
+      self.progresschecked = true
+    }
+
+    download.on('progress', data => {
+      self.progress = data.progress * 100
+      if (self.progress === 100) done()
     })
+
+    download.on('error', err => {
+      self.downloading = false
+      debug('error downloading paper: ', self.key)
+      throw err
+    })
+
+    download.on('end', done)
+
+    return download
   }
 
   self.metadata = () => {
@@ -90,24 +120,15 @@ function Paper (data) {
       tags: self.tags,
       source: self.source,
       id: self.id,
+      key: self.key,
       identifier: self.identifiers,
-      path: self.path,
+      path: data.path,
+      files: data.files,
       entryfile: self.entryfile
     }
   }
 
-  self.removeFiles = cb => {
-    self.getArticleEntries((err, entries) => {
-      if (err) return cb(err)
-      entries.filter(
-        entry => entry.type === 'directory'
-      ).forEach(
-        entry => fs.emptyDirSync(path.join(self.ds.datadir, entry.name))
-      )
-
-      cb()
-    })
-  }
+  self.removeFiles = cb => self.ds.unlink(self.path, cb)
 
   self.loadData()
 }

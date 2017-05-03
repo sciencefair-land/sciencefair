@@ -1,6 +1,7 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../lib/constants')
+const imgpath = require('../lib/imgpath')
 
 const style = css`
 
@@ -32,26 +33,22 @@ const style = css`
   width: 20px;
   height: 20px;
   background-color: ${C.YELLOW};
-  -webkit-mask: url(./images/close.svg) center / contain no-repeat;
+  -webkit-mask: url(${imgpath('close.svg')}) center / contain no-repeat;
 }
 
 `
 
-module.exports = (state, prev, send) => {
+module.exports = (state, emit) => {
   if (!(state.tags.showAddField)) return
 
   const input = html`<input class="${style.input}" placeholder="new tag name..">`
 
-  function submit (e) {
-    const payload = {
-      paper: state.selection.list,
-      tag: e.target.value
-    }
-
-    send('tag_add', payload)
+  const submit = e => {
+    e.preventDefault()
+    emit('tags:add', { tag: e.target.value, papers: state.selection.list })
   }
 
-  input.onkeypress = (e) => {
+  input.onkeypress = e => {
     if (!e) e = window.e
     var keyCode = e.keyCode || e.which
     if (keyCode === 13) submit(e)
@@ -59,9 +56,9 @@ module.exports = (state, prev, send) => {
 
   const closebtn = html`<div class="${style.cancel} clickable"></div>`
 
-  closebtn.onclick = (e) => {
+  closebtn.onclick = e => {
     e.preventDefault()
-    send('tag_stopadd')
+    emit('tags:stop-add')
   }
 
   setTimeout(() => {

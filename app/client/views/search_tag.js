@@ -1,49 +1,50 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../lib/constants')
+const imgpath = require('../lib/imgpath')
 
-module.exports = (tag, state, prev, send) => {
-  const style = css`
+const style = css`
 
-  .tag {
-    border: 1px solid ${C.WHITE};
-    padding: 5px;
-    border-radius: 2px;
-    color: ${C.WHITE};
-    font-family: Aleo-Light;
-    margin-right: 12px;
-    justify-content: center;
-    align-content: center;
-    position: relative;
-  }
+.tag {
+  border: 1px solid ${C.WHITE};
+  padding: 5px;
+  border-radius: 2px;
+  color: ${C.WHITE};
+  font-family: Aleo-Light;
+  margin-right: 12px;
+  justify-content: center;
+  align-content: center;
+  position: relative;
+}
 
-  .deltagbtnWrapper {
-    background: ${C.BLUE};
-    height: 16px;
-    width: 16px;
-    border-radius: 8px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin-top: -8px;
-    margin-left: -8px;
-    display: none;
-  }
+.deltagbtnWrapper {
+  background: ${C.BLUE};
+  height: 16px;
+  width: 16px;
+  border-radius: 8px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-top: -8px;
+  margin-left: -8px;
+  display: none;
+}
 
-  .deltagbtn {
-    height: 16px;
-    width: 16px;
-    background-color: ${C.WHITE};
-    color: ${C.DARKBLUE};
-    -webkit-mask: url(./images/delete2.svg) center / contain no-repeat;
-  }
+.deltagbtn {
+  height: 16px;
+  width: 16px;
+  background-color: ${C.WHITE};
+  color: ${C.DARKBLUE};
+  -webkit-mask: url(${imgpath('delete2.svg')}) center / contain no-repeat;
+}
 
-  .tag:hover > .deltagbtnWrapper {
-    display: flex;
-  }
+.tag:hover > .deltagbtnWrapper {
+  display: flex;
+}
 
-  `
+`
 
+module.exports = (tag, emit) => {
   const delbtn = html`
 
   <div class="${style.deltagbtnWrapper}">
@@ -52,13 +53,13 @@ module.exports = (tag, state, prev, send) => {
 
   `
 
-  delbtn.onclick = (e) => {
+  delbtn.onclick = e => {
     e.preventDefault()
     e.stopPropagation()
-    send('search_removetag', { tag: tag })
+    emit('search:remove-tag', tag)
   }
 
-  const tagdiv = html`
+  return html`
 
   <div class="${style.tag} clickable">
     #${tag}
@@ -66,6 +67,4 @@ module.exports = (tag, state, prev, send) => {
   </div>
 
   `
-
-  return tagdiv
 }

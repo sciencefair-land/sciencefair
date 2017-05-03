@@ -2,28 +2,31 @@ const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../lib/constants')
 
-module.exports = (state, prev, send) => {
-  const style = css`
+const style = css`
 
-  .message {
-    position: absolute;
-    bottom: 300px;
-    left: 50px;
-    font-size: 5em;
-    font-family: Aleo-Light;
-    color: ${C.MIDBLUE};
-    pointer-events: none;
-  }
+.message {
+  position: absolute;
+  bottom: 300px;
+  left: 50px;
+  font-size: 5em;
+  font-family: Aleo-Light;
+  color: ${C.MIDBLUE};
+  pointer-events: none;
+}
 
-  `
+`
+
+module.exports = (state, emit) => {
 
   var msg = ''
   if (state.initialising) {
-    msg = 'Syncing initial data.'
+    msg = 'Syncing initial data...'
+  } else if (state.search.searching && state.results.length === 0) {
+    msg = 'Searching...'
   } else if (state.results.length === 0) {
-    const query = state.currentsearch.query
+    const query = state.search.query
     const hasquery = query && query.length > 0
-    const tags = state.currentsearch.tags
+    const tags = state.search.tags
     const hastags = tags && tags.length > 0
     if (hasquery || hastags) {
       msg = 'No results.'

@@ -4,6 +4,7 @@ const C = require('../lib/constants')
 const numeral = require('numeral')
 const stat = require('./datasource_stat')
 const chunk = require('lodash/chunk')
+const imgpath = require('../lib/imgpath')
 
 const style = css`
 
@@ -33,12 +34,12 @@ const style = css`
 
 .checked {
   background-color: ${C.MIDBLUE};
-  -webkit-mask: url(./images/check.svg) center / contain no-repeat;
+  -webkit-mask: url(${imgpath('check.svg')}) center / contain no-repeat;
 }
 
 .unchecked {
   background-color: ${C.MIDBLUEFADE};
-  -webkit-mask: url(./images/uncheck.svg) center / contain no-repeat;
+  -webkit-mask: url(${imgpath('uncheck.svg')}) center / contain no-repeat;
 }
 
 .onoff {
@@ -88,14 +89,14 @@ const style = css`
   width: 30px;
   height: 30px;
   background-color: ${C.MIDBLUEFADE};
-  -webkit-mask: url(./images/tick.svg) center / contain no-repeat;
+  -webkit-mask: url(${imgpath('tick.svg')}) center / contain no-repeat;
 }
 
 .cross {
   width: 30px;
   height: 30px;
   background-color: ${C.MIDBLUEFADE};
-  -webkit-mask: url(./images/cross.svg) center / contain no-repeat;
+  -webkit-mask: url(${imgpath('cross.svg')}) center / contain no-repeat;
 }
 
 .deleteouter {
@@ -111,7 +112,7 @@ const style = css`
 
 .deleteinner {
   background-color: ${C.MIDBLUE};
-  -webkit-mask: url(./images/bin.svg) center / contain no-repeat;
+  -webkit-mask: url(${imgpath('bin.svg')}) center / contain no-repeat;
   width: 30px;
   height: 30px;
 }
@@ -135,7 +136,7 @@ const chunkwords = desc => chunk(
   c => c.reverse().join('\u00A0')
 ).reverse().join(' ')
 
-module.exports = (datasource, state, prev, send) => {
+module.exports = (datasource, state, emit) => {
   const checkbox = datasource => {
     const imgstyle = datasource.active ? style.checked : style.unchecked
     const el = html`
@@ -147,15 +148,14 @@ module.exports = (datasource, state, prev, send) => {
 
     `
 
-    el.onclick = (e) => {
+    el.onclick = e => {
       e.preventDefault()
-      send('datasource_toggleactive', datasource)
+      emit('datasources:toggle-active', datasource.key)
     }
     return el
   }
 
   const entry = datasource => {
-    // console.log(datasource)
     if (datasource.loading) {
       const shortkey = html`
 
@@ -203,7 +203,7 @@ module.exports = (datasource, state, prev, send) => {
         require('./overlay_confirm')(
           `Really delete datasource ${datasource.name} and all its data?`,
           really => {
-            if (really) send('datasource_remove', datasource)
+            if (really) emit('datasource:remove', datasource.key)
           }
         )
       }

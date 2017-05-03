@@ -6,6 +6,7 @@ const mean = require('lodash/mean')
 const icon = require('./icon')
 const paper = require('../lib/getpaper')
 const all = require('lodash/every')
+const any = require('lodash/some')
 
 const style = css`
 
@@ -18,6 +19,7 @@ const style = css`
   font-family: CooperHewitt-Light;
   font-size: 1.5em;
   margin-right: 12px;
+  margin-bottom: 12px;
   padding: 13px;
   position: relative;
 }
@@ -38,25 +40,17 @@ const style = css`
 
 `
 
-module.exports = (state, prev, send) => {
+module.exports = (state, emit) => {
   const selected = state.selection.list
-  const downloads = selected.map(
-    p => {
-      return { paper: p, download: state.downloads.lookup[p.key] }
-    }
-  )
-  const alldownloading = all(downloads.map(p => !!p.download))
+  const downloading = any(selected.map(p => p.downloading))
+    && all(selected.map(p => p.downloading || p.progress === 100))
 
-  const progressstats = downloads.map(
-    obj => obj.download || obj.paper
-  )
-
-  const progress = mean(progressstats.map(dl => dl.progress || 0))
+  const progress = mean(selected.map(p => p.progress || 0))
 
   const donetext = state.selection.list.length === 1 ? 'read' : 'downloaded'
   const doneicon = state.selection.list.length === 1 ? 'read' : 'tick'
 
-  const btntext = alldownloading
+  const btntext = downloading
     ? 'downloading'
     : progress === 100 ? donetext : 'download'
   const btnicon = progress === 100 ? doneicon : 'download'
@@ -74,8 +68,12 @@ module.exports = (state, prev, send) => {
 
   btn.onclick = e => {
     e.preventDefault()
-    if (selected.length > 1) return
-    progress === 100 ? send('read_selection') : send('download_add', selected)
+    if (progress === 100) {
+      if (selected.length > 1) return
+      emit('reader:read', selected[0])
+    } else {
+      emit('downloads:add', selected)
+    }
   }
 
   return btn

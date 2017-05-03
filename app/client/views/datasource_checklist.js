@@ -17,7 +17,7 @@ const style = css`
 
 `
 
-module.exports = (state, prev, send) => {
+module.exports = (state, emit) => {
   if (!state.datasources.loaded) {
     return html`<div class="${style.list}"><p>loading datasources...</p></div>`
   }
@@ -27,7 +27,7 @@ module.exports = (state, prev, send) => {
   <div class="${style.list}">
     ${state.datasources.list.length === 0
       ? 'No datasources yet'
-      : state.datasources.list.map(source => entry(source, state, prev, send))}
+      : state.datasources.list.map(source => entry(source, state, emit))}
   </div>
 
   `

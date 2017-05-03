@@ -1,18 +1,15 @@
 const path = require('path')
+const events = require('events')
+
+const inherits = require('inherits')
 
 const low = require('lowdb')
 const hyperdrive = require('hyperdrive')
-const level = require('level')
-const arraystream = require('stream-from-array').obj
-const streaminto = require('level-write-stream')
-const multi = require('multi-write-stream')
-const eos = require('end-of-stream')
-const raf = require('random-access-file')
+const storage = require('dat-storage')
+const walker = require('folder-walker')
 const fs = require('fs-extra')
 const mkdirp = require('mkdirp').sync
 const through = require('through2')
-const parallel = require('parallel-transform')
-const pump = require('pump')
 const pumpify = require('pumpify')
 const yuno = require('yunodb')
 const sum = require('lodash/sum')
@@ -21,13 +18,19 @@ const assign = require('lodash/assign')
 const speed = require('speedometer')()
 const discover = require('hyperdiscovery')
 const defaults = require('lodash/defaults')
+const alldone = require('./alldone')
+const paper = require('./getpaper')
 
-const debug = require('debug')('sciencefair')
+const multiprogress = require('./fs-readstreams-progress')
+const collectStats = require('./fs-collect-stats')
+
+const debug = require('debug')('sciencefair:datasource')
 
 const C = require('./constants')
 
 function Datasource (key, opts) {
   if (!(this instanceof Datasource)) return new Datasource(key, opts)
+  events.EventEmitter.call(this)
 
   if (!opts) opts = {}
   defaults(opts, {
@@ -38,8 +41,9 @@ function Datasource (key, opts) {
   self.opts = opts
   self.loading = true
   self.queuedDownloads = []
-  console.log(self)
+  debug('new datasource:', self)
 
+  self.name = 'new datasource ' + key.substring(0, 6)
   self.key = key
   self.datadir = path.join(C.DATASOURCES_PATH, key)
   mkdirp(self.datadir)
@@ -50,6 +54,7 @@ function Datasource (key, opts) {
   const statspath = path.join(self.datadir, 'source.stats')
   self.stats = low(statspath)
   self.stats.defaults({
+    active: false,
     peers: 0,
     metadataSync: {
       total: 0,
@@ -59,34 +64,84 @@ function Datasource (key, opts) {
   }).value()
   self.stats.read()
 
-  // mapping of article IDs to filepaths stored in levelDB
-  const filedbpath = path.join(self.datadir, 'file.map')
-  self.filedb = level(filedbpath, { valueEncoding: 'json' })
-
   // prepare the hyperdrive
-  const dbpath = path.join(self.datadir, 'hyper.drive')
-  const articlesdbpath = path.join(self.datadir, 'articles.drive')
-  const filepath = file => path.join(self.datadir, file)
-
-  const hyperdb = level(dbpath)
-  const articlesdb = level(articlesdbpath)
-  self.drive = hyperdrive(hyperdb)
-  self.articlesdrive = hyperdrive(articlesdb)
+  self.jsondir = path.join(self.datadir, 'meta_feed')
+  self.articledir = path.join(self.datadir, 'article_feed')
+  self.filepath = file => path.join(self.articledir, file)
 
   // prepare the search index
   const dbopts = {
     location: path.join(self.datadir, 'yuno.db'),
     keyField: '$.id',
     indexMap: {
-      'title': true,
-      'author': false,
-      'authorstr': true,
-      'date': false,
-      'identifier': false,
-      'abstract': true,
-      'path': false,
-      'entryfile': false
+      title: true,
+      authorstr: true,
+      abstract: true,
+      author: false,
+      date: false,
+      tags: false,
+      identifier: false,
+      path: false,
+      source: false,
+      files: false,
+      entryfile: false,
+      id: false
     }
+  }
+
+  // connect to the hyperdrive swarm and activate the DB
+  self.connect = cb => {
+    if (self.metadata) return cb()
+
+    // callback after an error, or when both database and hyperdrive
+    // (_feed.json) are connected
+    const done = alldone(2, err => {
+      if (err) return cb(err)
+      self.maybeSyncMetadata()
+      self.connectarticles()
+      debug(`source ${self.name || self.key}: database and hyperdrive connected`)
+      if (cb) cb()
+    })
+
+    self.connectmeta(done)
+    self.connectdb(done)
+  }
+
+  self.connectmeta = cb => {
+    self.metadata = hyperdrive(storage(self.jsondir), self.key, {
+      latest: true,
+      sparse: false,
+      live: false
+    })
+
+    self.metadata.once('ready', () => {
+      debug('datasource metadata drive ready', self.key)
+
+      self.metadataswarm = discover(self.metadata, {
+        tcp: false
+      })
+    })
+
+    self.metadata.once('content', () => {
+      debug('archive length', self.metadata.metadata.length)
+
+      self.metadata.content.on('download', (index, data, from) => {
+        speed(data.length)
+      })
+
+      self.metadata.readFile('/_feed.json', 'utf8', (err, data) => {
+        if (err) throw err
+        const parsed = JSON.parse(data)
+        Object.assign(self, parsed)
+        debug('read _feed.json, got source name:', parsed.name)
+        if (!self.articleFeed) {
+          const err = new Error('datasource is not valid - no article feed in the metadata')
+          cb(err)
+        } else {
+          cb()
+        }
+      })
+    })
   }
 
   self.connectdb = cb => {
@@ -98,289 +153,146 @@ function Datasource (key, opts) {
     })
   }
 
-  // connect to the hyperdrive swarm and activate the DB
-  self.connect = cb => {
-    if (self.connected) return cb()
-    console.log('connecting meta', self.key)
-
-    // callback after an error, or when both database and hyperdrive
-    // (_feed.json) are connected
-    const done = require('../lib/alldone')(2, err => {
-      if (err) return cb(err)
-      console.log(`source ${self.name || self.key}: database and hyperdrive connected`)
-      self.maybeSyncMetadata()
-      cb()
-    })
-
-    self.connectdb(done)
-
-    self.archive = self.drive.createArchive(
-      new Buffer(self.key, 'hex'),
-      {
-        live: false,
-        sparse: true,
-        file: name => raf(filepath(name))
+  self.maybeSyncMetadata = () => {
+    debug('resuming metadata sync')
+    self.syncmeta(
+      err => {
+        if (err) throw err
       }
     )
-
-    self.archive.on('download', data => speed(data.length))
-
-    const swarm = discover(self.archive)
-
-    swarm.on('connection', (peer, type) => {
-      console.log(`Connected to meta peer (${type.type} port ${type.port})`)
-      self.stats.set('peers', swarm.connections.length).value()
-      peer.on('close', () => {
-        console.log(`Disconnected from meta peer (${type.type} port ${type.port})`)
-        self.stats.set('peers', swarm.connections.length).value()
-      })
-    })
-
-    const loadjson = cb => {
-      fs.readJson(filepath('_feed.json'), (err, obj) => {
-        if (err) return cb(err)
-
-        Object.assign(self, obj)
-        self.syncArticleMetadata()
-        return done()
-      })
-    }
-
-    const countArticles = () => {
-      let articleCount = self.stats.get('articleCount').value() || 0
-      self.archive.list({ live: false }).on('data', entry => {
-        if (entry.name === '_feed.json') {
-          fetchjson(entry)
-        } else if (/^meta.*json$/.test(entry.name)) {
-          articleCount++
-        }
-      }).on(
-        'error', err => done(err)
-      ).on(
-        'close', () => self.stats.set('articleCount', articleCount).value()
-      ).on(
-        'end', () => self.stats.set('articleCount', articleCount).value()
-      )
-    }
-
-    const fetchjson = entry => {
-      if (!self.opts.diskfirst && !self.archive.isEntryDownloaded(entry)) {
-        self.archive.download(entry, loadjson)
-      } else {
-        loadjson(err => {
-          if (err) return done(err)
-          if (!(self.stats.get('articleCount').value())) countArticles()
-        })
-      }
-    }
-
-    loadjson(err => {
-      if (err) {
-        console.log('Could not load feed metadata JSON, syncing...', err)
-        self.archive.list({ live: false }).on('data', entry => {
-          if (entry.name === '_feed.json') {
-            fetchjson(entry)
-          }
-        })
-      } else {
-        if (!(self.stats.get('articleCount').value())) countArticles()
-      }
-    })
-  }
-
-  self.maybeSyncMetadata = () => {
-    if (self.stats.get('active').value()
-        && !(self.stats.get('metadataSync.finished').value())) {
-      console.log('Resuming metadata sync')
-      self.syncMetadata(
-        err => {
-          if (err) return console.log('error resuming datasource sync:', err)
-        }
-      )
-    }
   }
 
   // load a bibjson metadata entry
   self.loadEntry = entry => fs.readJsonSync(path.join(self.datadir, entry.name))
 
-  // streaming check if the entry is a metadata file, and if so
-  // that it has been downloaded
-  self.ensureMetaFile = function () {
-    return parallel(28, (entry, next) => {
-      if (/^meta.*json$/.test(entry.name)) {
-        if (self.opts.diskfirst || self.archive.isEntryDownloaded(entry)) {
-          next(null, self.loadEntry(entry))
-        } else {
-          self.archive.download(entry, err => {
-            if (err) return next(err)
-            next(null, self.loadEntry(entry))
-          })
-        }
-      } else {
-        next()
-      }
-    })
-  }
-
-  self.initFromDisk = cb => {
-    console.log('INIT FRAWM DISK YA')
-  }
-
   // begin or resume syncing metadata from the hyperdrive archive
   // and adding it to the search index
-  self.syncMetadata = cb => {
-    if (self.stats.get('metadataSync.finished').value()) return cb()
+  self.syncmeta = cb => {
+    if (self.stats.get('metadataSync').value().finished) {
+      self.connected = true
+      self.emit('connected')
+      return cb()
+    }
+    // if (self.stats.get('metadataSync.finished').value()) return cb()
+    debug('syncing metadata feed')
 
-    let metadataPos = self.stats.get('metadataSync.done').value() || 0
-    let metafiles = fs.readdirSync(
-      path.join(self.datadir, 'meta')
-    ).filter(
-      file => /json$/.test(file)
-    ).map(
-      file => { return { name: path.join('meta', file) } }
+    // each history item looks like:
+    // {
+    //   "type": "put",
+    //   "version": 3627,
+    //   "name": "/meta/elife-27150-v2.json",
+    //   "value": {
+    //     "mode": 33188,
+    //     "uid": 0,
+    //     "gid": 0,
+    //     "size": 769,
+    //     "blocks": 1,
+    //     "offset": 3626,
+    //     "byteOffset": 7609175,
+    //     "mtime": 1491369955265,
+    //     "ctime": 1491369955265
+    //   }
+    // }
+
+    const addname = require('./stream-obj-rename')({
+      from: 'filepath',
+      to: 'name'
+    })
+
+    const addsource = require('./stream-obj-xtend')({
+      source: self.key
+    })
+
+    const filtermeta = require('./through-filter')(
+      data => data.type ==='file' && /^\/meta\/.*json$/.test(data.name)
     )
-    const end = self.opts.diskfirst ? metafiles.length : self.archive.metadata.blocks
 
-    const count = through.ctor({ objectMode: true }, (data, enc, next) => {
-      metadataPos += 1
-      if (metadataPos % 30 === 0 || (end > 0 && metadataPos === end)) {
-        self.stats.get('metadataSync').assign({
-          done: metadataPos,
-          finished: false
-        }).value()
+    const getentry = require('./hyperdrive-sync-entry')(self.metadata)
+
+    n = 0
+    const getprogress = through.ctor({ objectMode: true }, (data, _, next) => {
+      n++
+      if (n % 35 === 0) {
+        const progress = {
+          done: n,
+          total: self.articleCount
+        }
+        self.stats.get('metadataSync').assign(progress).value()
+        self.emit('progress', progress)
       }
       next(null, data)
     })
 
-    const topaper = through.ctor({ objectMode: true }, (data, enc, next) => {
-      data.source = self.key
-      const meta = require('./getpaper')(data, true).metadata()
-      next(null, meta)
-    })
+    const getpaper = require('./hyperdrive-to-sciencefair-paper')()
 
-    let list
-    if (self.opts.diskfirst) {
-      console.log('USING DISK METAFILES')
-      list = arraystream(metafiles)
-    } else {
-      list = self.archive.list({
-        live: false,
-        offset: metadataPos
-      })
-    }
-
-    list.once('data', () => {
-      self.stats.get('metadataSync').assign({
-        total: end
-      }).value()
-    })
+    const getmeta = require('./stream-paper-meta')()
 
     const done = err => {
-      if (err) {
-        self.stats.get('metadataSync').assign({
-          done: metadataPos,
-          finished: false
-        }).value()
-        return cb(err)
-      }
-
+      if (err) return cb(err)
       self.stats.get('metadataSync').assign({
-        done: metadataPos,
+        done: self.articleCount,
+        total: self.articleCount,
         finished: true
       }).value()
+      self.emit('metadatasync:done')
       self.connected = true
+      self.emit('connected')
       cb()
     }
 
     pumpify.obj(
-      list,
-      count(),
-      self.ensureMetaFile(),
-      topaper(),
+      walker('/meta', { fs: self.metadata }),
+      addname(),
+      filtermeta(),
+      getentry(),
+      getprogress(),
+      addsource(),
+      getpaper(),
+      getmeta(),
       self.db.add(done)
     )
   }
 
-  self.articleMetadataSynced = () => self.stats.get('articleMetadataSynced').value()
-
-  self.syncArticleMetadata = () => {
-    self.connectArticles()
-    if (self.articleMetadataSynced()) {
-      console.log('article metadata already synced')
-      return
-    }
-
-    var rs = self.articles.list({
-      live: false
-    })
-
-    var fileEntries = 0
-    self.filedb.createReadStream().on('data', () => {
-      fileEntries++
-    }).on('end', () => {
-      console.log('local DB contains', fileEntries, 'entries')
-      console.log('streaming article metadata to local DB now')
-
-      rs.once('data', function () {
-        const blocks = self.articles.metadata.blocks
-        console.log('articles feed contains %d entries\n', blocks)
-
-        // TODO: resume from offset
-        if (blocks - 2 === fileEntries) {
-          console.log('all file entries synced to local DB')
-        } else {
-          console.log('syncing file entries to local DB')
-
-          rs.on('data', function (data) {
-            self.filedb.put(data.name, data, () => {})
-          })
-
-          rs.on('end', () => {
-            console.log('synced file metadata of all articles')
-            self.stats.set('articleMetadataSynced', true).value()
-            self.articles.close(err => {
-              if (err) return console.error('error closing articles archive', err)
-            })
-          })
-        }
-      })
-    })
-  }
-
-  self.connectArticles = () => {
+  self.connectarticles = () => {
     if (self.articles) return
 
-    console.log('connecting articles', self.articleFeed)
-    self.articles = self.articlesdrive.createArchive(
-      new Buffer(self.articleFeed, 'hex'),
-      {
-        live: false,
-        sparse: true,
-        file: name => raf(filepath(name))
-      }
+    self.articles = hyperdrive(
+      storage(self.articledir),
+      self.articleFeed,
+      { sparse: true, latest: true }
     )
-    const swarm = discover(self.articles)
 
-    swarm.on('connection', (peer, type) => {
-      console.log(`Connected to articles peer (${type.type} port ${type.port})`)
-      self.stats.set('articlepeers', swarm.connections.length).value()
-      peer.on('close', () => {
-        console.log(`Disconnected from articles peer (${type.type} port ${type.port})`)
-        self.stats.set('articlepeers', swarm.connections.length).value()
+    self.articles.once('ready', () => {
+      debug('datasource articles drive ready', self.articleFeed)
+
+      self.articlesswarm = discover(self.articles)
+      self.articlesswarm.on('connection', (peer, type) => {
+        self.stats.set('peers', self.articlesswarm.connections.length).value()
+        peer.on('close', () => {
+          self.stats.set('peers', self.articlesswarm.connections.length).value()
+        })
       })
     })
 
-    self.articles.on('download', data => speed(data.length))
+    self.articles.once('content', () => {
+      self.articles.content.on('download', (index, data, from) => {
+        speed(data.length)
+      })
 
-    if (self.queuedDownloads.length > 0) {
-      console.log('Processing queued downloads')
-      self.queuedDownloads.forEach(entry => self.download(entry.article, entry.cb))
-      self.queuedDownloads = []
-    }
+      if (self.queuedDownloads.length > 0) {
+        debug('Processing queued downloads')
+        self.queuedDownloads.forEach(entry => paper(entry).download())
+        self.queuedDownloads = []
+      }
+    })
   }
 
   self.toggleActive = () => {
     self.stats.set('active', !self.stats.get('active').value()).value()
+  }
+
+  self.setActive = () => {
+    self.stats.set('active', true).value()
   }
 
   // return an object of data about this datasource
@@ -392,7 +304,7 @@ function Datasource (key, opts) {
       stats: self.stats.getState(),
       loading: self.loading,
       active: self.stats.get('active').value(),
-      live: self.archive.live
+      live: self.archive ? self.archive.live : false
     }
   }
 
@@ -407,90 +319,86 @@ function Datasource (key, opts) {
   // close all databases, then delete the datasource directory
   self.remove = cb => self.close(() => fs.remove(self.datadir, cb))
 
-  self.getArticleEntries = (article, cb) => {
-    const entries = []
-    self.filedb.createReadStream(
-      {
-        gte: `articles/${article.path}`,
-        lte: `articles/${article.path}${String.fromCodePoint(0xFFFF)}`,
-        keys: false
-      }
-    ).on(
-      'data', data => entries.push(data)
-    ).on(
-      'error', err => cb(err)
-    ).on(
-      'end', () => cb(null, entries)
-    ).on(
-      'close', () => cb(null, entries)
-    )
-  }
+  self.articlestats = (files, cb) => process.nextTick(() => {
+    const stats = {
+      size: 0,
+      local: 0,
+      files: {}
+    }
 
-  self.entrysetDownloadProgress = entries => {
-    if (!self.articles) return 0
-    let totalBlocks = 0
-    let downloadedBlocks = 0
+    files.forEach(f => stats.files[f] = {})
 
-    entries.forEach(entry => {
-      downloadedBlocks += self.articles.countDownloadedBlocks(entry)
-      totalBlocks += entry.blocks
-    })
-
-    return (downloadedBlocks / totalBlocks) * 100
-  }
-
-  self.articleDownloadProgress = (article, cb) => {
-    self.getArticleEntries(article, (err, entries) => {
+    const done = alldone(2, err => {
       if (err) return cb(err)
-
-      article.progress = self.entrysetDownloadProgress(entries)
-      cb(null, article.progress)
+      stats.progress = stats.local / stats.size
+      Object.keys(stats.files).forEach(f => {
+        const file = stats.files[f]
+        file.progress = file.local / file.size
+      })
+      cb(null, stats)
     })
-  }
 
-  self.download = (article, cb) => {
+    const strippath = filepath => filepath.replace(self.articlepath, '')
+
+    // get the current size on disk
+    const errorStat = { size: 0 }
+    const disk = collectStats(files.map(self.filepath), { errorStat: errorStat }, (err, data) => {
+      if (err) return done(err)
+      stats.local = data.summary.size
+      data.files.forEach(f => {
+        const file = strippath(f.path)
+        stats.files[file].local = f.size
+      })
+      done()
+    })
+
+    // get the size in the archive
+    const archive = collectStats(files, { fs: self.articles }, (err, data) => {
+      if (err) return done(err)
+      stats.size = data.summary.size
+      data.files.forEach(f => stats.files[f.path].size = f.size)
+      done()
+    })
+  })
+
+  self.ready = () => (!!self.metadata && !!self.articles)
+
+  self.download = article => {
     if (!self.articles) {
-      self.queuedDownloads.push({ article: article, cb: cb })
+      self.queuedDownloads.push({ article: article })
       return
     }
 
-    self.getArticleEntries(article, (err, entries) => {
-      if (err) return cb(err)
-      const currentdl = self._downloads.map(d => d.id).indexOf(article.id)
-      if (currentdl !== -1) return cb()
+    if (self._downloads.find(d => d.key === article.key)) {
+      debug('already downloading', article.key)
+      return
+    }
 
-      const stats = {
-        started: Date.now(),
-        source: self.key,
-        id: article.id,
-        files: entries,
-        progress: self.entrysetDownloadProgress(entries)
-      }
+    const progress = { key: article.key }
+    self._downloads.push(progress)
 
-      self._downloads.push(stats)
+    const update = data => {
+      Object.assign(data, progress)
+    }
 
-      const updateStats = () => {
-        stats.progress = self.entrysetDownloadProgress(entries)
-        article.progress = stats.progress
-      }
+    const remove = () => {
+      self._downloads = self.downloads.filter(x => x.key !== progress.key)
+    }
 
-      updateStats()
+    const stream = multiprogress(article.files, { fs: self.articles })
+    stream.on('data', () => speed(data.length))
+    stream.on('progress', update)
+    stream.on('end', remove)
+    self.emit('download', article, stream)
 
-      const timerId = setInterval(updateStats, 200)
-      const alldone = require('./alldone')(entries.length, err => {
-        if (err) return cb(err)
-        clearInterval(timerId)
-        remove(self._downloads, stats)
-        cb()
-      })
-
-      entries.forEach(hit => self.articles.download(hit, alldone))
-    })
+    return stream
   }
 
   self.downloads = () => ({ list: self._downloads.slice(), speed: speed() })
 
   if (self.opts.diskfirst) self.initFromDisk()
 }
+
+inherits(Datasource, events.EventEmitter)
 
 module.exports = Datasource

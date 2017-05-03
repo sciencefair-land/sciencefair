@@ -1,6 +1,12 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../lib/constants')
+const imgpath = require('../lib/imgpath')
+const equal = require('lodash/isEqual')
+const clone = o => JSON.parse(JSON.stringify(o))
+const CacheComponent = require('cache-component')
+
+const debug = require('debug')('sciencefair:view:search')
 
 const style = css`
 
@@ -24,20 +30,6 @@ const style = css`
   display: flex;
 }
 
-.input {
-  width: 100%;
-  height: 30px;
-  border: none;
-  border-bottom: dotted 2px ${C.DARKBLUE};
-  font-size: 130%;
-  padding-left: 40px;
-  padding-bottom: 5px;
-  font-family: CooperHewitt-Book;
-  background: none;
-  display: flex;
-  outline: none;
-}
-
 .img {
   position: absolute;
   left: 2px;
@@ -46,108 +38,41 @@ const style = css`
   z-index: 900;
 }
 
-.tags {
-  position: absolute;
-  right: 34px;
-}
-
-.clear {
-  position: absolute;
-  padding: 5px;
-  right: 8px;
-  top: 0;
-  width: 20px;
-  height: 30px;
-  background-color: ${C.DARKBLUE};
-  -webkit-mask: url(./images/close.svg) center / contain no-repeat;
-}
-
 `
 
-const placeholders = [
-  'type a keyword to search',
-  'type \'* keyword\' to search your local collection',
-  'type # to access tagged papers, or \'* keyword\' to search local collection'
-]
+function CachedSearch () {
+  if (!(this instanceof CachedSearch)) return new CachedSearch()
+  CacheComponent.call(this)
+}
+CachedSearch.prototype = Object.create(CacheComponent.prototype)
 
-var clearing = false
+CachedSearch.prototype._render = function (state, emit) {
+  this._searchstate = clone(state.search)
+  debug('intial search state', state.search)
 
-module.exports = (state, prev, send) => {
-  if (state.initialising) return null
+  const search = html`
 
-  const hastags = state.tags.tags && Object.keys(state.tags.tags).length > 1
-  const hascollection = state.collectioncount > 0
-  const placeidx = hascollection + hastags
-  const placeholder = placeholders[placeidx]
-  const input = html`
-
-  <input class="${style.input}" placeholder="${placeholder}"
-   autofocus>
-
-  `
-
-  if (state.populatesearch) {
-    input.setAttribute('value', state.populatesearch)
-    send('search_populatedone')
-  }
-
-  input.oninput = (e) => {
-    e.preventDefault()
-    send('search_setquerystring', { query: e.target.value })
-  }
-
-  if (state.currentsearch.query.trim() === '' && clearing) {
-    input.setAttribute('value', '')
-    clearing = false
-  }
-
-  if (state.currentsearch.striptagquery) {
-    input.setAttribute('value', state.currentsearch.query)
-    send('search_tagquerystripped')
-  }
-
-  const tags = html`
-
-  <div class="${style.tags}">
-    ${(state.currentsearch.tags || []).map((tag) => {
-      return require('./search_tag')(tag, state, prev, send)
-    })}
-  </div>
-
-  `
-
-  function clearbtn () {
-    const query = state.currentsearch.query
-    const hasquery = query && query.length > 0
-    const tags = state.currentsearch.tags
-    const hastags = tags && tags.length > 0
-    if (hasquery || hastags) {
-      const btn = html`<div class="${style.clear} clickable"></div>`
-
-      btn.onclick = (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        clearing = true
-        send('search_clear')
-      }
-
-      return btn
-    } else {
-      return ''
-    }
-  }
-
-  return html`
-
-  <div class="${style.search}">
+  <div id="search-component" class="${style.search}">
     <div class="${style.wrapper}">
-      ${input}
-      ${tags}
-      ${clearbtn()}
-      <img class="${style.img}" src="./images/search.svg" />
-      ${require('./autocomplete')(state, prev, send)}
+      <img class="${style.img}" src="${imgpath('search.svg')}" />
+      ${require('./search_input')(state, emit)}
+      ${require('./search_tags')(state, emit)}
+      ${require('./search_clearbtn')(state, emit)}
+      ${require('./autocomplete')(state, emit)}
     </div>
   </div>
 
   `
+
+  return search
 }
+
+// Override default shallow compare _update function
+CachedSearch.prototype._update = function (state, emit) {
+  const update = !equal(state.search, this._searchstate)
+  return update
+}
+
+const searchel = CachedSearch()
+
+module.exports = (state, emit) => searchel.render(state, emit)

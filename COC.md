@@ -52,7 +52,7 @@ In your report please include:
 * If you believe this incident is ongoing.
 * Any other information you believe we should have.
 
-If your report is concerning a member of the Code For Science team, and you do not wish them to see the report, you may escalate your report by sending it directly to the independent arbiter, Mozilla Science Lab.
+If your report is concerning a member of the Code For Science team, and you do not wish them to see the report, you may escalate your report by emiting it directly to the independent arbiter, Mozilla Science Lab.
 
 ## What happens after you file a report?
 

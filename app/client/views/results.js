@@ -3,9 +3,7 @@ const css = require('csjs-inject')
 
 const paper = require('./paper')
 
-module.exports = (state, prev, send) => {
-  if (state.initialising) return null
-
+module.exports = (state, emit) => {
   const style = css`
 
   .results {
@@ -30,7 +28,7 @@ module.exports = (state, prev, send) => {
 
   <div class="${style.results}">
     ${state.results.map((result, index) => {
-      return paper({ index: index, paper: result }, state, prev, send)
+      return paper({ index: index, paper: result }, state, emit)
     })}
   </div>
 

@@ -9,7 +9,7 @@ const licenseurls = {
   'http://creativecommons.org/licenses/by/1.0/': 'CC-BY 1.0'
 }
 
-module.exports = (license, state, prev, send) => {
+module.exports = (license, state, emit) => {
   if (!license) return null
 
   const style = css`

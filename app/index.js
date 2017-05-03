@@ -1,7 +1,7 @@
-const {app, BrowserWindow, protocol} = require('electron')
+const { app, BrowserWindow, protocol } = require('electron')
 
 // if (process.env['SCIENCEFAIR_DEVMODE']) require('electron-debug')({ enable: true })
-require('electron-debug')({ enable: true })
+// require('electron-debug')({ enable: true })
 
 const path = require('path')
 const open = require('open')
@@ -19,16 +19,26 @@ app.on('ready', function () {
     titleBarStyle: 'hidden',
     fullscreen: false,
     icon: './icon/logo.png',
-    show: false
+    show: false,
+    webPreferences: {
+      webSecurity: false
+    }
   })
 
+
+  console.log('app user data path', app.getPath('userData'))
   main.setMenu(null)
 
   main.loadURL(path.join('file://', __dirname, '/client/index.html'))
 
+  main.webContents.session.clearStorageData({
+    storages: ['localstorage']
+  })
+
   // hack to avoid a blank white window showing briefly at startup
   // hide the window until content is loaded
   main.webContents.on('did-finish-load', () => {
+    main.webContents.setFrameRate(30)
     setTimeout(() => main.show(), 40)
   })
 
@@ -37,15 +47,16 @@ app.on('ready', function () {
     open(url)
   })
 
-  // Initate auto-updates on MacOS and Windows
-  main.webContents.once('did-frame-finish-load', () => {
-    const winormac = process.platform === 'darwin' || process.platform === 'win32'
-    const dev = process.env['SCIENCEFAIR_DEVMODE']
-		if (winormac && !dev) require('./client/lib/updater')()
-	})
+  if (!process.env['SCIENCEFAIR_DEVMODE']) {
+    // Initate auto-updates on MacOS and Windows
+    main.webContents.once('did-frame-finish-load', () => {
+      const winormac = process.platform === 'darwin' || process.platform === 'win32'
+  		if (winormac) require('./client/lib/updater')()
+  	})
+  }
 
   main.on('close', event => {
-    main.webContents.send('quitting')
+    main.webContents.emit('quitting')
   })
 
   main.on('closed', function () {

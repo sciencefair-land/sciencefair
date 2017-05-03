@@ -22,7 +22,10 @@ const style = css`
 
 .table {
   font-family: CooperHewitt-Light;
+  width: 100%;
 }
+
+.class { width: 50px; }
 
 .th {
   padding: 3px;
@@ -49,7 +52,7 @@ const style = css`
 
 `
 
-module.exports = (papers, state, prev, send) => {
+module.exports = (papers, state, emit) => {
   return html`
 
   <div class="${style.plot}">
@@ -62,12 +65,12 @@ module.exports = (papers, state, prev, send) => {
 
 function plot (daterangecounts) {
   const maxcount = max(daterangecounts.map((ac) => ac.count))
-  const unit = maxwidth / maxcount
+  const unit = 100 / maxcount
 
   return html`
     <table class="${style.table}">
       <tr>
-        <th class="${style.th}">
+        <th class="${style.th} ${style.class}">
           Year
         </th>
         <th class="${style.th}">
@@ -84,11 +87,11 @@ function plot (daterangecounts) {
 function plotrow (ac, unit) {
   return html`
     <tr>
-      <td class="${style.td}">
+      <td class="${style.td} ${style.class}">
         ${ac.year}
       </td>
       <td class="${style.td}">
-        <div class="${style.bar}" style="width: ${unit * ac.count}px;">
+        <div class="${style.bar}" style="width: ${unit * ac.count}%">
           ${ac.count}
         </div>
       </td>

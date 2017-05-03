@@ -26,7 +26,7 @@ const style = css`
 
 `
 
-module.exports = (state, prev, send) => {
+module.exports = (state, emit) => {
   const input = html`
 
   <input type="text" class="${style.input}" placeholder="add a datasource key" />
@@ -37,7 +37,7 @@ module.exports = (state, prev, send) => {
     if (e.keyCode === 13) {
       setTimeout(() => {
         const value = input.value
-        send('datasource_add', { key: value.trim(), loading: true })
+        emit('datasource:add', { key: value.trim(), active: true })
         input.value = ''
       }, 300)
     }

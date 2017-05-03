@@ -47,12 +47,12 @@ const matchopts = {
   post: '</span>'
 }
 
-module.exports = (state, prev, send) => {
-  const tagquery = state.currentsearch.tagquery
+module.exports = (state, emit) => {
+  const tagquery = state.search.tagquery
 
-  if (!((typeof tagquery) === 'string')) return html``
+  if (!tagquery) return null
 
-  function tagcount (tag) {
+  const tagcount = tag => {
     return {
       string: tag.string,
       original: tag.original,
@@ -60,10 +60,10 @@ module.exports = (state, prev, send) => {
     }
   }
 
-  function taghits () {
+  const taghits = () => {
     const alltags = Object.keys(state.tags.tags).filter(t => t !== '__local')
-    if (tagquery.length === 0) {
-      return alltags.map((tag) => {
+    if (tagquery === '#') {
+      return alltags.map(tag => {
         return {
           string: tag,
           original: tag
@@ -74,7 +74,7 @@ module.exports = (state, prev, send) => {
     }
   }
 
-  function row (tag) {
+  const row = tag => {
     const row = html`
 
     <div class="${style.tagrow} clickable">
@@ -84,26 +84,18 @@ module.exports = (state, prev, send) => {
 
     `
 
-    row.onclick = (e) => {
+    row.onclick = e => {
       e.preventDefault()
-      send('search_addtag', { tag: tag.original })
+      emit('search:add-tag', tag.original)
     }
 
     return row
   }
 
-  function rows () {
+  const rows = () => {
     const hits = taghits().map(tagcount)
-
-    const sorted = sortBy(hits, (tag) => {
-      return 0 - tag.count
-    })
-
-    const fullrows = sorted.map((hit) => {
-      return row(hit)
-    })
-
-    return fullrows
+    const sorted = sortBy(hits, tag => { return 0 - tag.count })
+    return sorted.map(row)
   }
 
   return html`

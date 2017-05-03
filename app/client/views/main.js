@@ -19,23 +19,15 @@ const style = css`
 
 `
 
-module.exports = (state, prev, send) => {
-  if (!(state.tags.loaded)) {
-    send('collection_scan')
-  }
+module.exports = (state, emit) => html`
 
-  return html`
+<div class="${style.main}">
+  ${require('./search')(state, emit)}
+  ${require('./results')(state, emit)}
+  ${require('./message')(state, emit)}
+  ${require('./detail')(state, emit)}
+  ${require('./footer')(state, emit)}
+  ${require('./datasource_selector')(state, emit)}
+</div>
 
-  <div class="${style.main}">
-    ${require('./initialise')(state, prev, send)}
-    ${require('./search')(state, prev, send)}
-    ${require('./results')(state, prev, send)}
-    ${require('./message')(state, prev, send)}
-    ${require('./detail')(state, prev, send)}
-    ${require('./footer')(state, prev, send)}
-    ${require('./datasource_selector')(state, prev, send)}
-    ${require('./notify')(state, prev, send)}
-  </div>
-
-  `
-}
+`

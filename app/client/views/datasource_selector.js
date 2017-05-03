@@ -40,12 +40,12 @@ const style = css`
 
 `
 
-module.exports = (state, prev, send) => {
+module.exports = (state, emit) => {
   if (!state.datasources.shown) return null
 
-  const checklist = require('./datasource_checklist')(state, prev, send)
+  const checklist = require('./datasource_checklist')(state, emit)
 
-  const addfield = require('./datasource_add')(state, prev, send)
+  const addfield = require('./datasource_add')(state, emit)
 
   const datasources = html`
 
@@ -74,7 +74,7 @@ module.exports = (state, prev, send) => {
   overlay.onclick = e => {
     // trigger toggle when user clicks on the overlay
     e.preventDefault()
-    send('datasource_selector_toggle')
+    emit('datasources:toggle-shown')
   }
 
   return overlay

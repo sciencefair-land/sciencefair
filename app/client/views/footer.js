@@ -2,6 +2,7 @@ const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../lib/constants')
 const bytes = require('bytes')
+const imgpath = require('../lib/imgpath')
 
 const style = css`
 
@@ -45,7 +46,7 @@ const style = css`
   height: 70px;
   width: 60px;
   background-color: ${C.LIGHTGREY};
-  -webkit-mask: url(./images/elife.svg) center / contain no-repeat;
+  -webkit-mask: url(${imgpath('elife.svg')}) center / contain no-repeat;
 }
 
 .n {
@@ -67,13 +68,13 @@ const style = css`
 
 `
 
-module.exports = (state, prev, send) => {
+module.exports = (state, emit) => {
   const downloads = html`
 
   <div class="${style.left} ${style.part}">
     <div class=${style.dl}>
       ${
-          (state.online || state.downloads.totalspeed > 0)
+        (state.online || state.downloads.totalspeed > 0)
         ? bytes(state.downloads.totalspeed, { unitSeparator: '\n' }) + '/s'
         : html`<div class="${style.offline}">offline</div>`
       }
@@ -104,8 +105,7 @@ module.exports = (state, prev, send) => {
 
   collectioncount.onclick = (e) => {
     e.preventDefault()
-    send('search_setquerystring', { query: '*' })
-    send('search_populate', '*')
+    emit('search:set-query-string', '*')
   }
 
   const sources = state.datasources.list.filter(ds => ds.active)
@@ -120,7 +120,7 @@ module.exports = (state, prev, send) => {
 
   datasource.onclick = (e) => {
     e.preventDefault()
-    send('datasource_selector_toggle')
+    emit('datasources:toggle-shown')
   }
 
   return html`
@@ -131,7 +131,7 @@ module.exports = (state, prev, send) => {
     ${collectioncount}
     ${datasource}
     <div class="${style.part} ${style.toggletab}">
-      ${require('./toggledetail')(state, prev, send)}
+      ${require('./toggledetail')(state, emit)}
     </div>
   </div>
 

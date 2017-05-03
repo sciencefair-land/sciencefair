@@ -22,11 +22,9 @@ const style = css`
 }
 `
 
-module.exports = (state, prev, send) => {
-  return html`
-    <div class="${style.titlebar}">
-      <span class="${style.science}">science</span>
-      <span class="${style.fair}">fair</span>
-    </div>
-  `
-}
+module.exports = () => html`
+  <div class="${style.titlebar}">
+    <span class="${style.science}">science</span>
+    <span class="${style.fair}">fair</span>
+  </div>
+`

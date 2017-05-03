@@ -1,8 +1,9 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../lib/constants')
+const imgpath = require('../lib/imgpath')
 
-module.exports = (tag, state, prev, send) => {
+module.exports = (tag, state, emit) => {
   const style = css`
 
   .tag {
@@ -36,7 +37,7 @@ module.exports = (tag, state, prev, send) => {
     width: 16px;
     background-color: ${C.YELLOW};
     color: ${C.DARKBLUE};
-    -webkit-mask: url(./images/delete2.svg) center / contain no-repeat;
+    -webkit-mask: url(${imgpath('delete2.svg')}) center / contain no-repeat;
   }
 
   .tag:hover > .deltagbtnWrapper {
@@ -53,12 +54,10 @@ module.exports = (tag, state, prev, send) => {
 
   `
 
-  delbtn.onclick = (e) => {
+  delbtn.onclick = e => {
     e.preventDefault()
     e.stopPropagation()
-    send('paper_removetag', {
-      tag: tag
-    })
+    emit('tags:remove', { tag: tag, papers: state.selection.list.slice() })
   }
 
   const tagdiv = html`
@@ -70,9 +69,9 @@ module.exports = (tag, state, prev, send) => {
 
   `
 
-  tagdiv.onclick = (e) => {
+  tagdiv.onclick = e => {
     e.preventDefault()
-    send('search_addtag', { tag: tag })
+    emit('search:add-tag', tag)
   }
 
   return tagdiv

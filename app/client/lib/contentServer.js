@@ -1,11 +1,13 @@
-var portfinder = require('portfinder')
-var nstatic = require('node-static')
+const http = require('http')
+const portfinder = require('portfinder')
+const nstatic = require('node-static')
+const C = require('./constants')
+const datadir = C.DATASOURCES_PATH
 
-function ContentServer (datadir) {
-  if (!(this instanceof ContentServer)) return new ContentServer(datadir)
-  var self = this
+function ContentServer () {
+  const self = this
 
-  var file = new nstatic.Server(datadir, {
+  const file = new nstatic.Server(datadir, {
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET',
@@ -16,13 +18,12 @@ function ContentServer (datadir) {
   portfinder.getPort((err, port) => {
     if (err) throw err
 
-    require('http').createServer(function (request, response) {
-      request.addListener('end', function () {
-        file.serve(request, response, function (err, result) {
+    http.createServer((request, response) => {
+      request.addListener('end', () => {
+        file.serve(request, response, (err, result) => {
           if (err) { // There was an error serving the file
             console.error('Error serving ' + request.url + ' - ' + err.message)
 
-            // Respond to the client
             response.writeHead(err.status, err.headers)
             response.end()
           }
@@ -33,6 +34,10 @@ function ContentServer (datadir) {
     console.log('Content server serving', datadir, 'at', port)
     self.port = port
   })
+
+  self.resolve = path => `http://localhost:${self.port}/${path}`
 }
 
-module.exports = ContentServer
+const server = new ContentServer()
+
+module.exports = server

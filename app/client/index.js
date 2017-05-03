@@ -1,56 +1,30 @@
-const C = require('./lib/constants')
-const mkdirp = require('mkdirp').sync
+require('./lib/setup')
+require('./lib/contentserver')
 
-mkdirp(C.DATAROOT)
-mkdirp(C.COLLECTION_PATH)
+const choo = require('choo')
+const app = choo()
 
-// if (process.env['SCIENCEFAIR_DEVMODE']) require('debug-menu').install()
-require('debug-menu').install()
+app.use(require('choo-asyncify'))
+app.use(require('choo-log')())
 
-start()
+app.use(require('./models/collection'))
+app.use(require('./models/datasources'))
+app.use(require('./models/defaultsources'))
+app.use(require('./models/detail'))
+app.use(require('./models/downloads'))
+// app.use(require('./models/error'))
+app.use(require('./models/main'))
+app.use(require('./models/notification'))
+app.use(require('./models/paper'))
+app.use(require('./models/reader'))
+app.use(require('./models/results'))
+app.use(require('./models/search'))
+app.use(require('./models/selection'))
+app.use(require('./models/tags'))
 
-function start () {
-  const requireDir = require('require-dir')
-  const choo = require('choo')
-  const app = choo({
-    onError: (err, state, createSend) => {
-      if (/ENOENT/.test(err.message)) return // ugly hack to stop annoying error bubble
-      console.groupCollapsed(`ERROR (non-fatal) handled by sciencefair: ${err.message}`)
-      console.error(err)
-      console.groupEnd()
+app.route('/', require('./views/start'))
+app.route('/home', require('./views/home'))
+app.route('/initial', require('./views/initial'))
+app.route('/reader', require('./views/reader'))
 
-      const send = createSend('onError: ')
-      if (err) send('note_add', {
-        title: 'Error',
-        message: err.message
-      }, () => {})
-    }
-  })
-
-  const model = {
-    state: require('./state'),
-    effects: requireDir('./effects'),
-    reducers: requireDir('./reducers'),
-    subscriptions: requireDir('./subscriptions')
-  }
-
-  require('./lib/localcollection')((err, db) => {
-    if (err) throw err
-
-    model.state.collection = db
-
-    app.model(model)
-
-    app.router([
-      ['/', require('./views/home')]
-    ])
-
-    const tree = app.start()
-    document.body.appendChild(tree)
-  })
-}
-
-require('electron').ipcRenderer.on('quitting', () => {
-  console.log('APP QUITTING')
-  require('./lib/getdatasource').all().forEach(d => d.close())
-})
+app.mount('body')
