@@ -10,13 +10,13 @@ ScienceFair is a desktop science library like nothing before. The main thing tha
 Some of the things that ScienceFair does differently:
 
 - users can subscribe to any datasources they choose
-- datasources are backed by peer-to-peer networks (backed by dat)
+- datasources are backed by peer-to-peer networks (using [dat](https://datproject.org/))
 - anyone can create a datasource (tools to make this easy coming soon)
 - papers are stored in JATS XML format - perfect for data mining
-- basic data-mining and bibliometrics are built-in
+- basic data-mining and bibliometrics are built-in (see [screenshots](#selection-stats))
 - we use the beautiful [Lens reader](https://github.com/elifesciences/lens) - no PDFs
 
-ScienceFair follows a few simple design principles:
+ScienceFair also follows a few simple design principles that we feel are missing from the ecosystem:
 
 - we keep the interface minimal and clear
 - incremental discovery is the way
