@@ -33,7 +33,10 @@ const style = css`
 
 .table {
   font-family: CooperHewitt-Light;
+  width: 100%;
 }
+
+.class { width: 100px; }
 
 .th {
   padding: 3px;
@@ -66,27 +69,24 @@ module.exports = (papers, state, emit) => {
     ${plot(termcount(papers))}
   </div>
 
-
   `
 }
 
 function plot (termcounts) {
   const maxcount = max(termcounts.map((tc) => tc.count))
-  const unit = maxwidth / maxcount
+  const unit = 100 / maxcount
 
   return html`
     <table class="${style.table}">
       <tr>
-        <th class="${style.th}">
+        <th class="${style.th} ${style.class}">
           Term
         </th>
         <th class="${style.th}">
           Papers
         </th>
       </tr>
-      ${termcounts.slice(0, 5).map((ac) => {
-        return plotrow(ac, unit)
-      })}
+      ${termcounts.slice(0, 5).map(tc => plotrow(tc, unit))}
     </table>
   `
 }
@@ -94,11 +94,11 @@ function plot (termcounts) {
 function plotrow (tc, unit) {
   return html`
     <tr>
-      <td class="${style.td}">
+      <td class="${style.td} ${style.class}">
         ${tc.term}
       </td>
       <td class="${style.td}">
-        <div class="${style.bar}" style="width: ${unit * tc.count}px;">
+        <div class="${style.bar}" style="width: ${unit * tc.count}%">
           ${tc.count}
         </div>
       </td>

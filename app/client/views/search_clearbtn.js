@@ -19,7 +19,7 @@ const style = css`
 `
 
 module.exports = (state, emit) => {
-  if (state.search.querystring) {
+  if (state.search.querystring || state.search.tags.length > 0) {
     const btn = html`<div id="search-clear-btn" class="${style.clear} clickable"></div>`
 
     btn.onclick = e => {

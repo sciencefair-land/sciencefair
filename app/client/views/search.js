@@ -3,7 +3,7 @@ const css = require('csjs-inject')
 const C = require('../lib/constants')
 const imgpath = require('../lib/imgpath')
 const equal = require('lodash/isEqual')
-const clone = require('lodash/cloneDeep')
+const clone = o => JSON.parse(JSON.stringify(o))
 const CacheComponent = require('cache-component')
 
 const debug = require('debug')('sciencefair:view:search')
@@ -48,6 +48,7 @@ CachedSearch.prototype = Object.create(CacheComponent.prototype)
 
 CachedSearch.prototype._render = function (state, emit) {
   this._searchstate = clone(state.search)
+  debug('intial search state', state.search)
 
   const search = html`
 
@@ -68,7 +69,8 @@ CachedSearch.prototype._render = function (state, emit) {
 
 // Override default shallow compare _update function
 CachedSearch.prototype._update = function (state, emit) {
-  return !equal(state.search, this._searchstate)
+  const update = !equal(state.search, this._searchstate)
+  return update
 }
 
 const searchel = CachedSearch()

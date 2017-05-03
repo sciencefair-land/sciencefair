@@ -187,7 +187,7 @@ module.exports = (state, bus) => {
     const query = state.search.query
     const tags = state.search.tags
 
-    if (query.trim() === '*') {
+    if (query && query.trim() === '*') {
       all()
     } else if (query && query.trim().length > 0) {
       search(query, tags)

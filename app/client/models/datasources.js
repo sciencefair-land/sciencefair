@@ -80,7 +80,7 @@ module.exports = (state, bus) => {
 
     if (active.length === 0) return bus.emit('results:none', 'datasources')
 
-    const query  = state.search.query.trim().replace(/et al\.?$/, '')
+    let query = state.search.query.trim().replace(/et al\.?$/, '')
 
     const resultify = ds => {
       let count = 0

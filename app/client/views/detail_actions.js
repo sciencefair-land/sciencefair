@@ -16,19 +16,22 @@ module.exports = (state, emit) => {
     font-family: CooperHewitt-Light;
     font-size: 1.5em;
     margin-right: 12px;
+    margin-bottom: 12px;
     padding: 6px;
     padding-top: 9px;
   }
 
   .actions {
     width: 100%;
-    justify-content : flex-end;
+    justify-content: flex-end;
+    flex-wrap: wrap;
     padding-top: 10px;
   }
 
   `
+  const selected = state.selection.list
 
-  const sharebtn = state.selection.list.length > 0 ? html`
+  const sharebtn = selected.length === 1 ? html`
 
   <div class="${style.button} clickable">
     share ${icon({ name: 'share' })}
@@ -47,7 +50,6 @@ module.exports = (state, emit) => {
     }
   }
 
-  const selected = state.selection.list
   const downloads = selected.map(
     p => {
       return { paper: p, download: state.downloads.lookup[p.key] }

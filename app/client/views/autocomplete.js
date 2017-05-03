@@ -62,7 +62,7 @@ module.exports = (state, emit) => {
 
   const taghits = () => {
     const alltags = Object.keys(state.tags.tags).filter(t => t !== '__local')
-    if (tagquery.length === 0) {
+    if (tagquery === '#') {
       return alltags.map(tag => {
         return {
           string: tag,

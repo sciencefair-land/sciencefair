@@ -45,6 +45,7 @@
     "hyperdrive": "^9.1.1",
     "inherits": "^2.0.3",
     "is-online": "^5.1.2",
+    "keycode": "^2.1.9",
     "leveldown": "^1.5.0",
     "lodash": "^4.5.1",
     "lowdb": "^0.14.0",
