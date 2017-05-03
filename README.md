@@ -24,17 +24,13 @@ ScienceFair follows a few simple design principles:
 
 ## TOC
 
-<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:0 orderedList:0 -->
-
-	- [downloads](#downloads)
-	- [screenshots](#screenshots)
-		- [home screen](#home-screen)
-		- [search results](#search-results)
-		- [selection & stats](#selection-stats)
-		- [reader](#reader)
-	- [development](#development)
-
-<!-- /TOC -->
+- [downloads](#downloads)
+- [screenshots](#screenshots)
+	- [home screen](#home-screen)
+	- [search results](#search-results)
+	- [selection & stats](#selection-stats)
+	- [reader](#reader)
+- [development](#development)
 
 ## downloads
 
