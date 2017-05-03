@@ -1,4 +1,5 @@
-<div align="center"><img src="" /></div>
+<div align="center"><img src="https://github.com/codeforscience/sciencefair/raw/master/assets/header.png" /></div>
+
 <h1 align="center">science fair</h3>
 <p align="center">
   <strong>Search, collect, read and reuse the scientific literature.</strong><br/><br/>
