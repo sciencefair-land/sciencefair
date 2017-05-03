@@ -1,6 +1,7 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../lib/constants')
+const imgpath = require('../lib/imgpath')
 
 const style = css`
 
@@ -34,7 +35,7 @@ const style = css`
   width: 16px;
   background-color: ${C.WHITE};
   color: ${C.DARKBLUE};
-  -webkit-mask: url(./images/delete2.svg) center / contain no-repeat;
+  -webkit-mask: url(${imgpath('delete2.svg')}) center / contain no-repeat;
 }
 
 .tag:hover > .deltagbtnWrapper {
