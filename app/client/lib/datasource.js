@@ -118,7 +118,8 @@ function Datasource (key, opts) {
       debug('datasource metadata drive ready', self.key)
 
       self.metadataswarm = discover(self.metadata, {
-        tcp: false
+        tcp: true,
+        utp: true
       })
     })
 
@@ -265,7 +266,10 @@ function Datasource (key, opts) {
     self.articles.once('ready', () => {
       debug('datasource articles drive ready', self.articleFeed)
 
-      self.articlesswarm = discover(self.articles)
+      self.articlesswarm = discover(self.articles, {
+        tcp: true,
+        utp: true
+      })
       self.articlesswarm.on('connection', (peer, type) => {
         self.stats.set('peers', self.articlesswarm.connections.length).value()
         peer.on('close', () => {
