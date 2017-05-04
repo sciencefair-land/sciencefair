@@ -1,7 +1,7 @@
 const { app, BrowserWindow, protocol } = require('electron')
 
 // if (process.env['SCIENCEFAIR_DEVMODE']) require('electron-debug')({ enable: true })
-require('electron-debug')({ enable: true })
+require('electron-debug')({ enabled: true })
 
 const path = require('path')
 const open = require('open')
@@ -30,10 +30,6 @@ app.on('ready', function () {
   main.setMenu(null)
 
   main.loadURL(path.join('file://', __dirname, '/client/index.html'))
-
-  main.webContents.session.clearStorageData({
-    storages: ['localstorage']
-  })
 
   // hack to avoid a blank white window showing briefly at startup
   // hide the window until content is loaded
