@@ -37,6 +37,7 @@ Please note that ScienceFair is currently pre-release, so there will be bugs - w
 Some of the things that ScienceFair does differently:
 
 - users can subscribe to any datasources they choose
+- a datasource can be a journal (eLife is provided as the default), a curated community collection, a personal reading list...
 - datasources are backed by peer-to-peer networks (using [dat](https://datproject.org/))
 - anyone can create a datasource (tools to make this easy coming soon)
 - papers are stored in JATS XML format - perfect for data mining
