@@ -7,6 +7,33 @@
 
 ScienceFair is a desktop science library like nothing before. The main thing that sets it apart? **Freedom from centralised control.**
 
+We aim to create a desktop experience for discovering, tracking, collecting and reading scientific articles that:
+
+- is completely free from external control (e.g. by publishers or platforms)
+- allows the user to customise their experience
+- helps decentralise the scholarly literature
+- promotes and integrates open data and metadata
+- helps grow an ecosystem of open source tools around scientific literature
+
+## TOC
+
+- [downloads](#downloads)
+- [technical details](#technical-details)
+- [screenshots](#screenshots)
+	- [home screen](#home-screen)
+	- [search results](#search-results)
+	- [selection & stats](#selection--stats)
+	- [reader](#reader)
+- [development](#development)
+
+## downloads
+
+You can download installers or bundled apps for Windows, Mac and Linux from the [releases page](https://github.com/codeforscience/sciencefair/releases).
+
+Please note that ScienceFair is currently pre-release, so there will be bugs - we're working hard to polish it to v1 release standard. If you'd like to [report bugs in the issue tracker](https://github.com/codeforscience/sciencefair/issues), that would be super helpful.
+
+## technical details
+
 Some of the things that ScienceFair does differently:
 
 - users can subscribe to any datasources they choose
@@ -21,22 +48,6 @@ ScienceFair also follows a few simple design principles that we feel are missing
 - we keep the interface minimal and clear
 - incremental discovery is the way
 - be beautiful
-
-## TOC
-
-- [downloads](#downloads)
-- [screenshots](#screenshots)
-	- [home screen](#home-screen)
-	- [search results](#search-results)
-	- [selection & stats](#selection--stats)
-	- [reader](#reader)
-- [development](#development)
-
-## downloads
-
-You can download installers or bundled apps for Windows, Mac and Linux from the [releases page](https://github.com/codeforscience/sciencefair/releases).
-
-Please note that ScienceFair is currently pre-release, so there will be bugs - we're working hard to polish it to v1 release standard. If you'd like to [report bugs in the issue tracker](https://github.com/codeforscience/sciencefair/issues), that would be super helpful.
 
 ## screenshots
 
