@@ -22,9 +22,9 @@ app.use(require('./models/search'))
 app.use(require('./models/selection'))
 app.use(require('./models/tags'))
 
-app.route('/', require('./views/start'))
-app.route('/home', require('./views/home'))
-app.route('/initial', require('./views/initial'))
-app.route('/reader', require('./views/reader'))
+app.route('#', require('./views/start'))
+app.route('#home', require('./views/home'))
+app.route('#initial', require('./views/initial'))
+app.route('#reader', require('./views/reader'))
 
 app.mount('body')

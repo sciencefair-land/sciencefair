@@ -5,11 +5,11 @@ module.exports = (state, bus) => {
 
   bus.on('initialising:start', () => {
     state.initialising = true
-    bus.emit('pushState', '/initial')
+    bus.emit('pushState', '#initial')
   })
 
   bus.on('initialising:stop', () => {
     state.initialising = false
-    bus.emit('pushState', '/home')
+    bus.emit('pushState', '#home')
   })
 }
