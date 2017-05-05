@@ -3,7 +3,7 @@ const css = require('csjs-inject')
 const C = require('../lib/constants')
 const imgpath = require('../lib/imgpath')
 
-module.exports = (opts) => {
+module.exports = opts => {
   const style = css`
 
   .icon {

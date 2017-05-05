@@ -2,6 +2,7 @@ const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../lib/constants')
 const bytes = require('bytes')
+const icon = require('./icon')
 
 const style = css`
 
@@ -29,11 +30,11 @@ const style = css`
   justify-content: flex-start;
 }
 
-.arrows {
+.icon {
   justify-content: center;
   align-items: center;
-  font-family: monospace;
-  width: 40px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .zero {
@@ -43,6 +44,12 @@ const style = css`
 `
 
 const byteopts = { decimalPlaces: 0 }
+const transfericon = {
+  name: 'xfer',
+  backgroundColor: C.YELLOWFADE,
+  width: 20,
+  height: 20
+}
 
 module.exports = data => {
   const down = bytes(data.down, byteopts)
@@ -54,7 +61,7 @@ module.exports = data => {
 
   <div class="${style.rate}">
     <div class="${style.ratepart} ${style.down}">${down}/s</div>
-    <div class="${style.arrows}">⥯</div>
+    <div class="${style.icon}">${icon(transfericon)}</div>
     <div class="${style.ratepart} ${style.up}">${up}/s</div>
   </div>
 
