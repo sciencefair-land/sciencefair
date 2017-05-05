@@ -1,7 +1,33 @@
 <div align="center"><img src="https://github.com/codeforscience/sciencefair/raw/master/assets/header.png" width="100%" /></div>
 
 <p align="center">
-  <strong>Search, collect, read and reuse the scientific literature.</strong><br/><br/>
+  <strong>Search, collect, read and reuse the scientific literature.</strong>
+</p>
+
+<p align="center">
+  <!-- Stability -->
+  <a href="https://nodejs.org/api/documentation.html#documentation_stability_index">
+    <img src="https://img.shields.io/badge/stability-experimental-orange.svg?style=flat-square"
+      alt="API stability" />
+  </a>
+  <!-- Release -->
+  <a href="https://github.com/codeforscience/sciencefair/releases/latest">
+    <img src="https://img.shields.io/github/release/codeforscience/sciencefair.svg?style=flat-square"
+      alt="Latest release" />
+  </a>
+  <!-- Downloads -->
+  <a href="https://github.com/codeforscience/sciencefair/releases/latest">
+    <img src="https://img.shields.io/github/downloads/codeforscience/sciencefair/total.svg?style=flat-square" />
+  </a>
+  <!-- License -->
+  <a href="https://github.com/codeforscience/sciencefair/blob/master/LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat-square"
+      alt="MIT license" />
+  </a>
+  <!-- Made with <3 -->
+  <a href="http://codeforscience.org" target="_blank">
+    <img src="https://img.shields.io/badge/made_with-❤️💛💚💙💜-e6e6e6.svg?style=flat-square" />
+  </a>
 </p>
 
 ScienceFair is a desktop science library like nothing before. The main thing that sets it apart? **Freedom from centralised control.**
