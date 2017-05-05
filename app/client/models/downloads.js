@@ -2,6 +2,8 @@ const all = require('lodash/every')
 const uniqBy = require('lodash/uniqBy')
 const speedometer = require('speedometer')
 const datasource = require('../lib/getdatasource')
+const localcollection = require('../lib/localcollection')
+const getpaper = require('../lib/getpaper')
 
 const debug = require('debug')('sciencefair:downloads')
 
@@ -59,57 +61,51 @@ module.exports = (state, bus) => {
 
   const poll = () => datasource.all().forEach(ds => updatespeed(ds.speed()))
 
+  // this subscription sets downloads running that were part-completed
+  // when the app last quit
+  const restartdownloads = cb => localcollection((err, db) => {
+    let n = 0
+    let loaded = 0
+    let incomplete = 0
+
+    const count = data => n++
+
+    const checkpaper = data => {
+      const paper = getpaper(data.value)
+      paper.filesPresent((err, progress) => {
+        if (err) return cb(err)
+        loaded ++
+        if (progress < 100) {
+          console.log('restarting paper download')
+          incomplete++
+          paper.download()
+        }
+        if (loaded === n) cb(null, incomplete)
+      })
+    }
+
+    const loadstore = () => db.docstore.createReadStream().on('data', checkpaper)
+
+    db.docstore
+      .createReadStream()
+      .on('data', count)
+      .on('end', loadstore)
+      .on('error', cb)
+  })
+
+  const restartnotify = () => restartdownloads((err, n) => {
+    if (err) throw err
+    if (n > 0) {
+      bus.emit('notification:add', {
+        title: 'Restoring downloads',
+        message: `${n} partially completed download${n === 1 ? '' : 's'} ha${n === 1 ? 's' : 've'} been restarted`
+      })
+    }
+  })
+
   setInterval(poll, 1000)
 
   bus.on('downloads:add', add)
+
+  bus.on('DOMContentLoaded', restartnotify)
 }
-
-
-// // this subscription sets downloads running that were part-completed
-// // when the app last quit
-//
-// const localcollection = require('../lib/localcollection')
-// const getpaper = require('../lib/getpaper')
-//
-// const restartdownloads = cb => localcollection(
-//   (err, db) => {
-//     let n = 0
-//     db.docstore
-//       .createReadStream()
-//       .on('data', data => {
-//         n++
-//       })
-//       .on('end', () => {
-//         let loaded = 0
-//         let incomplete = 0
-//         db.docstore
-//           .createReadStream()
-//           .on('data', data => {
-//             const paper = getpaper(data.value)
-//             paper.filesPresent((err, progress) => {
-//               if (err) return cb(err)
-//               loaded ++
-//               if (progress < 100) {
-//                 console.log('restarting paper download')
-//                 incomplete++
-//                 paper.download(() => {})
-//               }
-//               if (loaded === n) cb(null, incomplete)
-//             })
-//           })
-//       })
-//       .on('error', cb)
-//   }
-// )
-//
-// module.exports = (emit, done) => restartdownloads((err, n) => {
-//   if (err) return done(err)
-//   if (n > 0) {
-//     emit('note_add', {
-//       title: 'Restoring downloads',
-//       message: `${n} partially completed download${n === 1 ? '' : 's'} ha${n === 1 ? 's' : 've'} been restarted`
-//     }, done)
-//   } else {
-//     done()
-//   }
-// })
