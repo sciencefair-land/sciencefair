@@ -25,6 +25,7 @@ function ReadStreamsProgress (files, opts) {
       .once('total', addtotal)
       .on('progress', updateone(file))
       .on('error', error)
+      .stream
   }))
 
   self.stream.on('end', () => self.emit('end'))
