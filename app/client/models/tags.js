@@ -10,7 +10,7 @@ module.exports = (state, bus) => {
     loaded: true
   }
 
-  const render = () => bus.emit('render')
+  const render = () => bus.emit('renderer:render')
   const replace = tags => { state.tags.tags = tags }
   const get = tag => state.tags.tags[tag] || []
   const set = (tag, papers) => { state.tags.tags[tag] = papers }

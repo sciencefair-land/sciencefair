@@ -95,7 +95,7 @@ module.exports = (state, bus) => {
     lookup: {}
   }
 
-  const render = () => bus.emit('render')
+  const render = () => bus.emit('renderer:render')
 
   const set = selection => { state.selection = selection }
   const get = () => state.selection

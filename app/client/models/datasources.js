@@ -12,8 +12,6 @@ const pumpify = require('pumpify')
 const datasource = require('../lib/getdatasource')
 const C = require('../lib/constants')
 
-const update = () => datasource.all().map(ds => ds.data())
-
 // perform a one-time load of any datasource in the data directory
 const loadOnce = (state, bus) => {
   const keys = fs.readdirSync(
@@ -23,7 +21,7 @@ const loadOnce = (state, bus) => {
   )
   const loaded = () => {
     state.datasources.loaded = true
-    bus.emit('render')
+    bus.emit('renderer:render')
   }
   if (keys.length > 0) {
     const datasources = []
@@ -35,27 +33,36 @@ const loadOnce = (state, bus) => {
   }
 }
 
-// poll for new stats
-const pollForUpdates = (state, bus) => {
-  setInterval(() => {
-    const news = update()
-    const anyfinished = any(news, ds => ds.stats.metadataSync.finished)
-    if (anyfinished) {
-      if (state.initialising) bus.emit('initialising:stop')
-    } else {
-      if (!state.initialising) bus.emit('initialising:start')
-    }
-    if (!deepequal(state.datasources.list, news)) {
-      state.datasources.list = news
-      bus.emit('render')
-    }
-  }, 1000)
-}
-
 module.exports = (state, bus) => {
   state.datasources = { shown: false, loaded: false, list: [] }
 
   const debug = msg => bus.emit('log:debug', '[model:datasources] ' + msg)
+  const render = () => bus.emit('renderer:render')
+
+  const list = () => state.datasources.list
+  const setlist = _list => state.datasources.list = _list
+
+  const shown = () => state.datasources.shown
+  const setshown = _shown => state.datasources.shown = _shown
+
+  const add = source => {
+    datasource.fetch(source.key, (err, ds) => {
+      if (err) return bus.emit('error', err)
+      if (source.active) ds.setActive()
+
+      ds.connect()
+
+      if (datasource.all().length > 1) {
+        bus.emit('notification:add', {
+          title: 'Datasource added',
+          message: 'datasource added:\n' + source.name
+        })
+      }
+
+      ds.on('connected', () => bus.emit('initialising:stop'))
+      ds.on('progress', () => { if (state.initialising) render() })
+    })
+  }
 
   let activesearches = []
 
@@ -74,9 +81,7 @@ module.exports = (state, bus) => {
       throw new Error('No datasources found (they may not have loaded yet)')
     }
 
-    const active = state.datasources.list.filter(
-      ds => ds.active && !ds.loading
-    )
+    const active = state.datasources.list.filter(ds => ds.active && !ds.loading)
 
     if (active.length === 0) return bus.emit('results:none', 'datasources')
 
@@ -85,15 +90,11 @@ module.exports = (state, bus) => {
     const resultify = ds => {
       let count = 0
 
-      const write = (list, _, cb) => {
-        count += list.length
+      const write = (hits, _, cb) => {
+        count += hits.length
 
-        bus.emit('results:receive', {
-          hits: list.map(r => {
-            r.source = ds.key
-            return r
-          })
-        })
+        hits.forEach(r => r.source = ds.key)
+        bus.emit('results:receive', { hits: hits })
 
         cb()
       }
@@ -122,38 +123,17 @@ module.exports = (state, bus) => {
     }))
   }
 
-  bus.on('datasources:show', () => {
-    state.datasources.shown = true
-    bus.emit('render')
-  })
+  const show = () => {
+    setshown(true)
+    render()
+  }
 
-  bus.on('datasources:toggle-shown', () => {
-    state.datasources.shown = !state.datasources.shown
-    bus.emit('render')
-  })
+  const toggleShown = () => {
+    setshown(!shown())
+    render()
+  }
 
-  bus.on('datasources:add', source => {
-    datasource.fetch(source.key, (err, ds) => {
-      if (err) return bus.emit('error', err)
-      // ds.relayEventsTo(bus, { namespace:'datasources' })
-      if (source.active) ds.setActive()
-      ds.connect()
-
-      if (datasource.all().length > 1) {
-        bus.emit('notification:add', {
-          title: 'Datasource added',
-          message: 'datasource added:\n' + source.name
-        })
-      }
-
-      ds.on('connected', () => bus.emit('initialising:stop'))
-      ds.on('progress', () => {
-        if (state.initialising) bus.emit('render')
-      })
-    })
-  })
-
-  bus.on('datasources:toggle-active', key => {
+  const toggleActive =  key => {
     datasource.fetch(key, (err, source) => {
       if (err) return bus.emit('error', err)
 
@@ -164,13 +144,40 @@ module.exports = (state, bus) => {
         })
       }
     })
-  })
+  }
 
+  const init = () => {
+    loadOnce(state, bus)
+    poll()
+  }
+
+  const poll = () => {
+    const sources = datasource.all()
+    const news = sources.map(ds => ds.data())
+
+    // update initialising
+    const anyfinished = any(news, ds => ds.stats.metadataSync.finished)
+    if (anyfinished) {
+      if (state.initialising) bus.emit('initialising:stop')
+    } else {
+      if (!state.initialising) bus.emit('initialising:start')
+    }
+
+    // update list
+    if (!deepequal(list(), news)) {
+      setlist(news)
+      if (shown()) render()
+    }
+  }
+
+  setInterval(poll, 1000)
+
+  bus.on('datasources:add', add)
   bus.on('datasources:search', search)
   bus.on('datasources:cancel-search', cancelsearch)
+  bus.on('datasources:show', show)
+  bus.on('datasources:toggle-shown', toggleShown)
+  bus.on('datasources:toggle-active', toggleActive)
 
-  bus.on('DOMContentLoaded', () => {
-    loadOnce(state, bus)
-    pollForUpdates(state, bus)
-  })
+  bus.on('DOMContentLoaded', init)
 }

@@ -11,7 +11,7 @@ module.exports = (state, bus) => {
     searching: false
   }
 
-  const render = () => bus.emit('render')
+  const render = () => bus.emit('renderer:render')
 
   const setstring = str => { state.search.querystring = str }
   const getstring = () => state.search.querystring

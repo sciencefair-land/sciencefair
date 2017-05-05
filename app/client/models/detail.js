@@ -1,7 +1,7 @@
 module.exports = (state, bus) => {
   state.detailshown = false
 
-  const render = () => bus.emit('render')
+  const render = () => bus.emit('renderer:render')
 
   const set = bool => { state.detailshown = bool }
   const get = () => state.detailshown

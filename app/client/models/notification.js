@@ -3,7 +3,7 @@ const uuid = require('uuid')
 module.exports = (state, bus) => {
   state.notifications = {}
 
-  const updatemessages = () => bus.emit('render')
+  const updatemessages = () => bus.emit('renderer:render')
 
   const removemessage = messageid => {
     if (state.notifications[messageid]) {

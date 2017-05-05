@@ -15,7 +15,7 @@ const yuno = require('yunodb')
 const sum = require('lodash/sum')
 const remove = require('lodash/remove')
 const assign = require('lodash/assign')
-const speed = require('speedometer')()
+const speed = require('speedometer')
 const discover = require('hyperdiscovery')
 const defaults = require('lodash/defaults')
 const alldone = require('./alldone')
@@ -38,10 +38,11 @@ function Datasource (key, opts) {
   })
 
   const self = this
+  debug('new datasource:', self)
+
   self.opts = opts
   self.loading = true
   self.queuedDownloads = []
-  debug('new datasource:', self)
 
   self.name = 'new datasource ' + key.substring(0, 6)
   self.key = key
@@ -89,6 +90,13 @@ function Datasource (key, opts) {
     }
   }
 
+  // monitor speed
+  self._downspeed = speed()
+  self.downspeed = (i, data) => self._downspeed(data.length)
+  self._upspeed = speed()
+  self.upspeed = (i, data) => self._upspeed(data.length)
+  self.speed = () => { return { down: self._downspeed(), up: self._upspeed() } }
+
   // connect to the hyperdrive swarm and activate the DB
   self.connect = cb => {
     if (self.metadata) return cb()
@@ -126,9 +134,8 @@ function Datasource (key, opts) {
     self.metadata.once('content', () => {
       debug('archive length', self.metadata.metadata.length)
 
-      self.metadata.content.on('download', (index, data, from) => {
-        speed(data.length)
-      })
+      self.metadata.content.on('download', self.downspeed)
+      self.metadata.content.on('upload', self.upspeed)
 
       self.metadata.readFile('/_feed.json', 'utf8', (err, data) => {
         if (err) throw err
@@ -270,6 +277,7 @@ function Datasource (key, opts) {
         tcp: true,
         utp: true
       })
+
       self.articlesswarm.on('connection', (peer, type) => {
         self.stats.set('peers', self.articlesswarm.connections.length).value()
         peer.on('close', () => {
@@ -279,9 +287,8 @@ function Datasource (key, opts) {
     })
 
     self.articles.once('content', () => {
-      self.articles.content.on('download', (index, data, from) => {
-        speed(data.length)
-      })
+      self.articles.content.on('download', self.downspeed)
+      self.articles.content.on('upload', self.upspeed)
 
       if (self.queuedDownloads.length > 0) {
         debug('Processing queued downloads')
@@ -315,9 +322,7 @@ function Datasource (key, opts) {
   // close all databases
   self.close = cb => {
     self.stats.write()
-    self.archive.close(
-      () => self.db.close(cb)
-    )
+    self.metadata.close(() => self.archive.close(() => self.db.close(cb)))
   }
 
   // close all databases, then delete the datasource directory
@@ -346,7 +351,7 @@ function Datasource (key, opts) {
 
     // get the current size on disk
     const errorStat = { size: 0 }
-    const disk = collectStats(files.map(self.filepath), { errorStat: errorStat }, (err, data) => {
+    collectStats(files.map(self.filepath), { errorStat: errorStat }, (err, data) => {
       if (err) return done(err)
       stats.local = data.summary.size
       data.files.forEach(f => {
@@ -357,7 +362,7 @@ function Datasource (key, opts) {
     })
 
     // get the size in the archive
-    const archive = collectStats(files, { fs: self.articles }, (err, data) => {
+    collectStats(files, { fs: self.articles }, (err, data) => {
       if (err) return done(err)
       stats.size = data.summary.size
       data.files.forEach(f => stats.files[f.path].size = f.size)
@@ -369,7 +374,7 @@ function Datasource (key, opts) {
 
   self.download = article => {
     if (!self.articles) {
-      self.queuedDownloads.push({ article: article })
+      self.queuedDownloads.push(article)
       return
     }
 
@@ -378,27 +383,27 @@ function Datasource (key, opts) {
       return
     }
 
-    const progress = { key: article.key }
-    self._downloads.push(progress)
+    const download = { key: article.key }
+    self._downloads.push(download)
 
-    const update = data => {
-      Object.assign(data, progress)
-    }
+    const update = data => Object.assign(data, download)
 
     const remove = () => {
-      self._downloads = self.downloads.filter(x => x.key !== progress.key)
+      self._downloads = self._downloads.filter(x => x.key !== download.key)
     }
 
     const stream = multiprogress(article.files, { fs: self.articles })
-    stream.on('data', () => speed(data.length))
-    stream.on('progress', update)
-    stream.on('end', remove)
+    stream.on('progress', update).on('end', remove).drain()
     self.emit('download', article, stream)
 
     return stream
   }
 
-  self.downloads = () => ({ list: self._downloads.slice(), speed: speed() })
+  self.downloads = () => ({
+    list: self._downloads.slice(),
+    speed: self.speed(),
+    key: self.key
+  })
 
   if (self.opts.diskfirst) self.initFromDisk()
 }

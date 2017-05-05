@@ -1,19 +1,18 @@
 const uniqBy = require('lodash/uniqBy')
 const sortBy = require('lodash/sortBy')
 const isArray = require('lodash/isArray')
-const debounce = require('lodash/debounce')
-
 const paper = require('../lib/getpaper')
 
 module.exports = (state, bus) => {
   state.results = []
 
   const debug = msg => bus.emit('log:debug', '[model:results] ' + msg)
+  const render = () => bus.emit('renderer:render')
+
   const querystring = () => {
     const query = state.search
     return `'${query.query}${query.tags.map(t => ` #${t}`)}'`
   }
-  const render = debounce(() => bus.emit('render'), 250)
 
   const get = () => state.results
   const set = results => { state.results = results }

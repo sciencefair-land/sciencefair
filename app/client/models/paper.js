@@ -1,7 +1,7 @@
 const uniq = require('lodash/uniq')
 
 module.exports = (state, bus) => {
-  const render = () => bus.emit('render')
+  const render = () => bus.emit('renderer:render')
 
   const selectshow = data => {
     bus.emit('selection:update', data)

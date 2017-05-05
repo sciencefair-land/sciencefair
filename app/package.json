@@ -46,7 +46,7 @@
     "hyperdiscovery": "^6.0.0",
     "hyperdrive": "github:blahah/hyperdrive",
     "inherits": "^2.0.3",
-    "is-online": "^5.1.2",
+    "is-online": "^7.0.0",
     "keycode": "^2.1.9",
     "leveldown": "^1.5.0",
     "lodash": "^4.5.1",

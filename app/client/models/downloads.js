@@ -1,25 +1,22 @@
 const all = require('lodash/every')
-const debounce = require('lodash/debounce')
+const uniqBy = require('lodash/uniqBy')
+const speedometer = require('speedometer')
+const datasource = require('../lib/getdatasource')
 
 const debug = require('debug')('sciencefair:downloads')
 
 module.exports = (state, bus) => {
   state.downloads = {
-    totalspeed: 0,
-    list: [],
-    lookup: {}
+    speed: { up: 0, down: 0 }
   }
 
-  const render = debounce(() => bus.emit('render'), 250)
+  const render = () => bus.emit('renderer:render')
 
-  const speed = () => state.downloads.totalspeed
-  const setspeed = speed => { state.downloads.totalspeed = speed }
+  const downspeed = speedometer()
+  const upspeed = speedometer()
 
-  const list = () => state.downloads.list
-  const setlist = list => { state.downloads.list = list }
-
-  const lookup = () => state.downloads.lookup
-  const setlookup = lookup => { state.downloads.lookup = lookup }
+  const speed = () => state.downloads.speed
+  const setspeed = speed => { state.downloads.speed = speed }
 
   const add = papers => {
     if (!Array.isArray(papers)) papers = [papers]
@@ -48,30 +45,26 @@ module.exports = (state, bus) => {
     bus.emit('tags:add', { tag: '__local', papers: papers })
   }
 
+  const updatespeed = data => {
+    upspeed(data.up)
+    downspeed(data.down)
+    const before = speed()
+    const after = { up: upspeed(), down: downspeed() }
+    const changed = before.up !== after.up || before.down !== after.down
+    if (changed) {
+      setspeed(after)
+      render()
+    }
+  }
+
+  const poll = () => datasource.all().forEach(ds => updatespeed(ds.speed()))
+
+  setInterval(poll, 1000)
+
   bus.on('downloads:add', add)
 }
 
-// // online
-//
-// const online = require('is-online')
-//
-// module.exports = (emit, done) => setInterval(
-//   () => online((err, up) => {
-//     if (err) return console.log(err)
-//     emit('online_update', up, err => {
-//       if (err) return done(err)
-//     })
-//   }),
-//   5000
-// )
-//
-// module.exports = (state, data) => {
-//   return { online: data }
-// }
-//
-//
-// // resume
-//
+
 // // this subscription sets downloads running that were part-completed
 // // when the app last quit
 //
@@ -120,34 +113,3 @@ module.exports = (state, bus) => {
 //     done()
 //   }
 // })
-//
-//
-// // update
-//
-// // this subscription updates the downloads at 1 second intervals
-//
-// const datasource = require('../lib/getdatasource')
-// const sortBy = require('lodash/sortBy')
-// const flatten = require('lodash/flatten')
-// const fromPairs = require('lodash/fromPairs')
-// const sum = require('lodash/sum')
-//
-// const toPair = dl => { return [`${dl.source}:${dl.id}`, dl] }
-//
-// const getdownloads = () => {
-//   const downloads = datasource.all().map(ds => ds.downloads())
-//   const flattened = flatten(downloads.map(dl => dl.list))
-//   const dlstats = {
-//     lookup: fromPairs(flattened.map(toPair)),
-//     list: sortBy(flattened, 'started'),
-//     totalspeed: sum(downloads.map(dl => dl.speed))
-//   }
-//   return dlstats
-// }
-//
-// module.exports = (emit, done) => setInterval(
-//   () => emit('downloads_update', getdownloads(), err => {
-//     if (err) return done(err)
-//   }),
-//   1000
-// )

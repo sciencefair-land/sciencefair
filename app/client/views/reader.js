@@ -8,7 +8,7 @@ const imgpath = require('../lib/imgpath')
 
 const reader = (state, emit) => {
   console.log('(re-)rendering reader')
-  const paper = state.reading
+  const paper = state.reading.paper
 
   const margin = 0
   const marginTopShim = 30

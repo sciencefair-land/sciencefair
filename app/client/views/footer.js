@@ -1,8 +1,8 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../lib/constants')
-const bytes = require('bytes')
 const imgpath = require('../lib/imgpath')
+const speed = require('./speed')
 
 const style = css`
 
@@ -23,6 +23,7 @@ const style = css`
 
 .part {
   height: 100%;
+  width: 260px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,43 +43,29 @@ const style = css`
   width: 80px;
 }
 
-.logo {
-  height: 70px;
-  width: 60px;
-  background-color: ${C.LIGHTGREY};
-  -webkit-mask: url(${imgpath('elife.svg')}) center / contain no-repeat;
-}
-
 .n {
   font-size: 1.3em;
 }
 
-.dl {
-  font-size: 1.5em;
-  align-self: center;
-  margin-top: 10px;
-}
-
 .offline {
-  margin-top: 4px;
+  align-self: center;
   color: ${C.LIGHTGREY};
-  font-size: 0.8em;
+  font-size: 1.3em;
   opacity: 0.6;
 }
 
 `
 
 module.exports = (state, emit) => {
+  const online = state.online || state.downloads.speed.up || state.downloads.speed.down
   const downloads = html`
 
   <div class="${style.left} ${style.part}">
-    <div class=${style.dl}>
-      ${
-        (state.online || state.downloads.totalspeed > 0)
-        ? bytes(state.downloads.totalspeed, { unitSeparator: '\n' }) + '/s'
-        : html`<div class="${style.offline}">offline</div>`
-      }
-    </div>
+    ${
+      online
+      ? speed(state.downloads.speed)
+      : html`<div class="${style.offline}">offline</div>`
+    }
   </div>
 
   `
