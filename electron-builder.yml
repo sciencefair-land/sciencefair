@@ -34,8 +34,11 @@ linux:
   maintainer: "Richard Smith-Unna <rik@fathomlabs.io>"
 win:
   publish: github
-  target: nsis
+  target:
+    - nsis
+    - portable
+    - squirrel
   icon: "build/icon.ico"
 nsis:
   perMachine: true
-  oneClick: false
+  oneClick: true
