@@ -31,9 +31,16 @@ module.exports = (opts, cb) => {
 
   const merged = defaults(opts, collectionDefaults)
 
-  yuno(merged, (err, db) => {
-    if (err) return cb(err)
-    localcollection = db
-    cb(null, db)
+  let tries = 0
+  const dotry = () => yuno(merged, (err, db) => {
+    if (err) {
+      tries++
+      tries > 5 ? cb(err) : dotry()
+    } else {
+      localcollection = db
+      cb(null, db)
+    }
   })
+
+  dotry()
 }
