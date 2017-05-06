@@ -139,7 +139,7 @@ module.exports = (state, bus) => {
 
       source.toggleActive()
       if (source.stats.get('active').value()) {
-        source.syncMetadata(err => {
+        source.maybeSyncMetadata(err => {
           if (err) return bus.emit('error', err)
         })
       }
