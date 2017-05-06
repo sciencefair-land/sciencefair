@@ -35,7 +35,7 @@ module.exports = (opts, cb) => {
   const dotry = () => yuno(merged, (err, db) => {
     if (err) {
       tries++
-      tries > 5 ? cb(err) : dotry()
+      tries > 5 ? cb(err) : setTimeout(dotry, 500)
     } else {
       localcollection = db
       cb(null, db)
