@@ -33,10 +33,10 @@ linux:
     - AppImage
   maintainer: "Richard Smith-Unna <rik@fathomlabs.io>"
 win:
+  platforms:
+    - ia32
+    - x64
   publish: github
-  target:
-    - nsis
-    - portable
   icon: "build/icon.ico"
 nsis:
   perMachine: true
