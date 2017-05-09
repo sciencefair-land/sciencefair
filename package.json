@@ -9,7 +9,7 @@
     "buildlinux": "build -l",
     "buildosx": "build -m",
     "buildappveyor": "build",
-    "postinstall": "electron-rebuild -f --types prod,dev,optional --version 1.6.8 --build-from-source",
+    "postinstall": "electron-rebuild -f --types prod,dev,optional --version $(./node_modules/.bin/electron --version) --build-from-source",
     "start": "electron app/index.js",
     "dev": "DEBUG='sciencefair*' SCIENCEFAIR_DEVMODE=true electron --enable-features=V8Ignition app/index.js"
   },
