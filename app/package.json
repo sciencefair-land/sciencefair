@@ -6,7 +6,7 @@
   "scripts": {
     "start": "../node_modules/.bin/electron index.js",
     "dev": "DEBUG='sciencefair' SCIENCEFAIR_DEVMODE=TRUE ../node_modules/.bin/electron index.js",
-    "rebuild": "npm rebuild --runtime=electron --target=$(../node_modules/.bin/electron --version) --disturl=https://atom.io/download/atom-shell --abi=$(../node_modules/.bin/electron --abi)"
+    "rebuild": "npm rebuild --runtime=electron --target=1.6.8 --disturl=https://atom.io/download/atom-shell --abi=53"
   },
   "engines": {
     "node": "7.x"
