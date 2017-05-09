@@ -32,9 +32,6 @@ linux:
     - AppImage
   maintainer: "Richard Smith-Unna <rik@fathomlabs.io>"
 win:
-  platform:
-    - ia32
-    - x64
   publish: github
   icon: "build/icon.ico"
 nsis:

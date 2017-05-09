@@ -8,7 +8,7 @@
     "buildall": "build -mwl",
     "buildlinux": "build -l",
     "buildosx": "build -m",
-    "buildappveyor": "build",
+    "buildappveyor": "build -w --ia32 --x64",
     "postinstall": "electron-rebuild --types prod,dev,optional --version 1.6.8",
     "start": "electron app/index.js",
     "dev": "DEBUG='sciencefair*' SCIENCEFAIR_DEVMODE=true electron --enable-features=V8Ignition app/index.js"
