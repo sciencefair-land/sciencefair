@@ -32,7 +32,7 @@ linux:
     - AppImage
   maintainer: "Richard Smith-Unna <rik@fathomlabs.io>"
 win:
-  platforms:
+  platform:
     - ia32
     - x64
   publish: github
