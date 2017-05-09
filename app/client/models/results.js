@@ -29,6 +29,7 @@ module.exports = (state, bus) => {
   )
 
   const receive = incoming => {
+    bus.emit('search:done-searching')
     const papers = incoming.hits.map(paper)
     papers.forEach(checkfiles)
 
@@ -43,10 +44,6 @@ module.exports = (state, bus) => {
     debug('results replaced')
   }
 
-  const none = datasource => {
-    debug(`no results in ${datasource} for ${querystring()}`)
-  }
-
   const count = data => {
     if (get().length >= 200) render()
     debug(`${data.count} results in ${data.source} for ${querystring()}`)
@@ -55,6 +52,5 @@ module.exports = (state, bus) => {
   bus.on('results:clear', clear)
   bus.on('results:receive', receive)
   bus.on('results:replace', replace)
-  bus.on('results:none', none)
   bus.on('results:count', count)
 }

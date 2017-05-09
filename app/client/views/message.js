@@ -17,7 +17,6 @@ const style = css`
 `
 
 module.exports = (state, emit) => {
-
   var msg = ''
   if (state.initialising) {
     msg = 'Syncing initial data...'

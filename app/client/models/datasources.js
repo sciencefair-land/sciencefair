@@ -100,11 +100,8 @@ module.exports = (state, bus) => {
       }
 
       const flush = cb => {
-        if (count === 0) {
-          bus.emit('results:none', ds.name)
-        } else {
-          bus.emit('results:count', { count: count, source: ds.name })
-        }
+        if (count === 0) bus.emit('results:receive', { hits: [] })
+        bus.emit('results:count', { count: count, source: ds.name })
         cb()
       }
 

@@ -102,11 +102,8 @@ module.exports = (state, bus) => {
       'error', throwerr
     ).on(
       'end', () => {
-        if (hits.length > 0) {
-          bus.emit('results:receive', { hits: hits })
-        } else {
-          bus.emit('results:none', 'collection')
-        }
+        bus.emit('results:receive', { hits: hits })
+        bus.emit('results:count', { count: hits.length, source: 'collection'})
       }
     )
     activesearches.push(stream)
@@ -137,11 +134,7 @@ module.exports = (state, bus) => {
       }
 
       const flush = cb => {
-        if (count === 0) {
-          bus.emit('results:none', 'collection')
-        } else {
-          bus.emit('results:count', { count: count, source: 'collection'})
-        }
+        bus.emit('results:count', { count: count, source: 'collection'})
         cb()
       }
 
@@ -171,11 +164,8 @@ module.exports = (state, bus) => {
       'error', throwerr
     ).on(
       'end', () => {
-        if (hits.length > 0) {
-          bus.emit('results:receive', { hits: hits })
-        } else {
-          bus.emit('results:none', 'collection')
-        }
+        bus.emit('results:receive', { hits: hits })
+        bus.emit('results:count', { count: hits.length, source: 'collection'})
       }
     )
 
