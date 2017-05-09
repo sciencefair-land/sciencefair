@@ -1,6 +1,6 @@
 {
   "name": "sciencefair",
-  "version": "1.0.0-beta8",
+  "version": "1.0.0-beta9",
   "description": "search, browse, and download open access papers",
   "main": "index.js",
   "scripts": {
@@ -39,7 +39,7 @@
     "end-of-stream": "^1.1.0",
     "findandreplacedomtext": "^0.4.4",
     "folder-walker": "^3.1.0",
-    "fs-extra": "^0.30.0",
+    "fs-extra": "^3.0.1",
     "fs-readstream-progress": "^0.0.3",
     "fuzzy": "^0.1.1",
     "hint": "github:blahah/hint",

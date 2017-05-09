@@ -1,6 +1,6 @@
 {
   "name": "sciencefair-repo",
-  "version": "1.0.0-beta8",
+  "version": "1.0.0-beta9",
   "description": "container repo for sciecefair app src and build tools",
   "scripts": {
     "pack": "build --dir",
@@ -9,7 +9,7 @@
     "buildlinux": "build -l",
     "buildosx": "build -m",
     "buildappveyor": "build",
-    "postinstall": "electron-rebuild -f --types prod,dev,optional --version $(./node_modules/.bin/electron --version) --build-from-source",
+    "postinstall": "electron-rebuild -f --types prod,dev,optional --version $(./node_modules/.bin/electron --version)",
     "start": "electron app/index.js",
     "dev": "DEBUG='sciencefair*' SCIENCEFAIR_DEVMODE=true electron --enable-features=V8Ignition app/index.js"
   },
@@ -31,7 +31,7 @@
     "electron-builder": "^17.3.1",
     "electron-builder-squirrel-windows": "^17.2.0",
     "electron-debug": "^1.1.0",
-    "electron-rebuild": "^1.5.7",
+    "electron-rebuild": "^1.5.10",
     "minimist": "^1.2.0",
     "rimraf": "^2.5.2",
     "standard": "^7.1.2",
