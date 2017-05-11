@@ -10,7 +10,8 @@ mkdirp(C.DATAROOT)
 mkdirp(C.COLLECTION_PATH)
 mkdirp(C.DATASOURCES_PATH)
 
+const datasources = require('./getdatasource')
+
 require('electron').ipcRenderer.on('quitting', () => {
-  console.log('APP QUITTING')
-  require('./lib/getdatasource').all().forEach(d => d.close())
+  datasources.all().forEach(d => d.close())
 })
