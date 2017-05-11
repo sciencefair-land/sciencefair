@@ -2,7 +2,6 @@ const all = require('lodash/every')
 const uniqBy = require('lodash/uniqBy')
 const speedometer = require('speedometer')
 const datasource = require('../lib/getdatasource')
-const localcollection = require('../lib/localcollection')
 const getpaper = require('../lib/getpaper')
 
 const debug = require('debug')('sciencefair:downloads')
@@ -63,10 +62,12 @@ module.exports = (state, bus) => {
 
   // this subscription sets downloads running that were part-completed
   // when the app last quit
-  const restartdownloads = cb => localcollection((err, db) => {
+  const restartdownloads = cb => {
     let n = 0
     let loaded = 0
     let incomplete = 0
+    const db = state.collection
+    if (!db) return cb(new Error('the local collection failed to load'))
 
     const count = data => n++
 
@@ -91,7 +92,7 @@ module.exports = (state, bus) => {
       .on('data', count)
       .on('end', loadstore)
       .on('error', cb)
-  })
+  }
 
   const restartnotify = () => restartdownloads((err, n) => {
     if (err) throw err
@@ -106,6 +107,5 @@ module.exports = (state, bus) => {
   setInterval(poll, 1000)
 
   bus.on('downloads:add', add)
-
-  bus.on('DOMContentLoaded', restartnotify)
+  bus.on('downloads:restart', restartnotify)
 }

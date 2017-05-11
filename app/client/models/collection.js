@@ -27,6 +27,7 @@ const throwerr = err => { throw err }
 module.exports = (state, bus) => {
   state.collectioncount = 0
   state.collection = null
+  let restartchecked = false
 
   const debug = msg => bus.emit('log:debug', '[model:collection] ' + msg)
 
@@ -48,6 +49,10 @@ module.exports = (state, bus) => {
       'end', () => {
         state.collectioncount = count
         bus.emit('tags:replace', tags)
+        if (!restartchecked) {
+          bus.emit('downloads:restart')
+          restartchecked = true
+        }
       }
     )
   }
