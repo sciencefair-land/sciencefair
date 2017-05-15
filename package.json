@@ -1,6 +1,6 @@
 {
   "name": "sciencefair-repo",
-  "version": "1.0.0-beta10",
+  "version": "1.0.0-beta11",
   "description": "container repo for sciecefair app src and build tools",
   "scripts": {
     "pack": "build --dir",
