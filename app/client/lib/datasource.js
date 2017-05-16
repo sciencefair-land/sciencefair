@@ -212,7 +212,7 @@ function Datasource (key, opts) {
     })
 
     const filtermeta = require('./through-filter')(
-      data => data.type ==='file' && /^\/meta\/.*json$/.test(data.name)
+      data => data.type ==='file' && /^(\/|\\)meta(\/|\\).*json$/.test(data.name)
     )
 
     const getentry = require('./hyperdrive-sync-entry')(self.metadata)
