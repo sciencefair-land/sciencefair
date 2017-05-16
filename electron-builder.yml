@@ -4,6 +4,7 @@ productName: ScienceFair
 forceCodeSigning: true
 artifactName: "${productName}-${os}-${arch}-${version}.${ext}"
 asar: true
+asarUnpack: '*.node'
 compression: maximum
 mac:
   category: public.app-category.reference
