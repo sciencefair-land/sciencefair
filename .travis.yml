@@ -33,7 +33,7 @@ install:
   - nvm install 7
   - nvm use 7
   - yarn
-  - cd app && yarn && yarn clean
+  - cd app && yarn
 
 script:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then yarn run buildosx ; fi
