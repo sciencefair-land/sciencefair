@@ -11,14 +11,10 @@ files:
   - "!**/._*"
   - "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,__pycache__,thumbs.db,.gitignore,.gitattributes,.editorconfig,.flowconfig,.yarn-metadata.json,.idea,appveyor.yml,.travis.yml,circle.yml,npm-debug.log,.nyc_output,yarn.lock,.yarn-integrity}"
   - "!**/node_modules/search-index/si${/*}"
-asar: false
+asar: true
 compression: maximum
 mac:
   category: public.app-category.reference
-  publish: github
-  target:
-    - dmg
-    - zip
 dmg:
   background: "build/appdmg.png"
   icon: "build/icon.icns"
@@ -32,7 +28,6 @@ dmg:
       y: 240
       type: file
 linux:
-  publish: github
   category: "GNOME;GTK;Science;Literature"
   packageCategory: "GNOME;GTK;Science;Literature"
   description: "ScienceFair desktop science reading app for Linux"
@@ -41,8 +36,8 @@ linux:
     - AppImage
   maintainer: "Richard Smith-Unna <rik@fathomlabs.io>"
 win:
-  publish: github
   icon: "build/icon.ico"
 nsis:
   perMachine: true
   oneClick: true
+npmSkipBuildFromSource: true

@@ -5,19 +5,25 @@ sudo: required
 
 language: c
 
+env:
+  - ELECTRON_CACHE=$HOME/.electron
+
 matrix:
   include:
     - os: osx
-      python: 2.7
     - os: linux
-      python: 2.7
       env: CC=clang CXX=clang++ npm_config_clang=1
       compiler: clang
+
+cache:
+  directories:
+    - $HOME/.electron
 
 addons:
   apt:
     packages:
       - libgnome-keyring-dev
+      - libsecret-1-dev
       - icnsutils
       - graphicsmagick
       - xz-utils
@@ -31,13 +37,13 @@ before_install:
 
 install:
   - nvm install 7
-  - nvm use 7
   - yarn
+  - yarn add electron-builder@next --dev # force install next version to test electron-builder
   - cd app && yarn && cd ..
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export LDFLAGS="-mmacosx-version-min=10.9" ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export CFLAGS="-mmacosx-version-min=10.9" ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export CXXFLAGS="-mmacosx-version-min=10.9" ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd app/node_modules/sodium-native && npm install && npm run prebuild && cd ../../.. ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd app/node_modules/sodium-native && npm install && npm run prebuild && rm -rf node_modules && cd ../../.. ; fi
 
 script:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then yarn run buildosx ; fi
