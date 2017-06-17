@@ -45,10 +45,10 @@ app.on('ready', function () {
 
   if (!process.env['SCIENCEFAIR_DEVMODE']) {
     // Initate auto-updates on MacOS and Windows
-    main.webContents.once('did-frame-finish-load', () => {
-      const winormac = process.platform === 'darwin' || process.platform === 'win32'
-  		if (winormac) require('./client/lib/updater')()
-  	})
+    // main.webContents.once('did-frame-finish-load', () => {
+    //   const winormac = process.platform === 'darwin' || process.platform === 'win32'
+  	// 	if (winormac) require('./client/lib/updater')()
+  	// })
   }
 
   main.on('close', event => {
