@@ -18,6 +18,7 @@ mac:
   publish: github
   target:
     - dmg
+    - zip
 dmg:
   background: "build/appdmg.png"
   icon: "build/icon.icns"
