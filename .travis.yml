@@ -14,11 +14,6 @@ matrix:
       env: CC=clang CXX=clang++ npm_config_clang=1
       compiler: clang
 
-cache:
-  directories:
-    - $HOME/.electron
-    - $HOME/.cache
-
 addons:
   apt:
     packages:
@@ -36,9 +31,9 @@ before_install:
 
 install:
   - nvm install 7
-  - yarn install
-  - yarn add electron-builder@next --dev # force install next version to test electron-builder
-  - yarn clean
+  - nvm use 7
+  - yarn
+  - cd app && yarn && yarn clean
 
 script:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then yarn run buildosx ; fi
