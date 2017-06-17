@@ -40,4 +40,3 @@ win:
 nsis:
   perMachine: true
   oneClick: true
-npmSkipBuildFromSource: true
