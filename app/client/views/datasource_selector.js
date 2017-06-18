@@ -2,40 +2,16 @@ const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../lib/constants')
 
+const overlay = require('./overlay')
+
 const style = css`
 
-.overlay {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.datasources {
-  width: 50%;
-  min-width: 600px;
-  max-height: 50%;
-  background: ${C.BLUE};
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-
-}
-
-.header {
-  letter-spacing: 1px;
+.content {
   width: 100%;
-  padding: 30px;
-  background: ${C.MIDBLUE};
-  color: ${C.LIGHTGREY};
+  height: 100%;
+  padding: 0;
   margin: 0;
-  align-items: center;
-  font-family: Aleo-Regular;
+  flex-direction: column;
 }
 
 `
@@ -44,13 +20,11 @@ module.exports = (state, emit) => {
   if (!state.datasources.shown) return null
 
   const checklist = require('./datasource_checklist')(state, emit)
-
   const addfield = require('./datasource_add')(state, emit)
 
   const datasources = html`
 
-  <div class="${style.datasources}">
-    <h1 class="${style.header}">Datasources</h1>
+  <div class="${style.content}">
     ${checklist}
     ${addfield}
   </div>
@@ -63,19 +37,15 @@ module.exports = (state, emit) => {
     e.stopPropagation()
   }
 
-  const overlay = html`
-
-  <div class="${style.overlay}">
-    ${datasources}
-  </div>
-
-  `
-
-  overlay.onclick = e => {
+  const onclick = e => {
     // trigger toggle when user clicks on the overlay
     e.preventDefault()
     emit('datasources:toggle-shown')
   }
 
-  return overlay
+  return overlay(state, emit, {
+    title: 'Datasources',
+    content: datasources,
+    onclick: onclick
+  })
 }

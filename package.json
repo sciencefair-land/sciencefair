@@ -11,7 +11,7 @@
     "buildappveyor": "build -w --ia32 --x64",
     "postinstall": "which electron-rebuild && electron-rebuild",
     "start": "electron app/index.js",
-    "dev": "DEBUG='sciencefair*' SCIENCEFAIR_DEVMODE=true electron --enable-features=V8Ignition app/index.js"
+    "dev": "SCIENCEFAIR_DEVMODE=true electron --enable-features=V8Ignition app/index.js"
   },
   "engines": {
     "node": "7.x"
