@@ -65,3 +65,6 @@ builds
 
 dist
 *TODO.md
+
+yarn.lock
+package-lock.json
