@@ -9,7 +9,7 @@
     "buildlinux": "build -l",
     "buildosx": "build -m",
     "buildappveyor": "build -w --ia32 --x64",
-    "postinstall": "electron-rebuild",
+    "postinstall": "which electron-rebuild && electron-rebuild",
     "start": "electron app/index.js",
     "dev": "DEBUG='sciencefair*' SCIENCEFAIR_DEVMODE=true electron --enable-features=V8Ignition app/index.js"
   },
