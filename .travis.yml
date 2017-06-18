@@ -43,7 +43,7 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export LDFLAGS="-mmacosx-version-min=10.9" ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export CFLAGS="-mmacosx-version-min=10.9" ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export CXXFLAGS="-mmacosx-version-min=10.9" ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd app/node_modules/sodium-native && npm install && npm run prebuild && rm -rf node_modules && cd ../../.. ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd app/node_modules/sodium-native && npm install && npm run prebuild && rm -rf node_modules tmp && cd ../../.. ; fi
   - cd app && yarn run postinstall && cd ..
 
 script:
