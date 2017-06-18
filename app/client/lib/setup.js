@@ -3,6 +3,7 @@ if (process.env.SCIENCEFAIR_DEVMODE) {
   localStorage.setItem('logLevel','debug')
   require('debug-menu').install()
 }
+
 const C = require('./constants')
 const mkdirp = require('mkdirp').sync
 
