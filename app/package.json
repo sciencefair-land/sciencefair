@@ -6,7 +6,8 @@
   "scripts": {
     "start": "../node_modules/.bin/electron index.js",
     "dev": "DEBUG='sciencefair' SCIENCEFAIR_DEVMODE=TRUE ../node_modules/.bin/electron index.js",
-    "postinstall": "../node_modules/.bin/electron-rebuild"
+    "postinstall": "npm run rebuild",
+    "rebuild": "../node_modules/.bin/electron-rebuild"
   },
   "engines": {
     "node": "7.x"
