@@ -23,9 +23,9 @@ function Paper (data) {
   }
 
   self.loadBib = () => {
-    self.title = data.title || 'no title'
+    self.title = htmlify(data.title || 'no title')
     self.author = data.author || 'unknown'
-    self.abstract = data.abstract || 'no abstract given'
+    self.abstract = htmlify(data.abstract || 'no abstract given')
     self.date = data.date || { year: 'unknown ', month: 'unknown', day: 'unknown'}
     self.tags = data.tags || []
     self.identifiers = data.identifier || []
@@ -131,6 +131,10 @@ function Paper (data) {
   self.removeFiles = cb => self.ds.unlink(self.path, cb)
 
   self.loadData()
+}
+
+function htmlify (str) {
+  return str.replace('<italic>', '<em>').replace('</italic>', '</em>')
 }
 
 module.exports = Paper
