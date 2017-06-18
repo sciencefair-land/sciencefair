@@ -1,3 +1,2 @@
-require('./lib/raven')().context(function () {
-  require('./run.js')
-})
+require('./lib/raven')()
+require('./run.js')

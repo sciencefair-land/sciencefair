@@ -4,7 +4,7 @@ const { app, BrowserWindow, protocol } = require('electron')
 require('electron-debug')({ enabled: true })
 
 const path = require('path')
-const open = require('open')
+const open = require('opn')
 
 var main = null
 
