@@ -59,8 +59,6 @@ const setup = function () {
       console.log(`Sentry [${process.type}] could not record event:`, e)
     })
 
-    setTimeout(() => { throw new Error('testing the error dialog') }, 5000)
-
     return sentry
   } else if (process.type === 'renderer') {
     // renderer process
