@@ -25,7 +25,6 @@ app.on('ready', function () {
     }
   })
 
-
   console.log('app user data path', app.getPath('userData'))
   main.setMenu(null)
 

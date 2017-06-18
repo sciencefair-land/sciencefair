@@ -1,6 +1,6 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
-const open = require('open')
+const open = require('opn')
 
 const getpaper = require('../lib/getpaper')
 const contentserver = require('../lib/contentserver')
