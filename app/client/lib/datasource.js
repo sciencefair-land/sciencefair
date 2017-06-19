@@ -55,7 +55,7 @@ function Datasource (key, opts) {
   const statspath = path.join(self.datadir, 'source.stats')
   self.stats = low(statspath)
   self.stats.defaults({
-    active: false,
+    active: opts.active,
     peers: 0,
     metadataSync: {
       total: 0,
