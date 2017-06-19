@@ -43,7 +43,7 @@ const sharebtn = (paper, emit) => {
     e.preventDefault()
     // TODO: move url generation to paper
     const doiurl = `http://doi.org/${paper.id}`
-    copy(doiurl, () => emit('note_add', {
+    copy(doiurl, () => emit('notification:add', {
       title: 'Article share',
       message: `URL copied to clipboard: ${doiurl}`
     }))

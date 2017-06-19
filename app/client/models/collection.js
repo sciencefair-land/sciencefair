@@ -72,7 +72,7 @@ module.exports = (state, bus) => {
       if (err) throw err
 
       const n = data.length
-      bus.emit('note_add', {
+      bus.emit('notification:add', {
         title: 'Papers deleted',
         message: `${n} ${n === 1 ? '' : 's'} ha${n === 1 ? 's' : 've'} been removed from the local collection`
       })
@@ -221,7 +221,7 @@ module.exports = (state, bus) => {
         if (err) throw err
 
         const n = data.length
-        send('note_add', {
+        send('notification:add', {
           title: 'Papers deleted',
           message: `${n} ${n === 1 ? '' : 's'} ha${n === 1 ? 's' : 've'} been removed from the local collection`
         })
