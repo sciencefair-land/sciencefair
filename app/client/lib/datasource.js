@@ -62,8 +62,7 @@ function Datasource (key, opts) {
       done: 0,
       finished: false
     }
-  }).value()
-  self.stats.read()
+  }).write()
 
   // prepare the hyperdrive
   self.jsondir = path.join(self.datadir, 'meta_feed')
@@ -176,12 +175,12 @@ function Datasource (key, opts) {
   // begin or resume syncing metadata from the hyperdrive archive
   // and adding it to the search index
   self.syncmeta = cb => {
-    if (self.stats.get('metadataSync').value().finished) {
+    if (self.stats.get('metadataSync').write().finished) {
       self.connected = true
       self.emit('connected')
       return cb()
     }
-    // if (self.stats.get('metadataSync.finished').value()) return cb()
+    // if (self.stats.get('metadataSync.finished').write()) return cb()
     debug('syncing metadata feed')
 
     // each history item looks like:
@@ -225,7 +224,7 @@ function Datasource (key, opts) {
           done: n,
           total: self.articleCount
         }
-        self.stats.get('metadataSync').assign(progress).value()
+        self.stats.get('metadataSync').assign(progress).write()
         self.emit('progress', progress)
       }
       next(null, data)
@@ -241,7 +240,7 @@ function Datasource (key, opts) {
         done: self.articleCount,
         total: self.articleCount,
         finished: true
-      }).value()
+      }).write()
       self.emit('metadatasync:done')
       self.connected = true
       self.emit('connected')
@@ -279,9 +278,9 @@ function Datasource (key, opts) {
       })
 
       self.articlesswarm.on('connection', (peer, type) => {
-        self.stats.set('peers', self.articlesswarm.connections.length).value()
+        self.stats.set('peers', self.articlesswarm.connections.length).write()
         peer.on('close', () => {
-          self.stats.set('peers', self.articlesswarm.connections.length).value()
+          self.stats.set('peers', self.articlesswarm.connections.length).write()
         })
       })
     })
@@ -299,11 +298,11 @@ function Datasource (key, opts) {
   }
 
   self.toggleActive = () => {
-    self.stats.set('active', !self.stats.get('active').value()).value()
+    self.stats.set('active', !self.stats.get('active').write()).write()
   }
 
   self.setActive = () => {
-    self.stats.set('active', true).value()
+    self.stats.set('active', true).write()
   }
 
   // return an object of data about this datasource
@@ -314,7 +313,7 @@ function Datasource (key, opts) {
       description: self.description,
       stats: self.stats.getState(),
       loading: self.loading,
-      active: self.stats.get('active').value(),
+      active: self.stats.get('active').write(),
       live: self.archive ? self.archive.live : false
     }
   }
