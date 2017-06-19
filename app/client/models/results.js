@@ -49,8 +49,16 @@ module.exports = (state, bus) => {
     debug(`${data.count} results in ${data.source} for ${querystring()}`)
   }
 
+  const remove = data => {
+    const idx = get().indexOf(data)
+    if (idx > -1) get().splice(idx, 1)
+    render()
+    debug('result removed')
+  }
+
   bus.on('results:clear', clear)
   bus.on('results:receive', receive)
   bus.on('results:replace', replace)
+  bus.on('results:remove', remove)
   bus.on('results:count', count)
 }

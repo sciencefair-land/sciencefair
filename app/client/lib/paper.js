@@ -128,7 +128,7 @@ function Paper (data) {
     }
   }
 
-  self.removeFiles = cb => self.ds.unlink(self.path, cb)
+  self.removeFiles = cb => self.ds.articles.unlink(self.path, cb)
 
   self.loadData()
 }

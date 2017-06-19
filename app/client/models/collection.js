@@ -22,8 +22,6 @@ const parseresults = results => {
   return { hits: results }
 }
 
-const throwerr = err => { throw err }
-
 module.exports = (state, bus) => {
   state.collectioncount = 0
   state.collection = null
@@ -31,30 +29,39 @@ module.exports = (state, bus) => {
 
   const debug = msg => bus.emit('log:debug', '[model:collection] ' + msg)
 
+  let activescan
+
   const scan = () => {
     const tags = {}
-    var count = 0
-    state.collection.docstore.createReadStream().on(
+    let count = 0
+
+    if (activescan) activescan.destroy()
+
+    let scanstream = activescan = state.collection.docstore.createReadStream().on(
       'data', data => {
-        const doc = parsedoc(data.value)
         count += 1
+        const doc = parsedoc(data.value)
         if (!doc.tags) return
-        doc.tags.forEach((tag) => {
+        doc.tags.forEach(tag => {
           tags[tag] = uniq((tags[tag] || []).concat(data.key))
         })
       }
-    ).on(
-      'error', throwerr
-    ).on(
-      'end', () => {
+    )
+
+    eos(scanstream, err => {
+      if (err) {
+        throw err
+      } else {
         state.collectioncount = count
         bus.emit('tags:replace', tags)
         if (!restartchecked) {
           bus.emit('downloads:restart')
           restartchecked = true
         }
+        bus.emit('renderer:render')
+        activescan = null
       }
-    )
+    })
   }
 
   require('../lib/localcollection')((err, db) => {
@@ -104,7 +111,7 @@ module.exports = (state, bus) => {
         hits.push(doc)
       }
     ).on(
-      'error', throwerr
+      'error', err => { throw err }
     ).on(
       'end', () => {
         bus.emit('results:receive', { hits: hits })
@@ -166,7 +173,7 @@ module.exports = (state, bus) => {
         if (overlap.length === tags.length) hits.push(doc)
       }
     ).on(
-      'error', throwerr
+      'error', err => { throw err }
     ).on(
       'end', () => {
         bus.emit('results:receive', { hits: hits })
@@ -198,18 +205,25 @@ module.exports = (state, bus) => {
 
     const index = state.collection
 
-    const metadataify = through.obj({ objectMode: true }, (paper, enc, next) => {
-      next(null, paper.metadata())
-    })
+    const metadataify = through.obj(
+      (paper, enc, next) => next(null, paper.metadata())
+    )
+
+    const maybescan = err => {
+      if (err) throw err
+      setTimeout(scan, 300)
+    }
 
     index.del(keys, err => {
       if (err) throw err
-      eos(pumpify(docs, metadataify, index.add(err => {
-        if (err) throw err
-      })), err => {
-        if (err) throw err
-        scan()
-      })
+
+      const updatestream = pumpify(
+        docs,
+        metadataify,
+        index.add(err => { if (err) throw err })
+      )
+
+      eos(updatestream, maybescan)
     })
   }
 
@@ -221,10 +235,12 @@ module.exports = (state, bus) => {
         if (err) throw err
 
         const n = data.length
-        send('notification:add', {
+        bus.emit('notification:add', {
           title: 'Papers deleted',
           message: `${n} ${n === 1 ? '' : 's'} ha${n === 1 ? 's' : 've'} been removed from the local collection`
         })
+        data.forEach(d => bus.emit('results:remove', d))
+        setTimeout(scan, 300)
       })
     })
 
@@ -235,7 +251,7 @@ module.exports = (state, bus) => {
   bus.on('collection:cancel-search', cancelsearch)
 
   bus.on('collection:updatepaper', updatepaper)
-  bus.on('collection:removepaper', removepaper)
+  bus.on('collection:remove-paper', removepaper)
 
   bus.on('DOMContentLoaded', () => {})
 }
