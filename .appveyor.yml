@@ -8,7 +8,7 @@ init:
 
 install:
   - ps: Install-Product node 7 x64
-  - yarn
+  - yarn && cd app && yarn && yarn run rebuild && cd ..
 
 build_script:
   - yarn run buildappveyor
