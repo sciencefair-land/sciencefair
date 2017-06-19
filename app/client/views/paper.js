@@ -127,22 +127,25 @@ CachedPaper.prototype._render = function (selected, progress) {
     meta: e.metaKey
   })
 
-  const doubleClick = event => {
+  const doubleClick = () => {
     if (result.paper.progress === 100) {
-      emit('reader:read')
+      emit('reader:read', result.paper)
     } else {
       emit('downloads:add', [result.paper])
     }
   }
 
-  paper.onclick = e => {
-    e.preventDefault()
-    singleClick(e)
-  }
+  let timer
 
-  paper.ondblclick = e => {
-    e.preventDefault()
-    doubleClick(e)
+  paper.onclick = e => {
+    if (timer) {
+      clearTimeout(timer)
+      return doubleClick()
+    }
+    timer = setTimeout(() => {
+      singleClick(e)
+      timer = null
+    }, 250)
   }
 
   paper.setAttribute('id', 'paper-' + result.paper.key)

@@ -2,7 +2,8 @@ module.exports = (state, bus) => {
   state.reading = null
 
   bus.on('reader:read', paper => {
-    state.reading = { time: new Date(), paper: paper }
+    if (state.reading) return
+    state.reading = paper
     bus.emit('pushState', '#reader')
   })
 

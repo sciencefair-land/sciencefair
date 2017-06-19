@@ -36,16 +36,6 @@ app.on('ready', function () {
     setTimeout(() => main.show(), 40)
   })
 
-  const handleRedirect = (e, url) => {
-    if(url != main.webContents.getURL()) {
-      e.preventDefault()
-      open(url)
-    }
-  }
-
-  main.webContents.on('will-navigate', handleRedirect)
-  main.webContents.on('new-window', handleRedirect)
-
   if (!process.env['SCIENCEFAIR_DEVMODE']) {
     // Initate auto-updates on MacOS and Windows
     main.webContents.once('did-frame-finish-load', () => {

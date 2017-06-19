@@ -7,7 +7,7 @@ const contentserver = require('../lib/contentserver')
 const imgpath = require('../lib/imgpath')
 
 const reader = (state, emit) => {
-  const paper = state.reading.paper
+  const paper = state.reading
 
   const margin = 0
   const marginTopShim = 30
@@ -15,6 +15,7 @@ const reader = (state, emit) => {
   const style = css`
 
   .readerframe {
+      display: block;
     position: fixed;
     left: ${margin}px;
     top: ${margin + marginTopShim}px;
@@ -44,17 +45,14 @@ const reader = (state, emit) => {
   const xmlfile = `${paper.source}/article_feed${paper.path}/${paper.entryfile}`
   const docurl = contentserver.resolve(xmlfile)
   const lensurl = `file://${__dirname}/../lib/lens/index.html?url=${encodeURIComponent(docurl)}`
-  const frame = html`<webview class="${style.frame}"></webview>`
 
+  const frame = html`<webview id="reader" class="${style.frame}"></webview>`
   frame.disablewebsecurity = true
   frame.src = lensurl
-  frame.addEventListener('dom-ready', () => {
-    // uncomment line below if you want to debug the lens reader
-    // frame.openDevTools()
-  })
-
   frame.shadowRoot.applyAuthorStyles = true
   frame.shadowRoot.children[1].style.cssText = 'width: 100%; height: 100%'
+
+  // frame.addEventListener('dom-ready', () => frame.openDevTools())
 
   frame.addEventListener('new-window', e => {
     e.preventDefault()
