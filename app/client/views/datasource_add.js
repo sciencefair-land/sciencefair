@@ -37,7 +37,7 @@ module.exports = (state, emit) => {
     if (e.keyCode === 13) {
       setTimeout(() => {
         const value = input.value
-        emit('datasource:add', { key: value.trim(), active: true })
+        emit('datasources:add', { key: value.trim(), active: true })
         input.value = ''
       }, 300)
     }

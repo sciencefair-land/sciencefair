@@ -46,8 +46,15 @@ module.exports = (state, bus) => {
   const setshown = _shown => state.datasources.shown = _shown
 
   const add = source => {
+    const addfail = msg => bus.emit('notification:add', {
+      title: 'Datasource could not be added',
+      message: msg
+    })
+
+    if (source.key.length !== 64) return addfail('key must be 64 characters')
+
     datasource.fetch(source.key, (err, ds) => {
-      if (err) return bus.emit('error', err)
+      if (err) return addfail(err.message)
       if (source.active) ds.setActive()
 
       ds.connect()
@@ -63,6 +70,8 @@ module.exports = (state, bus) => {
       ds.on('progress', () => { if (state.initialising) render() })
     })
   }
+
+  const remove = key => datasource.del(key)
 
   let activesearches = []
 
@@ -170,6 +179,7 @@ module.exports = (state, bus) => {
   setInterval(poll, 1000)
 
   bus.on('datasources:add', add)
+  bus.on('datasources:remove', add)
   bus.on('datasources:search', search)
   bus.on('datasources:cancel-search', cancelsearch)
   bus.on('datasources:show', show)

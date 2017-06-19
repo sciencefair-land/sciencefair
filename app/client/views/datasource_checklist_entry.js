@@ -203,7 +203,7 @@ module.exports = (datasource, state, emit) => {
         require('./overlay_confirm')(
           `Really delete datasource ${datasource.name} and all its data?`,
           really => {
-            if (really) emit('datasource:remove', datasource.key)
+            if (really) emit('datasources:remove', datasource.key)
           }
         )
       }
