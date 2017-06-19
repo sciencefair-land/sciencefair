@@ -59,7 +59,8 @@ const setup = function () {
     console.error = function () {
       const err = arguments[0]
       const iserr = err instanceof Error
-      const isdtrace = iserr && /DTraceProviderBindings/.test(err.message)
+      const isdtrace = iserr && /bunyan/.test(err.stack)
+
       if (isdtrace) {
         console.log('caught and handled badly behaved error from dependency')
         sentry.captureException(new Error('Bunyan DTraceProviderBindings missing'))
