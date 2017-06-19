@@ -63,7 +63,7 @@ const deletebtn = (selected, emit) => {
 
   btn.onclick = e => {
     e.preventDefault()
-    emit('collection:remove-paper', state.selection.list)
+    emit('collection:remove-paper', selected)
   }
 
   return btn
