@@ -25,7 +25,6 @@ app.on('ready', function () {
     }
   })
 
-  console.log('app user data path', app.getPath('userData'))
   main.setMenu(null)
 
   main.loadURL(path.join('file://', __dirname, '/client/index.html'))
@@ -37,10 +36,15 @@ app.on('ready', function () {
     setTimeout(() => main.show(), 40)
   })
 
-  main.webContents.on('new-window', (event, url) => {
-    event.preventDefault()
-    open(url)
-  })
+  const handleRedirect = (e, url) => {
+    if(url != main.webContents.getURL()) {
+      e.preventDefault()
+      open(url)
+    }
+  }
+
+  main.webContents.on('will-navigate', handleRedirect)
+  main.webContents.on('new-window', handleRedirect)
 
   if (!process.env['SCIENCEFAIR_DEVMODE']) {
     // Initate auto-updates on MacOS and Windows

@@ -7,7 +7,6 @@ const contentserver = require('../lib/contentserver')
 const imgpath = require('../lib/imgpath')
 
 const reader = (state, emit) => {
-  console.log('(re-)rendering reader')
   const paper = state.reading.paper
 
   const margin = 0
@@ -44,9 +43,7 @@ const reader = (state, emit) => {
 
   const xmlfile = `${paper.source}/article_feed${paper.path}/${paper.entryfile}`
   const docurl = contentserver.resolve(xmlfile)
-  console.log('docurl', docurl)
   const lensurl = `file://${__dirname}/../lib/lens/index.html?url=${encodeURIComponent(docurl)}`
-  console.log('navigating to', lensurl)
   const frame = html`<webview class="${style.frame}"></webview>`
 
   frame.disablewebsecurity = true

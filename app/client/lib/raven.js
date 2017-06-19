@@ -27,8 +27,6 @@ const setup = function () {
   if (process.type === 'browser') {
     // main process
 
-    console.log('SETTING UP SENTRY IN MAIN PROCESS')
-
     process.on('uncaughtException', (err) => {
       const dialog = require('electron').dialog
 
@@ -46,23 +44,9 @@ const setup = function () {
 
     const sentry = raven.config(url, getopts(process.type)).install()
 
-    sentry.on('logged', function () {
-      console.log(`Sentry [${process.type}] logged an event`)
-    })
-
-    sentry.on('error', function (e) {
-      // The event contains information about the failure:
-      //   e.reason -- raw response body
-      //   e.statusCode -- response status code
-      //   e.response -- raw http response object
-
-      console.log(`Sentry [${process.type}] could not record event:`, e)
-    })
-
     return sentry
   } else if (process.type === 'renderer') {
     // renderer process
-    console.log('SETTING UP SENTRY IN RENDERER')
     const raven = require('raven-js')
 
     const url = `https://${RAVEN_A}@sentry.io/${RAVEN_C}`

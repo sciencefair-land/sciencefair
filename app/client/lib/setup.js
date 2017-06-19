@@ -1,5 +1,5 @@
 if (process.env.SCIENCEFAIR_DEVMODE) {
-  // localStorage.setItem('debug', process.env.DEBUG)
+  localStorage.setItem('debug', process.env.DEBUG)
   localStorage.setItem('logLevel','debug')
   require('debug-menu').install()
 }

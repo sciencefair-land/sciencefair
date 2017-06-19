@@ -2,6 +2,7 @@ const html = require('choo/html')
 const css = require('csjs-inject')
 
 const style = css`
+
 .titlebar {
   position: absolute;
   top: 2px;
@@ -16,18 +17,18 @@ const style = css`
   -webkit-app-region: drag;
 }
 
-.science {
-  color: rgb(111, 174, 193);
-}
-
-.fair {
-  color: rgb(202, 172, 77);
-}
 `
 
-module.exports = () => html`
-  <div class="${style.titlebar}">
-    <span class="${style.science}">science</span>
-    <span class="${style.fair}">fair</span>
+module.exports = (state, emit) => {
+  const bar = html`
+
+  <div class="${style.titlebar} clickable">
+    ${require('./logo')()}
   </div>
-`
+
+  `
+
+  bar.onclick = () => emit('about:show')
+
+  return bar
+}

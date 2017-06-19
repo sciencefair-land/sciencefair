@@ -27,6 +27,7 @@ module.exports = (state, emit) => html`
   ${require('./message')(state, emit)}
   ${require('./detail')(state, emit)}
   ${require('./footer')(state, emit)}
+  ${require('./about')(state, emit)}
   ${require('./datasource_selector')(state, emit)}
 </div>
 

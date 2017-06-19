@@ -4,7 +4,7 @@ module.exports = (state, emit, content) => html`
 
 <body>
   <div>
-    ${require('./titlebar')()}
+    ${require('./titlebar')(state, emit)}
     ${content}
     ${require('./notification')(state, emit)}
   </div>
