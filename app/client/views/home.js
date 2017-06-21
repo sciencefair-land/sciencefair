@@ -1,7 +1,5 @@
 const html = require('choo/html')
+const mainwrapper = require('./mainwrapper')
+const main = require('./main')
 
-module.exports = (state, emit) => {
-  return require('./mainwrapper')(
-    state, emit, require('./main')(state, emit)
-  )
-}
+module.exports = (state, emit) => mainwrapper(state, emit, main(state, emit))

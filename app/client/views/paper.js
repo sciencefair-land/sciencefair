@@ -159,7 +159,7 @@ module.exports = (result, state, emit) => {
   const progress = downloading ? Math.max(result.paper.progress, 10) : result.paper.progress
 
   let el = elementcache[result.paper.key]
-  if (el) {
+  if (el && result.index === el._result.index) {
     return el.render(selected, progress)
   } else {
     const newel = CachedPaper(result, emit)

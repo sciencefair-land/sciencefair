@@ -56,6 +56,8 @@ module.exports = (state, bus) => {
     debug('result removed')
   }
 
+  const none = () => bus.emit('search:done-searching')
+
   bus.on('results:clear', clear)
   bus.on('results:receive', receive)
   bus.on('results:replace', replace)

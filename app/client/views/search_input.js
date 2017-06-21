@@ -73,8 +73,30 @@ function CachedInput () {
 }
 CachedInput.prototype = Object.create(CacheComponent.prototype)
 
+//
+// CacheComponent.prototype._handleId = function (node) {
+//   if (node.id) {
+//     this._id = this._ccId = node.id
+//   } else {
+//     node.id = this._id = this._ccId
+//   }
+//   return node
+// }
+
+CachedInput.prototype._createProxy = function () {
+  var proxy = document.createElement('div')
+  var self = this
+  this._brandNode(proxy)
+  proxy.id = this._id
+  proxy.isSameNode = function (el) {
+    return el.id === 'cached-search-input'
+  }
+  return proxy
+}
+
 CachedInput.prototype._render = function (state, emit) {
-  if (this._element) return this._element
+  // if (this._element) return this._element
+
   this._searchtags = clone(state.search.tags)
 
   const emitify = throttle(emit, 200, { leading: true })
@@ -86,6 +108,7 @@ CachedInput.prototype._render = function (state, emit) {
 
   <input
     class="${style.input}"
+    id="cached-search-input"
     placeholder="${placeholder}"
     value="${inputvalue}"
     autofocus
@@ -102,7 +125,7 @@ CachedInput.prototype._render = function (state, emit) {
     const key = e.key
     debug('onkeydown', key, e)
 
-    if (key === 'Backspace' && e.target.value === '') return emit('search:clear')
+    if (key === 'Backspace' && e.target.value.trim() === '') return emit('search:clear')
 
     if (key === '#' || tagquery(e.target.value)) {
       // searching for a tag, submit immeditely to activate tag list
@@ -126,13 +149,13 @@ CachedInput.prototype._render = function (state, emit) {
     // if there's an existing timer (from a previous keypress)
     // it gets cancelled - this reduces the number of searches
     // that get submitted while a user is still typing the query
-    if (e.target.value.length > 3) {
+    if (e.target.value.length > 3 || /^#/.test(e.target.value)) {
       emitify.cancel()
       emitify('search:set-query-string', e.target.value)
     }
   }
 
-  this._input = input
+  // this._input = input
 
   return input
 }
@@ -140,17 +163,18 @@ CachedInput.prototype._render = function (state, emit) {
 // Override default shallow compare _update function
 CachedInput.prototype._update = function (state, emit) {
   if (state.search.clearing) {
-    this._input.value = ''
+    this._element.value = ''
     emit('search:done-clearing')
-  } else if (!equal(state.search.tags, this._searchtags) || this._input.value === '') {
-    this._input.placeholder = getplaceholder(state)
-    this._input.value = state.search.querystring
+    return false
+  } else if (!equal(state.search.tags, this._searchtags) || this._element.value === '') {
+    this._element.placeholder = getplaceholder(state)
+    this._element.value = state.search.querystring
     this._searchtags = state.search.tags
-    debug('updated value and tags', this._input.value, this._searchtags)
+    debug('updated value and tags', this._element.value, this._searchtags)
+    return false
   }
 
-
-  return true
+  return false
 }
 
 const inputel = CachedInput()

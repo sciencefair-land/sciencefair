@@ -8,6 +8,9 @@ const open = require('opn')
 
 var main = null
 
+app.commandLine.appendSwitch('enable-features', 'V8Ignition')
+app.commandLine.appendSwitch('enable-webassembly')
+
 app.on('ready', function () {
   main = new BrowserWindow({
     height: 750,

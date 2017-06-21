@@ -189,9 +189,9 @@ module.exports = (state, bus) => {
     const query = state.search.query
     const tags = state.search.tags
 
-    if (query && query.trim() === '*') {
+    if (query && query.trim() === '*' && tags.length === 0) {
       all()
-    } else if (query && query.trim().length > 0) {
+    } else if (query && query.trim() !== '*' && query.trim().length > 0) {
       search(query, tags)
     } else if (tags && tags.length) {
       filter(tags)
@@ -229,6 +229,8 @@ module.exports = (state, bus) => {
 
   const removepaper = data => {
     if (typeof data === 'string') data = [data]
+
+    bus.emit('selection:clear')
 
     const removefromdb = afterall(data.length, () => {
       state.collection.del(data.map(d => d.key), err => {

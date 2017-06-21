@@ -59,7 +59,7 @@ module.exports = (tag, emit) => {
     emit('search:remove-tag', tag)
   }
 
-  return html`
+  const tagel = html`
 
   <div class="${style.tag} clickable">
     #${tag}
@@ -67,4 +67,6 @@ module.exports = (tag, emit) => {
   </div>
 
   `
+
+  return tagel
 }

@@ -40,39 +40,16 @@ const style = css`
 
 `
 
-function CachedSearch () {
-  if (!(this instanceof CachedSearch)) return new CachedSearch()
-  CacheComponent.call(this)
-}
-CachedSearch.prototype = Object.create(CacheComponent.prototype)
+module.exports = (state, emit) => html`
 
-CachedSearch.prototype._render = function (state, emit) {
-  this._searchstate = clone(state.search)
-  debug('intial search state', state.search)
-
-  const search = html`
-
-  <div id="search-component" class="${style.search}">
-    <div class="${style.wrapper}">
-      <img class="${style.img}" src="${imgpath('search.svg')}" />
-      ${require('./search_input')(state, emit)}
-      ${require('./search_tags')(state, emit)}
-      ${require('./search_clearbtn')(state, emit)}
-      ${require('./autocomplete')(state, emit)}
-    </div>
+<div class="${style.search}">
+  <div class="${style.wrapper}">
+    <img class="${style.img}" src="${imgpath('search.svg')}" />
+    ${require('./search_input')(state, emit)}
+    ${require('./search_tags')(state, emit)}
+    ${require('./search_clearbtn')(state, emit)}
+    ${require('./autocomplete')(state, emit)}
   </div>
+</div>
 
-  `
-
-  return search
-}
-
-// Override default shallow compare _update function
-CachedSearch.prototype._update = function (state, emit) {
-  const update = !equal(state.search, this._searchstate)
-  return update
-}
-
-const searchel = CachedSearch()
-
-module.exports = (state, emit) => searchel.render(state, emit)
+`

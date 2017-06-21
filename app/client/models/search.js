@@ -84,6 +84,7 @@ module.exports = (state, bus) => {
   const cleared = () => setclearing(false)
 
   const addtag = tag => {
+    bus.emit('results:clear')
     const tags = uniq(gettags()).concat(tag)
     settags(tags)
     settagquery(null)
@@ -93,6 +94,7 @@ module.exports = (state, bus) => {
   }
 
   const removetag = tag => {
+    bus.emit('results:clear')
     const tags = filter(gettags(), t => t !== tag)
     settags(tags)
     if (gettags().length === 0 && !getquery()) return clear()
