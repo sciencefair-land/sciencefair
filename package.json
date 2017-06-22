@@ -3,12 +3,12 @@
   "version": "1.0.0-beta12",
   "description": "container repo for sciecefair app src and build tools",
   "scripts": {
-    "pack": "build --dir",
-    "build": "build",
-    "buildall": "build -mwl",
-    "buildlinux": "build -l",
-    "buildosx": "build -m",
-    "buildappveyor": "build -w --ia32 --x64",
+    "pack": "electron-builder --dir",
+    "build": "electron-builder",
+    "buildall": "electron-builder -mwl",
+    "buildlinux": "electron-builder -l",
+    "buildosx": "electron-builder -m",
+    "buildappveyor": "electron-builder -w --ia32 --x64",
     "postinstall": "which electron-rebuild && electron-rebuild",
     "start": "electron app/index.js",
     "dev": "SCIENCEFAIR_DEVMODE=true electron app/index.js"
