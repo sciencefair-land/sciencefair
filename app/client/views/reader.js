@@ -14,8 +14,8 @@ const reader = (state, emit) => {
 
   const style = css`
 
-  .readerframe {
-      display: block;
+  .reader {
+    background-color: white;
     position: fixed;
     left: ${margin}px;
     top: ${margin + marginTopShim}px;
@@ -28,7 +28,6 @@ const reader = (state, emit) => {
   .frame {
     width: 100%;
     height: 100%;
-    display: block;
   }
 
   .closebtn {
@@ -42,6 +41,13 @@ const reader = (state, emit) => {
 
   `
 
+  const closebtn = html`<img class="${style.closebtn}">`
+  closebtn.src = imgpath('close.svg')
+  closebtn.onclick = e => {
+    e.stopPropagation()
+    emit('reader:quit')
+  }
+
   const xmlfile = `${paper.source}/article_feed${paper.path}/${paper.entryfile}`
   const docurl = contentserver.resolve(xmlfile)
   const lensurl = `file://${__dirname}/../lib/lens/index.html?url=${encodeURIComponent(docurl)}`
@@ -50,30 +56,23 @@ const reader = (state, emit) => {
   frame.disablewebsecurity = true
   frame.src = lensurl
   frame.shadowRoot.applyAuthorStyles = true
-  frame.shadowRoot.children[1].style.cssText = 'width: 100%; height: 100%'
-
-  // frame.addEventListener('dom-ready', () => frame.openDevTools())
+  frame.shadowRoot.children[1].style.cssText = 'width: 100%; height: 100%;'
 
   frame.addEventListener('new-window', e => {
     e.preventDefault()
     open(e.url)
   })
 
-  const closebtn = html`<img class="${style.closebtn}">`
-  closebtn.src = imgpath('close.svg')
-  closebtn.onclick = e => {
-    e.stopPropagation()
-    emit('reader:quit')
-  }
+  const readerframe = require('./mainwrapper')(state, emit, html`
 
-  return require('./mainwrapper')(state, emit, html`
-
-  <div class="${style.readerframe}">
+  <div id="reader-frame" class="${style.reader}">
     ${closebtn}
     ${frame}
   </div>
 
   `)
+
+  return readerframe
 }
 
 module.exports = reader
