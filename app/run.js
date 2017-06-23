@@ -18,6 +18,7 @@ app.on('ready', function () {
     minWidth: 1080,
     resizable: true,
     title: 'sciencefair',
+    backgroundColor: '#fff',
     titleBarStyle: 'hidden',
     fullscreen: false,
     icon: './icon/logo.png',
