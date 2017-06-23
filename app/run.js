@@ -1,11 +1,23 @@
 const { app, BrowserWindow, protocol } = require('electron')
 
+let main = null
+
+const shouldQuit = app.makeSingleInstance((cliargs, cwd) => {
+  // Someone tried to run a second instance, we should focus our window.
+  if (main) {
+    if (main.isMinimized()) main.restore()
+    main.focus()
+  }
+})
+
+if (shouldQuit) {
+  return app.quit()
+}
+
 require('electron-debug')({ enabled: true })
 
 const path = require('path')
 const open = require('opn')
-
-var main = null
 
 app.commandLine.appendSwitch('enable-features', 'V8Ignition')
 app.commandLine.appendSwitch('enable-webassembly')
