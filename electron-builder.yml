@@ -40,5 +40,5 @@ win:
 nsis:
   perMachine: true
   oneClick: true
-npmRebuild: false
+npmRebuild: true
 nodeGypRebuild: false
