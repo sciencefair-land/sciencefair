@@ -40,7 +40,6 @@ install:
   - cd app && yarn && cd ..
 
 script:
-  - export DEBUG=electron-builder:*
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then yarn run buildosx ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then yarn run buildlinux ; fi
 
