@@ -1,6 +1,6 @@
 {
   "name": "sciencefair",
-  "version": "1.0.0-beta13",
+  "version": "1.0.0",
   "description": "search, browse, and download open access papers",
   "main": "index.js",
   "scripts": {
@@ -35,7 +35,6 @@
     "dat-storage": "^1.0.1",
     "debug": "^2.6.3",
     "debug-menu": "^0.6.0",
-    "electron-debug": "^1.2.0",
     "electron-log": "^2.0.0",
     "electron-updater": "^2.4.2",
     "end-of-stream": "^1.1.0",
