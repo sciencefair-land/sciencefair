@@ -30,10 +30,10 @@ dmg:
 linux:
   category: "GNOME;GTK;Science;Literature"
   packageCategory: "GNOME;GTK;Science;Literature"
-  description: "ScienceFair desktop science reading app for Linux"
+  description: "ScienceFair - desktop science reading app for Linux"
   target:
     - deb
-    - AppImage
+    - rpm
   maintainer: "Richard Smith-Unna <rik@fathomlabs.io>"
 win:
   icon: "build/icon.ico"
