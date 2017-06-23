@@ -1,6 +1,6 @@
 const { app, BrowserWindow, protocol } = require('electron')
 
-if (process.env['SCIENCEFAIR_DEVMODE']) require('electron-debug')({ enable: true })
+require('electron-debug')({ enable: true })
 
 const path = require('path')
 const open = require('opn')
