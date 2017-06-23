@@ -1,6 +1,6 @@
 const { app, BrowserWindow, protocol } = require('electron')
 
-require('electron-debug')({ enable: true })
+require('electron-debug')({ enabled: true })
 
 const path = require('path')
 const open = require('opn')
