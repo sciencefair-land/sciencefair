@@ -15853,6 +15853,7 @@ SciFaireLifeConverter.Prototype = function() {
           .replace('.jpg.jpg', '.jpg')
           .replace('.tif.jpg', '.jpg')
           .replace('.jpg', '-600w.jpg')
+        if (!/600w\.jpg$/.test(url)) url = url + '-600w.jpg'
         node.url = this.getAssetUrl(url, state)
       }
     }
