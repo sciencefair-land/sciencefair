@@ -7,27 +7,35 @@ const style = css`
   position: absolute;
   top: 2px;
   right: 10px;
+  left: 0;
+  height: 30px;
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+}
+
+.toplogo {
+  position: absolute;
+  right: 0;
+  top: 0;
   width: 160px;
   font-family: Aleo-Light;
   justify-content: flex-end;
   font-size: 130%;
   opacity: 0.7;
-  -webkit-user-select: none;
-  -webkit-app-region: drag;
 }
 
 `
 
 module.exports = (state, emit) => {
-  const bar = html`
+  const toplogo = html`
 
-  <div class="${style.titlebar} clickable">
+  <div class="${style.toplogo} clickable">
     ${require('./logo')()}
   </div>
 
   `
 
-  bar.onclick = () => emit('about:show')
+  toplogo.onclick = () => emit('about:show')
 
-  return bar
+  return html`<div class="${style.titlebar}">${toplogo}</div>`
 }
