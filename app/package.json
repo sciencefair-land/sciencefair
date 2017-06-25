@@ -1,6 +1,6 @@
 {
   "name": "sciencefair",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "search, browse, and download open access papers",
   "main": "index.js",
   "scripts": {
