@@ -35,7 +35,10 @@ module.exports = (state, bus) => {
     const tags = {}
     let count = 0
 
-    if (activescan) activescan.destroy()
+    if (activescan) {
+      activescan.destroy()
+      activescan = null
+    }
 
     let scanstream = activescan = state.collection.docstore.createReadStream().on(
       'data', data => {
@@ -50,7 +53,12 @@ module.exports = (state, bus) => {
 
     eos(scanstream, err => {
       if (err) {
-        throw err
+        if (err.message == 'premature close') {
+          // activescan was destroyed
+          return
+        } else {
+          throw err
+        }
       } else {
         state.collectioncount = count
         bus.emit('tags:replace', tags)

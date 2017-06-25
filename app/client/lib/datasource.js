@@ -117,8 +117,7 @@ function Datasource (key, opts) {
   self.connectmeta = cb => {
     self.metadata = hyperdrive(storage(self.jsondir), self.key, {
       latest: true,
-      sparse: false,
-      live: false
+      sparse: true,
     })
 
     self.metadata.once('ready', () => {
