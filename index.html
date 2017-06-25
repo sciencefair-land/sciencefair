@@ -2,101 +2,73 @@
 <html lang="en">
   <head>
     <meta http-equiv="content-type" content="text/html"; charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
-    <title>sciencefair</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sciencefair</title>
     <link href="assets/logo.png" rel="icon" type="image/png"/>
     <link href="style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto+Slab" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.7.0/css/tachyons.min.css"/>
   </head>
-  <body>
-    <div id="content">
-      <div class="view">
-        <div class="header">
-          <img class="headimg" src="assets/header.svg" />
-        </div>
-        <div id="header-buttons">
-          <div id="features" class="btn">
-            <a href="#features-skip-space">features</a>
+  <body class="bg-light-blue">
+    <div class="header-container fl w-100 pa1 pa3-m ph5-ns pv4-ns">
+      <img class="w-100" src="assets/header.svg" alt="header-image"/>
+      <div class="mw9 center ph3-ns">
+        <div class="cf ph4-ns">
+          <div class="fl grow w-100 w-25-ns pa2">
+            <p class="tc"><a href="#" class="link dim f3 no-underline mid-gray lh-copy">features</a></p>
           </div>
-          <div id="technology" class="btn">
-            <a href="#technology-skip-space">technology</a>
+          <div class="fl grow w-100 w-25-ns pa2">
+            <p class="tc"><a href="#" class="link dim f3 no-underline mid-gray lh-copy">technology</a></p>
           </div>
-          <div id="credits" class="btn">
-            <a href="#credits-skip-space">credits</a>
+          <div class="fl grow w-100 w-25-ns pa2">
+            <p class="tc"><a href="#" class="link dim f3 no-underline mid-gray lh-copy">credits</a></p>
           </div>
-          <div id="download" class="btn">
-            <a href="#download-skip-space">download</a>
+          <div class="fl grow w-100 w-25-ns pa2">
+            <p class="tc"><a href="#" class="link dim f3 no-underline light-yellow lh-copy">download</a></p>
           </div>
-        </div>
-      </div>
-      <div id="download-skip-space"></div>
-      <div class="view">
-        <div class="text-b">
-          <h1>Download</h1>
-          <a class="download-for">
-            <img class="dl-icon" src="assets/windows.png" />
-            <p>windows</p>
-          </a>
-          <a class="download-for">
-            <img class="dl-icon" src="assets/mac.png" />
-            <p>mac osx</p>
-          </a>
-          <a class="download-for">
-            <img class="dl-icon" src="assets/linux.png" />
-            <p>linux</p>
-          </a>
-          <p id="github-msg">
-            Or get the source code on GitHub
-            <a href="github.com/codeforscience/sciencefair/">
-              <img style="height: 50px" src="assets/github.png" />
-            </a>
-          </p>
-        </div>
-      </div>
-      <div class="view">
-        <div class="text-a">
-          <h1>Features</h1>
-          <ul>
-            <li>Search, download, organise and read scientific papers.</li>
-            <li>Clean, modern user interface.</li>
-            <li>Rich interactive reading experience with Lens reader.</li>
-            <li>Data is transmitted peer-to-peer.</li>
-            <li>You control the datasources you want to use.</li>
-            <li>Collected papers are ready for text-mining analysis, stored in JATS XML format.</li>
-          </ul>
-        </div>
-      </div>
-      <div class="view">
-        <div class="text-a">
-          <h1>Technology</h1>
-          <ul>
-            <li>ScienceFair is built on <a href="http://electron.io">electron</a> for easy cross-platform compatibility.</li>
-            <li>p2p data sharing using <a href="https://github.com/mafintosh/hyperdrive">hyperdrive technology</a> developed by the <a href="http://datproject.org">Dat project</a>.</li>
-            <li>Articles are displayed with <a href="http://lens.elifesciences.org/about/">Lens reader</a> developed by <a href="http://substance.io">Substance</a> for <a href="http://elifesciences.org">eLife</a>.</li>
-          </ul>
-        </div>
-      </div>
-      <div class="view">
-        <div class="text-b">
-          <div class="credits-text">
-            <h1>Credits</h1>
-            <p>ScienceFair was developed by CodeForScience and FathomLabs, with support from eLife and the Dat project.</p>
-          </div>
-          <a href="http://codeforscience.org" target="_blank">
-            <img class="logo" src="assets/codeforscience.png">
-          </a>
-          <a href="http://datproject.org" target="_blank">
-            <img class="logo" src="assets/dat.png">
-          </a>
-          <a href="http://fathomlabs.io" target="_blank">
-            <img class="logo" src="assets/fathomlabs.png">
-          </a>
-          <a href="http://elifesciences.org" target="_blank">
-            <img class="logo" style="margin-bottom: 22%; width: 100%" src="assets/elife.png">
-          </a>
         </div>
       </div>
     </div>
-    <script src="assets/bundle.js"></script>
+    <div class="fl w-60 pa4 ma7 br2 ba bg-light-gray">
+      <h1 class="mid-gray f1 lh-title">Download</h1>
+    </div>
+    <div class="fl w-60 pa4 ma7 br2 bg-mid-gray">
+      <h1 class="light-gray f1 lh-title">Features</h1>
+      <ul class="list pl2">
+        <li class="f3 lh-copy pv2 light-gray">Search, download, organise and read scientific papers.</li>
+        <li class="f3 lh-copy pv2 light-yellow">Clean, modern user interface.</li>
+        <li class="f3 lh-copy pv2 light-gray">Rich interactive reading experience with Lens reader.</li>
+        <li class="f3 lh-copy pv2 light-yellow">Data is transmitted peer-to-peer.</li>
+        <li class="f3 lh-copy pv2 light-gray">You control the datasources you want to use.</li>
+        <li class="f3 lh-copy pv2 light-yellow">Collected papers are ready for text-mining analysis, stored in JATS XML format.</li>
+      </ul>
+    </div>
+    <div class="fl w-60 pa4 ma7 br2 ba bg-light-gray">
+      <h1 class="mid-gray f1 lh-title">Technology</h1>
+      <ul class="list pl2">
+        <li class="f3 lh-copy pv2 mid-gray">Built on <a class="link dim dark-gray f3 no-underline" href="https://electron.atom.io/" target="_blank">electron</a> for easy cross-platform compatibility.</li>
+        <li class="f3 lh-copy pv2 mid-gray">Rich interactive reading experience with Lens reader.</li>
+        <li class="f3 lh-copy pv2 mid-gray">p2p data sharing using <a class="link dim dark-gray f3 no-underline" href="https://github.com/mafintosh/hyperdrive" target="_blank">hyperdrive technology</a> developed by the <a class="link dim dark-gray f3 no-underline" href="https://datproject.org/" target="_blank">Dat project</a>.</li>
+      </ul>
+    </div>
+    <div class="fl w-60 pa4 ma7 br2 bg-mid-gray">
+      <h1 class="light-gray f1 lh-title">Credits</h1>
+      <p class="f3 lh-copy pv2 light-gray">ScienceFair was developed by CodeForScience and FathomLabs, with support from eLife and the Dat project.</p>
+      <div class="mw9 center ph3-ns">
+        <div class="cf ph2-ns dt">
+          <div class="dib v-mid dtc fl w-100 w-25-ns pa2">
+            <img class="pv4 v-mid" src="assets/codeforscience.png" alt="Code for Science"/>
+          </div>
+          <div class="dib v-mid dtc fl w-100 w-25-ns pa2">
+            <img class="pv4 v-mid" src="assets/dat.png" alt="Dat data"/>
+          </div>
+          <div class="dib v-mid dtc fl w-100 w-25-ns pa2">
+            <img class="pv4 v-mid" src="assets/fathomlabs.png" alt="Fathom Labs"/>
+          </div>
+          <div class="dib v-mid dtc fl w-100 w-25-ns pa2">
+            <img class="pv4 v-mid" src="assets/elife.png" alt="eLife Sciences"/>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
