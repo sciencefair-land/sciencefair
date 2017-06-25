@@ -3,72 +3,130 @@
   <head>
     <meta http-equiv="content-type" content="text/html"; charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sciencefair</title>
+    <title>ScienceFair</title>
     <link href="assets/logo.png" rel="icon" type="image/png"/>
-    <link href="style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
     <link rel="stylesheet" href="https://unpkg.com/tachyons@4.7.0/css/tachyons.min.css"/>
   </head>
-  <body class="bg-light-blue">
-    <div class="header-container fl w-100 pa1 pa3-m ph5-ns pv4-ns">
-      <img class="w-100" src="assets/header.svg" alt="header-image"/>
-      <div class="mw9 center ph3-ns">
-        <div class="cf ph4-ns">
-          <div class="fl grow w-100 w-25-ns pa2">
-            <p class="tc"><a href="#" class="link dim f3 no-underline mid-gray lh-copy">features</a></p>
+  <body class="bg-light-gray">
+    <div class="header-container w-100 pa1 pa3-m ph5-ns pv4-ns tc">
+      <img class="w-90-ns w-150" src="assets/header.svg" alt="header-image"/>
+      <div class="w-90 mv4 center ph3-ns">
+        <div class="cf ph2-ns">
+          <div class="fl w-100 w-25-ns pa2">
+            <a class="w-90 f3 link ba ph3 pv2 mb2 dib grow bg-dark-gray b--dark-gray light-gray" href="#install">install</a>
           </div>
-          <div class="fl grow w-100 w-25-ns pa2">
-            <p class="tc"><a href="#" class="link dim f3 no-underline mid-gray lh-copy">technology</a></p>
+          <div class="fl w-100 w-25-ns pa2">
+            <a class="w-90 f3 link ba ph3 pv2 mb2 dib grow bg-dark-gray b--dark-gray light-gray" href="#features">features</a>
           </div>
-          <div class="fl grow w-100 w-25-ns pa2">
-            <p class="tc"><a href="#" class="link dim f3 no-underline mid-gray lh-copy">credits</a></p>
+          <div class="fl w-100 w-25-ns pa2">
+            <a class="w-90 f3 link ba ph3 pv2 mb2 dib grow bg-dark-gray b--dark-gray light-gray" href="#technology">technology</a>
           </div>
-          <div class="fl grow w-100 w-25-ns pa2">
-            <p class="tc"><a href="#" class="link dim f3 no-underline light-yellow lh-copy">download</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="fl w-60 pa4 ma7 br2 ba bg-light-gray">
-      <h1 class="mid-gray f1 lh-title">Download</h1>
-    </div>
-    <div class="fl w-60 pa4 ma7 br2 bg-mid-gray">
-      <h1 class="light-gray f1 lh-title">Features</h1>
-      <ul class="list pl2">
-        <li class="f3 lh-copy pv2 light-gray">Search, download, organise and read scientific papers.</li>
-        <li class="f3 lh-copy pv2 light-yellow">Clean, modern user interface.</li>
-        <li class="f3 lh-copy pv2 light-gray">Rich interactive reading experience with Lens reader.</li>
-        <li class="f3 lh-copy pv2 light-yellow">Data is transmitted peer-to-peer.</li>
-        <li class="f3 lh-copy pv2 light-gray">You control the datasources you want to use.</li>
-        <li class="f3 lh-copy pv2 light-yellow">Collected papers are ready for text-mining analysis, stored in JATS XML format.</li>
-      </ul>
-    </div>
-    <div class="fl w-60 pa4 ma7 br2 ba bg-light-gray">
-      <h1 class="mid-gray f1 lh-title">Technology</h1>
-      <ul class="list pl2">
-        <li class="f3 lh-copy pv2 mid-gray">Built on <a class="link dim dark-gray f3 no-underline" href="https://electron.atom.io/" target="_blank">electron</a> for easy cross-platform compatibility.</li>
-        <li class="f3 lh-copy pv2 mid-gray">Rich interactive reading experience with Lens reader.</li>
-        <li class="f3 lh-copy pv2 mid-gray">p2p data sharing using <a class="link dim dark-gray f3 no-underline" href="https://github.com/mafintosh/hyperdrive" target="_blank">hyperdrive technology</a> developed by the <a class="link dim dark-gray f3 no-underline" href="https://datproject.org/" target="_blank">Dat project</a>.</li>
-      </ul>
-    </div>
-    <div class="fl w-60 pa4 ma7 br2 bg-mid-gray">
-      <h1 class="light-gray f1 lh-title">Credits</h1>
-      <p class="f3 lh-copy pv2 light-gray">ScienceFair was developed by CodeForScience and FathomLabs, with support from eLife and the Dat project.</p>
-      <div class="mw9 center ph3-ns">
-        <div class="cf ph2-ns dt">
-          <div class="dib v-mid dtc fl w-100 w-25-ns pa2">
-            <img class="pv4 v-mid" src="assets/codeforscience.png" alt="Code for Science"/>
-          </div>
-          <div class="dib v-mid dtc fl w-100 w-25-ns pa2">
-            <img class="pv4 v-mid" src="assets/dat.png" alt="Dat data"/>
-          </div>
-          <div class="dib v-mid dtc fl w-100 w-25-ns pa2">
-            <img class="pv4 v-mid" src="assets/fathomlabs.png" alt="Fathom Labs"/>
-          </div>
-          <div class="dib v-mid dtc fl w-100 w-25-ns pa2">
-            <img class="pv4 v-mid" src="assets/elife.png" alt="eLife Sciences"/>
+          <div class="fl w-100 w-25-ns pa2">
+            <a class="w-90 f3 link ba ph3 pv2 mb2 dib grow bg-dark-gray b--dark-gray light-gray" href="#community">community</a>
           </div>
         </div>
       </div>
     </div>
+    <section id="install" class="w-100 center bg-dark-gray pa3 mv3">
+      <h1 class="light-gray f2 tc">Install</h1>
+      <p class="f3 w-80-ns lh-copy ph5-ns light-gray center tc">
+        Latest version: <code>v1.0.1</code> <small>(<a class="no-underline bg-animate hover-bg-light-blue silver hover-dark-gray" href="https://github.com/codeforscience/sciencefair/releases" target="_blank">see previous versions</a>)</small>.
+      </p>
+      <div class="w-80 mv4 center">
+        <div class="cf">
+          <div class="fl w-100 w-25-ns pa2 center tc">
+            <a class="w-70 f6 link grow ba pa3 mb2 dib light-gray" href="https://github.com/codeforscience/sciencefair/releases/download/v1.0.1/ScienceFair-mac-1.0.1.dmg"><strong>macOS 10.11+</strong><br><br>DMG</a>
+          </div>
+          <div class="fl w-100 w-25-ns pa2 center tc">
+            <a class="w-70 f6 link grow ba pa3 mb2 dib light-gray" href="https://github.com/codeforscience/sciencefair/releases/download/v1.0.1/sciencefair-setup-1.0.1.exe"><strong>Windows 32 or 64 bit</strong><br><br>EXE</a>
+          </div>
+          <div class="fl w-100 w-25-ns pa2 center tc">
+            <a class="w-70 f6 link grow ba pa3 mb2 dib light-gray" href="https://github.com/codeforscience/sciencefair/releases/download/v1.0.1/ScienceFair-linux-amd64-1.0.1.deb"><strong>Linux Debian / Ubuntu</strong><br><br>DEB</a>
+          </div>
+          <div class="fl w-100 w-25-ns pa2 center tc">
+            <a class="w-70 f6 link grow ba pa3 mb2 dib light-gray" href="https://github.com/codeforscience/sciencefair/releases/download/v1.0.1/ScienceFair-linux-x86_64-1.0.1.rpm"><strong>Linux Fedora / SUSE</strong><br><br>RPM</a>
+          </div>
+        </div>
+      </div>
+      <div class="w-100 mv4 tc light-gray f4">
+        <p>
+          Or you can explore the <a class="no-underline bg-animate hover-bg-light-blue silver hover-mid-gray" href="https://github.com/codeforscience/sciencefair">source code on GitHub</a>
+        </p>
+      </div>
+    </section>
+    <section id="features" class="w-100 center bg-light-gray pa3 mv3">
+      <h1 class="w-100 dark-gray f2 tc">Features</h1>
+      <ul class="list pa0 w-100 tc">
+        <li class="f5 f3-ns lh-copy pv2 mid-gray">Search, collect, read and analyse scientific papers.</li>
+        <li class="f3 f2-ns pv2 dark-gray">&#11042;</li>
+        <li class="f5 f3-ns lh-copy pv2 mid-gray">Clean, modern user interface.</li>
+        <li class="f3 f2-ns pv2 dark-gray">&#11042;</li>
+        <li class="f5 f3-ns lh-copy pv2 mid-gray">Rich interactive reading experience.</li>
+        <li class="f3 f2-ns pv2 dark-gray">&#11042;</li>
+        <li class="f5 f3-ns lh-copy pv2 mid-gray">Distributed data store.</li>
+        <li class="f3 f2-ns pv2 dark-gray">&#11042;</li>
+        <li class="f5 f3-ns lh-copy pv2 mid-gray">Control the datasources you use.</li>
+        <li class="f3 f2-ns pv2 dark-gray">&#11042;</li>
+        <li class="f5 f3-ns lh-copy pv2 mid-gray">Text-mining ready corpus.</li>
+      </ul>
+    </section>
+    <section id="technology" class="w-100 center bg-dark-gray pa3 mv3">
+      <h1 class="w-100 light-gray f2 tc">Technology</h1>
+      <ul class="list pa0 w-100 tc">
+        <li class="f5 f3-ns lh-copy pv2 light-gray">Built using <a class="no-underline bg-animate hover-bg-light-blue silver hover-mid-gray" href="https://github.com/yoshuawuyts/choo" target="_blank">choo</a> and run on <a class="no-underline bg-animate hover-bg-light-blue silver hover-mid-gray" href="https://electron.atom.io/" target="_blank">electron</a> for cross-platform compatibility and a low barrier to new contributors.</li>
+        <li class="f3 f2-ns pv2 silver">&#11042;</li>
+        <li class="f5 f3-ns lh-copy pv2 light-gray">Rich interactive reading experience with <a class="no-underline bg-animate hover-bg-light-blue silver hover-mid-gray" href="http://lens.elifesciences.org/about/" target="_blank">Lens reader</a>.</li>
+        <li class="f3 f2-ns pv2 silver">&#11042;</li>
+        <li class="f5 f3-ns lh-copy pv2 light-gray">Distributed data sharing using <a class="no-underline bg-animate hover-bg-light-blue silver hover-mid-gray" href="https://github.com/mafintosh/hyperdrive" target="_blank">hyperdrive technology</a> developed by the <a class="no-underline bg-animate hover-bg-light-blue silver hover-mid-gray" href="https://datproject.org/" target="_blank">Dat project</a>.</li>
+      </ul>
+    </section>
+    <section id="community" class="w-100 center bg-light-gray pa3 mv3 tc">
+      <h1 class="dark-gray f2 tc">Community</h1>
+      <p class="f3 w-80-ns lh-copy ph5-ns mid-gray center">
+        ScienceFair v1 was developed by
+        <a class="no-underline bg-animate hover-bg-light-blue silver hover-dark-gray" href="https://codeforscience.org" target="_blank">Code for Science</a>
+        and
+        <a class="no-underline bg-animate hover-bg-light-blue silver hover-dark-gray" href="https://fathomlabs.io" target="_blank">FathomLabs</a>
+        along with
+        <a class="no-underline bg-animate hover-bg-light-blue silver hover-dark-gray" href="https://github.com/codeforscience/sciencefair/graphs/contributors" target="_blank">other contributors</a>,
+        with support from
+        <a class="no-underline bg-animate hover-bg-light-blue silver hover-dark-gray" href="https://elifesciences.org" target="_blank">eLife</a>
+        and the
+        <a class="no-underline bg-animate hover-bg-light-blue silver hover-dark-gray" href="https://datproject.org" target="_blank">Dat</a>
+        project.
+      </p>
+      <p class="f3 w-80-ns lh-copy ph5-ns mid-gray center">
+        If you find a bug in ScienceFair please report it on the
+        <a class="no-underline bg-animate hover-bg-light-blue silver hover-dark-gray" href="https://github.com/codeforscience/sciencefair/issues" target="_blank">issue tracker</a>.
+        You can chat with us any time on
+        <a class="no-underline bg-animate hover-bg-light-blue silver hover-dark-gray" href="https://webchat.freenode.net/?channels=sciencefair" target="_blank">IRC (#sciencefair on freenode.net)</a>.
+      </p>
+      <p class="f3 w-80-ns lh-copy ph5-ns mid-gray center">
+        ScienceFair is an Open Source project. Code is licensed under the
+        <a class="no-underline bg-animate hover-bg-light-blue silver hover-dark-gray" href="https://github.com/codeforscience/sciencefair/blob/master/LICENSE" target="_blank">MIT license</a>
+        and hosted
+        <a class="no-underline bg-animate hover-bg-light-blue silver hover-dark-gray" href="https://github.com/codeforscience/sciencefair" target="_blank">on Github</a>.
+        We
+        <a class="no-underline bg-animate hover-bg-light-blue silver hover-dark-gray" href="https://github.com/codeforscience/sciencefair/blob/master/CONTRIBUTING.md" target="_blank">welcome contributions</a>
+        of any kind from anyone, provided you follow our
+        <a class="no-underline bg-animate hover-bg-light-blue silver hover-dark-gray" href="https://github.com/codeforscience/sciencefair/blob/master/CODE_OF_CONDUCT.md" target="_blank">code of conduct</a>.
+      </p>
+      <div class="w-80 ph3-ns pv4 tc center">
+        <div class="cf ph2-ns tc center">
+          <div class="dib fl w-100 w-25-ns tc">
+            <img src="assets/codeforscience_logo.png" alt="Code for Science"/>
+          </div>
+          <div class="dib fl w-100 w-25-ns tc">
+            <img src="assets/fathomlabs_logo.png" alt="Fathom Labs"/>
+          </div>
+          <div class="dib fl w-100 w-25-ns tc">
+            <img src="assets/elife_logo.png" alt="eLife Sciences"/>
+          </div>
+          <div class="dib fl w-100 w-25-ns tc">
+            <img src="assets/dat_logo.png" alt="Dat data"/>
+          </div>
+        </div>
+      </div>
+    </section>
   </body>
 </html>
