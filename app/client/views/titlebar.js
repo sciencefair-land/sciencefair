@@ -12,7 +12,6 @@ const style = css`
   justify-content: flex-end;
   font-size: 130%;
   opacity: 0.7;
-  -webkit-app-region: drag;
   -webkit-user-select: none;
   -webkit-app-region: drag;
 }

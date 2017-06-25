@@ -77,7 +77,6 @@ body {
   cursor: default;
   display: flex;
   flex-direction: row;
-  -webkit-app-region: drag;
 }
 
 ::-webkit-input-placeholder {
