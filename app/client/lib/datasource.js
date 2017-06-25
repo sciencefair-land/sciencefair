@@ -3,6 +3,7 @@ const events = require('events')
 
 const inherits = require('inherits')
 
+const portfinder = require('portfinder')
 const low = require('lowdb')
 const hyperdrive = require('hyperdrive')
 const storage = require('dat-storage')
@@ -118,14 +119,24 @@ function Datasource (key, opts) {
     self.metadata = hyperdrive(storage(self.jsondir), self.key, {
       latest: true,
       sparse: true,
+      tcp: true,
+      utp: true
     })
 
     self.metadata.once('ready', () => {
       debug('datasource metadata drive ready', self.key)
 
-      self.metadataswarm = discover(self.metadata, {
-        tcp: true,
-        utp: true
+      portfinder.getPort((err, port) => {
+        if (err) throw err
+
+        self.metadataswarm = discover(self.metadata, {
+          tcp: true,
+          utp: true,
+          port: port,
+          live: true,
+          upload: true,
+          download: true
+        })
       })
     })
 
@@ -262,24 +273,33 @@ function Datasource (key, opts) {
   self.connectarticles = () => {
     if (self.articles) return
 
-    self.articles = hyperdrive(
-      storage(self.articledir),
-      self.articleFeed,
-      { sparse: true, latest: true }
-    )
+    self.articles = hyperdrive(storage(self.articledir), self.articleFeed, {
+      latest: true,
+      sparse: true,
+      tcp: true,
+      utp: true
+    })
 
     self.articles.once('ready', () => {
       debug('datasource articles drive ready', self.articleFeed)
 
-      self.articlesswarm = discover(self.articles, {
-        tcp: true,
-        utp: true
-      })
+      portfinder.getPort((err, port) => {
+        if (err) throw err
 
-      self.articlesswarm.on('connection', (peer, type) => {
-        self.stats.set('peers', self.articlesswarm.connections.length).write()
-        peer.on('close', () => {
+        self.articlesswarm = discover(self.articles, {
+          tcp: true,
+          utp: true,
+          port: port,
+          live: true,
+          upload: true,
+          download: true
+        })
+
+        self.articlesswarm.on('connection', (peer, type) => {
           self.stats.set('peers', self.articlesswarm.connections.length).write()
+          peer.on('close', () => {
+            self.stats.set('peers', self.articlesswarm.connections.length).write()
+          })
         })
       })
     })
