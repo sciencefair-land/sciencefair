@@ -12,7 +12,7 @@
     "postinstall": "which electron-rebuild && electron-rebuild",
     "start": "electron app/index.js",
     "dev": "SCIENCEFAIR_DEVMODE=true electron app/index.js",
-    "deploysite": "gh-pages -d site"
+    "deploysite": "cd site && npm run build && cd .. && gh-pages -d site/dist"
   },
   "engines": {
     "node": "7.x"
