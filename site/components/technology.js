@@ -32,8 +32,8 @@ const searchindex = () => a({
 
 const entries = [
   html`<span>Science-focused reader provided by ${lens()}.</span>`,
-  html`<span>Distributed data sharing using ${hyperdrive()} technology.</span>`,
-  html`<span>Fast local search index built on ${searchindex()} technology.</span>`,
+  html`<span>Distributed data sharing using ${hyperdrive()}.</span>`,
+  html`<span>Fast local search index built on ${searchindex()}.</span>`,
   html`<span>Built using web technologies with ${choo()} and ${electron()}.</span>`
 ]
 
