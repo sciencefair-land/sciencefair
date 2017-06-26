@@ -31,18 +31,19 @@ const searchindex = () => a({
 })
 
 const entries = [
-  html`<span>Science-focused reader provided by ${lens()}.</span>`,
-  html`<span>Distributed data sharing using ${hyperdrive()}.</span>`,
+  html`<span>Science-focused JATS XML reader provided by ${lens()}.</span>`,
+  html`<span>Distributed data sharing using Dat's ${hyperdrive()}.</span>`,
   html`<span>Fast local search index built on ${searchindex()}.</span>`,
-  html`<span>Built using web technologies with ${choo()} and ${electron()}.</span>`
+  html`<span>Created using web technologies with ${choo()} and ${electron()}.</span>`
 ]
 
 const content = () => [
-  h1({ content: 'Technology', dark: true }),
-  list({ entries: entries })
+  h1({ content: 'Technology' }),
+  list({ entries: entries, dark: true })
 ]
 
 module.exports = opts => section({
   section: 'technology',
+  dark: true,
   content: content()
 })
