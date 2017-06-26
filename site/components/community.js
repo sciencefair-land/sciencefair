@@ -8,7 +8,7 @@ module.exports = () => html`
     ScienceFair v1 was developed by
     <a class="no-underline bg-animate hover-bg-light-blue silver hover-dark-gray" href="https://codeforscience.org" target="_blank">Code for Science</a>
     and
-    <a class="no-underline bg-animate hover-bg-light-blue silver hover-dark-gray" href="https://fathomlabs.io" target="_blank">FathomLabs</a>
+    <a class="no-underline bg-animate hover-bg-light-blue silver hover-dark-gray" href="http://fathomlabs.io" target="_blank">FathomLabs</a>
     along with
     <a class="no-underline bg-animate hover-bg-light-blue silver hover-dark-gray" href="https://github.com/codeforscience/sciencefair/graphs/contributors" target="_blank">other contributors</a>,
     with support from
