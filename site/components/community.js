@@ -12,6 +12,7 @@ module.exports = () => html`
     along with
     <a class="no-underline bg-animate hover-bg-light-blue silver hover-dark-gray" href="https://github.com/codeforscience/sciencefair/graphs/contributors" target="_blank">other contributors</a>,
     with support from
+    <a class="no-underline bg-animate hover-bg-light-blue silver hover-dark-gray" href="https://science.mozilla.org" target="_blank">Mozilla Science Lab</a>,
     <a class="no-underline bg-animate hover-bg-light-blue silver hover-dark-gray" href="https://elifesciences.org" target="_blank">eLife</a>
     and the
     <a class="no-underline bg-animate hover-bg-light-blue silver hover-dark-gray" href="https://datproject.org" target="_blank">Dat</a>
@@ -34,18 +35,23 @@ module.exports = () => html`
     <a class="no-underline bg-animate hover-bg-light-blue silver hover-dark-gray" href="https://github.com/codeforscience/sciencefair/blob/master/CODE_OF_CONDUCT.md" target="_blank">code of conduct</a>.
   </p>
   <div class="w-80 ph3-ns pv4 tc center">
-    <div class="cf ph2-ns tc center">
-      <div class="dib fl w-100 w-25-ns tc">
+    <div class="cf w-50-ns ph2-ns tc center">
+      <div class="dib fl w-100 w-50-ns tc">
         <img src="assets/codeforscience_logo.png" alt="Code for Science"/>
       </div>
-      <div class="dib fl w-100 w-25-ns tc">
+      <div class="dib fl w-100 w-50-ns tc">
         <img src="assets/fathomlabs_logo.png" alt="Fathom Labs"/>
       </div>
-      <div class="dib fl w-100 w-25-ns tc">
-        <img src="assets/elife_logo.png" alt="eLife Sciences"/>
+    </div>
+    <div class="cf w-two-thirds-ns ph2-ns pv2 tc center">
+      <div class="dib fl w-100 w-third-ns tc">
+        <img src="assets/sciencelab_logo.png" alt="Mozilla Science Lab"/>
       </div>
-      <div class="dib fl w-100 w-25-ns tc">
+      <div class="dib fl w-100 w-third-ns tc">
         <img src="assets/dat_logo.png" alt="Dat data"/>
+      </div>
+      <div class="dib fl w-100 w-third-ns tc">
+        <img src="assets/elife_logo.png" alt="eLife Sciences"/>
       </div>
     </div>
   </div>
