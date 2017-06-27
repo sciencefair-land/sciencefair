@@ -41,9 +41,12 @@ function Paper (data) {
     // TODO: remove this path hack once hyperdrive is optimised,
     // else have sciencefair datasource generator handle it
     self.path = path.join('/articles', data.path.split('').join('/'))
-    self.files = uniq(data.files.concat([data.entryfile]))
+    self.files = uniq((data.files || []).concat([data.entryfile]))
       .map(file => path.join(self.path, file))
     self.entryfile = data.entryfile
+    if (!self.entryfile) {
+      throw new Error('Paper requires an entryfile', data)
+    }
     require('./getdatasource').fetch(self.source, (err, ds) => {
       if (err)  return cb(err)
       self.ds = ds
