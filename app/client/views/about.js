@@ -109,7 +109,7 @@ module.exports = (state, emit) => {
   </div>
 
   `
-  website.onclick = () => open('https://codeforscience.com/sciencefair')
+  website.onclick = () => open('http://sciencefair-app.com')
 
   const chat = html`
 
