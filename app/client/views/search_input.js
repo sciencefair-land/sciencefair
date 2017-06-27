@@ -1,12 +1,12 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../lib/constants')
+
 const imgpath = require('../lib/imgpath')
 const throttle = require('lodash/throttle')
 const equal = require('lodash/isEqual')
 const clone = require('lodash/cloneDeep')
 const CacheComponent = require('cache-component')
-const keycode = require('keycode')
 
 const debug = require('debug')('sciencefair:view:searchinput')
 
@@ -73,30 +73,15 @@ function CachedInput () {
 }
 CachedInput.prototype = Object.create(CacheComponent.prototype)
 
-//
-// CacheComponent.prototype._handleId = function (node) {
-//   if (node.id) {
-//     this._id = this._ccId = node.id
-//   } else {
-//     node.id = this._id = this._ccId
-//   }
-//   return node
-// }
-
 CachedInput.prototype._createProxy = function () {
   var proxy = document.createElement('div')
-  var self = this
   this._brandNode(proxy)
   proxy.id = this._id
-  proxy.isSameNode = function (el) {
-    return el.id === 'cached-search-input'
-  }
+  proxy.isSameNode = el => el.id === 'cached-search-input'
   return proxy
 }
 
 CachedInput.prototype._render = function (state, emit) {
-  // if (this._element) return this._element
-
   this._searchtags = clone(state.search.tags)
 
   const emitify = throttle(emit, 200, { leading: true })
@@ -154,8 +139,6 @@ CachedInput.prototype._render = function (state, emit) {
       emitify('search:set-query-string', e.target.value)
     }
   }
-
-  // this._input = input
 
   return input
 }

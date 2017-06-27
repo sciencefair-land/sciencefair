@@ -1,7 +1,9 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../lib/constants')
+
 const imgpath = require('../lib/imgpath')
+const CacheComponent = require('cache-component')
 
 const style = css`
 
@@ -38,9 +40,21 @@ const style = css`
 
 `
 
-module.exports = (state, emit) => {
-  if (!(state.tags.showAddField)) return
+function CachedAddField () {
+  if (!(this instanceof CachedAddField)) return new CachedAddField()
+  CacheComponent.call(this)
+}
+CachedAddField.prototype = Object.create(CacheComponent.prototype)
 
+CachedAddField.prototype._createProxy = function () {
+  var proxy = document.createElement('div')
+  this._brandNode(proxy)
+  proxy.id = this._id
+  proxy.isSameNode = el => el.id === 'cached-tag-add-field'
+  return proxy
+}
+
+CachedAddField.prototype._render = function (state, emit) {
   const input = html`<input class="${style.input}" placeholder="new tag name..">`
 
   const submit = e => {
@@ -65,5 +79,23 @@ module.exports = (state, emit) => {
     input.focus()
   }, 200)
 
-  return html`<div class="${style.wrapper}">${input}${closebtn}</div>`
+  return html`
+
+  <div id="cached-tag-add-field" class="${style.wrapper}">
+    ${input}${closebtn}
+  </div>
+
+  `
+}
+
+CachedAddField.prototype._update = function (state, emit) {
+  return false
+}
+
+const inputel = CachedAddField()
+
+module.exports = (state, emit) => {
+  if (!(state.tags.showAddField)) return
+
+  return inputel.render(state, emit)
 }
