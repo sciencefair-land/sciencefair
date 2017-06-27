@@ -2,6 +2,8 @@ const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../lib/constants')
 
+const CacheComponent = require('cache-component')
+
 const style = css`
 
 .container {
@@ -26,7 +28,21 @@ const style = css`
 
 `
 
-module.exports = (state, emit) => {
+function CachedDSField () {
+  if (!(this instanceof CachedDSField)) return new CachedDSField()
+  CacheComponent.call(this)
+}
+CachedDSField.prototype = Object.create(CacheComponent.prototype)
+
+CachedDSField.prototype._createProxy = function () {
+  var proxy = document.createElement('div')
+  this._brandNode(proxy)
+  proxy.id = this._id
+  proxy.isSameNode = el => el.id === 'cached-ds-add-field'
+  return proxy
+}
+
+CachedDSField.prototype._render = function (state, emit) {
   const input = html`
 
   <input type="text" class="${style.input}" placeholder="add a datasource key" />
@@ -45,7 +61,7 @@ module.exports = (state, emit) => {
 
   const field = html`
 
-  <div class="${style.container}">
+  <div id="cached-ds-add-field" class="${style.container}">
     ${input}
   </div>
 
@@ -53,3 +69,11 @@ module.exports = (state, emit) => {
 
   return field
 }
+
+CachedDSField.prototype._update = function (state, emit) {
+  return false
+}
+
+const inputel = CachedDSField()
+
+module.exports = (state, emit) => inputel.render(state, emit)
