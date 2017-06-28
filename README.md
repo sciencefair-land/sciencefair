@@ -108,7 +108,7 @@ And importantly, **datasources you create are private** unless you decide to sha
 
 ### Built-in bibliometrics and analytics
 
-Basic bibliometrics are built-in (see [screenshots](#selection--stats)) in `v1.0`.
+Basic bibliometrics are built-in in `v1.0`.
 
 Full analysis and data-mining tools, alt-metrics and enriched annotation will be [coming soon](#roadmap).
 
