@@ -32,9 +32,21 @@
 
 > **We've released [:balloon: v1.0 :balloon:](https://github.com/codeforscience/sciencefair/releases/latest)! But we're just getting started. Check out the [roadmap](#roadmap) to see where we're headed.**
 
-How we access, read and reuse scientific literature is largely controlled by a few vast publishing organisations. Innovation is rare and slow, and always under the control of platforms. We have a vision of a different, better, more inclusive and open future for Science.
+---
 
-**ScienceFair is a new kind of desktop science library** that shows one path to that future. The main thing that sets it apart? **Freedom from centralised control.**  
+## Why ScienceFair?
+
+How we access, read and reuse scientific literature is largely controlled
+by a few vast publishing organisations. Many wonderful innovations are being
+explored outside those organisations, but they are rarely
+integrated into the platforms where people actually access science.
+
+**We have a vision of a different, better, future for science.** A future that's more **fair, inclusive and open.**
+A future where **people can explore and innovate** and where **users control and customise their experience**.
+
+**ScienceFair aims to help pave the road to that future.** The main thing that sets it apart? **Freedom from centralised control.**
+
+---
 
 We're creating a desktop experience for discovering, tracking, collecting and reading scientific articles that:
 

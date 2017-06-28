@@ -2,7 +2,7 @@ const html = require('choo/html')
 
 module.exports = () => html`
 
-<section id="community" class="w-100 center bg-light-gray pa3 mv3 tc">
+<section id="community" class="w-100 center bg-light-gray pa3 mv3 tl">
   <h1 class="dark-gray f2 tc">Community</h1>
   <p class="f3 w-80-ns lh-copy ph5-ns mid-gray center">
     ScienceFair v1 was developed by
