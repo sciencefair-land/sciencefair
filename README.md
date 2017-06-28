@@ -1,7 +1,7 @@
-<div align="center"><img src="https://github.com/codeforscience/sciencefair/raw/master/assets/header.png" width="100%" /></div>
+<div align="center"><img src="https://github.com/codeforscience/sciencefair/raw/master/assets/header_2.svg" width="100%" /></div>
 
 <p align="center">
-  <strong>Search, collect, read and reuse the scientific literature.</strong>
+  <strong>The open source p2p desktop science library that puts users in control.</strong>
 </p>
 
 <p align="center">
@@ -30,17 +30,21 @@
   </a>
 </p>
 
-ScienceFair is a desktop science library like nothing before. The main thing that sets it apart? **Freedom from centralised control.**
+> **We've released [:balloon: v1.0 :balloon:](https://github.com/codeforscience/sciencefair/releases/latest)! But we're just getting started. Check out the [roadmap](#roadmap) to see where we're headed.**
 
-We aim to create a desktop experience for discovering, tracking, collecting and reading scientific articles that:
+How we access, read and reuse scientific literature is largely controlled by a few vast publishing organisations. Innovation is rare and slow, and always under the control of platforms. We have a vision of a different, better, more inclusive and open future for Science.
+
+**ScienceFair is a new kind of desktop science library** that shows one path to that future. The main thing that sets it apart? **Freedom from centralised control.**  
+
+We're creating a desktop experience for discovering, tracking, collecting and reading scientific articles that:
 
 - is completely free from external control (e.g. by publishers or platforms)
+- helps decentralise the distribution and storage of the scholarly literature
 - allows the user to customise their experience
-- helps decentralise the scholarly literature
 - promotes and integrates open data and metadata
 - helps grow an ecosystem of open source tools around scientific literature
 
-## TOC
+## contents
 
 - [downloads](#downloads)
 - [technical details](#technical-details)
@@ -50,6 +54,7 @@ We aim to create a desktop experience for discovering, tracking, collecting and 
 	- [selection & stats](#selection--stats)
 	- [reader](#reader)
 - [development](#development)
+- [roadmap](#roadmap)
 
 ## downloads
 
@@ -61,13 +66,41 @@ Please note that ScienceFair is currently pre-release, so there will be bugs - w
 
 Some of the things that ScienceFair does differently:
 
-- users can subscribe to any datasources they choose
-- a datasource can be a journal (eLife is provided as the default), a curated community collection, a personal reading list...
-- datasources are backed by peer-to-peer networks (using [dat](https://datproject.org/))
-- anyone can create a datasource (tools to make this easy coming soon)
-- papers are stored in JATS XML format - perfect for data mining
-- basic data-mining and bibliometrics are built-in (see [screenshots](#selection--stats))
-- we use the beautiful [Lens reader](https://github.com/elifesciences/lens) - no PDFs
+### A reading experience optimised for Science
+
+We use the beautiful [Lens reader](https://github.com/elifesciences/lens) to render JATS XML to a reading experience optimised for scientific papers.
+
+<img src="https://github.com/codeforscience/sciencefair/raw/master/assets/screenshots/reader.png" alt="reader" />
+
+### Instant multi-source search
+
+Instant search of your local collection **and** remote datasources, only downloading the data requested.
+
+<img src="https://github.com/codeforscience/sciencefair/raw/master/assets/screenshots/results.png" alt="results" />
+
+### Secure, flexible, distributed datasources
+
+A ScienceFair datasource can be a journal, a curated community collection, a personal reading list... anything you like.
+
+v1.0 comes with the eLife journal by default, and more will follow very soon.
+
+Datasources are append-only feeds of JATS XML articles, signed with public-key encryption and distributed peer-to-peer (using [dat](https://datproject.org/)). This means:
+
+- downloads come from the nearest, fastest sources
+- it doesn't matter if the original source goes offline
+- only the original creator can add new content
+- anyone can create a datasource (tools to make this easy [coming soon](#roadmap))
+- your local collection of articles is ready for data mining
+
+And importantly, **datasources you create are private** unless you decide to share them, and **nobody can ever take a datasource offline**.
+
+### Built-in bibliometrics and analytics
+
+Basic bibliometrics are built-in (see [screenshots](#selection--stats)) in `v1.0`.
+
+Full analysis and data-mining tools, alt-metrics and enriched annotation will be [coming soon](#roadmap).
+
+<img src="https://github.com/codeforscience/sciencefair/raw/master/assets/screenshots/selection.png" alt="selection" />
 
 ScienceFair also follows a few simple design principles that we feel are missing from the ecosystem:
 
@@ -75,23 +108,7 @@ ScienceFair also follows a few simple design principles that we feel are missing
 - incremental discovery is the way
 - be beautiful
 
-## screenshots
-
-### home screen
-
 <img src="https://github.com/codeforscience/sciencefair/raw/master/assets/screenshots/home.png" alt="home screen" />
-
-### search results
-
-<img src="https://github.com/codeforscience/sciencefair/raw/master/assets/screenshots/results.png" alt="results" />
-
-### selection & stats
-
-<img src="https://github.com/codeforscience/sciencefair/raw/master/assets/screenshots/selection.png" alt="selection" />
-
-### reader
-
-<img src="https://github.com/codeforscience/sciencefair/raw/master/assets/screenshots/reader.png" alt="reader" />
 
 ## development
 
@@ -107,3 +124,24 @@ Clone this repo, then run
 cd back to the root of the repo and run
 
 - `npm run dev` to start in development mode
+
+## roadmap
+
+- [x] `v1.0` **proof of concept**:
+  - incorporate major new technologies (dat/hyperdrive, lens reader, instant search)
+  - core user experience and design
+  - development, packaging and distribution architecture in place
+  - `1.0.x` releases will be bug fixes and non-breaking improvements
+- [ ] `v1.1` **focus on datasources**:
+  - more, and bigger, datasources available by default
+  - tools for creating and managing datasources
+  - interface for creating and securely sharing p2p collections within the app
+  - a platform and interface for discovering and managing datasources
+- [ ] `v1.2` **focus on enrichment**:
+  - altmetrics, updates (e.g. retractions), etc. displayed in context in realtime
+  - advanced bibliometrics and data-mining tools
+  - annotation and commenting, within the app and drawn from existing sources
+- [ ] `v2.0` **focus on user customisation**:
+  - a package system, allowing customising and extending key aspects of the experience
+  - tools and documentation for making new packages
+  - a platform and interface for discovering and managing packages
