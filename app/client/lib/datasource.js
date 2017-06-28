@@ -423,6 +423,26 @@ function Datasource (key, opts) {
     key: self.key
   })
 
+  self.clear = (files, cb) => {
+    if (!(files instanceof Array)) files = [files]
+
+    const done = alldone(files.length, cb)
+
+    files.forEach(file => self.articles.tree.get(file, (err, entry) => {
+      if (err) return done(err)
+
+      const start = entry.offset
+      const end = start + entry.blocks
+      const bytes = {
+        byteOffset: entry.byteOffset,
+        byteLength: entry.size
+      }
+
+      self.articles.content.cancel(start, end)
+      self.articles.content.clear(start, end, bytes, done)
+    }))
+  }
+
   if (self.opts.diskfirst) self.initFromDisk()
 }
 

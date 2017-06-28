@@ -40,13 +40,14 @@ function Paper (data) {
   self.loadDatasource = () => {
     // TODO: remove this path hack once hyperdrive is optimised,
     // else have sciencefair datasource generator handle it
-    self.path = path.join('/articles', data.path.split('').join('/'))
-    self.files = uniq((data.files || []).concat([data.entryfile]))
-      .map(file => path.join(self.path, file))
     self.entryfile = data.entryfile
     if (!self.entryfile) {
       throw new Error('Paper requires an entryfile', data)
     }
+    self.path = path.join('/articles', data.path.split('').join('/'))
+    self.files = uniq((data.files || []).concat([data.entryfile])).map(
+      file => path.join(self.path, file)
+    )
     require('./getdatasource').fetch(self.source, (err, ds) => {
       if (err)  return cb(err)
       self.ds = ds
@@ -131,7 +132,17 @@ function Paper (data) {
     }
   }
 
-  self.removeFiles = cb => self.ds.articles.unlink(self.path, cb)
+  self.removeFiles = cb => {
+    const done = err => {
+      if (err) return cb(err)
+      self.progress = 0
+      self.downloading = false
+      self.progresschecked = true
+      cb()
+    }
+
+    self.ds.clear(self.files, done)
+  }
 
   self.loadData()
 }

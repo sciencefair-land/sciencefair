@@ -78,27 +78,6 @@ module.exports = (state, bus) => {
     scan()
   })
 
-  const remove = data => {
-    if (typeof data === 'string') data = [data]
-
-    data.forEach(paper => paper.unsync())
-
-    state.collection.del(data.map(d => d.key), err => {
-      if (err) throw err
-
-      const n = data.length
-      bus.emit('notification:add', {
-        title: 'Papers deleted',
-        message: `${n} ${n === 1 ? '' : 's'} ha${n === 1 ? 's' : 've'} been removed from the local collection`
-      })
-    })
-
-    bus.emit('results:replace', diff(state.results, data))
-    bus.emit('selection:clear')
-    bus.emit('detail:toggle')
-    scan()
-  }
-
   let activesearches = []
 
   const cancelsearch = () => {
@@ -238,23 +217,30 @@ module.exports = (state, bus) => {
   const removepaper = data => {
     if (typeof data === 'string') data = [data]
 
-    bus.emit('selection:clear')
+    const n = data.length
 
-    const removefromdb = afterall(data.length, () => {
+    const removefromdb = afterall(n, err => {
+      if (err) throw err
+
       state.collection.del(data.map(d => d.key), err => {
         if (err) throw err
 
-        const n = data.length
         bus.emit('notification:add', {
-          title: 'Papers deleted',
-          message: `${n} ${n === 1 ? '' : 's'} ha${n === 1 ? 's' : 've'} been removed from the local collection`
+          title: `Paper${n === 1 ? '' : 's'} deleted`,
+          message: `${n} paper${n === 1 ? '' : 's'} ha${n === 1 ? 's' : 've'} been removed from the local collection`
         })
+
         data.forEach(d => bus.emit('results:remove', d))
+        bus.emit('selection:clear')
+        bus.emit('detail:toggle')
         setTimeout(scan, 300)
       })
     })
 
-    data.forEach(paper => paper.removeFiles(removefromdb))
+    data.forEach(paper => paper.removeFiles(err => {
+      if (err) throw err
+      removefromdb()
+    }))
   }
 
   bus.on('collection:search', dosearch)
