@@ -42,6 +42,12 @@ module.exports = (state, emit) => {
     flex-direction: column;
     justify-content: space-between;
     padding: 10px;
+    user-select: text;
+  }
+
+  .paper ::selection {
+    background: ${C.WHITE};
+    color: ${C.GREYBLUE};
   }
 
   .row {
