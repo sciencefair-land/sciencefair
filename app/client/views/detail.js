@@ -4,6 +4,7 @@ const C = require('../lib/constants')
 
 const isString = require('lodash/isString')
 const intersection = require('lodash/intersection')
+const open = require('opn')
 
 const height = 200
 const padding = 5
@@ -166,6 +167,13 @@ function renderTitle (title) {
 
 function singlepaper (paper, style, state, emit) {
   if (!paper) return null
+
+  const doibtn = html`<a href="#">${paper.id}</a>`
+  doibtn.onclick = e => {
+    e.preventDefault()
+    open(`http://doi.org/${paper.id}`)
+  }
+
   return html`
 
   <div class="${style.wrapper}">
@@ -186,7 +194,7 @@ function singlepaper (paper, style, state, emit) {
           ${renderAbstract(paper.abstract)}
         </div>
         <div class="${style.doi} ${style.row} ${style.datum}">
-          <span>DOI: <a href="http://doi.org/${paper.id}">${paper.id}</a></span>
+          <span>DOI: ${doibtn}</span>
         </div>
       </div>
       <div class="${style.column}">
