@@ -9,7 +9,7 @@ const url = file => [base, `v${version}`, file].join('/')
 const downloads = {
   macos: {
     href: url(`scienceFair-${version}.dmg`),
-    content: html`<div><strong>macOS 10.11+</strong><br><br>DMG</div>`
+    content: html`<div><strong>macOS 10.9+</strong><br><br>DMG</div>`
   },
   win: {
     href: url(`sciencefair-setup-${version}.exe`),
