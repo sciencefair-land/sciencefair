@@ -1,4 +1,4 @@
-<div align="center"><img src="https://raw.githubusercontent.com/codeforscience/sciencefair/master/assets/header_v2.svg" width="100%" /></div>
+<div align="center"><img src="https://raw.githubusercontent.com/codeforscience/sciencefair/master/assets/header_v2.png" width="100%" /></div>
 
 <p align="center">
   <strong>The open source p2p desktop science library that puts users in control.</strong>
