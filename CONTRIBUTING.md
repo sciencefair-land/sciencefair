@@ -12,7 +12,7 @@ Here are some guidelines to help you engage and contribute:
 
 ## <a name = "conduct"/>Code of conduct
 
-Help us keep sciencefair open and inclusive. Please read and follow our [Code of Conduct](COC.md).
+Help us keep sciencefair open and inclusive. Please read and follow our [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## <a name = "help"/>Getting help
 
