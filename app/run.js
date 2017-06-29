@@ -32,7 +32,7 @@ app.on('ready', function () {
     title: 'sciencefair',
     backgroundColor: '#fff',
     titleBarStyle: 'hidden',
-    fullscreen: false,
+    fullscreenable: true,
     icon: './icon/logo.png',
     show: false,
     webPreferences: {
