@@ -7,7 +7,7 @@ const joinus = () => a({ href: '#community', content: 'join us' })
 module.exports = () => html`
 
 <div class="w-100 tc dark-gray pt3">
-  <div class="w-70-ns w-90 center ba pa4 ph5">
+  <div class="w-70-ns w-90 center ba pa4 ph5-ns ph4">
     <h3 class="w-100 tc center f3 lh-copy dark-gray">
       Why ScienceFair?
     </h3>
@@ -36,6 +36,12 @@ module.exports = () => html`
     </p>
     <p class="w-100 tl f3 lh-copy dark-gray">
       <small>Thanks, <em>The ScienceFair team</em></small>
+    </p>
+    <p class="w-100 tl f3 lh-copy dark-gray">
+      <small>
+        p.s. you can read about ScienceFair in more detail in our launch
+        post on ${a({ href: 'https://elifesciences.org/labs/88b45406/sciencefair-a-new-desktop-science-library', content: 'the eLife Labs blog' })}.
+      </small>
     </p>
   </div>
 </div>
