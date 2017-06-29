@@ -47,7 +47,14 @@ const style = css`
   height: 20px;
   background: ${C.LIGHTGREY};
   color: ${C.MIDBLUE};
+}
+
+.innerbar {
   padding: 2px 4px;
+}
+
+.zero {
+  color: ${C.LIGHTGREY};
 }
 
 `
@@ -92,7 +99,7 @@ function plotrow (ac, unit) {
       </td>
       <td class="${style.td}">
         <div class="${style.bar}" style="width: ${unit * ac.count}%">
-          ${ac.count}
+          <span class="${style.innerbar} ${ac.count === 0 ? style.zero : ''}">${ac.count}</span>
         </div>
       </td>
     </tr>
