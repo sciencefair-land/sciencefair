@@ -27,7 +27,6 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "choo-log": "7.0.0-0",
     "cross-zip": "^2.1.3",
     "electron": "1.7.2",
     "electron-builder": "^19.7.3",
