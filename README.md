@@ -25,7 +25,7 @@
       alt="MIT license" />
   </a>
   <!-- Made with <3 -->
-  <a href="http://codeforscience.org" target="_blank">
+  <a href="https://codeforscience.org" target="_blank">
     <img src="https://img.shields.io/badge/made_with-❤️💛💚💙💜-e6e6e6.svg?style=flat-square" />
   </a>
 </p>
