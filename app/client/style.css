@@ -102,6 +102,7 @@ body {
 
 ::selection {
   background: white;
+  color: black;
 }
 
 .clickable {
