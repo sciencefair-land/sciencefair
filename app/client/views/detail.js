@@ -4,7 +4,7 @@ const C = require('../lib/constants')
 
 const isString = require('lodash/isString')
 const intersection = require('lodash/intersection')
-const open = require('opn')
+const open = require('electron').shell.openExternal
 
 const height = 200
 const padding = 5

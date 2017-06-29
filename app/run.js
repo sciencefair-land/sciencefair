@@ -17,7 +17,7 @@ if (shouldQuit) {
 require('electron-debug')({ enabled: true })
 
 const path = require('path')
-const open = require('opn')
+const open = require('electron').shell.openExternal
 
 app.commandLine.appendSwitch('enable-features', 'V8Ignition')
 app.commandLine.appendSwitch('enable-webassembly')

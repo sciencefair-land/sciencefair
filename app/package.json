@@ -58,7 +58,6 @@
     "multi-read-stream": "^2.0.0",
     "node-static": "^0.7.7",
     "numeral": "^2.0.6",
-    "opn": "^5.1.0",
     "path-exists": "^3.0.0",
     "portfinder": "^1.0.3",
     "pretty-ms": "^2.1.0",
