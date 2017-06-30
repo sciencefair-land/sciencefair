@@ -20,12 +20,12 @@ dmg:
   icon: "build/icon.icns"
   iconSize: 128
   contents:
-    - x: 380
-      y: 240
+    - x: 532
+      y: 249
       type: link
       path: /Applications
-    - x: 122
-      y: 240
+    - x: 281
+      y: 249
       type: file
 linux:
   category: "GNOME;GTK;Science;Literature"
