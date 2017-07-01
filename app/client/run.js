@@ -6,7 +6,6 @@ const app = choo({ href: false })
 
 app.use(require('choo-asyncify'))
 app.use(require('./models/error'))
-if (!process.env['SCIENCEFAIR_DEVMODE']) localStorage.logLevel = 'error'
 app.use(require('choo-log')())
 
 app.use(require('./models/renderer'))
