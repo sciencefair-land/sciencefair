@@ -18,7 +18,7 @@ module.exports = (state, bus) => {
     })
 
     render()
-    bus.emit('collection:updatepaper', newpapers)
+    bus.emit('collection:update-paper', newpapers)
   }
 
   const removetag = data => {
@@ -33,7 +33,7 @@ module.exports = (state, bus) => {
     })
 
     render()
-    bus.emit('collection:updatepaper', newpapers)
+    bus.emit('collection:update-paper', newpapers)
   }
 
   bus.on('paper:select-show', selectshow)

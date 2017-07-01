@@ -185,7 +185,7 @@ module.exports = (state, bus) => {
     }
   }
 
-  const updatepaper = data => {
+  const addorupdatepaper = (data, update) => {
     const papers = isArray(data) ? data : [data]
     const docs = stream(papers)
     const keys = papers.filter(p => !p.collected).map(p => p.key)
@@ -201,17 +201,24 @@ module.exports = (state, bus) => {
       setTimeout(scan, 300)
     }
 
-    index.del(keys, err => {
-      if (err) throw err
+    const handleerr = err => { if (err) throw err }
 
-      const updatestream = pumpify(
-        docs,
-        metadataify,
-        index.add(err => { if (err) throw err })
-      )
+    const updatestream = pumpify(
+      docs,
+      metadataify,
+      update ? index.update() : index.add()
+    )
 
-      eos(updatestream, maybescan)
-    })
+    eos(updatestream, maybescan)
+  }
+
+  const updatepaper = data => {
+    const papers = isArray(data) ? data : [data]
+    const oldp = []
+    const newp = []
+    papers.forEach(p => p.collected ? oldp.push(p) : newp.push(p))
+    if (oldp.length > 0) addorupdatepaper(oldp, true)
+    if (newp.length > 0) addorupdatepaper(newp, true)
   }
 
   const removepaper = data => {
@@ -246,7 +253,7 @@ module.exports = (state, bus) => {
   bus.on('collection:search', dosearch)
   bus.on('collection:cancel-search', cancelsearch)
 
-  bus.on('collection:updatepaper', updatepaper)
+  bus.on('collection:update-paper', updatepaper)
   bus.on('collection:remove-paper', removepaper)
 
   bus.on('DOMContentLoaded', () => {})
