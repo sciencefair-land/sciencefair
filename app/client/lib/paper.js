@@ -76,6 +76,7 @@ function Paper (data) {
     self.ds.articlestats(self.files, (err, stats) => {
       if (err) return cb(err)
       debug('progress stats', self.title, stats)
+      if (stats.progress > 0) self.collected = true
       self.progress = stats.progress * 100
       self.progresschecked = true
       cb(null, self.progress, true)
@@ -87,6 +88,7 @@ function Paper (data) {
   self.download = () => {
     debug('downloading', self.key)
     if (self.downloading) return null
+    self.collected = true
     self.downloading = true
     const download = self.ds.download(self)
     if (!download) return null

@@ -1,6 +1,7 @@
 const intersection = require('lodash/intersection')
 const diff = require('lodash/difference')
 const uniq = require('lodash/uniq')
+const debounce = require('lodash/debounce')
 const isArray = require('lodash/isArray')
 const batchify = require('byte-stream')
 const through = require('through2')
@@ -31,16 +32,13 @@ module.exports = (state, bus) => {
 
   let activescan
 
-  const scan = () => {
+  const _scan = name => {
     const tags = {}
     let count = 0
 
-    if (activescan) {
-      activescan.destroy()
-      activescan = null
-    }
+    if (activescan) return setTimeout(scan, 1000)
 
-    let scanstream = activescan = state.collection.docstore.createReadStream().on(
+    activescan = state.collection.docstore.createReadStream().on(
       'data', data => {
         count += 1
         const doc = parsedoc(data.value)
@@ -51,7 +49,8 @@ module.exports = (state, bus) => {
       }
     )
 
-    eos(scanstream, err => {
+    eos(activescan, err => {
+      activescan = null
       if (err) {
         if (err.message == 'premature close') {
           // activescan was destroyed
@@ -67,15 +66,16 @@ module.exports = (state, bus) => {
           restartchecked = true
         }
         bus.emit('renderer:render')
-        activescan = null
       }
     })
   }
 
+  const scan = debounce(_scan, 300, { leading: true, trailing: true })
+
   require('../lib/localcollection')((err, db) => {
     if (err) throw err
     state.collection = db
-    scan()
+    scan('initial')
   })
 
   let activesearches = []
@@ -188,7 +188,6 @@ module.exports = (state, bus) => {
   const addorupdatepaper = (data, update) => {
     const papers = isArray(data) ? data : [data]
     const docs = stream(papers)
-    const keys = papers.filter(p => !p.collected).map(p => p.key)
 
     const index = state.collection
 
@@ -198,27 +197,25 @@ module.exports = (state, bus) => {
 
     const maybescan = err => {
       if (err) throw err
-      setTimeout(scan, 300)
+      scan(update ? 'update' : 'add')
     }
 
-    const handleerr = err => { if (err) throw err }
+    const op = cb => update ? index.update(cb) : index.add(cb)
 
     const updatestream = pumpify(
       docs,
       metadataify,
-      update ? index.update() : index.add()
+      op(maybescan)
     )
-
-    eos(updatestream, maybescan)
   }
 
   const updatepaper = data => {
     const papers = isArray(data) ? data : [data]
     const oldp = []
     const newp = []
-    papers.forEach(p => p.collected ? oldp.push(p) : newp.push(p))
+    papers.forEach(p => p.progress > 0 ? oldp.push(p) : newp.push(p))
     if (oldp.length > 0) addorupdatepaper(oldp, true)
-    if (newp.length > 0) addorupdatepaper(newp, true)
+    if (newp.length > 0) addorupdatepaper(newp, false)
   }
 
   const removepaper = data => {
@@ -240,7 +237,7 @@ module.exports = (state, bus) => {
         data.forEach(d => bus.emit('results:remove', d))
         bus.emit('selection:clear')
         bus.emit('detail:toggle')
-        setTimeout(scan, 300)
+        scan('remove')
       })
     })
 
