@@ -229,7 +229,7 @@ function Datasource (key, opts) {
     n = 0
     const getprogress = through.ctor({ objectMode: true }, (data, _, next) => {
       n++
-      if (n % 35 === 0) {
+      if (n % 150 === 0) {
         const progress = {
           done: n,
           total: self.articleCount

@@ -5,6 +5,6 @@ const paper = require('./getpaper')
 // sciencefair papers
 module.exports = () => {
   return through.ctor({ objectMode: true }, (data, enc, next) => {
-    next(null, paper(data))
+    next(null, paper(data, true))
   })
 }

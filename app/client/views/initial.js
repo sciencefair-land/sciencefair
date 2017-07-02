@@ -60,9 +60,9 @@ module.exports = (state, emit) => {
     finished: false
   }
 
-  const synced = metastat.done / metastat.total >= 0.1
+  const synced = metastat.finished
     ? '100%'
-    : numeral(`${metastat.done / (metastat.total / 10)}`).format('0%')
+    : numeral(`${metastat.done / metastat.total}`).format('0%')
 
   const remaining = html`
 

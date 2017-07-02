@@ -177,7 +177,7 @@ module.exports = (state, bus) => {
     // update initialising
     const any10pc = any(news, ds => {
       const d = ds.stats.metadataSync
-      return d.finished || d.done / d.total >= 0.1
+      return d.finished
     })
     if (any10pc) {
       if (state.initialising) bus.emit('initialising:stop')
