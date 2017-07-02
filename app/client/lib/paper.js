@@ -1,4 +1,6 @@
 const path = require('path')
+const inherits = require('inherits')
+const events = require('events')
 const fs = require('fs-extra')
 const uniq = require('lodash/uniq')
 
@@ -8,6 +10,7 @@ const debug = require('debug')('sciencefair:paper')
 function Paper (data) {
   if (data instanceof Paper) return data
   if (!(this instanceof Paper)) return new Paper(data)
+  events.EventEmitter.call(this)
 
   if (data.document) {
     Object.assign(data, data.document)
@@ -16,6 +19,7 @@ function Paper (data) {
 
   const self = this
   self.progress = 0
+  self.selected = false
 
   self.loadData = () => {
     self.loadBib()
@@ -51,6 +55,7 @@ function Paper (data) {
     require('./getdatasource').fetch(self.source, (err, ds) => {
       if (err)  return cb(err)
       self.ds = ds
+      self.emit('datasource:loaded', ds)
     })
   }
 
@@ -78,6 +83,7 @@ function Paper (data) {
       debug('progress stats', self.title, stats)
       if (stats.progress > 0) self.collected = true
       self.progress = stats.progress * 100
+      self.emit('progress', self.progress)
       self.progresschecked = true
       cb(null, self.progress, true)
     })
@@ -86,29 +92,32 @@ function Paper (data) {
   self.candownload = () => self.ds.ready()
 
   self.download = () => {
-    debug('downloading', self.key)
     if (self.downloading) return null
+    const download = self.ds.download(self)
+    if (!download) return null // datasource not ready
+    debug('downloading', self.key)
+    self.emit('download:started')
     self.collected = true
     self.downloading = true
-    const download = self.ds.download(self)
-    if (!download) return null
 
     const done = () => {
       if (!self.downloading) return
       debug('downloaded', self.key)
       self.downloading = false
       self.progresschecked = true
+      self.emit('download:done')
     }
 
     download.on('progress', data => {
       self.progress = data.progress * 100
+      self.emit('progress', self.progress)
       if (self.progress === 100) done()
     })
 
     download.on('error', err => {
       self.downloading = false
       debug('error downloading paper: ', self.key)
-      throw err
+      self.emit('download:error', err)
     })
 
     download.on('end', done)
@@ -140,14 +149,32 @@ function Paper (data) {
       self.progress = 0
       self.downloading = false
       self.progresschecked = true
+      self.emit('cleared')
+      self.emit('progress', 0)
       cb()
     }
 
     self.ds.clear(self.files, done)
   }
 
+  self.minprogress = () => {
+    return self.downloading ? Math.max(self.progress, 10) : self.progress
+  }
+
+  self.select = () => {
+    self.selected = true
+    self.emit('selected')
+  }
+
+  self.deselect = () => {
+    self.selected = false
+    self.emit('deselected')
+  }
+
   self.loadData()
 }
+
+inherits(Paper, events.EventEmitter)
 
 function htmlify (str) {
   return str.replace('<italic>', '<em>').replace('</italic>', '</em>')

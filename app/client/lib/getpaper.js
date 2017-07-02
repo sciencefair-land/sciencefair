@@ -1,11 +1,11 @@
 const Paper = require('./paper')
 
-const papers = {}
+window.papers = window.papers || {}
 
 module.exports = (data, skipcache) => {
   if (skipcache) return Paper(data)
   const key = typeof data === 'string' ? data : `${data.source}:${data.id}`
-  const paper = papers[key] || Paper(data)
-  papers[key] = paper
+  const paper = window.papers[key] || Paper(data)
+  window.papers[key] = paper
   return paper
 }

@@ -42,18 +42,20 @@ const style = css`
 
 module.exports = (state, emit) => {
   const selected = state.selection.list
-  const downloading = any(selected.map(p => p.downloading))
-    && all(selected.map(p => p.downloading || p.progress === 100))
+  const justone = selected.length === 1
+  const downloading =
+       any(selected.map(p => p.downloading))
+    && all(selected.map(p => p.minprogress() > 0))
 
-  const progress = mean(selected.map(p => p.progress || 0))
+  const progress = mean(selected.map(p => p.minprogress()))
+  const finished = progress === 100
 
-  const donetext = state.selection.list.length === 1 ? 'read' : 'downloaded'
-  const doneicon = state.selection.list.length === 1 ? 'read' : 'tick'
+  const donetext = justone ? 'read' : 'downloaded'
+  const doneicon = justone ? 'read' : 'tick'
 
-  const btntext = downloading
-    ? 'downloading'
-    : progress === 100 ? donetext : 'download'
-  const btnicon = progress === 100 ? doneicon : 'download'
+  const nodltxt = finished ? donetext : 'download'
+  const btntext = downloading ? 'downloading' : nodltxt
+  const btnicon = finished ? doneicon : 'download'
 
   const btn = html`
 
@@ -68,7 +70,7 @@ module.exports = (state, emit) => {
 
   btn.onclick = e => {
     e.preventDefault()
-    if (progress === 100) {
+    if (finished) {
       if (selected.length > 1) return
       emit('reader:read', selected[0])
     } else {

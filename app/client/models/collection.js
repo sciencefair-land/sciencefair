@@ -213,7 +213,7 @@ module.exports = (state, bus) => {
     const papers = isArray(data) ? data : [data]
     const oldp = []
     const newp = []
-    papers.forEach(p => p.progress > 0 ? oldp.push(p) : newp.push(p))
+    papers.forEach(p => p.minprogress() > 0 ? oldp.push(p) : newp.push(p))
     if (oldp.length > 0) addorupdatepaper(oldp, true)
     if (newp.length > 0) addorupdatepaper(newp, false)
   }
