@@ -45,7 +45,7 @@ function Datasource (key, opts) {
   self.loading = true
   self.queuedDownloads = []
 
-  self.name = 'new datasource ' + key.substring(0, 6)
+  self.name = 'key:' + key.substring(0, 6) + '...'
   self.key = key
   self.datadir = path.join(C.DATASOURCES_PATH, key)
   mkdirp(self.datadir)
@@ -340,11 +340,22 @@ function Datasource (key, opts) {
   // close all databases
   self.close = cb => {
     self.stats.write()
-    self.metadata.close(() => self.archive.close(() => self.db.close(cb)))
+    const toclose = [self.metadata, self.articles, self.db]
+    const done = alldone(toclose.length, cb)
+
+    toclose.forEach(item => {
+      try {
+        item ? item.close.bind(item)(done) : done()
+      } catch (err) {
+        debug(err)
+      }
+    })
   }
 
   // close all databases, then delete the datasource directory
-  self.remove = cb => self.close(() => fs.remove(self.datadir, cb))
+  self.remove = cb => self.close(
+    err => err ? cb(err) : fs.remove(self.datadir, cb)
+  )
 
   self.articlestats = (files, cb) => process.nextTick(() => {
     const stats = {

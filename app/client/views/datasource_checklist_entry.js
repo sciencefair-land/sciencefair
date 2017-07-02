@@ -200,9 +200,11 @@ module.exports = (datasource, state, emit) => {
 
       deletebtn.onclick = e => {
         e.preventDefault()
+        emit('renderer:freeze')
         require('./overlay_confirm')(
           `Really delete datasource ${datasource.name} and all its data?`,
           really => {
+            emit('renderer:unfreeze')
             if (really) emit('datasources:remove', datasource.key)
           }
         )
@@ -225,7 +227,7 @@ module.exports = (datasource, state, emit) => {
           </div>
         </div>
         <div class=${style.right}>
-          ${state.datasources.length > 1 ? deletebtn : null}
+          ${state.datasources.list.length > 1 ? deletebtn : null}
         </div>
       </div>
 

@@ -62,16 +62,29 @@ module.exports = (state, bus) => {
       if (datasource.all().length > 1) {
         bus.emit('notification:add', {
           title: 'Datasource added',
-          message: 'datasource added:\n' + source.name
+          message: 'datasource added:\n' + ds.name
         })
       }
 
-      ds.on('connected', () => bus.emit('initialising:stop'))
+      ds.on('connected', () => {
+        if (state.initialising) bus.emit('initialising:stop')
+      })
       ds.on('progress', () => { if (state.initialising) render() })
     })
   }
 
-  const remove = key => datasource.del(key)
+  const remove = source => {
+    datasource.fetch(source, (err, ds) => {
+      if (err) throw err
+
+      datasource.del(source)
+
+      bus.emit('notification:add', {
+        title: 'Datasource removed',
+        message: 'datasource removed:\n' + ds.name
+      })
+    })
+  }
 
   let activesearches = []
 
@@ -179,7 +192,7 @@ module.exports = (state, bus) => {
   setInterval(poll, 1000)
 
   bus.on('datasources:add', add)
-  bus.on('datasources:remove', add)
+  bus.on('datasources:remove', remove)
   bus.on('datasources:search', search)
   bus.on('datasources:cancel-search', cancelsearch)
   bus.on('datasources:show', show)
