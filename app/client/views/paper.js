@@ -64,20 +64,22 @@ const style = css`
   font-family: CooperHewitt-Medium;
 }
 
-.selected {
-  display: flex;
+.corner {
   width: 0;
   height: 0;
   border-style: solid;
   border-width: 0 20px 20px 0;
-  border-color: transparent ${C.YELLOW} transparent transparent;
   position: absolute;
   top: 0;
   right: 0;
 }
 
+.selected {
+  border-color: transparent ${C.YELLOW} transparent transparent;
+}
+
 .unselected {
-  display: none;
+  border-color: transparent;
 }
 
 .progressbar {
@@ -122,7 +124,7 @@ CachedPaper.prototype._render = function () {
   title.innerHTML = result.paper.title
 
   const corner = this._corner
-    = html`<div class=${cornerclass(result.paper.selected)}></div>`
+    = html`<div class="${cornerclass(result.paper.selected)}"></div>`
 
   const paper = html`
     <div class="${style.paper} clickable">
@@ -192,12 +194,8 @@ CachedPaper.prototype._update = function () {
 }
 
 module.exports = (result, state, emit) => {
-  const selected = !!state.selection.lookup[result.paper.key]
-  const downloading = result.paper.downloading
-  const progress = result.paper.progress
-
   let el = elementcache[result.paper.key]
-  if (el && result.index === el._result.index) {
+  if (el) {
     return el.render()
   } else {
     const newel = CachedPaper(result, emit)
@@ -224,7 +222,7 @@ function renderAuthor (author) {
 }
 
 function cornerclass (selected) {
-  return selected ? style.selected : style.unselected
+  return style.corner + ' ' + (selected ? style.selected : style.unselected)
 }
 
 function barstyle (progress) {
