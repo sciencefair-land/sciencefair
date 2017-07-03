@@ -1,6 +1,6 @@
 {
   "name": "sciencefair-repo",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "container repo for sciencefair app src and build tools",
   "scripts": {
     "pack": "electron-builder --dir",
