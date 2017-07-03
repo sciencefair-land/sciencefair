@@ -1,9 +1,11 @@
-const untildify = require('untildify')
 const path = require('path')
+
+const { app } = require('electron').remote
 
 const DEVMODE = !!(process.env['SCIENCEFAIR_DEVMODE'])
 
-const dataroot = untildify(DEVMODE ? '~/.sciencefair_dev' : '~/.sciencefair')
+const docs = app.getPath('documents')
+const dataroot = path.join(docs, DEVMODE ? 'sciencefair_dev' : 'sciencefair')
 
 module.exports = {
   // paths
