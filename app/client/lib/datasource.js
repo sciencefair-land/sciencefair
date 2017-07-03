@@ -76,7 +76,6 @@ function Datasource (key, opts) {
     location: path.join(self.datadir, 'yuno.db'),
     keyField: '$.id',
     appendOnly: true,
-    compositeField: false,
     wildcard: false,
     indexMap: {
       title: true,
@@ -231,18 +230,20 @@ function Datasource (key, opts) {
     const getentry = require('./hyperdrive-sync-entry')(self.metadata)
 
     let n = 0
-    let lastprogress = null
+    let lastpcdone = 0
     const getprogress = through.ctor({ objectMode: true }, (data, _, next) => {
       n++
-      if (n % 150 === 0) {
+      if (n % 30 === 0 || n === self.articleCount) {
         const progress = {
           done: n,
           total: self.articleCount
         }
-        if (!equals(lastprogress, progress)) {
+        const pcdone = Math.round((progress.done / progress.total) * 100)
+        if (pcdone !== lastpcdone) {
           self.stats.get('metadataSync').assign(progress).write()
           self.emit('progress', progress)
         }
+        lastprogress = progress
       }
       next(null, data)
     })
@@ -258,6 +259,7 @@ function Datasource (key, opts) {
         total: self.articleCount,
         finished: true
       }).write()
+      self.emit('progress', 1)
       self.emit('metadatasync:done')
       self.connected = true
       self.emit('connected')
