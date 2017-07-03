@@ -28,7 +28,7 @@ const collectStats = require('./fs-collect-stats')
 
 const debug = require('debug')('sciencefair:datasource')
 
-const C = require('./constants')
+const C = require('../../constants')
 
 function Datasource (key, opts) {
   if (!(this instanceof Datasource)) return new Datasource(key, opts)

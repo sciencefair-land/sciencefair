@@ -1,6 +1,6 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
-const C = require('../lib/constants')
+const C = require('../../constants')
 const bytes = require('bytes')
 const icon = require('./icon')
 

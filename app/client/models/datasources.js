@@ -10,7 +10,7 @@ const through = require('through2')
 const pumpify = require('pumpify')
 
 const datasource = require('../lib/getdatasource')
-const C = require('../lib/constants')
+const C = require('../../constants')
 
 // perform a one-time load of any datasource in the data directory
 const loadOnce = (state, bus) => {

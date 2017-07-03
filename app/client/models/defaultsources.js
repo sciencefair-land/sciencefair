@@ -2,7 +2,7 @@
 // if they aren't already added
 
 const path = require('path')
-const C = require('../lib/constants.js')
+const C = require('../../constants')
 const exists = require('path-exists').sync
 
 const defaults = [

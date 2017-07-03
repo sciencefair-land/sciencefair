@@ -1,7 +1,7 @@
 const http = require('http')
 const portfinder = require('portfinder')
 const nstatic = require('node-static')
-const C = require('./constants')
+const C = require('../../constants')
 const datadir = C.DATASOURCES_PATH
 
 function ContentServer () {

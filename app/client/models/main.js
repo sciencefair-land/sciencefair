@@ -1,5 +1,3 @@
-const C = require('../lib/constants')
-
 module.exports = (state, bus) => {
   state.initialising = false
 
