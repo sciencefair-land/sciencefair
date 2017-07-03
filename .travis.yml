@@ -37,7 +37,8 @@ before_install:
 install:
   - yarn
   - yarn add electron-builder@next --dev # force install next version to test electron-builder
-  - cd app && yarn --ignore-optional && cd ..
+  - cd app && yarn && cd ..
+  - rm -rf ./app/node_modules/webworker-threads
 
 script:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then yarn run buildosx ; fi
