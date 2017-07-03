@@ -36,6 +36,7 @@
     "debug": "^2.6.3",
     "debug-menu": "^0.6.0",
     "electron-debug": "^1.2.0",
+    "electron-default-menu": "^1.0.1",
     "electron-log": "^2.0.0",
     "electron-updater": "^2.4.2",
     "end-of-stream": "^1.1.0",
