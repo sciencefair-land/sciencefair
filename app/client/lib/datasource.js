@@ -16,6 +16,7 @@ const yuno = require('yunodb')
 const sum = require('lodash/sum')
 const remove = require('lodash/remove')
 const assign = require('lodash/assign')
+const equals = require('lodash/isEqual')
 const speed = require('speedometer')
 const discover = require('hyperdiscovery')
 const defaults = require('lodash/defaults')
@@ -74,6 +75,9 @@ function Datasource (key, opts) {
   const dbopts = {
     location: path.join(self.datadir, 'yuno.db'),
     keyField: '$.id',
+    appendOnly: true,
+    compositeField: false,
+    wildcard: false,
     indexMap: {
       title: true,
       authorstr: true,
@@ -226,7 +230,8 @@ function Datasource (key, opts) {
 
     const getentry = require('./hyperdrive-sync-entry')(self.metadata)
 
-    n = 0
+    let n = 0
+    let lastprogress = null
     const getprogress = through.ctor({ objectMode: true }, (data, _, next) => {
       n++
       if (n % 150 === 0) {
@@ -234,8 +239,10 @@ function Datasource (key, opts) {
           done: n,
           total: self.articleCount
         }
-        self.stats.get('metadataSync').assign(progress).write()
-        self.emit('progress', progress)
+        if (!equals(lastprogress, progress)) {
+          self.stats.get('metadataSync').assign(progress).write()
+          self.emit('progress', progress)
+        }
       }
       next(null, data)
     })
