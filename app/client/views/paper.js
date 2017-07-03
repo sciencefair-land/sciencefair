@@ -1,6 +1,7 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../lib/constants')
+const highlight = require('../lib/highlight')
 
 const isString = require('lodash/isString')
 
@@ -101,16 +102,21 @@ CachedPaper.prototype = Object.create(CacheComponent.prototype)
 CachedPaper.prototype._render = function (selected, progress) {
   const result = this._result
   const emit = this._emit
+  const query = this._query
 
   const title = html`<div class="${style.title}"></div>`
   title.innerHTML = result.paper.title
+  highlight(title, query)
 
+  const author = renderAuthor(result.paper.author)
+  highlight(author, query)
+  
   const paper = html`
     <div class="${style.paper} clickable">
       ${selectedmark(selected)}
       ${title}
       <div class="${style.author}">
-        ${renderAuthor(result.paper.author)}
+        ${author}
       </div>
       <div class="${style.year}">
         ${result.paper.date ? result.paper.date.year : 'none'}
@@ -160,10 +166,12 @@ module.exports = (result, state, emit) => {
 
   let el = elementcache[result.paper.key]
   if (el && result.index === el._result.index) {
+    el._query = state.search.querystring
     return el.render(selected, progress)
   } else {
     const newel = CachedPaper(result, emit)
     elementcache[result.paper.key] = newel
+    newel._query = state.search.querystring
     return newel.render(selected, progress)
   }
 }
