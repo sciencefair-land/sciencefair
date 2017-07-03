@@ -10,7 +10,8 @@ init:
 
 install:
   - ps: Install-Product node 8 x64
-  - yarn && cd app && yarn && yarn run rebuildwin && cd ..
+  - yarn && cd app && yarn --ignore-optional && yarn run rebuildwin && cd ..
+  - rm -rf app/node_modules/webworker-threads
 
 build_script:
   - yarn run buildappveyor
