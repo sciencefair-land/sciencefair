@@ -16,6 +16,7 @@ const yuno = require('yunodb')
 const sum = require('lodash/sum')
 const remove = require('lodash/remove')
 const assign = require('lodash/assign')
+const equals = require('lodash/isEqual')
 const speed = require('speedometer')
 const discover = require('hyperdiscovery')
 const defaults = require('lodash/defaults')
@@ -45,7 +46,7 @@ function Datasource (key, opts) {
   self.loading = true
   self.queuedDownloads = []
 
-  self.name = 'new datasource ' + key.substring(0, 6)
+  self.name = 'key:' + key.substring(0, 6) + '...'
   self.key = key
   self.datadir = path.join(C.DATASOURCES_PATH, key)
   mkdirp(self.datadir)
@@ -74,6 +75,8 @@ function Datasource (key, opts) {
   const dbopts = {
     location: path.join(self.datadir, 'yuno.db'),
     keyField: '$.id',
+    appendOnly: true,
+    wildcard: false,
     indexMap: {
       title: true,
       authorstr: true,
@@ -226,16 +229,21 @@ function Datasource (key, opts) {
 
     const getentry = require('./hyperdrive-sync-entry')(self.metadata)
 
-    n = 0
+    let n = 0
+    let lastpcdone = 0
     const getprogress = through.ctor({ objectMode: true }, (data, _, next) => {
       n++
-      if (n % 35 === 0) {
+      if (n % 30 === 0 || n === self.articleCount) {
         const progress = {
           done: n,
           total: self.articleCount
         }
-        self.stats.get('metadataSync').assign(progress).write()
-        self.emit('progress', progress)
+        const pcdone = Math.round((progress.done / progress.total) * 100)
+        if (pcdone !== lastpcdone) {
+          self.stats.get('metadataSync').assign(progress).write()
+          self.emit('progress', progress)
+        }
+        lastprogress = progress
       }
       next(null, data)
     })
@@ -251,6 +259,7 @@ function Datasource (key, opts) {
         total: self.articleCount,
         finished: true
       }).write()
+      self.emit('progress', 1)
       self.emit('metadatasync:done')
       self.connected = true
       self.emit('connected')
@@ -340,11 +349,22 @@ function Datasource (key, opts) {
   // close all databases
   self.close = cb => {
     self.stats.write()
-    self.metadata.close(() => self.archive.close(() => self.db.close(cb)))
+    const toclose = [self.metadata, self.articles, self.db]
+    const done = alldone(toclose.length, cb)
+
+    toclose.forEach(item => {
+      try {
+        item ? item.close.bind(item)(done) : done()
+      } catch (err) {
+        debug(err)
+      }
+    })
   }
 
   // close all databases, then delete the datasource directory
-  self.remove = cb => self.close(() => fs.remove(self.datadir, cb))
+  self.remove = cb => self.close(
+    err => err ? cb(err) : fs.remove(self.datadir, cb)
+  )
 
   self.articlestats = (files, cb) => process.nextTick(() => {
     const stats = {

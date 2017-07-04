@@ -30,7 +30,7 @@ module.exports = (state, bus) => {
 
   const receive = incoming => {
     bus.emit('search:done-searching')
-    const papers = incoming.hits.map(paper)
+    const papers = incoming.hits.map(hit => paper(hit))
     papers.forEach(checkfiles)
 
     set(uniqBy(get().concat(papers), result => result.key))

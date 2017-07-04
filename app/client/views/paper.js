@@ -65,15 +65,22 @@ const style = css`
   font-family: CooperHewitt-Medium;
 }
 
-.selected {
+.corner {
   width: 0;
   height: 0;
   border-style: solid;
   border-width: 0 20px 20px 0;
-  border-color: transparent ${C.YELLOW} transparent transparent;
   position: absolute;
   top: 0;
   right: 0;
+}
+
+.selected {
+  border-color: transparent ${C.YELLOW} transparent transparent;
+}
+
+.unselected {
+  border-color: transparent;
 }
 
 .progressbar {
@@ -99,10 +106,21 @@ function CachedPaper (result, emit) {
 }
 CachedPaper.prototype = Object.create(CacheComponent.prototype)
 
-CachedPaper.prototype._render = function (selected, progress) {
+CachedPaper.prototype._render = function () {
   const result = this._result
   const emit = this._emit
   const query = this._query
+
+  this._watch(result.paper)
+
+  const bar = this._bar = html`
+
+  <div
+    class="${style.progressbar}"
+    style="${barstyle(result.paper.minprogress())}"
+  />
+
+  `
 
   const title = html`<div class="${style.title}"></div>`
   title.innerHTML = result.paper.title
@@ -111,9 +129,12 @@ CachedPaper.prototype._render = function (selected, progress) {
   const author = renderAuthor(result.paper.author)
   highlight(author, query)
   
+  const corner = this._corner
+    = html`<div class="${cornerclass(result.paper.selected)}"></div>`
+
   const paper = html`
     <div class="${style.paper} clickable">
-      ${selectedmark(selected)}
+      ${corner}
       ${title}
       <div class="${style.author}">
         ${author}
@@ -121,7 +142,7 @@ CachedPaper.prototype._render = function (selected, progress) {
       <div class="${style.year}">
         ${result.paper.date ? result.paper.date.year : 'none'}
       </div>
-      <div class="${style.progressbar}" style="width: ${progress}%"/>
+      ${bar}
     </div>
   `
 
@@ -159,20 +180,35 @@ CachedPaper.prototype._render = function (selected, progress) {
   return paper
 }
 
-module.exports = (result, state, emit) => {
-  const selected = state.selection.lookup[result.paper.key]
-  const downloading = result.paper.downloading
-  const progress = downloading ? Math.max(result.paper.progress, 10) : result.paper.progress
+CachedPaper.prototype._watch = function (paper) {
+  paper.on('selected', () => this.updateSelected(true))
+  paper.on('deselected', () => this.updateSelected(false))
+  paper.on('downloading', () => this.updateProgress(paper.minprogress()))
+  paper.on('progress', () => this.updateProgress(paper.minprogress()))
+}
 
+CachedPaper.prototype.updateSelected = function (selected) {
+  this._corner.className = cornerclass(selected)
+}
+
+CachedPaper.prototype.updateProgress = function (progress) {
+  this._bar.style = barstyle(progress)
+}
+
+CachedPaper.prototype._update = function () {
+  return false
+}
+
+module.exports = (result, state, emit) => {
   let el = elementcache[result.paper.key]
-  if (el && result.index === el._result.index) {
+  if (el) {
     el._query = state.search.querystring
-    return el.render(selected, progress)
+    return el.render()
   } else {
     const newel = CachedPaper(result, emit)
     elementcache[result.paper.key] = newel
     newel._query = state.search.querystring
-    return newel.render(selected, progress)
+    return newel.render()
   }
 }
 
@@ -193,6 +229,10 @@ function renderAuthor (author) {
   }
 }
 
-function selectedmark (selected) {
-  return selected ? html`<div class=${style.selected}></div>` : null
+function cornerclass (selected) {
+  return style.corner + ' ' + (selected ? style.selected : style.unselected)
+}
+
+function barstyle (progress) {
+  return `width: ${progress}%;`
 }

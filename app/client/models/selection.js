@@ -4,9 +4,7 @@ const difference = require('lodash/difference')
 const uniq = require('lodash/uniq')
 const keyby = require('lodash/keyBy')
 
-const isselected = (data, papers) => {
-  return papers.indexOf(data.paper) > -1
-}
+const isselected = (data, papers) => papers.indexOf(data.paper) > -1
 
 const toggleclicked = (data, papers) => {
   const idx = papers.map(p => p.key).indexOf(data.paper.key)
@@ -103,18 +101,20 @@ module.exports = (state, bus) => {
   const setref = ref => { state.selection.reference = ref }
   const getref = () => state.selection.reference
 
-  const setlist = list => { state.selection.list = list }
+  const setlist = list => {
+    getlist().forEach(p => p.deselect())
+    list.forEach(p => p.select())
+    state.selection.list = list
+  }
   const getlist = () => state.selection.list
 
   const setlookup = lookup => { state.selection.lookup = lookup }
   const getlookup = () => state.selection.lookup
 
   const clear = () => {
-    set({
-      reference: null,
-      list: [],
-      lookup: {}
-    })
+    setref(null)
+    setlist([])
+    setlookup({})
     render()
   }
 

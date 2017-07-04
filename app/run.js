@@ -1,4 +1,5 @@
-const { app, BrowserWindow, protocol } = require('electron')
+const { app, BrowserWindow, protocol, shell, Menu } = require('electron')
+const defaultMenu = require('electron-default-menu')
 
 let main = null
 
@@ -40,7 +41,9 @@ app.on('ready', function () {
     }
   })
 
-  main.setMenu(null)
+  const menu = defaultMenu(app, shell)
+
+  Menu.setApplicationMenu(Menu.buildFromTemplate(menu))
 
   main.loadURL(path.join('file://', __dirname, '/client/index.html'))
 
