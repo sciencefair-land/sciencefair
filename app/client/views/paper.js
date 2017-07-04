@@ -202,12 +202,12 @@ CachedPaper.prototype._update = function () {
 module.exports = (result, state, emit) => {
   let el = elementcache[result.paper.key]
   if (el) {
-    el._query = state.search.querystring
+    el._query = state.search.query
     return el.render()
   } else {
     const newel = CachedPaper(result, emit)
     elementcache[result.paper.key] = newel
-    newel._query = state.search.querystring
+    newel._query = state.search.query
     return newel.render()
   }
 }
