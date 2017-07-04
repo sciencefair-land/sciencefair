@@ -1,6 +1,6 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
-const C = require('../lib/constants')
+const C = require('../../constants')
 const imgpath = require('../lib/imgpath')
 
 module.exports = (state, emit) => {

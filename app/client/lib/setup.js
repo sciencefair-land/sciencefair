@@ -9,7 +9,7 @@ if (process.env.SCIENCEFAIR_DEVMODE) {
   window.localStorage.DISABLE_NANOTIMING = true
 }
 
-const C = require('./constants')
+const C = require('../../constants')
 const mkdirp = require('mkdirp').sync
 
 mkdirp(C.DATAROOT)

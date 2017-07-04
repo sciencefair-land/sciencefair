@@ -1,7 +1,7 @@
 const yuno = require('yunodb')
 const defaults = require('lodash/defaults')
 
-const C = require('./constants')
+const C = require('../../constants')
 
 const collectionDefaults = {
   deletable: true,

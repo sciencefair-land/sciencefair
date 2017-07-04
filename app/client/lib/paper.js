@@ -4,7 +4,6 @@ const events = require('events')
 const fs = require('fs-extra')
 const uniq = require('lodash/uniq')
 
-const C = require('./constants')
 const debug = require('debug')('sciencefair:paper')
 
 function Paper (data) {
