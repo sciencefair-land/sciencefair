@@ -5396,10 +5396,10 @@ ElifeConverter.Prototype = function() {
   this.enhanceVideo = function(state, node, element) {
     var href = element.getAttribute("xlink:href").split(".");
     var name = href[0];
-    node.url = "http://api.elifesciences.org/v2/articles/"+state.doc.id+"/media/file/"+name+".mp4";
-    node.url_ogv = "http://api.elifesciences.org/v2/articles/"+state.doc.id+"/media/file//"+name+".ogv";
-    node.url_webm = "http://api.elifesciences.org/v2/articles/"+state.doc.id+"/media/file//"+name+".webm";
-    node.poster = "http://api.elifesciences.org/v2/articles/"+state.doc.id+"/media/file/"+name+".jpg";
+    node.url = "http://legacy--api.elifesciences.org/v2/articles/"+state.doc.id+"/media/file/"+name+".mp4";
+    node.url_ogv = "http://legacy--api.elifesciences.org/v2/articles/"+state.doc.id+"/media/file//"+name+".ogv";
+    node.url_webm = "http://legacy--api.elifesciences.org/v2/articles/"+state.doc.id+"/media/file//"+name+".webm";
+    node.poster = "http://legacy--api.elifesciences.org/v2/articles/"+state.doc.id+"/media/file/"+name+".jpg";
   };
 
   // Example url to JPG: http://cdn.elifesciences.org/elife-articles/00768/svg/elife00768f001.jpg
