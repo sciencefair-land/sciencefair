@@ -1,10 +1,12 @@
 const path = require('path')
 
-const { app } = require('electron').remote
+const app = require('electron').app
+const remote = require('electron').remote
+const api = app || remote.app
 
 const DEVMODE = !!(process.env['SCIENCEFAIR_DEVMODE'])
 
-const docs = app.getPath('documents')
+const docs = api.getPath('documents')
 const dataroot = path.join(docs, DEVMODE ? 'sciencefair_dev' : 'sciencefair')
 
 module.exports = {
