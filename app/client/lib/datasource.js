@@ -138,7 +138,8 @@ function Datasource (key, opts) {
           port: port,
           live: true,
           upload: true,
-          download: true
+          download: true,
+          dht: false
         })
       })
     })
@@ -301,7 +302,8 @@ function Datasource (key, opts) {
           port: port,
           live: true,
           upload: true,
-          download: true
+          download: true,
+          dht: false
         })
 
         self.articlesswarm.on('connection', (peer, type) => {
