@@ -25,6 +25,7 @@ app.use(require('./models/results'))
 app.use(require('./models/search'))
 app.use(require('./models/selection'))
 app.use(require('./models/tags'))
+app.use(require('./keybindings'))
 
 app.route('#', require('./views/start'))
 app.route('#home', require('./views/home'))
