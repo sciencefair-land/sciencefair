@@ -4,7 +4,6 @@ const C = require('../../constants')
 const includes = require('lodash/includes')
 const mean = require('lodash/mean')
 const icon = require('./icon')
-const paper = require('../lib/getpaper')
 const all = require('lodash/every')
 const any = require('lodash/some')
 

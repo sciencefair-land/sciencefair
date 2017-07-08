@@ -1,8 +1,3 @@
-const fs = require('fs-extra')
-const path = require('path')
-
-const exists = require('path-exists').sync
-const after = require('lodash/after')
 const any = require('lodash/some')
 const deepequal = require('lodash/isEqual')
 const batchify = require('byte-stream')
@@ -10,27 +5,26 @@ const through = require('through2')
 const pumpify = require('pumpify')
 
 const datasource = require('../lib/getdatasource')
-const C = require('../../constants')
+
+const {ipcRenderer} = require('electron')
 
 // perform a one-time load of any datasource in the data directory
 const loadOnce = (state, bus) => {
-  const keys = fs.readdirSync(
-    C.DATASOURCES_PATH
-  ).filter(
-    file => fs.statSync(path.join(C.DATASOURCES_PATH, file)).isDirectory()
-  )
   const loaded = () => {
     state.datasources.loaded = true
     bus.emit('renderer:render')
   }
-  if (keys.length > 0) {
-    const datasources = []
 
-    keys.forEach(key => bus.emit('datasources:add', { key: key }))
-    loaded()
-  } else {
-    loaded()
-  }
+  ipcRenderer.send('datasources:updateKeys')
+
+  ipcRenderer.on('datasources:keysUpdated', (event, keys) => {
+    if (keys.length > 0) {
+      keys.forEach(key => bus.emit('datasources:add', { key: key }))
+      loaded()
+    } else {
+      loaded()
+    }
+  })
 }
 
 module.exports = (state, bus) => {
@@ -40,10 +34,15 @@ module.exports = (state, bus) => {
   const render = () => bus.emit('renderer:render')
 
   const list = () => state.datasources.list
-  const setlist = _list => state.datasources.list = _list
+  const setlist = _list => {
+    state.datasources.list = _list
+  }
 
   const shown = () => state.datasources.shown
-  const setshown = _shown => state.datasources.shown = _shown
+
+  const setshown = _shown => {
+    state.datasources.shown = _shown
+  }
 
   const add = source => {
     const addfail = msg => bus.emit('notification:add', {
@@ -115,7 +114,9 @@ module.exports = (state, bus) => {
       const write = (hits, _, cb) => {
         count += hits.length
 
-        hits.forEach(r => r.source = ds.key)
+        hits.forEach(r => {
+          r.source = ds.key
+        })
         bus.emit('results:receive', { hits: hits })
 
         cb()
@@ -152,7 +153,7 @@ module.exports = (state, bus) => {
     render()
   }
 
-  const toggleActive =  key => {
+  const toggleActive = key => {
     datasource.fetch(key, (err, source) => {
       if (err) return bus.emit('error', err)
 

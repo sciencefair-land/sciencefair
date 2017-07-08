@@ -19,6 +19,7 @@ require('electron-debug')({ enabled: true })
 
 const path = require('path')
 const open = require('electron').shell.openExternal
+const setup = require('./lib/setup')
 
 app.commandLine.appendSwitch('enable-features', 'V8Ignition')
 app.commandLine.appendSwitch('enable-webassembly')

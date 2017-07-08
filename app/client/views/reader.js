@@ -2,7 +2,6 @@ const html = require('choo/html')
 const css = require('csjs-inject')
 const open = require('electron').shell.openExternal
 
-const getpaper = require('../lib/getpaper')
 const contentserver = require('../lib/contentserver')
 const imgpath = require('../lib/imgpath')
 
