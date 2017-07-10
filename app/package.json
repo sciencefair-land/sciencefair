@@ -56,6 +56,7 @@
     "lowdb": "^0.16.2",
     "matched": "^0.4.3",
     "mkdirp": "^0.5.1",
+    "mousetrap": "^1.6.1",
     "multi-read-stream": "^2.0.0",
     "node-static": "^0.7.7",
     "numeral": "^2.0.6",
