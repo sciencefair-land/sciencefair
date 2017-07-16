@@ -1,7 +1,9 @@
 const http = require('http')
 const portfinder = require('portfinder')
 const nstatic = require('node-static')
-const C = require('../../constants')
+const C = require('../constants')
+const {ipcMain} = require('electron')
+
 const datadir = C.DATASOURCES_PATH
 
 function ContentServer () {
@@ -36,6 +38,11 @@ function ContentServer () {
   })
 
   self.resolve = path => `http://localhost:${self.port}/${path}`
+
+  ipcMain.on('contentserver:resolve', (event, arg) => {
+    const path = self.resolve(arg)
+    event.returnValue = path
+  })
 }
 
 const server = new ContentServer()

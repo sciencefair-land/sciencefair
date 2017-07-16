@@ -19,3 +19,4 @@ ipcMain.on('datasources:updateKeys', (event, arg) => {
 })
 
 require('./defaultsources')
+require('./contentserver')

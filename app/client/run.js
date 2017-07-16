@@ -1,5 +1,4 @@
 require('./lib/setup')
-require('./lib/contentserver')
 
 const choo = require('choo')
 const app = choo({ href: false })
