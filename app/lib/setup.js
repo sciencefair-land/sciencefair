@@ -14,7 +14,8 @@ ipcMain.on('datasources:updateKeys', (event, arg) => {
   ).filter(
     file => fs.statSync(path.join(C.DATASOURCES_PATH, file)).isDirectory()
   )
-  
+
   event.sender.send('datasources:keysUpdated', keys)
 })
 
+require('./contentserver')

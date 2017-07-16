@@ -1,8 +1,7 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
 const open = require('electron').shell.openExternal
-
-const contentserver = require('../lib/contentserver')
+const {ipcRenderer} = require('electron')
 const imgpath = require('../lib/imgpath')
 
 const reader = (state, emit) => {
@@ -48,7 +47,7 @@ const reader = (state, emit) => {
   }
 
   const xmlfile = `${paper.source}/article_feed${paper.path}/${paper.entryfile}`
-  const docurl = contentserver.resolve(xmlfile)
+  const docurl = ipcRenderer.sendSync('contentserver:resolve', xmlfile)
   const lensurl = `file://${__dirname}/../lib/lens/index.html?url=${encodeURIComponent(docurl)}`
 
   const frame = html`<webview id="reader" class="${style.frame}"></webview>`
