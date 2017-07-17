@@ -45,7 +45,7 @@ CachedDSField.prototype._createProxy = function () {
 CachedDSField.prototype._render = function (state, emit) {
   const input = html`
 
-  <input type="text" class="${style.input}" placeholder="add a datasource key" />
+  <input type="text" id="cached-ds-add-input" class="${style.input}" placeholder="add a datasource key" />
 
   `
 

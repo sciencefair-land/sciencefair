@@ -1,8 +1,13 @@
 const Mousetrap = require('mousetrap')
 const {BrowserWindow} = require('electron').remote
 
-module.exports = (state, bus) => {
+const ignoreSelectAllIds = [
+  'cached-search-input',
+  'cached-ds-add-input',
+  'cached-tag-add-input'
+]
 
+module.exports = (state, bus) => {
   // ESC
   Mousetrap.bind('esc', () => {
     if (state.reading) {
@@ -17,4 +22,19 @@ module.exports = (state, bus) => {
     }
   })
 
+  // ctrl/cmd + a
+   Mousetrap.bind(['command+a', 'ctrl+a'], () => {
+     const active = document.activeElement
+     if (active.id && ignoreSelectAllIds.includes(active.id)) {
+       // this element implements its own select all or uses native implementation
+       return
+     } else if (state.datasources.shown || state.aboutshown || state.reader) {
+       // overlay view
+       return
+     } else if (state.results) {
+       // select all results
+       bus.emit('selection:all')
+       return false
+     }
+   })
 }
