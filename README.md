@@ -128,9 +128,9 @@ This project uses node `v7`, ideally the [latest version](https://nodejs.org/dis
 
 To get a local copy working, clone this repo, then run
 
-- `npm install` to install dev dependencies
-- `cd app && npm install && npm run rebuild` to install regular dependencies
-- `cd .. && npm run dev` to start in development mode
+- `npm install` to install dev dependencies and app dependencies
+- `npm start` to start the application
+- `npm run dev` to start in development mode
 
 ## roadmap
 
