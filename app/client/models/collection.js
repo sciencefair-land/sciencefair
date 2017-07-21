@@ -100,7 +100,7 @@ module.exports = (state, bus) => {
     ).on(
       'end', () => {
         bus.emit('results:receive', { hits: hits })
-        bus.emit('results:count', { count: hits.length, source: 'collection'})
+        bus.emit('results:count', { count: hits.length, source: 'collection' })
       }
     )
     activesearches.push(stream)
@@ -131,7 +131,7 @@ module.exports = (state, bus) => {
       }
 
       const flush = cb => {
-        bus.emit('results:count', { count: count, source: 'collection'})
+        bus.emit('results:count', { count: count, source: 'collection' })
         cb()
       }
 
@@ -162,7 +162,7 @@ module.exports = (state, bus) => {
     ).on(
       'end', () => {
         bus.emit('results:receive', { hits: hits })
-        bus.emit('results:count', { count: hits.length, source: 'collection'})
+        bus.emit('results:count', { count: hits.length, source: 'collection' })
       }
     )
 
