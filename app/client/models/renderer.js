@@ -9,9 +9,7 @@ module.exports = (state, bus) => {
   const unfreeze = () => frozen = false
 
   const mayberender = () => {
-    if (frozen) {
-
-    } else {
+    if (!frozen) {
       queue()
     }
   }
