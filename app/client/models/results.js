@@ -22,7 +22,7 @@ module.exports = (state, bus) => {
   }
 
   const checkfiles = p => p.filesPresent(
-    (err, progress, updated) => { if (updated) render() }
+    (err, progress, updated) => { if (!err && updated) render() }
   )
 
   const receive = incoming => {
