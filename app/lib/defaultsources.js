@@ -15,7 +15,8 @@ ipcMain.on('datasources:loadDefaults', (event, arg) => {
   defaults.forEach(key => {
     const dir = path.join(C.DATASOURCES_PATH, key)
 
-    if (exists(dir)) return
-    else event.sender.send('datasources:defaultLoaded', key)
+    if (!exists(dir)) {
+      event.sender.send('datasources:defaultLoaded', key)
+    }
   })
 })
