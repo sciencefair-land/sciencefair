@@ -10,7 +10,7 @@ module.exports = (state, bus) => {
 
   const mayberender = () => {
     if (frozen) {
-      return
+
     } else {
       queue()
     }

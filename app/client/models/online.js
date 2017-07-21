@@ -1,4 +1,4 @@
-const isOnline = require('is-online');
+const isOnline = require('is-online')
 
 module.exports = (state, bus) => {
   state.online = false

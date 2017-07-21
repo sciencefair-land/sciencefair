@@ -44,9 +44,9 @@ module.exports = (state, bus) => {
   const update = () => {
     setsearching(true)
     // if query is '*' or we have tags, don't search datasources
-    const searchdatasources = getquery()
-      && getquery()[0] !== '*'
-      && !gettags().length
+    const searchdatasources = getquery() &&
+      getquery()[0] !== '*' &&
+      !gettags().length
     if (searchdatasources) bus.emit('datasources:search')
     bus.emit('collection:search')
   }

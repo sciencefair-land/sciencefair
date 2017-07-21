@@ -22,7 +22,6 @@ module.exports = (state, bus) => {
   }
 
   const removetag = data => {
-
     const newpapers = data.papers.map(paper => {
       const tags = paper.tags
       const removeidx = tags.indexOf(data.tag)

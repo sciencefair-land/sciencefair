@@ -54,7 +54,7 @@ module.exports = (state, bus) => {
       if (err) {
         if (err.message == 'premature close') {
           // activescan was destroyed
-          return
+
         } else {
           throw err
         }

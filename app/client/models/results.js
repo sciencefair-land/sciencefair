@@ -16,7 +16,7 @@ module.exports = (state, bus) => {
 
   const get = () => state.results
   const set = results => { state.results = results }
-  const setone = (idx, result) => { state.results[idx] =  result }
+  const setone = (idx, result) => { state.results[idx] = result }
 
   const clear = () => {
     set([])
