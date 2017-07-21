@@ -64,7 +64,7 @@ const getinputvalue = state => {
   }
 }
 
-const tagquery = str => { return /\#/.test(str) }
+const tagquery = str => { return /#/.test(str) }
 
 function CachedInput () {
   if (!(this instanceof CachedInput)) return new CachedInput()
