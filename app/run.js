@@ -1,4 +1,4 @@
-const { app, BrowserWindow, protocol, shell, Menu } = require('electron')
+const { app, BrowserWindow, shell, Menu } = require('electron')
 const defaultMenu = require('electron-default-menu')
 
 let main = null
@@ -17,8 +17,6 @@ if (shouldQuit) {
   require('electron-debug')({ enabled: true })
 
   const path = require('path')
-  const open = require('electron').shell.openExternal
-  const setup = require('./lib/setup')
 
   app.commandLine.appendSwitch('enable-features', 'V8Ignition')
   app.commandLine.appendSwitch('enable-webassembly')
