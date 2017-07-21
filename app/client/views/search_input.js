@@ -121,7 +121,7 @@ CachedInput.prototype._render = function (state, emit) {
       return
     }
 
-    if (key == ' ' || key === 'Enter') {
+    if (key === ' ' || key === 'Enter') {
       // space or enter submits the search immediately
       emitify.cancel()
       const querystring = e.target.value + (key === 'enter' ? ' ' : '')
