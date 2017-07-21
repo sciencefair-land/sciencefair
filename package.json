@@ -13,7 +13,8 @@
     "start": "electron app/index.js",
     "dev": "SCIENCEFAIR_DEVMODE=true electron app/index.js",
     "deploysite": "cd site && npm run build && cd .. && gh-pages -d site/dist",
-    "doctor": "electron ./scripts/doctor.js"
+    "doctor": "electron ./scripts/doctor.js",
+    "test": "standard"
   },
   "engines": {
     "node": "7.x"
@@ -39,5 +40,10 @@
     "rimraf": "^2.5.2",
     "standard": "^10.0.2",
     "temporary": "^0.0.8"
+  },
+  "standard": {
+    "ignore": [
+      "app/client/lib"
+    ]
   }
 }
