@@ -32,6 +32,10 @@ module.exports = (state, bus) => {
 
   let activescan
 
+  const _activeScanDestroyedError = err => {
+    return err.message === 'premature close'
+  }
+
   const _scan = name => {
     const tags = {}
     let count = 0
@@ -51,14 +55,9 @@ module.exports = (state, bus) => {
 
     eos(activescan, err => {
       activescan = null
-      if (err) {
-        if (err.message == 'premature close') {
-          // activescan was destroyed
-
-        } else {
-          throw err
-        }
-      } else {
+      if (err && !_activeScanDestroyedError(err)) {
+        throw err
+      } else if (!err) {
         state.collectioncount = count
         bus.emit('tags:replace', tags)
         if (!restartchecked) {
