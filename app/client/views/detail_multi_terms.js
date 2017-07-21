@@ -21,8 +21,6 @@ const stopwords = [
   'both', 'thus'
 ]
 
-const maxwidth = 200
-
 const style = css`
 
 .plot {

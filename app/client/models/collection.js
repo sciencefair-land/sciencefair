@@ -1,5 +1,4 @@
 const intersection = require('lodash/intersection')
-const diff = require('lodash/difference')
 const uniq = require('lodash/uniq')
 const debounce = require('lodash/debounce')
 const isArray = require('lodash/isArray')
@@ -200,12 +199,7 @@ module.exports = (state, bus) => {
     }
 
     const op = cb => update ? index.update(cb) : index.add(cb)
-
-    const updatestream = pumpify(
-      docs,
-      metadataify,
-      op(maybescan)
-    )
+    pumpify(docs, metadataify, op(maybescan))
   }
 
   const updatepaper = data => {
@@ -254,5 +248,3 @@ module.exports = (state, bus) => {
 
   bus.on('DOMContentLoaded', () => {})
 }
-
-const noop = () => {}

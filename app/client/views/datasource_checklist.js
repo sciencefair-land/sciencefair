@@ -1,8 +1,6 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../../constants')
-const numeral = require('numeral')
-const stat = require('./datasource_stat')
 const entry = require('./datasource_checklist_entry')
 
 const style = css`

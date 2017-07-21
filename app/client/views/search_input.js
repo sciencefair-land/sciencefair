@@ -2,7 +2,6 @@ const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../../constants')
 
-const imgpath = require('../lib/imgpath')
 const throttle = require('lodash/throttle')
 const equal = require('lodash/isEqual')
 const clone = require('lodash/cloneDeep')

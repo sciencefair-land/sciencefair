@@ -1,5 +1,4 @@
 const all = require('lodash/every')
-const uniqBy = require('lodash/uniqBy')
 const speedometer = require('speedometer')
 const datasource = require('../lib/getdatasource')
 const getpaper = require('../lib/getpaper')

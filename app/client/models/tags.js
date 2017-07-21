@@ -1,5 +1,3 @@
-const includes = require('lodash/includes')
-const keys = require('lodash/keys')
 const uniq = require('lodash/uniq')
 const diff = require('lodash/difference')
 
