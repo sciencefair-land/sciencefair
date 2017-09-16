@@ -5,13 +5,11 @@ module.exports = (state, bus) => {
   const queue = debounce(render, 250, { leading: true, trailing: true })
   let frozen = false
 
-  const freeze = () => frozen = true
-  const unfreeze = () => frozen = false
+  const freeze = () => { frozen = true }
+  const unfreeze = () => { frozen = false }
 
   const mayberender = () => {
-    if (frozen) {
-      return
-    } else {
+    if (!frozen) {
       queue()
     }
   }

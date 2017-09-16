@@ -2,7 +2,6 @@ const Mousetrap = require('mousetrap')
 const {BrowserWindow} = require('electron').remote
 
 module.exports = (state, bus) => {
-
   // ESC
   Mousetrap.bind('esc', () => {
     if (state.reading) {
@@ -16,5 +15,4 @@ module.exports = (state, bus) => {
       win.setFullScreen(false)
     }
   })
-
 }

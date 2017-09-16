@@ -1,7 +1,6 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../../constants')
-const includes = require('lodash/includes')
 const mean = require('lodash/mean')
 const icon = require('./icon')
 const all = require('lodash/every')
@@ -43,8 +42,8 @@ module.exports = (state, emit) => {
   const selected = state.selection.list
   const justone = selected.length === 1
   const downloading =
-       any(selected.map(p => p.downloading))
-    && all(selected.map(p => p.minprogress() > 0))
+       any(selected.map(p => p.downloading)) &&
+    all(selected.map(p => p.minprogress() > 0))
 
   const progress = mean(selected.map(p => p.minprogress()))
   const finished = progress === 100

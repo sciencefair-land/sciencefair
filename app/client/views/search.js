@@ -2,11 +2,6 @@ const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../../constants')
 const imgpath = require('../lib/imgpath')
-const equal = require('lodash/isEqual')
-const clone = o => JSON.parse(JSON.stringify(o))
-const CacheComponent = require('cache-component')
-
-const debug = require('debug')('sciencefair:view:search')
 
 const style = css`
 

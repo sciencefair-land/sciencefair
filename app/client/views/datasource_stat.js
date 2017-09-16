@@ -35,10 +35,6 @@ module.exports = (name, value) => {
 
   `
 
-  const tickcross = bool => {
-    return html`<div class="${bool ? style.tick : style.cross}" />`
-  }
-
   const statbadge = html`
 
   <div class="${style.badge}">

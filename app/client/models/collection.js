@@ -1,5 +1,4 @@
 const intersection = require('lodash/intersection')
-const diff = require('lodash/difference')
 const uniq = require('lodash/uniq')
 const debounce = require('lodash/debounce')
 const isArray = require('lodash/isArray')
@@ -32,6 +31,10 @@ module.exports = (state, bus) => {
 
   let activescan
 
+  const _activeScanDestroyedError = err => {
+    return err.message === 'premature close'
+  }
+
   const _scan = name => {
     const tags = {}
     let count = 0
@@ -51,14 +54,9 @@ module.exports = (state, bus) => {
 
     eos(activescan, err => {
       activescan = null
-      if (err) {
-        if (err.message == 'premature close') {
-          // activescan was destroyed
-          return
-        } else {
-          throw err
-        }
-      } else {
+      if (err && !_activeScanDestroyedError(err)) {
+        throw err
+      } else if (!err) {
         state.collectioncount = count
         bus.emit('tags:replace', tags)
         if (!restartchecked) {
@@ -102,7 +100,7 @@ module.exports = (state, bus) => {
     ).on(
       'end', () => {
         bus.emit('results:receive', { hits: hits })
-        bus.emit('results:count', { count: hits.length, source: 'collection'})
+        bus.emit('results:count', { count: hits.length, source: 'collection' })
       }
     )
     activesearches.push(stream)
@@ -133,7 +131,7 @@ module.exports = (state, bus) => {
       }
 
       const flush = cb => {
-        bus.emit('results:count', { count: count, source: 'collection'})
+        bus.emit('results:count', { count: count, source: 'collection' })
         cb()
       }
 
@@ -164,7 +162,7 @@ module.exports = (state, bus) => {
     ).on(
       'end', () => {
         bus.emit('results:receive', { hits: hits })
-        bus.emit('results:count', { count: hits.length, source: 'collection'})
+        bus.emit('results:count', { count: hits.length, source: 'collection' })
       }
     )
 
@@ -201,12 +199,7 @@ module.exports = (state, bus) => {
     }
 
     const op = cb => update ? index.update(cb) : index.add(cb)
-
-    const updatestream = pumpify(
-      docs,
-      metadataify,
-      op(maybescan)
-    )
+    pumpify(docs, metadataify, op(maybescan))
   }
 
   const updatepaper = data => {
@@ -255,5 +248,3 @@ module.exports = (state, bus) => {
 
   bus.on('DOMContentLoaded', () => {})
 }
-
-const noop = () => {}

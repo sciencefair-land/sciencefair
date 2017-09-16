@@ -128,9 +128,9 @@ CachedPaper.prototype._render = function () {
 
   const author = renderAuthor(result.paper.author)
   highlight(author, query)
-  
-  const corner = this._corner
-    = html`<div class="${cornerclass(result.paper.selected)}"></div>`
+
+  const corner = this._corner =
+    html`<div class="${cornerclass(result.paper.selected)}"></div>`
 
   const paper = html`
     <div class="${style.paper} clickable">

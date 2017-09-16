@@ -1,4 +1,3 @@
-const html = require('choo/html')
 const mainwrapper = require('./mainwrapper')
 const main = require('./main')
 

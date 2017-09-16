@@ -10,8 +10,6 @@ const toPairs = require('lodash/toPairs')
 const max = require('lodash/max')
 const uniqBy = require('lodash/uniqBy')
 
-const maxwidth = 200
-
 const style = css`
 
 .plot {

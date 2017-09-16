@@ -2,15 +2,10 @@ const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../../constants')
 
-const flatten = require('lodash/flatten')
-const countBy = require('lodash/countBy')
-const isString = require('lodash/isString')
 const sortBy = require('lodash/sortBy')
 const toPairs = require('lodash/toPairs')
 const min = require('lodash/min')
 const max = require('lodash/max')
-
-const maxwidth = 200
 
 const style = css`
 

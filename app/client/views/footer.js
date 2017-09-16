@@ -1,7 +1,6 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../../constants')
-const imgpath = require('../lib/imgpath')
 const speed = require('./speed')
 
 const style = css`

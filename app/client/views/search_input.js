@@ -2,7 +2,6 @@ const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../../constants')
 
-const imgpath = require('../lib/imgpath')
 const throttle = require('lodash/throttle')
 const equal = require('lodash/isEqual')
 const clone = require('lodash/cloneDeep')
@@ -65,7 +64,7 @@ const getinputvalue = state => {
   }
 }
 
-const tagquery = str => { return /\#/.test(str) }
+const tagquery = str => { return /#/.test(str) }
 
 function CachedInput () {
   if (!(this instanceof CachedInput)) return new CachedInput()
@@ -122,7 +121,7 @@ CachedInput.prototype._render = function (state, emit) {
       return
     }
 
-    if (key == ' ' || key === 'Enter') {
+    if (key === ' ' || key === 'Enter') {
       // space or enter submits the search immediately
       emitify.cancel()
       const querystring = e.target.value + (key === 'enter' ? ' ' : '')
