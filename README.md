@@ -72,7 +72,7 @@ We're creating a desktop experience for discovering, tracking, collecting and re
 
 You can download installers or bundled apps for Windows, Mac and Linux from the [releases page](https://github.com/codeforscience/sciencefair/releases).
 
-Please note that ScienceFair is currently pre-release, so there will be bugs - we're working hard to polish it to v1 release standard. If you'd like to [report bugs in the issue tracker](https://github.com/codeforscience/sciencefair/issues), that would be super helpful.
+If you find a bug, please [report it in the issue tracker](https://github.com/codeforscience/sciencefair/issues).
 
 ## technical details
 
