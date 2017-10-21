@@ -62,7 +62,7 @@ module.exports = (papers, state, emit) => {
 }
 
 function plot (authorcounts) {
-  const maxcount = max(authorcounts.map((ac) => ac.count))
+  const maxcount = max(authorcounts.map(counts))
   const unit = 100 / maxcount
 
   return html`
@@ -100,6 +100,9 @@ function plotrow (ac, unit) {
 function authorcount (papers) {
   const authors = uniqBy(papers, 'key').map(paper => {
     const author = paper.author
+
+    if (!author) return null
+
     if (isString(author)) {
       return author.split(',').map((a) => a.trim())
     } else {
@@ -109,7 +112,7 @@ function authorcount (papers) {
     }
   })
 
-  const counts = countBy(flatten(authors))
+  const counts = countBy(flatten(authors.filter(nonull)))
 
   return sortBy(toPairs(counts), 1)
     .reverse()
@@ -117,3 +120,7 @@ function authorcount (papers) {
       return { author: pair[0], count: pair[1] }
     })
 }
+
+function counts (authorcount) { return authorcount.count }
+
+function nonull (a) { return a !== null }

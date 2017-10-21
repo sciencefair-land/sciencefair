@@ -142,6 +142,8 @@ function renderDate (date) {
 }
 
 function renderAuthor (author) {
+  if (!author || author.length === 0) return html`<span>Anon</span>`
+
   const authors = isString(author)
     ? author.split(/,\s?/)
     : author.map(a => a.surname)
