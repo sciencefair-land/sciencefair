@@ -168,6 +168,17 @@ module.exports = (state, bus) => {
     render()
   }
 
+  const all = () => {
+    setref({
+      index: 0,
+      paper: state.results[0]
+    })
+    setlist(state.results.slice())
+    setlookup(keyby(getlist(), 'key'))
+    render()
+  }
+
+  bus.on('selection:all', all)
   bus.on('selection:clear', clear)
   bus.on('selection:update', update)
 }

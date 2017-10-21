@@ -55,7 +55,11 @@ CachedAddField.prototype._createProxy = function () {
 }
 
 CachedAddField.prototype._render = function (state, emit) {
-  const input = html`<input class="${style.input}" placeholder="new tag name..">`
+  const input = html`
+
+  <input id="cached-tag-add-input" class="${style.input}" placeholder="new tag name..">
+
+  `
 
   const submit = e => {
     e.preventDefault()
