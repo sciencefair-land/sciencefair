@@ -9,7 +9,7 @@
     "postinstall": "npm run rebuild || npm run rebuildwin",
     "rebuild": "../node_modules/.bin/electron-rebuild && npm run baddeps",
     "rebuildwin": ".\\..\\node_modules\\.bin\\electron-rebuild",
-    "baddeps": "rm -f node_modules/webworker-threads/ node_modules/dtrace-provider/"
+    "baddeps": "rm -rf node_modules/webworker-threads/ node_modules/dtrace-provider/"
   },
   "engines": {
     "node": "8.x"
