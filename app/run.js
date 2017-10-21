@@ -1,3 +1,5 @@
+require('./lib/setup')
+
 const { app, BrowserWindow, shell, Menu } = require('electron')
 const defaultMenu = require('electron-default-menu')
 
