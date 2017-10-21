@@ -21,8 +21,6 @@ const stopwords = [
   'both', 'thus'
 ]
 
-const maxwidth = 200
-
 const style = css`
 
 .plot {
@@ -110,10 +108,10 @@ function termcount (papers) {
   const terms = uniqBy(papers, 'key').map(paper => {
     const title = (paper.title ? paper.title : '')
       .replace('.', '').replace(/s$/, '').split(' ')
-      .map(term => term.toLowerCase().replace(/[,\.]/, ''))
+      .map(term => term.toLowerCase().replace(/[,.]/, ''))
     const abstract = (paper.abstract ? paper.abstract : '')
       .replace('.', '').replace(/s$/, '').split(' ')
-      .map(term => term.toLowerCase().replace(/[,\.]/, ''))
+      .map(term => term.toLowerCase().replace(/[,.]/, ''))
     return difference(uniq(title.concat(abstract)), stopwords)
   })
 

@@ -1,5 +1,3 @@
-require('./lib/setup')
-
 const choo = require('choo')
 const app = choo({ href: false })
 

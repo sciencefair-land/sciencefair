@@ -1,6 +1,4 @@
 const uniqBy = require('lodash/uniqBy')
-const sortBy = require('lodash/sortBy')
-const isArray = require('lodash/isArray')
 const paper = require('../lib/getpaper')
 
 module.exports = (state, bus) => {
@@ -16,7 +14,6 @@ module.exports = (state, bus) => {
 
   const get = () => state.results
   const set = results => { state.results = results }
-  const setone = (idx, result) => { state.results[idx] =  result }
 
   const clear = () => {
     set([])
@@ -25,7 +22,7 @@ module.exports = (state, bus) => {
   }
 
   const checkfiles = p => p.filesPresent(
-    (err, progress, updated) => { if (updated) render() }
+    (err, progress, updated) => { if (!err && updated) render() }
   )
 
   const receive = incoming => {
@@ -55,8 +52,6 @@ module.exports = (state, bus) => {
     render()
     debug('result removed')
   }
-
-  const none = () => bus.emit('search:done-searching')
 
   bus.on('results:clear', clear)
   bus.on('results:receive', receive)

@@ -1,4 +1,3 @@
-const cloneDeep = require('lodash/cloneDeep')
 const findLastIndex = require('lodash/findLastIndex')
 const difference = require('lodash/difference')
 const uniq = require('lodash/uniq')
@@ -95,7 +94,6 @@ module.exports = (state, bus) => {
 
   const render = () => bus.emit('renderer:render')
 
-  const set = selection => { state.selection = selection }
   const get = () => state.selection
 
   const setref = ref => { state.selection.reference = ref }
@@ -109,7 +107,6 @@ module.exports = (state, bus) => {
   const getlist = () => state.selection.list
 
   const setlookup = lookup => { state.selection.lookup = lookup }
-  const getlookup = () => state.selection.lookup
 
   const clear = () => {
     setref(null)

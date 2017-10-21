@@ -62,14 +62,14 @@ module.exports = (msg, cb) => {
   yesbtn.onclick = e => {
     e.preventDefault()
     destroy()
-    cb(true)
+    cb(true) // eslint-disable-line
   }
 
   const nobtn = html`<div class="${style.button}">NO</div>`
   nobtn.onclick = e => {
     e.preventDefault()
     destroy()
-    cb(false)
+    cb(false) // eslint-disable-line
   }
 
   const question = html`

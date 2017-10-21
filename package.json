@@ -1,6 +1,6 @@
 {
   "name": "sciencefair-repo",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "container repo for sciencefair app src and build tools",
   "scripts": {
     "pack": "electron-builder --dir",
@@ -13,10 +13,11 @@
     "start": "electron app/index.js",
     "dev": "SCIENCEFAIR_DEVMODE=true electron app/index.js",
     "deploysite": "cd site && npm run build && cd .. && gh-pages -d site/dist",
-    "doctor": "electron ./scripts/doctor.js"
+    "doctor": "electron ./scripts/doctor.js",
+    "test": "standard"
   },
   "engines": {
-    "node": "7.x"
+    "node": "8.x"
   },
   "repository": {
     "type": "git",
@@ -29,15 +30,20 @@
   "license": "MIT",
   "devDependencies": {
     "cross-zip": "^2.1.3",
-    "dat": "^13.6.0",
-    "electron": "1.7.2",
-    "electron-builder": "^19.7.3",
-    "electron-rebuild": "^1.5.11",
+    "dat": "^13.9.0",
+    "electron": "1.7.8",
+    "electron-builder": "^19.37.2",
+    "electron-rebuild": "^1.6.0",
     "gh-pages": "^1.0.0",
     "minimist": "^1.2.0",
     "node-gyp-build": "^3.2.0",
     "rimraf": "^2.5.2",
     "standard": "^10.0.2",
     "temporary": "^0.0.8"
+  },
+  "standard": {
+    "ignore": [
+      "app/client/lib"
+    ]
   }
 }

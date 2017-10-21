@@ -128,9 +128,9 @@ CachedPaper.prototype._render = function () {
 
   const author = renderAuthor(result.paper.author)
   highlight(author, query)
-  
-  const corner = this._corner
-    = html`<div class="${cornerclass(result.paper.selected)}"></div>`
+
+  const corner = this._corner =
+    html`<div class="${cornerclass(result.paper.selected)}"></div>`
 
   const paper = html`
     <div class="${style.paper} clickable">
@@ -213,9 +213,12 @@ module.exports = (result, state, emit) => {
 }
 
 function renderAuthor (author) {
-  const authors = isString(author)
+  if (!author || author.length === 0) return html`<span>Anon</span>`
+
+  let authors = isString(author)
     ? author.split(/,\s?/)
     : author.map(a => a.surname)
+
   if (authors.length === 1) {
     return html`<span>${authors[0]}`
   } else if (authors.length < 4) {

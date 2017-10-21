@@ -55,10 +55,10 @@ module.exports = (state, emit) => {
   const metastat = state.datasources.list.length > 0
     ? state.datasources.list[0].stats.metadataSync
     : {
-    done: 0,
-    total: 100,
-    finished: false
-  }
+      done: 0,
+      total: 100,
+      finished: false
+    }
 
   const synced = metastat.finished
     ? '100%'

@@ -1,17 +1,18 @@
 {
   "name": "sciencefair",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "search, browse, and download open access papers",
   "main": "index.js",
   "scripts": {
     "start": "../node_modules/.bin/electron index.js",
-    "dev": "DEBUG='sciencefair' SCIENCEFAIR_DEVMODE=TRUE ../node_modules/.bin/electron index.js",
+    "dev": "SCIENCEFAIR_DEVMODE=TRUE ../node_modules/.bin/electron index.js",
     "postinstall": "npm run rebuild || npm run rebuildwin",
-    "rebuild": "../node_modules/.bin/electron-rebuild",
-    "rebuildwin": ".\\..\\node_modules\\.bin\\electron-rebuild"
+    "rebuild": "../node_modules/.bin/electron-rebuild && npm run baddeps",
+    "rebuildwin": ".\\..\\node_modules\\.bin\\electron-rebuild",
+    "baddeps": "rm -rf node_modules/webworker-threads/ node_modules/dtrace-provider/"
   },
   "engines": {
-    "node": "7.x"
+    "node": "8.x"
   },
   "repository": {
     "type": "git",
