@@ -1,4 +1,4 @@
-const yuno = require('yunodb')
+const yuno = window.require('yunodb')
 const defaults = require('lodash/defaults')
 
 const C = require('../../constants')

@@ -12,6 +12,6 @@ if (process.env.SCIENCEFAIR_DEVMODE) {
 
 const datasources = require('./getdatasource')
 
-require('electron').ipcRenderer.on('quitting', () => {
+window.require('electron').ipcRenderer.on('quitting', () => {
   datasources.all().forEach(d => d.close(() => {}))
 })

@@ -4,14 +4,15 @@
   "description": "container repo for sciencefair app src and build tools",
   "scripts": {
     "pack": "electron-builder --dir",
+    "bundle": "node scripts/bundle.js",
     "build": "electron-builder",
     "buildall": "electron-builder -mwl",
     "buildlinux": "electron-builder -l",
     "buildosx": "electron-builder -m",
     "buildappveyor": "electron-builder -w --ia32 --x64",
     "postinstall": "which electron-rebuild && electron-rebuild",
-    "start": "electron app/index.js",
-    "dev": "SCIENCEFAIR_DEVMODE=true electron app/index.js",
+    "start": "npm run bundle && electron app/index.js",
+    "dev": "SCIENCEFAIR_DEVMODE=true npm run bundle && electron app/index.js",
     "deploysite": "cd site && npm run build && cd .. && gh-pages -d site/dist",
     "doctor": "electron ./scripts/doctor.js",
     "test": "standard"
@@ -39,11 +40,26 @@
     "node-gyp-build": "^3.2.0",
     "rimraf": "^2.5.2",
     "standard": "^10.0.2",
-    "temporary": "^0.0.8"
+    "temporary": "^0.0.8",
+    "browserify": "^14.5.0",
+    "common-shakeify": "^0.4.4",
+    "envify": "^4.1.0",
+    "minify-stream": "^1.1.0",
+    "unassertify": "^2.0.5",
+    "yo-yoify": "^4.0.0"
   },
   "standard": {
     "ignore": [
       "app/client/lib"
     ]
+  },
+  "browserify": {
+    "builtins": [],
+    "commonDir": false,
+    "detectGlobals": false,
+    "ignoreMissing": true,
+    "insertGlobalVars": "global",
+    "browserField": false,
+    "standalone": "renderer"
   }
 }

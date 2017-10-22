@@ -1,6 +1,6 @@
 module.exports = () => {
   try {
-    const { app, dialog } = require('electron')
+    const { app, dialog } = window.require('electron')
     const { autoUpdater } = require('electron-updater')
     // Log whats happening
     const log = require('electron-log')

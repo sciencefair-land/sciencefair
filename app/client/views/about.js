@@ -2,7 +2,7 @@ const html = require('choo/html')
 const css = require('csjs-inject')
 const C = require('../../constants')
 
-const open = require('electron').shell.openExternal
+const open = window.require('electron').shell.openExternal
 
 const overlay = require('./overlay')
 const pkgjson = require('../../package.json')

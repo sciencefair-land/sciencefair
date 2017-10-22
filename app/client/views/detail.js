@@ -1,10 +1,11 @@
 const html = require('choo/html')
+const rawhtml = window.require('choo/html/raw')
 const css = require('csjs-inject')
 const C = require('../../constants')
 
 const isString = require('lodash/isString')
 const intersection = require('lodash/intersection')
-const open = require('electron').shell.openExternal
+const open = window.require('electron').shell.openExternal
 
 const height = 200
 const padding = 5
@@ -161,11 +162,11 @@ function renderAuthor (author) {
 }
 
 function renderAbstract (abstract) {
-  return html('<span>' + abstract + '</span>')
+  return rawhtml('<span>' + abstract + '</span>')
 }
 
 function renderTitle (title) {
-  return html('<span>' + title + '</span>')
+  return rawhtml('<span>' + title + '</span>')
 }
 
 function singlepaper (paper, style, state, emit) {

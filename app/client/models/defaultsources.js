@@ -1,4 +1,4 @@
-const {ipcRenderer} = require('electron')
+const {ipcRenderer} = window.require('electron')
 
 module.exports = (state, bus) => {
   bus.on('DOMContentLoaded', () => {

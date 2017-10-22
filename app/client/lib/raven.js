@@ -28,7 +28,7 @@ const setup = function () {
     // main process
 
     process.on('uncaughtException', (err) => {
-      const dialog = require('electron').dialog
+      const dialog = window.require('electron').dialog
 
       dialog.showMessageBox({
         title: 'An error occurred',

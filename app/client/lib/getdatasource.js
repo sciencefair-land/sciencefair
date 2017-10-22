@@ -1,4 +1,7 @@
-const Datasource = require('./datasource')
+var path = require('path')
+var datasourcePath = path.join(__dirname, 'lib', 'datasource')
+
+const Datasource = window.require(datasourcePath)
 
 const datasources = {}
 

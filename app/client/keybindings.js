@@ -1,5 +1,5 @@
 const Mousetrap = require('mousetrap')
-const {BrowserWindow} = require('electron').remote
+const {BrowserWindow} = window.require('electron').remote
 
 const ignoreSelectAllIds = [
   'cached-search-input',

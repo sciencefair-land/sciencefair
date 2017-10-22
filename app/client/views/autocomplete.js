@@ -1,4 +1,5 @@
 const html = require('choo/html')
+const rawhtml = window.require('choo/html/raw')
 const css = require('csjs-inject')
 const C = require('../../constants')
 const fuzzy = require('fuzzy')
@@ -78,7 +79,7 @@ module.exports = (state, emit) => {
     const row = html`
 
     <div class="${style.tagrow} clickable">
-      ${html(`<div>#${tag.string}</div>`)}
+      ${rawhtml(`<div>#${tag.string}</div>`)}
       <div>${tag.count}</div>
     </div>
 
