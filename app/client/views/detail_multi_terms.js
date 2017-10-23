@@ -19,7 +19,8 @@ const stopwords = [
   'show', 'during',
   'required', 'additional', 'because',
   'one', 'two', 'three', 'four', 'five',
-  'six', 'seven', 'eight', 'nine', 'ten'
+  'six', 'seven', 'eight', 'nine', 'ten',
+  'report', 'key'
 ]
 
 const style = css`
@@ -107,12 +108,9 @@ function plotrow (tc, unit) {
 
 function termcount (papers) {
   const terms = uniqBy(papers, 'key').map(paper => {
-    const title = (paper.title ? paper.title : '')
-      .replace('.', '').replace(/s$/, '').split(' ')
-      .map(term => term.toLowerCase().replace(/[,.]/, ''))
-    const abstract = (paper.abstract ? paper.abstract : '')
-      .replace('.', '').replace(/s$/, '').split(' ')
-      .map(term => term.toLowerCase().replace(/[,.]/, ''))
+    const title = cleanTerms(paper.title ? paper.title : '')
+    const abstract = cleanTerms(paper.abstract ? paper.abstract : '')
+
     let termset = uniq(title.concat(abstract))
     termset = stopword.removeStopwords(termset)
     termset = stopword.removeStopwords(termset, stopwords)
@@ -130,4 +128,17 @@ function termcount (papers) {
     .map((pair) => {
       return { term: pair[0], count: pair[1] }
     })
+}
+
+function cleanTerms (str) {
+  return str
+    .replace('.', '')
+    .replace(/s$/, '')
+    .split(' ')
+    .map(term => term.toLowerCase()
+      .replace(/[,.]/, '')
+      .replace(/<\/?[^>]+>/g, '')
+      .replace(/^[\W+]/, '')
+      .replace(/[\W+]$/, '')
+    )
 }
