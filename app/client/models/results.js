@@ -31,7 +31,7 @@ module.exports = (state, bus) => {
     papers.forEach(checkfiles)
 
     set(uniqBy(get().concat(papers), result => result.key))
-    if (get().length < 200) render()
+    if (get().length < 30) render()
     debug(`received ${incoming.hits.length} results, for ${querystring()}`)
   }
 
@@ -42,7 +42,7 @@ module.exports = (state, bus) => {
   }
 
   const count = data => {
-    if (get().length >= 200) render()
+    if (get().length >= 30) render()
     debug(`${data.count} results in ${data.source} for ${querystring()}`)
   }
 
