@@ -97,3 +97,6 @@ dist
 
 yarn.lock
 package-lock.json
+
+# Bundled assets
+app/client/bundle.js
