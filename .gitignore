@@ -99,4 +99,5 @@ yarn.lock
 package-lock.json
 
 # Bundled assets
+app/bundle.js
 app/client/bundle.js

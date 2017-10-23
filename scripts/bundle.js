@@ -15,10 +15,16 @@ var shakeify = require('common-shakeify')
 // uglify
 var uglify = require('minify-stream')
 
-var clientdir = path.join(__dirname, '..', 'app', 'client')
-var infile = path.join(clientdir, 'index.js')
-var outfile = path.join(clientdir, 'bundle.js')
-var write = fs.createWriteStream(outfile)
+var appdir = path.join(__dirname, '..', 'app')
+var appfileIn = path.join(appdir, 'index.js')
+var appfileOut = path.join(appdir, 'bundle.js')
+
+var clientdir = path.join(appdir, 'client')
+var clientfileIn = path.join(clientdir, 'index.js')
+var clientfileOut = path.join(clientdir, 'index.js')
+
+var writeApp = fs.createWriteStream(appfileOut)
+var writeClient = fs.createWriteStream(clientfileOut)
 
 var browserifyOpts = {
   builtins: [],
@@ -26,8 +32,20 @@ var browserifyOpts = {
   detectGlobals: false,
   ignoreMissing: true,
   insertGlobalVars: 'global',
-  browserField: false
+  browserField: false,
+  bundleExternal: false
 }
+
+// app
+browserify(browserifyOpts)
+  .transform(envify)
+  .transform(unassertify)
+  .plugin(shakeify)
+  // .transform(yoyoify, { global: true })
+  .add(appfileIn)
+  .bundle()
+  .pipe(uglify())
+  .pipe(writeApp)
 
 var renderifyOpts = {
   windowRequire: [
@@ -35,13 +53,15 @@ var renderifyOpts = {
   ]
 }
 
+// client
 browserify(browserifyOpts)
   .transform(renderify, renderifyOpts)
   .transform(envify)
   .transform(unassertify)
   .plugin(shakeify)
   // .transform(yoyoify, { global: true })
-  .add(infile)
+  .external('node_modules/electron/**/*')
+  .add(clientfileIn)
   .bundle()
   .pipe(uglify())
-  .pipe(write)
+  .pipe(writeClient)
