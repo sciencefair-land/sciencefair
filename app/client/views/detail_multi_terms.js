@@ -10,15 +10,16 @@ const max = require('lodash/max')
 const difference = require('lodash/difference')
 const uniq = require('lodash/uniq')
 const uniqBy = require('lodash/uniqBy')
+const stopword = require('stopword')
 
 const stopwords = [
-  'and', 'but', 'the', 'a', 'an', 'and', 'so', 'yet', 'of', 'in', 'to', 'by',
-  'is', 'that', 'for', 'we', 'published', 'study', 'from', 'with', 'as', 'on',
-  'between', 'experiment', 'experiments', 'results', 'biology', 'are', 'this',
-  'et', 'al', 'al.', 'al.,', 'be', 'project:', 'which', 'these', 'or', 'have',
-  'at', 'our', 'were', 'show', 'during', 'can', 'not', 'its', 'their', 'has',
-  'here', 'also', 'it', 'required', 'additional', 'find', 'because', 'most',
-  'both', 'thus'
+  'published', 'study',
+  'between', 'experiment', 'experiments', 'results', 'biology',
+  'et', 'al', 'al.', 'al.,', 'project:',
+  'show', 'during',
+  'required', 'additional', 'because',
+  'one', 'two', 'three', 'four', 'five',
+  'six', 'seven', 'eight', 'nine', 'ten'
 ]
 
 const style = css`
@@ -112,7 +113,14 @@ function termcount (papers) {
     const abstract = (paper.abstract ? paper.abstract : '')
       .replace('.', '').replace(/s$/, '').split(' ')
       .map(term => term.toLowerCase().replace(/[,.]/, ''))
-    return difference(uniq(title.concat(abstract)), stopwords)
+    let termset = uniq(title.concat(abstract))
+    termset = stopword.removeStopwords(termset)
+    termset = stopword.removeStopwords(termset, stopwords)
+    return termset.map(term => {
+      if (term === 'cells') return 'cell'
+      if (term === 'genes') return 'gene'
+      return term
+    })
   })
 
   const counts = countBy(flatten(terms))

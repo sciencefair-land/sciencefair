@@ -59,6 +59,7 @@
     "mkdirp": "^0.5.1",
     "mousetrap": "^1.6.1",
     "multi-read-stream": "^2.0.0",
+    "natural": "blahah/natural",
     "node-static": "^0.7.7",
     "numeral": "^2.0.6",
     "path-exists": "^3.0.0",
@@ -71,11 +72,12 @@
     "search-index-adder": "blahah/search-index-adder#patch-2",
     "sodium-native": "^1.10.1",
     "speedometer": "^1.0.0",
+    "stopword": "^0.1.9",
     "stream-from-array": "^1.0.0",
     "tar.gz": "^1.0.5",
     "through2": "^2.0.1",
     "untildify": "^3.0.2",
     "uuid": "^3.1.0",
-    "yunodb": "github:blahah/yunodb#streaming"
+    "yunodb": "blahah/yunodb#streaming"
   }
 }
