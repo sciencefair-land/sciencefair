@@ -1,4 +1,3 @@
-const raven = require('raven')
 const os = require('os')
 
 const RAVEN_A = '095b3facc71344ce9d665455045f5041'
