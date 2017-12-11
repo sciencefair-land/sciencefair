@@ -10,14 +10,16 @@ const height = 200
 const padding = 5
 
 module.exports = (state, emit) => {
+  const detailshown = state.detailshown && state.results.length > 0
+
   const style = css`
 
   .detail {
     position: absolute;
     bottom: 70px;
-    height: ${state.detailshown ? height : 0}px;
+    height: ${detailshown ? height : 0}px;
     width: 100%;
-    padding: ${state.detailshown ? padding : 0}px;
+    padding: ${detailshown ? padding : 0}px;
     margin: 0;
     flex-direction: row;
     overflow-y: hidden;
@@ -118,20 +120,13 @@ module.exports = (state, emit) => {
   `
 
   function getcontent (state) {
-    const hasresults = state.results.length > 0
-    if (!hasresults) return blank()
+    if (!detailshown) return null
 
     if (state.selection.list.length === 1) {
       return singlepaper(state.selection.list[0], style, state, emit)
     } else if (state.selection.list.length > 1) {
       return multipaper(state.selection.list, style, state, emit)
-    } else {
-      return blank()
     }
-  }
-
-  function blank () {
-    return html`<p class="${style.empty}">No paper selected.</p>`
   }
 
   return html`<div class="${style.detail}">${getcontent(state)}</div>`

@@ -112,6 +112,7 @@ module.exports = (state, bus) => {
     setref(null)
     setlist([])
     setlookup({})
+    bus.emit('detail:hide')
     render()
   }
 
@@ -165,6 +166,11 @@ module.exports = (state, bus) => {
     }
 
     setlookup(keyby(getlist(), 'key'))
+
+    if (getlist().length === 0) {
+      bus.emit('detail:hide')
+    }
+
     render()
   }
 

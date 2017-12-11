@@ -229,7 +229,6 @@ module.exports = (state, bus) => {
 
         data.forEach(d => bus.emit('results:remove', d))
         bus.emit('selection:clear')
-        bus.emit('detail:toggle')
         scan('remove')
       })
     })

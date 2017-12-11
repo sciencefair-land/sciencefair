@@ -10,11 +10,18 @@ module.exports = (state, bus) => {
     set(true)
     render()
   }
+
+  const hide = () => {
+    set(false)
+    render()
+  }
+
   const toggle = () => {
     set(!get())
     render()
   }
 
   bus.on('detail:show', show)
+  bus.on('detail:hide', hide)
   bus.on('detail:toggle', toggle)
 }
