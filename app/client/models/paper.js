@@ -4,6 +4,7 @@ module.exports = (state, bus) => {
   const render = () => bus.emit('renderer:render')
 
   const selectshow = data => {
+    data.paper.filesPresent(() => {})
     bus.emit('selection:update', data)
     bus.emit('detail:show')
   }

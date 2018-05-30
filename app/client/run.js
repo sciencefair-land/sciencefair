@@ -3,7 +3,7 @@ const app = choo({ href: false })
 
 app.use(require('choo-asyncify'))
 app.use(require('./models/error'))
-app.use(require('choo-log')())
+app.use(require('choo-devtools')())
 
 app.use(require('./models/renderer'))
 
