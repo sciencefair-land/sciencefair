@@ -82,7 +82,7 @@ function Paper (data) {
       debug('progress stats', self.title, stats)
       if (stats.progress > 0) self.collected = true
       self.progress = stats.progress * 100
-      self.emit('progress', self.progress)
+      self.emit('progress', self.minprogress())
       self.progresschecked = true
       cb(null, self.progress, true)
     })
@@ -99,6 +99,8 @@ function Paper (data) {
     self.collected = true
     self.downloading = true
 
+    self.emit('progress', self.minprogress())
+
     const done = () => {
       if (!self.downloading) return
       debug('downloaded', self.key)
@@ -109,7 +111,7 @@ function Paper (data) {
 
     download.on('progress', data => {
       self.progress = data.progress * 100
-      self.emit('progress', self.progress)
+      self.emit('progress', self.minprogress())
       if (self.progress === 100) done()
     })
 
