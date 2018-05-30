@@ -5,9 +5,9 @@ const intro = require('./intro')
 
 const tagline = () => html`
 
-<h2 class="w-100 dark-gray f2 tc">
-  The open source p2p desktop science library that puts users in control.
-</h2>
+<h3 class="w-100 dark-gray f3 tc">
+  A desktop app for discovering, reading, and organizing scientific literature. It's not like anything you've used before - ScienceFair is the global science library of the future.
+</h3>
 
 `
 
