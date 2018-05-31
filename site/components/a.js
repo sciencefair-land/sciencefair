@@ -5,7 +5,9 @@ const className = [
   'bg-animate',
   'hover-bg-light-blue',
   'silver',
-  'hover-dark-gray'
+  'hover-dark-gray',
+  'pl',
+  'pw1'
 ].join(' ')
 
 module.exports = opts => html`

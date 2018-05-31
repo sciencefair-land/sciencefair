@@ -1,7 +1,7 @@
 const html = require('choo/html')
 
 const className = dark => {
-  return `w-70 f6 link grow ba pa3 mb2 dib ${dark ? 'dark' : 'light'}-gray`
+  return `w-70 f6 link grow ba pa3 mb2 dib ${dark ? 'dark' : 'light'}-gray bg-white border-box ma3 br3`
 }
 
 module.exports = opts => html`

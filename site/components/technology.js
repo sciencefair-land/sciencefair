@@ -38,12 +38,12 @@ const entries = [
 ]
 
 const content = () => [
-  h1({ content: 'Technology' }),
-  list({ entries: entries, dark: true })
+  h1({ content: 'Technology', dark: true }),
+  list({ entries: entries, dark: false })
 ]
 
 module.exports = opts => section({
   section: 'technology',
-  dark: true,
+  dark: false,
   content: content()
 })
