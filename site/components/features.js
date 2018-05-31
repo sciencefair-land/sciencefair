@@ -1,5 +1,6 @@
 const section = require('./section')
 const h1 = require('./h1')
+const zoom = require('advanced-zoom')
 
 const a = require('./a')
 const featurelist = require('./featurelist')

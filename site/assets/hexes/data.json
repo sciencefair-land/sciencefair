@@ -1,0 +1,8 @@
+[
+  { "src": "dat_logo.png", "href": "https://datproject.org" },
+  { "src": "elife_logo.png", "href": "https://elifesciences.org" },
+  { "src": "codeforscience_logo.png", "href": "https://codeforscience.org" },
+  { "src": "coko_logo.png", "href": "https://coko.foundation" },
+  { "src": "fathomlabs_logo.png", "href": "https://fathomlabs.io" },
+  { "src": "sciencelab_logo.png", "href": "https://science.mozilla.org" }
+]

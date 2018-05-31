@@ -16,7 +16,9 @@
     "standard": "^10.0.2"
   },
   "dependencies": {
+    "advanced-zoom": "^1.2.1",
     "bankai": "^9.13.0",
+    "hex-grid": "^2.0.2",
     "tachyons": "^4.9.1"
   }
 }
