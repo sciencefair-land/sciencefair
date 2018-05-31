@@ -8,7 +8,7 @@ const feature = require('./feature')
 const entries = [
   {
     txt: 'Modern, search-driven user interace',
-    detail: 'ScienceFair uses blazing-fast search to help you find and filter the literature you need',
+    detail: 'ScienceFair uses blazing-fast search and a clean user interface to help you find and filter the literature you need. No hidden menus or complex settings.',
     img: './assets/screenshots/home.png'
   },
   {
