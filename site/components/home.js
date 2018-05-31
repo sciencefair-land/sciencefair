@@ -4,8 +4,8 @@ module.exports = () => html`
 
 <body class="bg-light-gray roboto">
   ${require('./header')()}
-  ${require('./install')()}
   ${require('./features')()}
+  ${require('./install')()}
   ${require('./technology')()}
   ${require('./community')()}
 </body>

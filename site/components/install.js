@@ -12,9 +12,9 @@ const releases = repo + '/releases'
 
 module.exports = opts => section({
   section: 'install',
-  dark: true,
+  dark: false,
   content: [
-    h1({ content: 'Install' }),
+    h1({ content: 'Install', dark: true }),
     p({ content: html`
       <span>
         Latest version:
@@ -23,7 +23,8 @@ module.exports = opts => section({
           ${a({ href: releases, content: html`<span>(see previous versions)</span>` })}
         </small>
       </span>
-      `
+      `,
+      dark: true
     }),
     dlbtns(),
     p({ content: html`
@@ -31,7 +32,8 @@ module.exports = opts => section({
         Or you can explore
         ${a({ href: repo, content: 'the source code on GitHub' })}
       </span>
-      `
+      `,
+      dark: true
     })
   ]
 })

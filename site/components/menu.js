@@ -2,8 +2,8 @@ const html = require('choo/html')
 const menubtn = require('./menubtn')
 
 const sections = [
-  'install',
   'features',
+  'install',
   'technology',
   'community'
 ]
