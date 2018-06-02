@@ -28,27 +28,8 @@ module.exports = () => html`
     We ${a('https://github.com/codeforscience/sciencefair/blob/master/CONTRIBUTING.md', 'welcome contributions')}
     of any kind from anyone, provided you follow our ${a('https://github.com/codeforscience/sciencefair/blob/master/CODE_OF_CONDUCT.md', 'code of conduct')}.
   </p>
-  <div class="w-80 ph3-ns pv4 tc center">
-    <div class="cf w-50-ns ph2-ns tc center">
-      <div class="dib fl w-100 w-50-ns tc">
-        <img src="assets/codeforscience_logo.png" alt="Code for Science"/>
-      </div>
-      <div class="dib fl w-100 w-50-ns tc">
-        <img src="assets/fathomlabs_logo.png" alt="Fathom Labs"/>
-      </div>
-    </div>
-    <div class="cf w-two-thirds-ns ph2-ns pv2 tc center">
-      <div class="dib fl w-100 w-third-ns tc">
-        <img src="assets/sciencelab_logo.png" alt="Mozilla Science Lab"/>
-      </div>
-      <div class="dib fl w-100 w-third-ns tc">
-        <img src="assets/dat_logo.png" alt="Dat data"/>
-      </div>
-      <div class="dib fl w-100 w-third-ns tc">
-        <img src="assets/elife_logo.png" alt="eLife Sciences"/>
-      </div>
-    </div>
-  </div>
+
+  ${require('./hexgrid')()}
 </section>
 
 `
