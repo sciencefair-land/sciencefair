@@ -23,10 +23,9 @@ function hexgridder (state, emitter) {
         if (d.y === 0) innerwidth += hexes[i].offsetWidth
       })
       const leftpad = (outerwidth - innerwidth) / 2
-      console.log(leftpad)
 
       const hexheight = hexes[0].offsetHeight
-      const heightpad = Math.max(g.grid.map(d => d.y)) + hexheight + 50
+      const heightpad = Math.max(g.grid.map(d => d.y)) + hexheight + 100
 
       root.style.height = `${heightpad}px`
 
@@ -38,6 +37,7 @@ function hexgridder (state, emitter) {
     }
 
     scan()
+    window.addEventListener('load', scan)
     window.addEventListener('resize', scan)
   })
 }
