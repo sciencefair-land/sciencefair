@@ -52,7 +52,7 @@
     "inherits": "^2.0.3",
     "is-online": "^7.0.0",
     "keycode": "^2.1.9",
-    "leveldown": "^1.5.0",
+    "leveldown": "^4.0.1",
     "lodash": "^4.5.1",
     "lowdb": "^1.0.0",
     "matched": "^3.0.1",
