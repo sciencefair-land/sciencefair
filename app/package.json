@@ -79,5 +79,8 @@
     "untildify": "^3.0.2",
     "uuid": "^3.1.0",
     "yunodb": "blahah/yunodb#streaming"
+  },
+  "resolutions": {
+    "leveldown": "^4.0.1"
   }
 }
