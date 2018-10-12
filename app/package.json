@@ -25,7 +25,7 @@
   "license": "MIT",
   "dependencies": {
     "byte-stream": "^2.1.0",
-    "bytes": "^2.4.0",
+    "bytes": "^3.0.0",
     "cache-component": "^5.2.0",
     "choo": "^6.11.0",
     "choo-asyncify": "^0.0.2",
