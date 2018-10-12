@@ -76,8 +76,8 @@ function plot (authorcounts) {
         </th>
       </tr>
       ${authorcounts.slice(0, 5).map((ac) => {
-        return plotrow(ac, unit)
-      })}
+    return plotrow(ac, unit)
+  })}
     </table>
   `
 }

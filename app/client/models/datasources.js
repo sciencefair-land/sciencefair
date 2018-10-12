@@ -6,7 +6,7 @@ const pumpify = require('pumpify')
 
 const datasource = require('../lib/getdatasource')
 
-const {ipcRenderer} = require('electron')
+const { ipcRenderer } = require('electron')
 
 // perform a one-time load of any datasource in the data directory
 const loadOnce = (state, bus) => {

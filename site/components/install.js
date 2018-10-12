@@ -23,7 +23,7 @@ module.exports = opts => section({
         </small>
       </span>
       `,
-      dark: true
+    dark: true
     }),
     dlbtns(),
     p({ content: html`
@@ -31,7 +31,7 @@ module.exports = opts => section({
         Or you can explore ${a({ href: repo, content: 'the source code on GitHub' })}
       </span>
       `,
-      dark: true
+    dark: true
     })
   ]
 })

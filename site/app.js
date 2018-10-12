@@ -19,7 +19,7 @@ function hexgridder (state, emitter) {
       const g = grid({ element: root, spacing: spacing }, hexes)
 
       let innerwidth = (spacing * (g.grid.filter(d => d.y === 0).length - 1))
-      g.grid.map((d,i) => {
+      g.grid.map((d, i) => {
         if (d.y === 0) innerwidth += hexes[i].offsetWidth
       })
       const leftpad = (outerwidth - innerwidth) / 2

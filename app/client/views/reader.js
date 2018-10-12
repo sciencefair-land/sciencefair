@@ -1,7 +1,7 @@
 const html = require('choo/html')
 const css = require('csjs-inject')
 const open = require('electron').shell.openExternal
-const {ipcRenderer} = require('electron')
+const { ipcRenderer } = require('electron')
 const imgpath = require('../lib/imgpath')
 
 const reader = (state, emit) => {

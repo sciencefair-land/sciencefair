@@ -1,8 +1,5 @@
 const html = require('choo/html')
 const menu = require('./menu')
-const h1 = require('./h1')
-const a = require('./a')
-const intro = require('./intro')
 
 const tagline = () => html`
 
@@ -11,11 +8,6 @@ const tagline = () => html`
 </h2>
 
 `
-
-const blog = a({
-  href: 'https://elifesciences.org/labs/88b45406/sciencefair-a-new-desktop-science-library',
-  content: 'here'
-})
 
 module.exports = () => html`
 
