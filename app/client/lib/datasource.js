@@ -5,6 +5,7 @@ const inherits = require('inherits')
 
 const portfinder = require('portfinder')
 const low = require('lowdb')
+const LowFileSync = require('lowdb/adapters/FileSync')
 const hyperdrive = require('hyperdrive')
 const storage = require('dat-storage')
 const walker = require('folder-walker')
@@ -55,7 +56,7 @@ function Datasource (key, opts) {
 
   // stats about the datasource are held in memory and persisted in JSON
   const statspath = path.join(self.datadir, 'source.stats')
-  self.stats = low(statspath)
+  self.stats = low(new LowFileSync(statspath))
   self.stats.defaults({
     active: opts.active,
     peers: 0,
