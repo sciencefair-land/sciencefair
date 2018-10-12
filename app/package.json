@@ -44,7 +44,7 @@
     "findandreplacedomtext": "^0.4.4",
     "folder-walker": "^3.1.0",
     "fs-extra": "^3.0.1",
-    "fs-readstream-progress": "^0.0.4",
+    "fs-readstream-progress": "0.0.5",
     "fuzzy": "^0.1.1",
     "hint": "blahah/hint",
     "hyperdiscovery": "^6.0.0",
