@@ -55,7 +55,7 @@
     "leveldown": "^1.5.0",
     "lodash": "^4.5.1",
     "lowdb": "^1.0.0",
-    "matched": "^0.4.3",
+    "matched": "^3.0.1",
     "mkdirp": "^0.5.1",
     "mousetrap": "^1.6.1",
     "multi-read-stream": "^2.0.0",
