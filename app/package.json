@@ -47,7 +47,7 @@
     "fs-readstream-progress": "0.0.5",
     "fuzzy": "^0.1.1",
     "hint": "blahah/hint",
-    "hyperdiscovery": "^6.0.0",
+    "hyperdiscovery": "^8.0.0",
     "hyperdrive": "^9.4.5",
     "inherits": "^2.0.3",
     "is-online": "^7.0.0",
