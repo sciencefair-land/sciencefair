@@ -69,7 +69,7 @@
     "pumpify": "^1.3.5",
     "raven": "^2.1.0",
     "raven-js": "^3.16.0",
-    "search-index-adder": "blahah/search-index-adder#patch-2",
+    "search-index-adder": "^0.4.0",
     "sodium-native": "^2.2.2",
     "speedometer": "^1.0.0",
     "stopword": "^0.1.9",
