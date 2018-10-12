@@ -59,7 +59,7 @@
     "mkdirp": "^0.5.1",
     "mousetrap": "^1.6.1",
     "multi-read-stream": "^2.0.0",
-    "natural": "blahah/natural",
+    "natural": "^0.6.1",
     "node-static": "^0.7.7",
     "numeral": "^2.0.6",
     "path-exists": "^3.0.0",
