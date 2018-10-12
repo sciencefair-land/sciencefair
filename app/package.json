@@ -34,7 +34,7 @@
     "csjs": "^1.0.5",
     "csjs-inject": "^1.0.0",
     "dat-storage": "^1.0.1",
-    "debug": "^2.6.3",
+    "debug": "^4.1.0",
     "debug-menu": "^0.6.0",
     "electron-debug": "^1.2.0",
     "electron-default-menu": "^1.0.1",
