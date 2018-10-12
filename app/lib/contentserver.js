@@ -2,7 +2,7 @@ const http = require('http')
 const portfinder = require('portfinder')
 const nstatic = require('node-static')
 const C = require('../constants')
-const {ipcMain} = require('electron')
+const { ipcMain } = require('electron')
 
 const datadir = C.DATASOURCES_PATH
 

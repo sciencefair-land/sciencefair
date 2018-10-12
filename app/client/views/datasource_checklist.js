@@ -24,8 +24,8 @@ module.exports = (state, emit) => {
 
   <div class="${style.list}">
     ${state.datasources.list.length === 0
-      ? 'No datasources yet'
-      : state.datasources.list.map(source => entry(source, state, emit))}
+    ? 'No datasources yet'
+    : state.datasources.list.map(source => entry(source, state, emit))}
   </div>
 
   `

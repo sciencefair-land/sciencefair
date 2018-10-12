@@ -4,7 +4,7 @@ const aclass = 'no-underline bg-animate hover-bg-light-blue silver hover-dark-gr
 
 const a = (href, txt) => html`
   <a class=${aclass} href="${href}" target="_blank">
-    ${  txt}
+    ${txt}
   </a>
 `
 

@@ -1,5 +1,5 @@
 const Mousetrap = require('mousetrap')
-const {BrowserWindow} = require('electron').remote
+const { BrowserWindow } = require('electron').remote
 
 const ignoreSelectAllIds = [
   'cached-search-input',
@@ -27,10 +27,10 @@ module.exports = (state, bus) => {
     const active = document.activeElement
     if (active.id && ignoreSelectAllIds.includes(active.id)) {
       // this element implements its own select all or uses native implementation
-      return
+
     } else if (state.datasources.shown || state.aboutshown || state.reader) {
       // overlay view
-      return
+
     } else if (state.results) {
       // select all results
       bus.emit('selection:all')
