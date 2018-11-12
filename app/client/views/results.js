@@ -28,8 +28,8 @@ module.exports = (state, emit) => {
 
   <div class="${style.results}">
     ${state.results.map((result, index) => {
-      return paper({ index: index, paper: result }, state, emit)
-    })}
+    return paper({ index: index, paper: result }, state, emit)
+  })}
   </div>
 
   `

@@ -124,7 +124,7 @@ ScienceFair also follows a few simple design principles that we feel are missing
 
 ## development
 
-This project uses node `v7`, ideally the [latest version](https://nodejs.org/dist/latest-v7.x/). It also uses the two-`package.json` structure ([what??](https://github.com/electron-userland/electron-builder/wiki/Two-package.json-Structure)).
+This project uses node `v8`, ideally the [latest version](https://nodejs.org/dist/latest-v7.x/). It also uses the two-`package.json` structure ([what??](https://github.com/electron-userland/electron-builder/wiki/Two-package.json-Structure)).
 
 To get a local copy working, clone this repo, then run
 

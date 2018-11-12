@@ -2,7 +2,7 @@ const C = require('../constants')
 const mkdirp = require('mkdirp').sync
 const fs = require('fs-extra')
 const path = require('path')
-const {ipcMain} = require('electron')
+const { ipcMain } = require('electron')
 
 mkdirp(C.DATAROOT)
 mkdirp(C.COLLECTION_PATH)

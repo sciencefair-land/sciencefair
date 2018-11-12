@@ -4,7 +4,7 @@
 const C = require('../constants')
 const path = require('path')
 const exists = require('path-exists').sync
-const {ipcMain} = require('electron')
+const { ipcMain } = require('electron')
 
 const defaults = [
   'ce62c46f51f1e50fbf9da718540003b47ffce5f19279162ce975a7d0aca164de' // elife

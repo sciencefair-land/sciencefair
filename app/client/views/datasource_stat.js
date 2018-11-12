@@ -40,10 +40,10 @@ module.exports = (name, value) => {
   <div class="${style.badge}">
     <div class="${style.name}">${name}</div>
     ${
-      (typeof value === 'boolean') || !value
-      ? null
-      : html`<div class="${style.value}">${value}</div>`
-    }
+  (typeof value === 'boolean') || !value
+    ? null
+    : html`<div class="${style.value}">${value}</div>`
+}
   </div>
 
   `

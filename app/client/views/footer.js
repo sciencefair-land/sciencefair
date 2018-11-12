@@ -61,10 +61,10 @@ module.exports = (state, emit) => {
 
   <div class="${style.left} ${style.part}">
     ${
-      online
-      ? speed(state.downloads.speed)
-      : html`<div class="${style.offline}">offline</div>`
-    }
+  online
+    ? speed(state.downloads.speed)
+    : html`<div class="${style.offline}">offline</div>`
+}
   </div>
 
   `

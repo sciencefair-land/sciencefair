@@ -16,7 +16,10 @@ const shouldQuit = app.makeSingleInstance((cliargs, cwd) => {
 if (shouldQuit) {
   app.quit()
 } else {
-  require('electron-debug')({ enabled: true })
+  require('electron-debug')({
+    enabled: true,
+    showDevTools: false
+  })
 
   const path = require('path')
 
