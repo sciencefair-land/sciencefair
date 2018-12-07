@@ -27,7 +27,7 @@ function Paper (data) {
 
   self.loadBib = () => {
     self.title = htmlify(data.title || 'no title')
-    self.author = data.author || { 'surname': 'unknown', 'given-names': 'unknown' }
+    self.author = data.author || [{ 'surname': 'unknown', 'given-names': 'unknown' }]
     self.abstract = htmlify(data.abstract || 'no abstract given')
     self.date = data.date || { year: 'unknown ', month: 'unknown', day: 'unknown'}
     self.tags = data.tags || []
