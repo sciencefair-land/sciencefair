@@ -6,6 +6,10 @@
 # build for linux
 sudo apt-get install --no-install-recommends -y \
   icnsutils graphicsmagick xz-utils
+  
+# on Fedora, this packages would be installed with:
+# sudo dnf install libicns-utils graphicsmagick xz-libs
+  
 # build rpm
 sudo apt-get install --no-install-recommends -y rpm
 # build pacman
